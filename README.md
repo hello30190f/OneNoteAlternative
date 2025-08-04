@@ -7,6 +7,6 @@
 3. if there are problems difficult to recover, crete new one
 
 ## prototype README list
-- (firstPrototype)[firstPrototype/README.md]
+- [firstPrototype](firstPrototype/README.md)
 
 
