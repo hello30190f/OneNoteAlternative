@@ -14,7 +14,7 @@
 ### basic
 - [architecture](note/architecture.md)
 - [dataStrecture](note/dataStrecture.md)
-### description of implemention
+### description of implementation
 - [backend-CilentSide](note/backendClientSide.md)
 - [backend-DataServer](note/backendDataServer.md)
 - [frontend](note/frontend.md)
