@@ -10,3 +10,11 @@
 - [ ] create backend and frontend script files and folders
 - [ ] implement all 
 
+## frameworks and libraries
+### frontend
+- Vite
+- React
+- Tailwind CSS
+
+### backend
+- python ?
