@@ -1,9 +1,9 @@
 # base unit
 ## Notebook
  contain groups and pages. manage infomation for a project. 
-## group
+## contents group
  group for organizing any other groups and pages.
-## content group
+## files group
  organaize and manage any binary bolb resources. This group automaticly belong to corresponeding pages and groups which use these resources.  
 
  Here is binary blog resources examples.
