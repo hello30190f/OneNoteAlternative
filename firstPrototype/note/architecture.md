@@ -4,7 +4,7 @@
 ## contents group
  group for organizing any other groups and pages.
 ## files group
- organaize and manage any binary bolb resources. This group automaticly belong to corresponeding pages and groups which use these resources.  
+ organaize and manage any binary blob resources. This group automaticly belong to corresponeding pages and groups which use these resources.  
 
  Here is binary blog resources examples.
 - any images
@@ -13,8 +13,26 @@
 - any executable files
 - any binary files with special data structure.
 
+## duplicate files
+ When files are in the same folder, There are several kind of duplication would be considered.
+
+- different filename but same binary.
+- same filename but different binary.
+- same filename and same binary.
+
+ To manage these stulations,(tend to be too heavy task, async task)
+
+- compare binary to other resources 
+ when find same resources, create reference
+- compare filename to other resources.
+ when find whose resources have same filename, add index to filename to identify
+ samefinename.cpp
+ samefinename-1.cpp
+ ...
+
+
 ## page
- page will contain any contents. There are seveal templates.
+ page will contain any contents. There are several templates.
 
 - Project flow view (TODO List for each milestone)
 - diagram page (like drawio)

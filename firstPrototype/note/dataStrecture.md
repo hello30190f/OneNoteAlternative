@@ -10,7 +10,7 @@
     - notebook.json // main infomation for a notebook. this is mandatory.
     - index folder  // hold index of metadata for any pages. this is not mandatory but without this could cause performance issues.
         - tags.json    // keep in track about tags. For example, what pages are belongs to specific tags.
-        - content.json // keep in track about contents. For example, where content is used, where content are added originaly. 
+        - files.json   // keep in track about files. For example, where files are used, where files are added originaly. 
     - files folder
         - any binary blobs here
     - contents folder
@@ -19,9 +19,37 @@
 ## notebook.json
 ```json
 {
-    "name": "name of a notebook",
+    "name"      : "name of a notebook",
     "createDate": "YYYY/MM/DD",
     "updateDate": "YYYY/MM/DD",
+    "id"        : "bb6f7d1c-c722-495c-923b-ab9e9574ef5b" // id is random uuid
+}
+```
+
+## index data format
+### tags.json
+```json
+{
+    "tagName1": ["/path/to/content.md","/path/to/content.json",...],
+    "tagName2": ["/path/to/content.md","/path/to/content.json",...]
+    ...
+}
+```
+
+### files.json
+```json
+{
+    "fileName1":{
+        "original"  : "/path/to/originalFileResourcesWhereAdded.md",
+        "refs"      : ["/path/to/ThisFileResourceBeingUsed","/path/to/ThisFileResourceBeingUsed1"...],
+        "filePath"  : "/path/to/originalFileSavedWithFileNameAndExtention"
+    },
+    "fileName2":{
+        "original"  : "/path/to/originalFileResourcesWhereAdded.md",
+        "refs"      : ["/path/to/ThisFileResourceBeingUsed","/path/to/ThisFileResourceBeingUsed1"...],
+        "filePath"  : "/path/to/originalFileSavedWithFileNameAndExtention"
+    }
+    ...
 }
 ```
 
