@@ -1,3 +1,15 @@
+# data structure
+ This page will include description of data structure.
+
+- Notebook metadata format
+- Notebool index data format
+- Notebook folder structure
+- How files will be saved
+- How pages will be saved  
+  
+ ※ This page does not include about detail of page data format. [dataStrecture1](./dataStrecture1.md) contain about page data fromat detail. 
+
+
 # data hierarchy
 1. Notebook
 2. content group or files group
@@ -95,6 +107,7 @@ files folder
 
 
 ## contents folder
+ contents folder will contain any pages will be saved as markdown or json formatted data.
 
 
 
