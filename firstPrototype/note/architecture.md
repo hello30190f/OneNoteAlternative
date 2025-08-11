@@ -16,15 +16,15 @@
 ## duplicate files 
  When files are in the same folder, There are several kind of duplication would be considered.
 
-- different filename but same binary.
-- same filename but different binary.
-- same filename and same binary.
+- different filename but same binary.  
+- same filename but different binary.  
+- same filename and same binary.  
 
  To manage these stulations,(tend to be too heavy task, async task)
 
-- compare binary to other resources 
+- compare binary to other resources   
  when find same resources, create reference
-- compare filename to other resources.
+- compare filename to other resources.  
  when find whose resources have same filename, add index to filename to identify
  samefinename.cpp
  samefinename-1.cpp
