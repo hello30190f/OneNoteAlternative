@@ -13,7 +13,7 @@
 - any executable files
 - any binary files with special data structure.
 
-## duplicate files
+## duplicate files 
  When files are in the same folder, There are several kind of duplication would be considered.
 
 - different filename but same binary.

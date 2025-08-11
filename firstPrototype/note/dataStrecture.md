@@ -53,10 +53,55 @@
 }
 ```
 
+## files folder
+ where any files will be stored. keep folder hierarchy depend on pages where files are originally added. Here is example where added files will be placed.
+
+- contents folder example
+```
+contents folder
+    aContent.md
+    testGroup
+        Images.json
+        explain.md
+```
+- aContent.md contain
+    - img1.png  // different binary to img1.png of Image.json 
+    - chrome.exe
+
+- Images.json contain
+    - img1.png
+    - img2.png
+    - img3.png
+    - img4.webp
+    - img5.jpg
+
+- files folder example
+```
+files folder
+    aContent(folder)
+        img1.png
+        chrome.exe
+    testGroup(folder)
+        Images(folder)
+            img1.png
+            img2.png
+            img3.png
+            img4.webp
+            img5.jpg
+        explain(folder)
+            "empty folder. when a content is created,a folder where added files are stored will be created."
+```
+
+
+
+## contents folder
+
+
+
+
+
 
 # contents group
-
- 
 
 # files group
 
