@@ -56,6 +56,8 @@
 - OneNote style page 
 - embedded favorite text and code editor view (VScode, neovim, Xcode and etc...) 
 
-
+# tagging system
+- for each files and contents, have a record what tags are belongs to.
+- for each tags, have a record what contents and files are belongs to.
 
 
