@@ -61,3 +61,8 @@
 - for each tags, have a record what contents and files are belongs to.
 
 
+# network
+- websocket
+ keep low latency, try to use websocket when there are support. I will implement first this.
+- http 
+ as fallback, http could be used but currently not implemented.

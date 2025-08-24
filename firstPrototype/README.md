@@ -5,9 +5,9 @@
 ## TODOs
 - [x] create empty project
 - [ ] write a simple architecture discription (currently woring)
+- [ ] create backend and frontend script files and folders (currently woring)
 - [ ] define backend APIs
 - [ ] define data strectures
-- [ ] create backend and frontend script files and folders
 - [ ] implement all 
 
 ## note list
