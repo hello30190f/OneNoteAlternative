@@ -62,7 +62,12 @@
 
 
 # network
+## protocol
 - websocket  
  to keep low latency, try to use websocket when there are support. I will implement first this.
 - http   
  as fallback, http could be used but currently not implemented.
+
+## security
+- SSL/TLS  
+ At prototype phase, i will not implement this. This may be security issue when use this system with network outside of localhost.
