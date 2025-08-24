@@ -1,17 +1,21 @@
 # architecture
  This page describe architecture of this notetaking system.
 
-# extentions
-## base extentions 
+# extensions
+## base extensions 
  add basic functions. Here is the examples of these.
 - any file preview functions
 - ink functions
 
-## extra extentions
+## extra extensions
  add optional functions.
 - synchronize data with cloud services like google drive, onedrive and so on...
 - data Importer from other services or apps like onenote, google keep and so on...
 
+## kind of extension
+- frontend extension
+- dataserver extension
+- client side backend extension
 
 
 # base unit
