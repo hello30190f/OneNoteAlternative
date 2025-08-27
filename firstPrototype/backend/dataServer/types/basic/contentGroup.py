@@ -1,0 +1,2 @@
+class contentGroup:
+    pass

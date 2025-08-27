@@ -33,3 +33,28 @@
 
 
 
+# data server architecture
+## basic
+- main.py
+    - commands
+    - helper
+    - types
+
+## main.py
+ where the server start. listen a websocket from the frontend.
+
+## controller.py
+ where accept requests from the forntend via websocket. try to call a command which is requested. By default, there are no commands corresponed to a request, notFound command will be executed. 
+
+## commands
+ where command logics are stored. For each commands, single script should be exist. 
+
+## helper
+ where commonly used functions are stored. This is optional.
+
+## types
+ where data types are stored. For each data types, single script should be exist.
+
+
+
+# extension

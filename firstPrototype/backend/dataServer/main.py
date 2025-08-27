@@ -3,14 +3,15 @@
 
 import uinput
 import asyncio
-from modules.reqestParser import parser
+# from modules.reqestParser import parser
 
 from websockets.asyncio.server import serve
 
 
 async def mainLoop(websocket):
     # websocket ref should be passed any class require network operation.
-    parser(websocket)
+    # parser(websocket)
+    pass
     
 
 async def main():
