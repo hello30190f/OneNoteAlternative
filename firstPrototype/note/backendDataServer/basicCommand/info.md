@@ -12,7 +12,7 @@
 {
     "command": "info",
     "data": {
-        // nothing or just ignored if there are data.
+        // nothing or just ignored if there is data.
     }
 }
 ```
