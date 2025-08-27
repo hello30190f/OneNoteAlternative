@@ -17,7 +17,7 @@
 - [dataStrecture1](note/dataStrecture1.md)
 ### description of implementation
 - [backend-CilentSide](note/backendClientSide.md)
-- [backend-DataServer](note/backendDataServer.md)
+- [backend-DataServer](note/backendDataServer/home.md)
 - [frontend](note/frontend.md)
 ### Just summary for first prototype
 - [Summary](note/Summary.md)
