@@ -66,6 +66,7 @@
 - [commandDocTemplate](./basicCommand/commandDocTemplate.md)
 - [notFound](./basicCommand/notFound.md)
 - [info](./basicCommand/info.md)
+- [pageInfo](./basicCommand/pageInfo.md)
 
 ## helper
 - [helperDocTemplate](./basicHelper/helperDocTemplate.md)
