@@ -25,13 +25,14 @@ useEffect(() => {
     })
 
     if(websocket !== null){
-        websocket.send(JSON.stringify({command:"info",data:null}))
+        let request = JSON.stringify({command:"info",data:null})
+        websocket.send(request)
     }else{
         setIndex({"status":"error","errorMessage":"No data server connected to.","data":null})
     }
 },[websocket])
 
-
+// render
 function CreateList({index}:{index:info}){
     let notebooks: ReactElement[] = []
     for(const aNotebook in index.data){
@@ -45,8 +46,11 @@ function CreateList({index}:{index:info}){
     return notebooks
 }
 
-function ShowErrorMessage(){
-    return(<div>Unable to show this index.</div>)
+
+function ShowError({message}:{message:string}){
+    return(<div>
+        {message}
+    </div>)
 }
 
 
@@ -55,7 +59,7 @@ export default function Selector(){
         return(
             <>
                 <div className="selector">
-                    <ShowErrorMessage></ShowErrorMessage>
+                    <ShowError message="Unable to show this index."></ShowError>
                 </div>
             </>
         )

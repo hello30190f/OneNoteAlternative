@@ -1,21 +1,37 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, type ReactElement } from "react"
 import { websocket } from "./network/database"
+import Free from "./pages/free/main";
+import Blank from "./pages/blank";
+import Markdown from "./pages/markdown";
+import Texteditor from "./pages/texteditor";
 
 
 interface PageInfo {
   status: string;
   errorMessage: string;
-  data: Record<string, PageMetadataAndData> | null;
+  data: PageMetadataAndData | null;
 }
 
-interface PageMetadataAndData{     
+interface PageMetadataAndData {     
     pageType:string,
     tags:[],
     files:[],
     pageData:string // JSON string data
 }
 
+// @extention need to add thier original pages into this list. 
+export let PageCompornetList = {
+    "free": Free,
+    "blank": Blank,
+    "markdown": Markdown,
+    "texteditor": Texteditor
+}
+
+
 const [pageInfo,setPageInfo] = useState<PageInfo | null>(null)
+const [pageID,setPageID] = useState<string | null>()
+const [pageContent,setPageContent] = useState<ReactElement>()
+
 
 useEffect(() => {
     websocket?.addEventListener("message",(event) => {
@@ -28,16 +44,27 @@ useEffect(() => {
     })
 },[websocket])
 
-
 useEffect(() => {
-    
-},[pageInfo])
+    if(pageID) getPage(pageID)
+},[pageID])
 
-function GetPage(){
+function getPage(pageID:string){
+    if(websocket !== null){
+        let request = JSON.stringify({command:"pageInfo",data:{pageID:pageID}})
+        websocket.send(request)
+    }else{
+        setPageInfo({"status":"error","errorMessage":"No data server connected to.","data":null})
+    }
+}
 
-    return(
-        <></>
-    )
+// render
+function ShowPageContents({ pageInfo }:{ pageInfo:PageInfo }){
+    let data = pageInfo.data
+
+
+    return(<div>
+
+    </div>)
 }
 
 function ShowError({message}:{message:string}){
@@ -47,14 +74,16 @@ function ShowError({message}:{message:string}){
 }
 
 export default function Page({ pageID }:{ pageID:string | null}){
-    if(websocket !== null && pageID !== null){
+    useEffect(() => {
+        setPageID(pageID)
+    },[pageID])
+
+    if(websocket !== null && pageID !== null && pageInfo){
         return(
             // show content
-            <div>
-                <GetPage></GetPage>
-            </div>
+            <ShowPageContents pageInfo={pageInfo}></ShowPageContents>
         )
-    }else if(websocket === null && pageID !== null){
+    }else if(websocket === null){
         return(
             <ShowError message="websocket error. there is no connection to the data server."></ShowError>
         )

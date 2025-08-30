@@ -29,7 +29,7 @@
         "pageType": "typeOfPage",
         "tags": [],
         "files": [],
-        "pageData": "JSON encoded string. This depend on page type."
+        "pageData": "JSON encoded string. This depend on the page type."
     }
 }
 ```
