@@ -1,6 +1,6 @@
 # info command
 ## role
- send index information to initialize frontend. This command will provide information shown below.
+ send index information to initialize the frontend. This command will provide information shown below.
 
 - notebook list
     - page list
@@ -26,13 +26,14 @@
         "notebooksName1":{
             "pages":[
                 "path/to/page.md",
-                "pageAtRootDir.md"
+                "pageAtRootDir.md",
+                "OneNoteStylePage.json",
                 ...
             ],
             "files":[
                 "img.png",
                 "video.mp4",
-                "metadata.json"
+                "metadata.json",
                 ...
             ]
         },

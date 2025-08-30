@@ -27,6 +27,7 @@
 - Vite
 - React
 - Tailwind CSS
+- zustand
 
 ### backend
 - python ?
