@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from "react"
+import { useEffect, useState, type JSX, type ReactElement } from "react"
 import { websocket } from "./network/database"
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
@@ -12,7 +12,7 @@ interface PageInfo {
   data: PageMetadataAndData | null;
 }
 
-interface PageMetadataAndData {     
+export interface PageMetadataAndData {     
     pageType:string,
     tags:[],
     files:[],
@@ -61,9 +61,29 @@ function getPage(pageID:string){
 function ShowPageContents({ pageInfo }:{ pageInfo:PageInfo }){
     let data = pageInfo.data
 
+    if(data == null){
+        return(<ShowError message="There is no data."></ShowError>)
+    }
+
+    let PageCompornet = PageCompornetList["free"]
+    for(let Compornet in PageCompornetList){
+        if(Compornet == data.pageType){
+            // might be require refactor.
+            PageCompornet = PageCompornetList[Compornet as keyof typeof PageCompornetList]
+        }
+    }
+    if(PageCompornet == null){
+        let message = "Failed to load page. There are no pages match the page type for " + data.pageType
+        return(<ShowError message={message} ></ShowError>)
+    }
 
     return(<div>
-
+        <PageCompornet 
+            files={data.files} 
+            pageData={data.pageData}
+            pageType={data.pageType}
+            tags={data.tags}
+        ></PageCompornet>
     </div>)
 }
 
