@@ -1,7 +1,6 @@
 # main server scirpt
 # serve dataserver function with websocket. 
 
-import uinput
 import asyncio
 # from modules.reqestParser import parser
 

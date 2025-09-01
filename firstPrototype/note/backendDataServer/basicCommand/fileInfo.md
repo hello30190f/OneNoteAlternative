@@ -14,7 +14,7 @@
 
 ## response (dataserver to frontend)
 ### about metadata key
- key metadata will contain special information for each files. For example, image file may contain information shown below.
+ key metadata will contain special information for each files. For example, a image file may contain information shown below.
 
 - resolution
 - camera name
