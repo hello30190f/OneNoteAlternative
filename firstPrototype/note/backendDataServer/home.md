@@ -63,10 +63,18 @@
 
 # detail
 ## command
+### template
 - [commandDocTemplate](./basicCommand/commandDocTemplate.md)
+### common
 - [notFound](./basicCommand/notFound.md)
+### page view
 - [info](./basicCommand/info.md)
 - [pageInfo](./basicCommand/pageInfo.md)
+### File API
+- [fileInfo](./basicCommand/fileInfo.md)
+- [fileData](./basicCommand/fileData.md)
+
 
 ## helper
+### template
 - [helperDocTemplate](./basicHelper/helperDocTemplate.md)
