@@ -24,7 +24,7 @@
 #### backend response(JSON)
 - result code
 - response data  
-※ response data could be empty when there is no response data.
+※ the response data could be empty when there is no response data.
 
 ### dataserver to frontend
 #### server interrupt reqest(JSON)
