@@ -30,7 +30,7 @@ export let PageCompornetList = {
 
 const [pageInfo,setPageInfo] = useState<PageInfo | null>(null)
 const [pageID,setPageID] = useState<string | null>()
-const [pageContent,setPageContent] = useState<ReactElement>()
+// const [pageContent,setPageContent] = useState<ReactElement>()
 
 
 useEffect(() => {
