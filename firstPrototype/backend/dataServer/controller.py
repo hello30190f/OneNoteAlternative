@@ -7,7 +7,7 @@ from commands.fileInfo import fileInfo
 from commands.fileData import fileData
 
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
-# extention should register their command to this dictionary.
+# extension should register their command to this dictionary.
 #   func(request,websocket) -> None
 #       request     -> parsed json string data
 #       websocket   -> websockets.asyncio.server.ServerConnection
