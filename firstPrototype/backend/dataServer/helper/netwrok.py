@@ -1,13 +1,13 @@
 from websockets.exceptions import ConnectionClosedOK
 
 # example of wating message from frontend
-async def receiveLoop(websocket):
+async def receiveLoop(websocket,instance,callback):
     # put parser here.
     while True:
         try: 
             message = await websocket.recv()
-            print(message)
-            pass
+            print("<<<" + message)
+            callback(instance,message)
         except ConnectionClosedOK:
             break
 
