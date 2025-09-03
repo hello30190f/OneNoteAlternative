@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactElement } from "react";
-import { useDatabaseStore } from "../App"; 
+import { useDatabaseStore } from "./network/database";
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
 import Markdown from "./pages/markdown";

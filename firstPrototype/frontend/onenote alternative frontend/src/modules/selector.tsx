@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactElement } from "react";
-import { useDatabaseStore } from "../App"; // Zustand ストア
+import { useDatabaseStore } from "./network/database";
 
 interface Info {
     status: string;
