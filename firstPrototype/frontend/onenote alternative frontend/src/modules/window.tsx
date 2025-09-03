@@ -4,7 +4,7 @@ import Page from "./page";
 const [currentPage,setCurrentPage] = useState<string | null>(null)
 
 // show selector of notebooks, pages and files
-export default function window(){
+export default function Window(){
     return(
         <>
             <div className="window">
