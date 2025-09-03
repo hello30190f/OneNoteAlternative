@@ -1,6 +1,6 @@
 # notFound command
 ## role
- tell the frontend to the requested command does not exist.
+ Tell the frontend to the requested command does not exist.
 
 ## args (frontend to dataserver)
 ```json

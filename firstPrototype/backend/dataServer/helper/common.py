@@ -27,9 +27,6 @@ def malformedRequestResponse(websocket):
 #   OK   : return parsed JSON data
 #   Error: None
 def malformedRequestChecker(message):
-    # TODO: implement this
-    print("malformedRequestChecker does not impelemented yet...")
-
     # check the message is valid JSON string
     request = None
     try:

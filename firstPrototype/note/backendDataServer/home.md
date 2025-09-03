@@ -78,3 +78,6 @@
 ## helper
 ### template
 - [helperDocTemplate](./basicHelper/helperDocTemplate.md)
+- [common](./basicHelper/common.md)
+- [loadSettings](./basicHelper/loadSettings.md)
+- [netwrok](./basicHelper/netwrok.md)
