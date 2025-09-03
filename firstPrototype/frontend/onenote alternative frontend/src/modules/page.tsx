@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactElement } from "react";
-import { useDatabaseStore } from "../App"; // Zustand ストア
+import { useDatabaseStore } from "../App"; 
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
 import Markdown from "./pages/markdown";
@@ -18,7 +18,7 @@ export interface PageMetadataAndData {
     pageData: string; // JSON string data
 }
 
-// ページコンポーネントのマッピング
+// @extention need to add thier original pages into this list. 
 export const PageCompornetList = {
     free: Free,
     blank: Blank,
@@ -32,12 +32,10 @@ export default function Page({ pageID }: { pageID: string | null }) {
     const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
     const [currentPageID, setCurrentPageID] = useState<string | null>(pageID);
 
-    // pageID が props で変わったら更新
     useEffect(() => {
         setCurrentPageID(pageID);
     }, [pageID]);
 
-    // WebSocket の message を監視
     useEffect(() => {
         if (!websocket) return;
 
@@ -62,7 +60,6 @@ export default function Page({ pageID }: { pageID: string | null }) {
         };
     }, [websocket]);
 
-    // pageID に対応するページ情報を取得
     useEffect(() => {
         if (!websocket || !currentPageID) return;
 
@@ -70,7 +67,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
         websocket.send(request);
     }, [websocket, currentPageID]);
 
-    // ページ表示用コンポーネント
+    // render
     function ShowPageContents({ pageInfo }: { pageInfo: PageInfo }) {
         const data = pageInfo.data;
 
@@ -94,7 +91,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
         return <div>{message}</div>;
     }
 
-    // レンダリング
+
     if (!websocket) {
         return <ShowError message="WebSocket error. No connection to the data server." />;
     }

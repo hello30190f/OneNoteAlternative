@@ -13,7 +13,6 @@ interface Notebook {
 }
 
 export default function Selector() {
-    // Zustandから直接 websocket を購読する
     const websocket = useDatabaseStore((s) => s.websocket);
 
     const [index, setIndex] = useState<Info>({
@@ -46,7 +45,6 @@ export default function Selector() {
         };
 
         const whenOpened = () => {
-            // 初期リクエスト送信
             const request = JSON.stringify({ command: "info", data: null });
             websocket.send(request);
         }
