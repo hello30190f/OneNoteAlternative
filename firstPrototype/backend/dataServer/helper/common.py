@@ -5,9 +5,7 @@ def NotImplementedResponse(websocket):
                      {
                          "status": "NotImplemented",
                          "errorMessage": "nothing",
-                         "data":{
-                             // nothing
-                         }
+                         "data":{ }
                      }
                      """
     websocket.send(responseString)
@@ -17,9 +15,7 @@ def malformedRequestResponse(websocket):
                      {
                          "status": "error",
                          "errorMessage": "Non JSON string or corrupted JSON string.",
-                         "data":{
-                             // nothing
-                         }
+                         "data":{ }
                      }
                      """
     websocket.send(responseString)
