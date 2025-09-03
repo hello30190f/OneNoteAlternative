@@ -1,5 +1,4 @@
 import json
-import os
 
 settingFilePath = "settings.json"
 settings = None
