@@ -9,7 +9,6 @@ type DatabaseState = {
   getWebsocket: () => WebSocket | null;
 };
 
-
 export function useDatabase() {
     const [websocket, setWebsocket] = useState<WebSocket | null>(null);
     const [serverIP, setServerIP] = useState<string>("ws://localhost:55225");
@@ -63,7 +62,6 @@ export const useDatabaseStore = create<DatabaseState>((set, get) => ({
   getWebsocket: () => get().websocket,
 }));
 
-// サーバー接続の副作用を管理する hook
 export function useDatabaseEffects() {
   const serverIP = useDatabaseStore((s) => s.serverIP);
   const setWebsocket = useDatabaseStore.setState;
