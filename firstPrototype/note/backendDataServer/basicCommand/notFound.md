@@ -1,6 +1,7 @@
 # notFound command
 ## role
- Tell the frontend to the requested command does not exist.
+ Tell the frontend to the requested command does not exist. **This command cannot be called from the frontend directly and the implementation exist as a helper function on ```helper/common.py```**
+
 
 ## args (frontend to dataserver)
 ```json
