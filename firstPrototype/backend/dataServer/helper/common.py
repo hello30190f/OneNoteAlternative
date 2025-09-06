@@ -1,24 +1,24 @@
 import json
 
+# error response ---------------------------------------
+# error response ---------------------------------------
 def NotImplementedResponse(websocket):
-    responseString = """
-                     {
-                         "status": "NotImplemented",
-                         "errorMessage": "nothing",
-                         "data":{ }
-                     }
-                     """
+    responseString = json.dumps({
+        "status": "NotImplemented",
+        "errorMessage": "nothing",
+        "data": { }
+    })
     websocket.send(responseString)
 
 def malformedRequestResponse(websocket):
-    responseString = """
-                     {
-                         "status": "error",
-                         "errorMessage": "Non JSON string or corrupted JSON string.",
-                         "data":{ }
-                     }
-                     """
+    responseString = json.dumps({
+        "status": "error",
+        "errorMessage": "nothinNon JSON string or corrupted JSON string.g",
+        "data": { }
+    })
     websocket.send(responseString)
+# error response ---------------------------------------
+# error response ---------------------------------------
 
 
 # arg:
