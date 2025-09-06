@@ -17,6 +17,14 @@ def malformedRequestResponse(websocket):
         "data": { }
     })
     websocket.send(responseString)
+
+def notFound(websocket):
+    responseString = json.dumps({
+        "status": "error",
+        "errorMessage": "command does not exist",
+        "data": { }
+    })
+    websocket.send(responseString)
 # error response ---------------------------------------
 # error response ---------------------------------------
 

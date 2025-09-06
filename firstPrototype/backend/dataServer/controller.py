@@ -1,7 +1,6 @@
-from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse
+from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse, notFound
 import json
-from commands.info import info
-from commands.notFound import notFound 
+from commands.info import info 
 from commands.pageInfo import pageInfo
 from commands.fileInfo import fileInfo
 from commands.fileData import fileData
@@ -36,5 +35,5 @@ def controler(message,websocket):
             break
 
     # when command is not found.
-    notFound(request,websocket)
+    notFound(websocket)
 
