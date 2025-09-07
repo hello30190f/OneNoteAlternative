@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement, type ReactNode } from "react";
 import { useDatabaseStore } from "./network/database";
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
@@ -87,20 +87,33 @@ export default function Page({ pageID }: { pageID: string | null }) {
         );
     }
 
-    function ShowError({ message }: { message: string }) {
-        return <div>{message}</div>;
+    function PageOutlineAndContainer({ children }:{ children:ReactNode }){
+        return <div className="h-screen w-screen gb-wihte">
+            {children}
+        </div>
     }
 
+    function ShowError({ message }: { message: string }) {
+        return <div>{message}</div>
+    }
 
     if (!websocket) {
-        return <ShowError message="WebSocket error. No connection to the data server." />;
+        return <PageOutlineAndContainer>
+            <ShowError message="WebSocket error. No connection to the data server." />;
+        </PageOutlineAndContainer>
     }
     if (!currentPageID) {
-        return <ShowError message="Page is not selected." />;
+        return<PageOutlineAndContainer>
+            <ShowError message="Page is not selected." />
+        </PageOutlineAndContainer> 
     }
     if (!pageInfo) {
-        return <ShowError message="Loading page..." />;
+        return <PageOutlineAndContainer>
+            <ShowError message="Loading page..." />
+        </PageOutlineAndContainer>
     }
 
-    return <ShowPageContents pageInfo={pageInfo} />;
+    return <PageOutlineAndContainer>
+            <ShowPageContents pageInfo={pageInfo} />
+        </PageOutlineAndContainer>
 }

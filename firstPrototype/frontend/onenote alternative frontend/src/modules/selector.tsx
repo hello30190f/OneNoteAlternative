@@ -74,7 +74,17 @@ export default function Selector() {
                 </div>
             );
         }
-        return <>{notebooks}</>;
+        if(notebooks.length != 0){
+            return <>{notebooks}</>;
+        }else{
+            return <p>There are no notebooks to show.</p>
+        }
+    }
+
+    function Header(){
+        return <div className="">
+            <p>Notebook List</p>
+        </div>
     }
 
     function ShowError({ message }: { message: string }) {
@@ -89,7 +99,8 @@ export default function Selector() {
         );
     } else {
         return (
-            <div className="selector">
+            <div className="selector flex-1 ml-auto bg-gray flex flex-col">
+                <Header></Header>
                 <CreateList index={index} />
             </div>
         );

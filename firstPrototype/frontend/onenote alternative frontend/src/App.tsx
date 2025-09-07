@@ -15,11 +15,7 @@ function App() {
   const closeConnection = useDatabaseStore((s) => s.closeConnection);
   const getWebsocket = useDatabaseStore((s) => s.getWebsocket);
 
-  return (
-    <>
-      <Window></Window>
-    </>
-  )
+  return <Window></Window>
 }
 
 export default App

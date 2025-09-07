@@ -11,6 +11,8 @@
 // WebSocket.CLOSED (3)
 // The connection is closed or couldn't be opened.
 
+import type { ReactNode } from "react";
+
 // Check websocket state
 // OK State
     // WebSocket.OPEN (1)
@@ -39,3 +41,5 @@ interface response {
 //         return true
 //     }
 // }
+
+

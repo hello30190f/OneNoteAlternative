@@ -24,13 +24,9 @@ export default function Window(){
     
     return(
         <>
-            <div className="window">
-                <div className="pageView">
-                    <Page pageID={currentPage}></Page>
-                </div>
-                <div className="selector">
-                    <Selector></Selector>
-                </div>
+            <div className="window flex flex-row">
+                <Page pageID={currentPage}></Page>
+                <Selector></Selector>
             </div>
         </>
     )

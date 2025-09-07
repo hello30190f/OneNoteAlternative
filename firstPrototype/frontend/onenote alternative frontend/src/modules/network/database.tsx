@@ -36,8 +36,8 @@ export function useDatabaseEffects() {
     const ws = new WebSocket(serverIP);
     setWebsocket({ websocket: ws });
 
-    return () => {
-      ws.close();
-    };
+    // return () => {
+    //   ws.close();
+    // };
   }, [serverIP, setWebsocket]);
 }
