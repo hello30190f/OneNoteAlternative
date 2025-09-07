@@ -10,7 +10,7 @@ import controller
 
 
 async def mainLoop(websocket):
-    receiveLoop(websocket,controller.controler)    
+    await receiveLoop(websocket,controller.controler)    
 
 async def main():
     # async with serve(mainLoop, "localhost", 50096) as server:

@@ -1,4 +1,4 @@
 from helper.common import NotImplementedResponse
 
-def pageInfo(request,websocket):
-    NotImplementedResponse(websocket)
+async def pageInfo(request,websocket):
+    await NotImplementedResponse(websocket)

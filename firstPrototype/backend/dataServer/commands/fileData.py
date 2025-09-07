@@ -1,4 +1,4 @@
 from helper.common import NotImplementedResponse
 
-def fileData(request,websocket):
-    NotImplementedResponse(websocket)
+async def fileData(request,websocket):
+    await NotImplementedResponse(websocket)

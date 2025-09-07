@@ -2,29 +2,32 @@ import json
 
 # error response ---------------------------------------
 # error response ---------------------------------------
-def NotImplementedResponse(websocket):
+async def NotImplementedResponse(websocket):
     responseString = json.dumps({
         "status": "NotImplemented",
         "errorMessage": "nothing",
         "data": { }
     })
-    websocket.send(responseString)
+    print(">>>" + responseString)
+    await websocket.send(responseString)
 
-def malformedRequestResponse(websocket):
+async def malformedRequestResponse(websocket):
     responseString = json.dumps({
         "status": "error",
         "errorMessage": "nothinNon JSON string or corrupted JSON string.g",
         "data": { }
     })
-    websocket.send(responseString)
+    print(">>>" + responseString)
+    await websocket.send(responseString)
 
-def notFound(websocket):
+async def notFound(websocket):
     responseString = json.dumps({
         "status": "error",
         "errorMessage": "command does not exist",
         "data": { }
     })
-    websocket.send(responseString)
+    print(">>>" + responseString)
+    await websocket.send(responseString)
 # error response ---------------------------------------
 # error response ---------------------------------------
 

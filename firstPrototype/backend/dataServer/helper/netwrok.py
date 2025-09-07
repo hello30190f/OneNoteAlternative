@@ -7,7 +7,8 @@ async def receiveLoopForClass(websocket,instance,callback):
         try: 
             message = await websocket.recv()
             print("<<<" + message)
-            callback(instance,message)
+            # callback have to show sent messages.
+            await callback(instance,message)
         except ConnectionClosedOK:
             break
 
@@ -18,6 +19,7 @@ async def receiveLoop(websocket,callback):
         try: 
             message = await websocket.recv()
             print("<<<" + message)
-            callback(message,websocket)
+            # callback have to show sent messages.
+            await callback(message,websocket)
         except ConnectionClosedOK:
             break

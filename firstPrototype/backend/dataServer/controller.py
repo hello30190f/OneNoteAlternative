@@ -21,19 +21,22 @@ commands = {
 
 # call command
 # when command is not valid, notFound command will be executed.
-def controler(message,websocket):
+async def controler(message,websocket):
     request = malformedRequestChecker(message)
     if(request == None):
         malformedRequestResponse(websocket)   
 
     requestedCommand = request["command"]
 
+    commandFound = False
     # try to call the requested command if it does exist.
     for aCommand in commands.keys():
         if(aCommand == requestedCommand):
-            commands[requestedCommand](request,websocket)
+            await commands[requestedCommand](request,websocket)
+            commandFound = True
             break
 
     # when command is not found.
-    notFound(websocket)
+    if(not commandFound):
+        await notFound(websocket)
 
