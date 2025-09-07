@@ -11,7 +11,7 @@ type DatabaseState = {
 
 export const useDatabaseStore = create<DatabaseState>((set, get) => ({
   websocket: null,
-  serverIP: "ws://localhost:55225",
+  serverIP: "ws://localhost:50097",
 
   changeServer: (ip: string) => {
     set({ serverIP: ip });

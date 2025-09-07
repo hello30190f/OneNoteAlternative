@@ -33,6 +33,7 @@ export default function Selector() {
 
         const handleMessage = (event: MessageEvent) => {
             const result = JSON.parse(String(event.data));
+            console.log(result)
             if (!result.status.includes("error")) {
                 setIndex(result);
             } else {
