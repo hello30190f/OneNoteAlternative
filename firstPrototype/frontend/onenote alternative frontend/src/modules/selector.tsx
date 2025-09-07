@@ -1,5 +1,6 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement, type ReactNode } from "react";
 import { useDatabaseStore } from "./network/database";
+import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
 
 interface Info {
     status: string;
@@ -91,18 +92,32 @@ export default function Selector() {
         return <div>{message}</div>;
     }
 
+    function SelectorOutline({ children }:{ children:ReactNode }){
+        return <div className="SelectorContainer flex-1 ml-auto bg-gray flex flex-col">
+            {children}
+        </div>
+    }
+
+    let windowArg:OverlayWindowArgs = {
+        title: "Selector"
+    } 
+
     if (index == null) {
         return (
-            <div className="selector">
-                <ShowError message="Unable to show this index." />
-            </div>
+            <OverlayWindow arg={windowArg}>
+                <SelectorOutline>
+                    <ShowError message="Unable to show this index." />
+                </SelectorOutline>
+            </OverlayWindow>
         );
     } else {
         return (
-            <div className="selector flex-1 ml-auto bg-gray flex flex-col">
-                <Header></Header>
-                <CreateList index={index} />
-            </div>
+            <OverlayWindow arg={windowArg}>
+                <SelectorOutline>
+                    <Header></Header>
+                    <CreateList index={index} />
+                </SelectorOutline>
+            </OverlayWindow>
         );
     }
 }

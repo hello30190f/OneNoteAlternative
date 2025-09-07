@@ -88,7 +88,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
     }
 
     function PageOutlineAndContainer({ children }:{ children:ReactNode }){
-        return <div className="h-screen w-screen gb-wihte">
+        return <div className="h-screen w-screen bg-gray-600">
             {children}
         </div>
     }

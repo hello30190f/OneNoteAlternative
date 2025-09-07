@@ -24,7 +24,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             prevPos.x = event.screenX
             prevPos.y = event.screenY
         },
-        "mousemove": (event:React.MouseEvent) => {
+        "mousemove": (event:MouseEvent) => {
             if(onMove){
                 let dx = event.screenX - prevPos.x
                 let dy = event.screenY - prevPos.y
@@ -48,19 +48,21 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             prevPos.x = touch.screenX
             prevPos.y = touch.screenY
         },
-        "touchmove": (event:React.TouchEvent) => {
+        "touchmove": (event:TouchEvent) => {
             if(onMove){
                 let touch = event.touches.item(0)
-                let dx = touch.screenX - prevPos.x
-                let dy = touch.screenY - prevPos.y
-
-                prevPos.x = touch.screenX
-                prevPos.y = touch.screenY
-
-                setWindowPos({
-                    x:windowPos.x + dx,
-                    y:windowPos.y + dy
-                })
+                if(touch){
+                    let dx = touch.screenX - prevPos.x
+                    let dy = touch.screenY - prevPos.y
+    
+                    prevPos.x = touch.screenX
+                    prevPos.y = touch.screenY
+    
+                    setWindowPos({
+                        x:windowPos.x + dx,
+                        y:windowPos.y + dy
+                    })
+                }
             }
         },
         "touchend": () => {
@@ -69,25 +71,23 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     }
 
     addEventListener("touchend",windowHandlers.touchend)
+    addEventListener("touchmove",windowHandlers.touchmove)
     addEventListener("mouseup",windowHandlers.mouseup)
+    addEventListener("mousemove",windowHandlers.mousemove)
 
     let windowPosStyleString = " top-[" + String(windowPos.x) + "px] left-[" + String(windowPos.y) + "px] " 
-    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-row h-[1rem] opacity-70 min-w-[5rem] fixed" + windowPosStyleString
+    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-row opacity-70 min-w-[5rem] fixed" + windowPosStyleString
 
     if(visible){
-        return (<div 
-        className={OverlayWindowContaierClassName}
-        onMouseDown={windowHandlers.mousedown}
-        onMouseMove={windowHandlers.mousemove}
-        onTouchStart={windowHandlers.touchstart}
-        onTouchMove={windowHandlers.touchmove}
-        >
-
-            <div className="windowHeader move bg-gray-200 w-full">
-                <div className="title h-[1rem] text-white">{arg.title}</div>
-                <div className="close size-[1rem] bg-red-50 ml-auto" onClick={() => {setVisible(false)}}></div>
+        return (<div className={OverlayWindowContaierClassName}>
+            <div className="windowHeader move absolute bg-yellow-200 w-full h-[2rem]"
+                onMouseDown={windowHandlers.mousedown}
+                onTouchStart={windowHandlers.touchstart}>
+                    
+                <div className="title h-[1rem] absolute text-white">{arg.title}</div>
+                <div className="close size-[2rem] bg-red-500 ml-auto" onClick={() => {setVisible(false)}}></div>
             </div>
-            <div className="content bg-gray-50 min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
+            <div className="content mt-[2rem] bg-gray-200 min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
  items-center">
                 {children}
             </div>
