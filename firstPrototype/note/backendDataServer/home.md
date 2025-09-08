@@ -21,13 +21,38 @@
 #### forntend reqest(JSON)
 - operation(command)
 - data
+```json
+{
+    "command": "commandName",
+    "data": {
+        "data1": "data1",
+        "blobdata": {
+            "file1": "base64 encoded blob", 
+            "file2": "base64 encoded blob", 
+            "file3": "base64 encoded blob", 
+            ...
+        }
+        ...
+    }
+}
+```
 #### backend response(JSON)
-- result code
+- result string
+- error message string
 - response data  
 ※ the response data could be empty when there is no response data.
+```json
+{
+    "status": "resultString",
+    "errorMessage": "messageString",
+    "data":{ }
+}
+```
+
 
 ### dataserver to frontend
 #### server interrupt reqest(JSON)
+
 
 #### frontend response(JSON)
 
@@ -65,15 +90,19 @@
 ## command
 ### template
 - [commandDocTemplate](./basicCommand/commandDocTemplate.md)
-### common
-- [notFound](./basicCommand/notFound.md)
+### helper
+- [notFound](./basicCommand/helper/notFound.md)
+- [malformedRequest](./basicCommand/helper/malformedRequest.md)
+- [NotImplemented](./basicCommand/helper/NotImplemented.md)
 ### page view
 - [info](./basicCommand/info.md)
 - [pageInfo](./basicCommand/pageInfo.md)
-### File API
+### File 
 - [fileInfo](./basicCommand/fileInfo.md)
 - [fileData](./basicCommand/fileData.md)
-
+### create
+- [createNotebook](./basicCommand/createNotebook.md)
+- [createPage](./basicCommand/createPage.md)
 
 ## helper
 ### template

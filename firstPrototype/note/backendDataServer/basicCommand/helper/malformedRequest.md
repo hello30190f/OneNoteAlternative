@@ -19,6 +19,7 @@ Non JSON string or corrupted JSON string.
 ```
 
 ## error cases
+ No error cases
 
 
 

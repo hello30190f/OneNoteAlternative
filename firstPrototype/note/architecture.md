@@ -72,6 +72,9 @@
 - http   
  as fallback, http could be used but currently not implemented.
 
+## connection
+ when websocket protocol used, at least two connection will be established. One for "the frontend to the dataserver" and another for "the dataserver to the frontend".
+
 ## security
 - SSL/TLS  
  At prototype phase, i will not implement this. This may be security issue when use this system with network outside of localhost.
