@@ -5,7 +5,7 @@
 ## args (frontend to dataserver)
 ```json
 {
-    "command": "info",
+    "command": "createPage",
     "data": {
 
     }

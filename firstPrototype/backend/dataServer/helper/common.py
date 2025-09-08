@@ -38,7 +38,7 @@ async def notFound(websocket):
 #   OK   : return parsed JSON data
 #   Error: None
 def malformedRequestChecker(message):
-    # check the message is valid JSON string
+    # check the message is valid JSON string or not
     request = None
     try:
         request = json.loads(message)

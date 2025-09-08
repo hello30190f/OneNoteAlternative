@@ -12,3 +12,5 @@ else:
     print("loadSettings helper: current settings")
     print(settings)
 
+# NotebookRootFolders
+#  Where begin to find notebook metadata files.
