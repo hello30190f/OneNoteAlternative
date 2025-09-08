@@ -1,9 +1,11 @@
 from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse, notFound
 import json
-from commands.info import info 
-from commands.pageInfo import pageInfo
-from commands.fileInfo import fileInfo
-from commands.fileData import fileData
+from commands.info              import info 
+from commands.pageInfo          import pageInfo
+from commands.fileInfo          import fileInfo
+from commands.fileData          import fileData
+from commands.createPage        import createPage
+from commands.createNotebook    import createNotebook
 
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
 # extension should register their command to this dictionary.
@@ -12,11 +14,13 @@ from commands.fileData import fileData
 #       websocket   -> websockets.asyncio.server.ServerConnection
 #   command function or class should return response with JSON format via websocket.
 commands = {
-    "info": info,
-    "notFound": notFound,
-    "pageInfo": pageInfo,
-    "fileInfo": fileInfo,
-    "fileData": fileData
+    "info"          : info,
+    "notFound"      : notFound,
+    "pageInfo"      : pageInfo,
+    "fileInfo"      : fileInfo,
+    "fileData"      : fileData,
+    "createPage"    : createPage,
+    "createNotebook": createNotebook
 }
 
 # call command
