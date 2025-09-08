@@ -1,4 +1,4 @@
-import { useState, type ReactNode} from "react"
+import { useRef, useState, type ReactNode} from "react"
 
 export interface OverlayWindowArgs{
     title: string
@@ -7,16 +7,12 @@ export interface OverlayWindowArgs{
 // show window can be moved around anywhare and closed
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
     const [visible,setVisible] = useState(true)
-    // const [onMove,setOnMove] = useState(false)
-    const [windowPos,setWindowPos] = useState({
-        x:100,
-        y:100,
-    })
-    // let windowPos = {
-    //     x:0,
-    //     y:0
-    // }
 
+    //TODO: fix reset window pos problem when react redraw
+    let windowPos = useRef({
+        x:100,
+        y:100
+    })
     let onMove = false
     let prevPos = {
         x:0,
@@ -25,33 +21,43 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     const windowHandlers = {
         "mousedown": (event:React.MouseEvent) => {
+            event.preventDefault()
             onMove = true 
             prevPos.x = event.screenX
             prevPos.y = event.screenY
+            console.log("move window start")
+            console.log(prevPos)
         },
         "mousemove": (event:MouseEvent) => {
             if(onMove){
+                event.preventDefault()
                 let dx = event.screenX - prevPos.x
                 let dy = event.screenY - prevPos.y
 
                 prevPos.x = event.screenX
                 prevPos.y = event.screenY
 
+                console.log("mousemove")
                 console.log(dx)
+                console.log(event.screenX)
+                console.log(windowPos.current.x)
 
-                // windowPos.x = windowPos.x + dx
-                // windowPos.y = windowPos.y + dy
-                setWindowPos({
-                    x:windowPos.x + dx,
-                    y:windowPos.y + dy
+                windowPos.current.x = windowPos.current.x + dx
+                windowPos.current.y = windowPos.current.y + dy
+ 
+                setWindowStyle({
+                    left: String(windowPos.current.x) + "px",
+                    top: String(windowPos.current.y) + "px"
                 })
             }
         },
         "mouseup": () => {
+            console.log("move window end")
             onMove = false
         },
         
         "touchstart": (event:React.TouchEvent) => {
+            event.preventDefault()
             onMove = true
             let touch = event.touches.item(0)
             prevPos.x = touch.screenX
@@ -59,6 +65,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         },
         "touchmove": (event:TouchEvent) => {
             if(onMove){
+                event.preventDefault()
                 let touch = event.touches.item(0)
                 if(touch){
                     let dx = touch.screenX - prevPos.x
@@ -67,16 +74,18 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                     prevPos.x = touch.screenX
                     prevPos.y = touch.screenY
 
-                    // windowPos.x = windowPos.x + dx
-                    // windowPos.y = windowPos.y + dy
-                    setWindowPos({
-                        x:windowPos.x + dx,
-                        y:windowPos.y + dy
+                    windowPos.current.x = windowPos.current.x + dx
+                    windowPos.current.y = windowPos.current.y + dy
+
+                    setWindowStyle({
+                        left: String(windowPos.current.x) + "px",
+                        top: String(windowPos.current.y) + "px"
                     })
                 }
             }
         },
         "touchend": () => {
+            console.log("move window end")
             onMove = false
         }
     }
@@ -86,12 +95,10 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     addEventListener("mouseup",windowHandlers.mouseup)
     addEventListener("mousemove",windowHandlers.mousemove)
 
-    // let windowPosStyleString = " top-[" + String(windowPos.x) + "px] left-[" + String(windowPos.y) + "px] " 
-    // let windowPosStyleString = "left: " + String(windowPos.x) + "px; top: " + String(windowPos.y) + "px;" 
-    const windowPosStyle = {
-        left: String(windowPos.x) + "px",
-        top: String(windowPos.y) + "px"
-    }
+    const [windowPosStyle,setWindowStyle] = useState({
+        left: String(windowPos.current.x) + "px",
+        top: String(windowPos.current.y) + "px"
+    })
 
     let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col opacity-70 min-w-[5rem] fixed" 
 
