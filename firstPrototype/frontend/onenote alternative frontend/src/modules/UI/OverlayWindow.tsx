@@ -13,29 +13,32 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         x:100,
         y:100
     })
-    let onMove = false
-    let prevPos = {
+    let onMove = useRef(false)
+    let prevPos = useRef({
         x:0,
         y:0
-    }
+    })
+    let init = useRef(true)
 
     const windowHandlers = {
         "mousedown": (event:React.MouseEvent) => {
             event.preventDefault()
-            onMove = true 
-            prevPos.x = event.screenX
-            prevPos.y = event.screenY
+            onMove.current = true 
+            prevPos.current.x = event.screenX
+            prevPos.current.y = event.screenY
             console.log("move window start")
-            console.log(prevPos)
+            console.log(onMove)
+            console.log(prevPos.current)
         },
         "mousemove": (event:MouseEvent) => {
-            if(onMove){
+            console.log(onMove.current)
+            if(onMove.current){
                 event.preventDefault()
-                let dx = event.screenX - prevPos.x
-                let dy = event.screenY - prevPos.y
+                let dx = event.screenX - prevPos.current.x
+                let dy = event.screenY - prevPos.current.y
 
-                prevPos.x = event.screenX
-                prevPos.y = event.screenY
+                prevPos.current.x = event.screenX
+                prevPos.current.y = event.screenY
 
                 console.log("mousemove")
                 console.log(dx)
@@ -53,26 +56,26 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         },
         "mouseup": () => {
             console.log("move window end")
-            onMove = false
+            onMove.current = false
         },
         
         "touchstart": (event:React.TouchEvent) => {
             event.preventDefault()
-            onMove = true
+            onMove.current = true
             let touch = event.touches.item(0)
-            prevPos.x = touch.screenX
-            prevPos.y = touch.screenY
+            prevPos.current.x = touch.screenX
+            prevPos.current.y = touch.screenY
         },
         "touchmove": (event:TouchEvent) => {
-            if(onMove){
+            if(onMove.current){
                 event.preventDefault()
                 let touch = event.touches.item(0)
                 if(touch){
-                    let dx = touch.screenX - prevPos.x
-                    let dy = touch.screenY - prevPos.y
+                    let dx = touch.screenX - prevPos.current.x
+                    let dy = touch.screenY - prevPos.current.y
 
-                    prevPos.x = touch.screenX
-                    prevPos.y = touch.screenY
+                    prevPos.current.x = touch.screenX
+                    prevPos.current.y = touch.screenY
 
                     windowPos.current.x = windowPos.current.x + dx
                     windowPos.current.y = windowPos.current.y + dy
@@ -86,14 +89,23 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         },
         "touchend": () => {
             console.log("move window end")
-            onMove = false
+            onMove.current = false
         }
     }
 
-    addEventListener("touchend",windowHandlers.touchend)
-    addEventListener("touchmove",windowHandlers.touchmove)
-    addEventListener("mouseup",windowHandlers.mouseup)
-    addEventListener("mousemove",windowHandlers.mousemove)
+    if(init.current){
+        console.log("Overlay window init")
+        addEventListener("touchend",windowHandlers.touchend)
+        addEventListener("mouseup",windowHandlers.mouseup)
+
+        addEventListener("touchmove",windowHandlers.touchmove)
+        addEventListener("mousemove",windowHandlers.mousemove)
+
+        init.current = false
+        console.log(init.current)
+    }
+
+
 
     const [windowPosStyle,setWindowStyle] = useState({
         left: String(windowPos.current.x) + "px",
