@@ -1,6 +1,12 @@
 
 # backendDataServer
- handle data management. this server can be run separately or locally from frontend. 
+ Handle data management. This server can be run separately or locally from the frontend. Only concentrate on a single folder for notebook store.
+
+- aRootFolderOfNotebookStore
+    - Notebook1Folder
+    - Notebook2Folder
+    - Notebook3Folder
+    ...
 
 # Langage and libs
 - python
