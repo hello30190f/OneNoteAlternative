@@ -26,9 +26,9 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             onMove.current = true 
             prevPos.current.x = event.screenX
             prevPos.current.y = event.screenY
-            console.log("move window start")
-            console.log(onMove)
-            console.log(prevPos.current)
+            // console.log("move window start")
+            // console.log(onMove)
+            // console.log(prevPos.current)
         },
         "mousemove": (event:MouseEvent) => {
             console.log(onMove.current)
@@ -40,10 +40,10 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 prevPos.current.x = event.screenX
                 prevPos.current.y = event.screenY
 
-                console.log("mousemove")
-                console.log(dx)
-                console.log(event.screenX)
-                console.log(windowPos.current.x)
+                // console.log("mousemove")
+                // console.log(dx)
+                // console.log(event.screenX)
+                // console.log(windowPos.current.x)
 
                 windowPos.current.x = windowPos.current.x + dx
                 windowPos.current.y = windowPos.current.y + dy
@@ -55,7 +55,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             }
         },
         "mouseup": () => {
-            console.log("move window end")
+            // console.log("move window end")
             onMove.current = false
         },
         
@@ -88,13 +88,13 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             }
         },
         "touchend": () => {
-            console.log("move window end")
+            // console.log("move window end")
             onMove.current = false
         }
     }
 
     if(init.current){
-        console.log("Overlay window init")
+        // console.log("Overlay window init")
         addEventListener("touchend",windowHandlers.touchend)
         addEventListener("mouseup",windowHandlers.mouseup)
 
@@ -105,8 +105,6 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         console.log(init.current)
     }
 
-
-
     const [windowPosStyle,setWindowStyle] = useState({
         left: String(windowPos.current.x) + "px",
         top: String(windowPos.current.y) + "px"
@@ -116,15 +114,15 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     if(visible){
         return (<div className={OverlayWindowContaierClassName} style={windowPosStyle}>
-            <div className="windowHeader move bg-yellow-200 w-full h-[2rem]"
+            <div className="windowHeader move bg-yellow-600 w-full h-[2rem]"
                 onMouseDown={windowHandlers.mousedown}
                 onTouchStart={windowHandlers.touchstart}
                 >
                     
                 <div className="title h-[1rem] absolute text-white">{arg.title}</div>
-                <div className="close size-[2rem] bg-red-500 ml-auto" onClick={() => {setVisible(false)}}></div>
+                <div className="close size-[2rem] bg-red-700 ml-auto" onClick={() => {setVisible(false)}}></div>
             </div>
-            <div className="content\ bg-gray-200 min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
+            <div className="content bg-gray-900 min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
  items-center">
                 {children}
             </div>
