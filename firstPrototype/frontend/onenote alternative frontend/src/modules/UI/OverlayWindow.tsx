@@ -1,12 +1,17 @@
 import { useRef, useState, type ReactNode} from "react"
 
 export interface OverlayWindowArgs{
-    title: string
+    title: string,
+    visible: boolean,
+    setVisible: React.Dispatch<React.SetStateAction<boolean>> 
 }
 
 // show window can be moved around anywhare and closed
+// TODO: expose setVisible to children compornent.
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
-    const [visible,setVisible] = useState(true)
+    // const [visible,setVisible] = useState(true)
+    const visible = arg.visible
+    const setVisible = arg.setVisible
 
     //TODO: fix reset window pos problem when react redraw
     let windowPos = useRef({
@@ -31,7 +36,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             // console.log(prevPos.current)
         },
         "mousemove": (event:MouseEvent) => {
-            console.log(onMove.current)
+            // console.log(onMove.current)
             if(onMove.current){
                 event.preventDefault()
                 let dx = event.screenX - prevPos.current.x
@@ -120,7 +125,10 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 >
                     
                 <div className="title h-[1rem] absolute text-white">{arg.title}</div>
-                <div className="close size-[2rem] bg-red-700 ml-auto" onClick={() => {setVisible(false)}}></div>
+                <div className="close size-[2rem] bg-red-700 ml-auto" onClick={(event:React.MouseEvent) => {
+                    event.preventDefault()
+                    setVisible(false)
+                    }}></div>
             </div>
             <div className="content bg-gray-900 min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
  items-center">

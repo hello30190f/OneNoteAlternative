@@ -114,27 +114,27 @@ export default function Selector() {
     }
 
     let windowArg:OverlayWindowArgs = {
-        title: "Selector"
+        title: "Selector",
+        visible: visible,
+        setVisible: setVisible
     } 
 
-    if(visible){
-        if (index == null) {
-            return (
-                <OverlayWindow arg={windowArg}>
-                    <SelectorOutline>
-                        <ShowError message="Unable to show this index." />
-                    </SelectorOutline>
-                </OverlayWindow>
-            );
-        } else {
-            return (
-                <OverlayWindow arg={windowArg}>
-                    <SelectorOutline>
-                        <Header></Header>
-                        <CreateList index={index} />
-                    </SelectorOutline>
-                </OverlayWindow>
-            );
-        }
+    if (index == null) {
+        return (
+            <OverlayWindow arg={windowArg}>
+                <SelectorOutline>
+                    <ShowError message="Unable to show this index." />
+                </SelectorOutline>
+            </OverlayWindow>
+        );
+    } else {
+        return (
+            <OverlayWindow arg={windowArg}>
+                <SelectorOutline>
+                    <Header></Header>
+                    <CreateList index={index} />
+                </SelectorOutline>
+            </OverlayWindow>
+        );
     }
 }
