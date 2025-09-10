@@ -114,7 +114,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     if(visible){
         return (<div className={OverlayWindowContaierClassName} style={windowPosStyle}>
-            <div className="windowHeader move bg-yellow-600 w-full h-[2rem]"
+            <div className="windowHeader move bg-yellow-600 w-full h-[2rem] justify-center place-items-center align-middle text-center"
                 onMouseDown={windowHandlers.mousedown}
                 onTouchStart={windowHandlers.touchstart}
                 >

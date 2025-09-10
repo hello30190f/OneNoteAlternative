@@ -22,21 +22,31 @@ export const useToggleableStore = create<toggleableTools>((set,get) => ({
     }
 }))
 
-
 export default function ToolsBar(){
     const toggleables = useToggleableStore((s) => s.toggleables)
 
     function AtoggleableButton({ Atoggleable }:{ Atoggleable:toggleable }) {
         return <div 
-            className="AtoggleableButton h-[2rem] bg-blue-600" 
+            className="
+            AtoggleableButton 
+            h-[2rem] bg-blue-500 min-w-[4rem] 
+            flex 
+            pl-[1rem] pr-[1rem] 
+            justify-center place-items-center align-middle text-center
+ items-center" 
             onClick={() => {
+                // TODO: fix this button only works once problem.
+                // setVisibility may be broken.
+                console.log("ToolsBar:" + Atoggleable.name)
+                console.log(Atoggleable.setVisibility) 
+                console.log(Atoggleable.visibility) 
                 if(Atoggleable.visibility){
                     Atoggleable.setVisibility(false)
                 }else{
                     Atoggleable.setVisibility(true)
                 }
             }}
-        ></div>
+        >{Atoggleable.name}</div>
     }
 
     function ToolsBarOutlineStyle({ children }:{ children:ReactNode }){

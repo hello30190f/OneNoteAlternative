@@ -1,6 +1,7 @@
-import { useEffect, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { useDatabaseStore } from "./network/database";
 import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
+import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
 
 interface Info {
     status: string;
@@ -15,6 +16,9 @@ interface Notebook {
 
 export default function Selector() {
     const websocket = useDatabaseStore((s) => s.websocket);
+    const [visible,setVisible] = useState(false)
+    const init = useRef(true)
+    const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
 
     const [index, setIndex] = useState<Info>({
         status: "init",
@@ -60,6 +64,17 @@ export default function Selector() {
         };
     }, [websocket]);
 
+    // TODO: toolbar registor bug fix
+    if(init.current){
+        const toggleable:toggleable = {
+            name: "Selector",
+            setVisibility: setVisible,
+            visibility:visible
+        }
+        toolbarAddTool(toggleable)
+        init.current = false
+    }
+
     function CreateList({ index }: { index: Info }) {
         if (!index.data) return null;
 
@@ -102,22 +117,24 @@ export default function Selector() {
         title: "Selector"
     } 
 
-    if (index == null) {
-        return (
-            <OverlayWindow arg={windowArg}>
-                <SelectorOutline>
-                    <ShowError message="Unable to show this index." />
-                </SelectorOutline>
-            </OverlayWindow>
-        );
-    } else {
-        return (
-            <OverlayWindow arg={windowArg}>
-                <SelectorOutline>
-                    <Header></Header>
-                    <CreateList index={index} />
-                </SelectorOutline>
-            </OverlayWindow>
-        );
+    if(visible){
+        if (index == null) {
+            return (
+                <OverlayWindow arg={windowArg}>
+                    <SelectorOutline>
+                        <ShowError message="Unable to show this index." />
+                    </SelectorOutline>
+                </OverlayWindow>
+            );
+        } else {
+            return (
+                <OverlayWindow arg={windowArg}>
+                    <SelectorOutline>
+                        <Header></Header>
+                        <CreateList index={index} />
+                    </SelectorOutline>
+                </OverlayWindow>
+            );
+        }
     }
 }
