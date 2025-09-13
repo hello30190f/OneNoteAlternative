@@ -9,11 +9,9 @@ export interface OverlayWindowArgs{
 // show window can be moved around anywhare and closed
 // TODO: expose setVisible to children compornent.
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
-    // const [visible,setVisible] = useState(true)
     const visible = arg.visible
     const setVisible = arg.setVisible
 
-    //TODO: fix reset window pos problem when react redraw
     let windowPos = useRef({
         x:100,
         y:100
