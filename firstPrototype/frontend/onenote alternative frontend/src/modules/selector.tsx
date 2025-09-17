@@ -22,6 +22,7 @@ export default function Selector() {
     const [visible,setVisible] = useState(false)
     const init = useRef(true)
     const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
+    const requestUUID = useRef<string>(genUUID())
 
     const [index, setIndex] = useState<Info>({
         status: "init",
@@ -44,27 +45,30 @@ export default function Selector() {
         }
 
         const handleMessage = (event: MessageEvent) => {
-            //TODO: add UUID and command check 
-
             const result = JSON.parse(String(event.data));
             console.log(result)
-            if (!result.status.includes("error")) {
-                setIndex(result);
-            } else {
-                setIndex({
-                    status: result.status,
-                    errorMessage: result.errorMessage,
-                    UUID: result.UUID,
-                    command: result.command,
-                    data: null,
-                });
+
+            if(result.UUID == requestUUID.current && "info" == result.command){
+                if (!result.status.includes("error")) {
+                    setIndex(result);
+                } else {
+                    setIndex({
+                        status: result.status,
+                        errorMessage: result.errorMessage,
+                        UUID: result.UUID,
+                        command: result.command,
+                        data: null,
+                    });
+                }
             }
         };
 
         const whenOpened = () => {
+            requestUUID.current = genUUID()
+
             const request = JSON.stringify({ 
                 command: "info", 
-                UUID: genUUID(),
+                UUID: requestUUID.current,
                 data: null 
             });
             websocket.send(request);
