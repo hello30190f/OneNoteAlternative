@@ -8,6 +8,8 @@ import Texteditor from "./pages/texteditor";
 interface PageInfo {
     status: string;
     errorMessage: string;
+    UUID: string;
+    command: string;
     data: PageMetadataAndData | null;
 }
 
@@ -45,9 +47,11 @@ export default function Page({ pageID }: { pageID: string | null }) {
                 setPageInfo(result);
             } else {
                 setPageInfo({
-                    status: result.status,
-                    errorMessage: result.errorMessage,
-                    data: null,
+                    status:         result.status,
+                    errorMessage:   result.errorMessage,
+                    UUID:           result.UUID,
+                    command:        result.command,
+                    data:           null,
                 });
             }
         };

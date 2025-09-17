@@ -29,6 +29,8 @@ import type { ReactNode } from "react";
 interface response {
     status: string;
     errorMessage: string;
+    UUID: string;
+    command: string;
     data: any;
 }
 

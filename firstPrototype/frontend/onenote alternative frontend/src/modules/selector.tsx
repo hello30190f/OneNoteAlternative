@@ -6,6 +6,8 @@ import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
 interface Info {
     status: string;
     errorMessage: string;
+    UUID: string | null;
+    command: string | null;
     data: Record<string, Notebook> | null;
 }
 
@@ -23,6 +25,8 @@ export default function Selector() {
     const [index, setIndex] = useState<Info>({
         status: "init",
         errorMessage: "nothing",
+        UUID: null,
+        command: null,
         data: null,
     });
 
@@ -31,6 +35,8 @@ export default function Selector() {
             setIndex({
                 status: "error",
                 errorMessage: "No data server connected to.",
+                UUID: null,
+                command: null,
                 data: null,
             });
             return;
@@ -45,6 +51,8 @@ export default function Selector() {
                 setIndex({
                     status: result.status,
                     errorMessage: result.errorMessage,
+                    UUID: result.UUID,
+                    command: result.command,
                     data: null,
                 });
             }
