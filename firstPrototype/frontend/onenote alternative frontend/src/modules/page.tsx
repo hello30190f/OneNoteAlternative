@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { useDatabaseStore } from "./network/database";
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
@@ -34,6 +34,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
 
     const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
     const [currentPageID, setCurrentPageID] = useState<string | null>(pageID);
+    const requestUUID = useRef<string>(genUUID())
 
     useEffect(() => {
         setCurrentPageID(pageID);
@@ -42,20 +43,21 @@ export default function Page({ pageID }: { pageID: string | null }) {
     useEffect(() => {
         if (!websocket) return;
 
-        const handleMessage = (event: MessageEvent) => {
-            //TODO: add UUID and command check 
-            
+        const handleMessage = (event: MessageEvent) => {           
             const result = JSON.parse(String(event.data));
-            if (!result.status.includes("error")) {
-                setPageInfo(result);
-            } else {
-                setPageInfo({
-                    status:         result.status,
-                    errorMessage:   result.errorMessage,
-                    UUID:           result.UUID,
-                    command:        result.command,
-                    data:           null,
-                });
+            
+            if(result.UUID == requestUUID.current && "pageInfo" == result.command){
+                if (!result.status.includes("error")) {
+                    setPageInfo(result);
+                } else {
+                    setPageInfo({
+                        status:         result.status,
+                        errorMessage:   result.errorMessage,
+                        UUID:           result.UUID,
+                        command:        result.command,
+                        data:           null,
+                    });
+                }
             }
         };
 
@@ -70,9 +72,10 @@ export default function Page({ pageID }: { pageID: string | null }) {
     useEffect(() => {
         if (!websocket || !currentPageID) return;
 
+        requestUUID.current = genUUID()
         const request = JSON.stringify({ 
             command: "pageInfo", 
-            UUID: genUUID(),
+            UUID: requestUUID.current,
             data: { pageID: currentPageID }
         });
         websocket.send(request);
