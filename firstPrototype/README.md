@@ -32,6 +32,10 @@
 - [frontend](note/frontend.md)
 ### Just summary for first prototype
 - [Summary](note/Summary.md)
+### page type
+- [pageTemplate](./note/pages/pageTemplate.md)
+- [markdown](./note/pages/markdown.md)
+- [free](./note/pages/free.md)
 
 ## frameworks and libraries
 ### frontend
