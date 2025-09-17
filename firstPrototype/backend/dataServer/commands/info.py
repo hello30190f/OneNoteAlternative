@@ -15,6 +15,7 @@ import os.path
 async def info(request,websocket):
     root = loadSettings.settings["NotebookRootFolder"]
     
+    notebookJSONinfo = None
     notebooks    = []
     pages        = []
     files        = []
@@ -49,16 +50,22 @@ async def info(request,websocket):
                         with open(currentdir + "/metadata.json","rt") as notebook:
                             data = json.loads(notebook.read())
                             notebooks.append(data["name"])
+                            if(notebookJSONinfo != None):
+                                notebookJSONinfo[data["name"]] = data
+                            else:
+                                notebookJSONinfo = {}
+                                notebookJSONinfo[data["name"]] = data 
                     except:
                         print("info: something went worng with: " + currentdir + "/metadata.json")
                 else:
-                    print("info: " + currentdir + "does not include notebook.")
+                    print("info: " + currentdir + " does not include a notebook.")
             
             # check remote notebooks cache existence when this data server running as a local data server on a client with the frontend.
             elif(loadSettings.settings["isStandalone"] and "-cache" in aFolderOrFile):
-                print("info: cache function does not Implemented for now.")
+                print("info: cache function is not Implemented for now.")
 
-    def findPages():
+    def findPages(notebookName):
+        notebookJSONinfo[notebookName]
         pass
 
     def findFiles():

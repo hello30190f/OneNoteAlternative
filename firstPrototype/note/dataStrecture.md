@@ -31,7 +31,7 @@
 ## notebook.json
 ```json
 {
-    "name"      : "name of a notebook",
+    "name"      : "name of a notebook. this should be same name as root folder of the notebook.",
     "createDate": "YYYY/MM/DD",
     "updateDate": "YYYY/MM/DD",
     "id"        : "bb6f7d1c-c722-495c-923b-ab9e9574ef5b" // id is random uuid
