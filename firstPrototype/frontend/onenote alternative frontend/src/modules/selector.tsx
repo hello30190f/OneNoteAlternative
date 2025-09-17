@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "
 import { useDatabaseStore } from "./network/database";
 import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
 import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
+import { genUUID } from "./common";
 
 interface Info {
     status: string;
@@ -43,6 +44,8 @@ export default function Selector() {
         }
 
         const handleMessage = (event: MessageEvent) => {
+            //TODO: add UUID and command check 
+
             const result = JSON.parse(String(event.data));
             console.log(result)
             if (!result.status.includes("error")) {
@@ -59,7 +62,11 @@ export default function Selector() {
         };
 
         const whenOpened = () => {
-            const request = JSON.stringify({ command: "info", data: null });
+            const request = JSON.stringify({ 
+                command: "info", 
+                UUID: genUUID(),
+                data: null 
+            });
             websocket.send(request);
         }
 

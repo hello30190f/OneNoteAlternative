@@ -4,6 +4,7 @@ import Free from "./pages/free/main";
 import Blank from "./pages/blank";
 import Markdown from "./pages/markdown";
 import Texteditor from "./pages/texteditor";
+import { genUUID } from "./common";
 
 interface PageInfo {
     status: string;
@@ -67,7 +68,11 @@ export default function Page({ pageID }: { pageID: string | null }) {
     useEffect(() => {
         if (!websocket || !currentPageID) return;
 
-        const request = JSON.stringify({ command: "pageInfo", data: { pageID: currentPageID } });
+        const request = JSON.stringify({ 
+            command: "pageInfo", 
+            UUID: genUUID(),
+            data: { pageID: currentPageID }
+        });
         websocket.send(request);
     }, [websocket, currentPageID]);
 
