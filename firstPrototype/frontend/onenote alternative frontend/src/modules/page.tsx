@@ -43,6 +43,8 @@ export default function Page({ pageID }: { pageID: string | null }) {
         if (!websocket) return;
 
         const handleMessage = (event: MessageEvent) => {
+            //TODO: add UUID and command check 
+            
             const result = JSON.parse(String(event.data));
             if (!result.status.includes("error")) {
                 setPageInfo(result);
