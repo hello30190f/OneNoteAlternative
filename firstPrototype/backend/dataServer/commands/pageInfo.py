@@ -9,32 +9,46 @@ async def pageInfo(request,websocket):
     notebookName        = request["notebook"]
     targetPath          = root + "/" + notebookName + "/contents/" + pagePathFromContent
     
-    with open(targetPath,"rt") as aPage:
-        contentString = aPage.read()
+    try:
+        with open(targetPath,"rt") as aPage:
+            contentString = aPage.read()
 
-        #TODO: implement this
+            # detect page type
+            pageType = None
+            jsondata = None
+            if("markdown" in targetPath): 
+                pageType = "markdown"
+            elif("json" in targetPath):
+                jsondata = json.loads(contentString)
+                pageType = jsondata["pageType"]
 
-        # note: find metadata for each pages and files
-        # detect page type
+            # collect metadata
+            tags = None
+            files = None
+            if(jsondata != None):
+                # find tags
+                tags = jsondata["tags"]
+                # find files
+                files = jsondata["files"]
 
+            await websocket.send(json.dumps({
+                "status": "ok",
+                "UUID": request["UUID"],
+                "command": "pageInfo",
+                "errorMessage": "nothing",
+                "data":{
+                    "pageType": pageType,
+                    "tags": tags,
+                    "files": files,
+                    "pageData": contentString
+                }
+            }))
 
-        # find tags
-
-
-        # find files
-
-
-        # await websocket.send(json.dumps({
-        #     "status": "ok",
-        #     "UUID": request["UUID"],
-        #     "command": "pageInfo",
-        #     "errorMessage": "nothing",
-        #     "data":{
-        #         "pageType": "typeOfPage",
-        #         "tags": ["tag1","tag2"],
-        #         "files": ["path/to/file1.md","path/to/file2.png","path/to/file1.blender"],
-        #         "pageData": contentString
-        #     }
-        # }))
-
-    await NotImplementedResponse(websocket)
+    except:
+       await websocket.send(json.dumps({
+            "status": "error",
+            "UUID": request["UUID"],
+            "command": "pageInfo",
+            "errorMessage": "The backend error. This might mean there is no page or malformed json file.",
+            "data":{ }
+        }))
