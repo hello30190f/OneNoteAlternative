@@ -37,7 +37,7 @@
         "pageType": "typeOfPage",
         "tags": ["tag1","tag2",...],
         "files": ["path/to/file1.md","path/to/file2.png","path/to/file1.blender"...],
-        "pageData": "JSON encoded string. This depend on the page type."
+        "pageData": "string. This depend on the page type."
     }
 }
 ```
