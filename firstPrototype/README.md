@@ -5,11 +5,11 @@
 ## TODOs
 ### Freespace
 - [x] create empty project
-- [ ] write a simple architecture discription
+- [x] write a simple architecture discription
 - [ ] create backend and frontend script files and folders (currently working)
 - [ ] define backend APIs (currently working)
 - [ ] define data strectures (currently working)
-- [ ] implement all 
+- [ ] define metadata for each files and pages  (currently working)
 
 ### Frontend
 - [ ] implement websocket server selector 

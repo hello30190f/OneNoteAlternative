@@ -14,6 +14,7 @@ async def pageInfo(request,websocket):
 
         #TODO: implement this
 
+        # note: find metadata for each pages and files
         # detect page type
 
 
