@@ -11,6 +11,7 @@
 ```json
 {
     "command": "info",
+    "UUID": "UUID string",
     "data": {
         // nothing or just ignored if there is data.
     }
@@ -21,6 +22,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "info",
     "errorMessage": "nothing",
     "data":{
         "notebooksName1":{

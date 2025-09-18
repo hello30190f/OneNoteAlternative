@@ -6,6 +6,7 @@
 ```json
 {
     "command": "createNotebook",
+    "UUID": "UUID string",
     "data": {
         "notebookName": "notbookName"
     }
@@ -17,6 +18,8 @@
 {
     "status": "ok",
     "errorMessage": "nothing",
+    "UUID":"UUID string",
+    "command": "createNotebook",
     "data":{ }
 }
 ```
@@ -26,6 +29,8 @@
 ```json
 {
     "status": "error",
+    "UUID":"UUID string",
+    "command": "createNotebook",
     "errorMessage": "duplicate notebook name",
     "data":{ }
 }

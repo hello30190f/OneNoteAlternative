@@ -6,6 +6,7 @@
 ```json
 {
     "command": "fileInfo",
+    "UUID": "UUID string",
     "data": {
         "fileID": "path/to/file1.anyExt",
     }
@@ -25,6 +26,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "fileInfo",
     "errorMessage": "nothing",
     "data":{
         "size": 132, // filesize in byte, for example 132B
@@ -38,6 +41,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "fileInfo",
     "errorMessage": "nothing",
     "data":{
         "size": 132000000, // filesize in byte, for example 132MB

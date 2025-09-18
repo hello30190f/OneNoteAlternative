@@ -7,6 +7,7 @@
 ```json
 {
     "command": "fileData",
+    "UUID": "UUID string",
     "data": {
         "fileID": "path/to/file1.anyExt",
         "splitIndex": null
@@ -17,6 +18,7 @@
 ```json
 {
     "command": "fileData",
+    "UUID": "UUID string",
     "data": {
         "fileID": "path/to/file1.anyExt",
         "splitIndex": 4 //  this can be any number from 0 to splitAmount - 1.
@@ -30,6 +32,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "fileData",
     "errorMessage": "nothing",
     "data":{
         "split": false,
@@ -42,6 +46,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "fileData",
     "errorMessage": "nothing",
     "data":{
         "split": true,

@@ -6,6 +6,7 @@
 ```json
 {
     "command": "info",
+    "UUID": "UUID string",
     "data": {
 
     }
@@ -17,6 +18,8 @@
 {
     "status": "ok",
     "errorMessage": "nothing",
+    "UUID":"UUID string",
+    "command": "info",
     "data":{
 
     }

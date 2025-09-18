@@ -6,6 +6,7 @@
 ```json
 {
     "command": "createPage",
+    "UUID": "UUID string",
     "data": {
         "noteboook": "notebookName",
         "newPageID": "Path/to/newPageName.md",
@@ -16,6 +17,7 @@
 ```json
 {
     "command": "createPage",
+    "UUID": "UUID string",
     "data": {
         "noteboook": "notebookName",
         "newPageID": "Path/to/newPageName.json",
@@ -28,6 +30,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "createPage",
     "errorMessage": "nothing",
     "data":{ }
 }
@@ -39,6 +43,8 @@
 ```json
 {
     "status": "error",
+    "UUID":"UUID string",
+    "command": "createPage",
     "errorMessage": "duplicate pageID",
     "data":{ }
 }

@@ -7,7 +7,9 @@
 ```json
 {
     "command": "pageInfo",
+    "UUID": "UUID string",
     "data": {
+        "notebook": "notebookName",
         "pageID": "id/of/page.md"
     }
 }
@@ -16,7 +18,9 @@
 ```json
 {
     "command": "pageInfo",
+    "UUID": "UUID string",
     "data": {
+        "notebook": "notebookName",
         "pageID": "id/of/page.json"
     }
 }
@@ -26,6 +30,8 @@
 ```json
 {
     "status": "ok",
+    "UUID":"UUID string",
+    "command": "pageInfo",
     "errorMessage": "nothing",
     "data":{
         "pageType": "typeOfPage",
