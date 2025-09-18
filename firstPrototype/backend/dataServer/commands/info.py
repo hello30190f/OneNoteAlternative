@@ -64,12 +64,14 @@ async def info(request,websocket):
             elif(loadSettings.settings["isStandalone"] and "-cache" in aFolderOrFile):
                 print("info: cache function is not Implemented for now.")
 
+    # find pages recursively
     def findPages(notebookName):
-        notebookJSONinfo[notebookName]
-        pass
+        data = notebookJSONinfo[notebookName]
 
-    def findFiles():
-        pass
+    # find files recursively
+    def findFiles(notebookName):
+        data = notebookJSONinfo[notebookName]
+
 
 
 
