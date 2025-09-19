@@ -67,3 +67,23 @@ def malformedRequestChecker(message):
         return None
 
 
+# arg:
+#   data    : the dict data of "data" key inside the request from the forntend.
+#   keylist : the key list that the command require to work.
+# return value
+#   OK   : None
+#   Error: ["missing","keys","list"]
+def dataKeyChecker(data:dict,keylist:list):
+    missing = []
+
+    for aDataKey in data.keys():
+        find = False
+        for aCompareKey in keylist:
+            if(aDataKey == aCompareKey):
+                find = True
+                break
+        if(not find):
+            missing.append(aDataKey)
+
+    if(len(missing) == 0):  return None
+    else:                   return missing 

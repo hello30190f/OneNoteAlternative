@@ -86,3 +86,26 @@
  Nothing will be returned.
 
 
+
+
+
+
+## dataKeyChecker func
+### role
+ Check any mandatory keys missing or not for the content of "data" key inside the frontend request.
+
+### args
+- data:dict  
+ The dict data of "data" key inside the request from the forntend.
+- keylist:list  
+ The key list that the command require to work.
+
+### return
+- None:None  
+ Nothing will be returned.
+
+### return on error
+#### when missing data key is found
+- ["missing","keys","list"]:list  
+ Return what keys are missing.
+
