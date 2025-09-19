@@ -20,8 +20,8 @@
                 "data": "This is test text. Yukkuri marisa abuse Yukkuri reimu.",
                 "position":{
                     "x": 200,
-                    "y": 100,
-                    "z": 0
+                    "y": 150,
+                    "z": 1
                 }
             }
         ]

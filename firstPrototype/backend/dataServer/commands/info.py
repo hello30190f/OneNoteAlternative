@@ -31,7 +31,7 @@ async def info(request,websocket):
 
     # check metadata.json existance for a notebook
     # dont find notebooks recursively
-    #TODO: cache folder is exception. currently not implement about that.
+    #TODO: cache folder is exception. Currently it is not implemented.
     def findNotes():
         # look for notebooks or cache at the notebook root folder in settings.json 
         for aFolderOrFile in os.listdir(root):
