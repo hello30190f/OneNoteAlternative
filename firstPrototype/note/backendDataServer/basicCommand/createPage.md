@@ -46,7 +46,7 @@
     "UUID":"UUID string",
     "command": "createPage",
     "data":{
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["noteboook","newPageID","pageType"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

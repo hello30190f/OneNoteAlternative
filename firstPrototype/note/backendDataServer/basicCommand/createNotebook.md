@@ -33,7 +33,7 @@
     "UUID"          : "UUID string",
     "command"       : "createNotebook",
     "data": {
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["notebookName"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

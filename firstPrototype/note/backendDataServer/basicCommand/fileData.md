@@ -66,7 +66,7 @@
     "UUID":"UUID string",
     "command": "fileData",
     "data":{
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["fileID","splitIndex"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }
