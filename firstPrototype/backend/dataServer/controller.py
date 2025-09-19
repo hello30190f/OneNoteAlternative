@@ -5,6 +5,7 @@ from commands.pageInfo          import pageInfo
 from commands.fileInfo          import fileInfo
 from commands.fileData          import fileData
 from commands.createPage        import createPage
+from commands.updatePage        import updatePage
 from commands.createNotebook    import createNotebook
 
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
@@ -20,6 +21,7 @@ commands = {
     "fileInfo"      : fileInfo,
     "fileData"      : fileData,
     "createPage"    : createPage,
+    "updatePage"    : updatePage,
     "createNotebook": createNotebook
 }
 

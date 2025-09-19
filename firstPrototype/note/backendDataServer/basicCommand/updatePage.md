@@ -12,7 +12,7 @@
         "pageID"    : "Path/to/newPageName",
         "pageType"  : "typeOfPage",
         "update"    : {
-            "depend": "on paget type",
+            "depend": "on page type",
         }
     }
 }

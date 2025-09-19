@@ -1,5 +1,26 @@
-from helper.common import NotImplementedResponse
-from helper import loadSettings 
+from helper.common import NotImplementedResponse, dataKeyChecker
+from helper import loadSettings
+import json
 
 async def createNotebook(request,websocket):
+    mandatoryKeys   = ["notebookName"]
+    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    if(missing != None):
+        print("[CommandName] ERROR: Mandatory keys are missing for this command.")
+        print(mandatoryKeys)
+        print(missing)
+        await websocket.send(json.dumps({
+            "status"        : "error",
+            "errorMessage"  : "Mandatory data keys are missing or malformed.",
+            "UUID"          : request["UUID"],
+            "command"       : "[Command Name Here]",
+            "data": {
+                "mandatoryKeys": mandatoryKeys,
+                "missing": missing
+            }
+        }))
+        return
+
+
+
     await NotImplementedResponse(request,websocket)
