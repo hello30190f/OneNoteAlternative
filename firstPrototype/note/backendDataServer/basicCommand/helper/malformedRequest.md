@@ -10,9 +10,11 @@ Non JSON string or corrupted JSON string.
 ## response (dataserver to frontend)
 ```json
 {
-    "status": "error",
-    "errorMessage": "Non JSON string or corrupted JSON string.",
-    "data":{
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : request["command"],
+    "errorMessage"  : "Non JSON string or corrupted JSON string.",
+    "data": {
         // nothing
     }
 }

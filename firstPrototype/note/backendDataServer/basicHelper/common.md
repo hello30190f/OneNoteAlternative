@@ -8,9 +8,11 @@
 - the response
 ```json
 {
-    "status": "NotImplemented",
-    "errorMessage": "nothing",
-    "data":{ }
+    "status"        : "NotImplemented",
+    "UUID"          : "UUID string",
+    "command"       : request["command"],
+    "errorMessage"  : "nothing",
+    "data"          : { }
 }
 ```
 
@@ -30,9 +32,11 @@
 - the response
 ```json
 {
-    "status": "error",
-    "errorMessage": "Non JSON string or corrupted JSON string.",
-    "data":{ }
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : request["command"],
+    "errorMessage"  : "Non JSON string or corrupted JSON string.",
+    "data"          : { }
 }
 ```
 
@@ -53,9 +57,11 @@
 #### mandatory keys list
 - command
 - data
+- UUID
 ```json
 {
     "command": "anyString",
+    "UUID": "UUID string",
     "data": {
         // anything 
     }

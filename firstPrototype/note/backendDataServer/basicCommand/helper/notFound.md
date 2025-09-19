@@ -16,9 +16,11 @@
 ## response (dataserver to frontend)
 ```json
 {
-    "status": "error",
-    "errorMessage": "command does not exist",
-    "data":{
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : request["command"],
+    "errorMessage"  : "command does not exist",
+    "data": {
         // nothing
     }
 }

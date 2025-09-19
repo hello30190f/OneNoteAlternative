@@ -15,9 +15,11 @@
 ## response (dataserver to frontend)
 ```json
 {
-    "status": "NotImplemented",
-    "errorMessage": "nothing",
-    "data":{
+    "status"        : "NotImplemented",
+    "UUID"          : "UUID string",
+    "command"       : request["command"],
+    "errorMessage"  : "nothing",
+    "data": {
         // nothing
     }
 }
