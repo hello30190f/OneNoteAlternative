@@ -49,3 +49,32 @@
     "data":{ }
 }
 ```
+
+### when there is no template for specified pageType or some kind of FileSystem failure is ocurred.
+ A new page won't be created.
+```json
+{
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : "createPage",
+    "errorMessage"  : "The backend error. Failed to create a new file or to find the specified pageType: [pageType]",
+    "data"          : { }
+}
+```
+
+### when failed to create new folder while try to create a new page.
+ A new page won't be created. ```result.returncode``` mean result code(int) of ```mkdir -p [filepath]```.
+```json
+{
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : "createPage",
+    "errorMessage"  : "The backend error. Failed to create new folder.",
+    "data"          : { 
+        "folderPath" : "path/to/folder", 
+        "returnCode" : result.returncode
+    }
+}
+```
+
+

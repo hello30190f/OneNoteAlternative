@@ -32,11 +32,11 @@ async def pageInfo(request,websocket):
                 files = jsondata["files"]
 
             await websocket.send(json.dumps({
-                "status": "ok",
-                "UUID": request["UUID"],
-                "command": "pageInfo",
-                "errorMessage": "nothing",
-                "data":{
+                "status"        : "ok",
+                "UUID"          : request["UUID"],
+                "command"       : "pageInfo",
+                "errorMessage"  : "nothing",
+                "data": {
                     "pageType": pageType,
                     "tags": tags,
                     "files": files,
@@ -50,9 +50,9 @@ async def pageInfo(request,websocket):
        print(notebookName)
        print(targetPath)
        await websocket.send(json.dumps({
-            "status": "error",
-            "UUID": request["UUID"],
-            "command": "pageInfo",
-            "errorMessage": "The backend error. This might mean there is no page or malformed json file.",
-            "data":{ }
+            "status"        : "error",
+            "UUID"          : request["UUID"],
+            "command"       : "pageInfo",
+            "errorMessage"  : "The backend error. This might mean there is no page or malformed json file.",
+            "data"          : { }
         }))

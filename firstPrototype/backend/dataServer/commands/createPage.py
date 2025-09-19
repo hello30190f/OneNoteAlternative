@@ -1,6 +1,6 @@
 from helper.common import NotImplementedResponse
 from helper import loadSettings 
-import os ,os.path , json
+import os , os.path , json , subprocess
 from ..types.pages import controller
 
 # note
@@ -27,8 +27,35 @@ async def createPage(request,websocket):
     pagePathFromContentFolder   = request["newPageID"]
 
     pagePath = loadSettings.settings["NotebookRootFolder"] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
+    filename = pagePath.split("/")[-1]
+    folder   = pagePath.replace(filename,"")
 
-    # check page existance
+    # check the directory existance
+    # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
+    if(not os.path.exists(folder)):
+        # create folder
+        command = "mkdir -p " + folder
+        result = subprocess.run([command],shell=True)
+
+        if(result.returncode != 0):
+            print("createPage ERROR: The backend error. Failed to create new folder.")
+            print("notebook    : " + notebookName) 
+            print("contentPath : " + pagePathFromContentFolder)
+            print("fill path   : " + pagePath)
+            await websocket.send(json.dumps({
+                "status"        : "error",
+                "UUID"          : request["UUID"],
+                "command"       : "createPage",
+                "errorMessage"  : "The backend error. Failed to create new folder.",
+                "data"          : { 
+                    "folderPath" : folder,
+                    "returnCode" : result.returncode
+                }
+            }))
+            return
+
+
+    # check the page existance
     if(not os.path.exists(pagePath)): 
         print("createPage ERROR: duplicate pageID")
         print("notebook    : " + notebookName) 
@@ -42,29 +69,29 @@ async def createPage(request,websocket):
             "data"          : { }
         }))
         return
+    
 
-    # create new page
+    # create a new page
     failed = False
-    if(pageType == "markdown"):
-        try:
-            with open(pagePath,"wt") as page:
-                pageTemplate = controller.getPageTemplate(pageType,None)
+    try:
+        with open(pagePath,"wt") as page:
+            # call page template
+            # TODO: implement data for generating init page
+            pageTemplate = controller.getPageTemplate(pageType,None)
+            if(pageTemplate != None):
                 page.write(pageTemplate)
-        except:
-            failed = True
-    else:
-        try:
-            with open(pagePath,"wt") as page:
-                # call page template
-                # TODO: implement data for generate init page
-                pageTemplate = controller.getPageTemplate(pageType,None)
-                page.write(pageTemplate)
-        except:
-            failed = True
+            else:
+                print("createPage ERROR: Failed to find pageTemplate for '" + pageType + "'")
+                failed = True
+    except:
+        failed = True
 
 
     if(failed):
-        print("createPage ERROR: duplicate pageID")
+        # remove the failed page
+        os.remove(pagePath)
+
+        print("createPage ERROR: The backend error. Failed to create a new file for the new page.")
         print("notebook    : " + notebookName) 
         print("contentPath : " + pagePathFromContentFolder)
         print("fill path   : " + pagePath)
@@ -72,7 +99,7 @@ async def createPage(request,websocket):
             "status"        : "error",
             "UUID"          : request["UUID"],
             "command"       : "createPage",
-            "errorMessage"  : "duplicate pageID",
+            "errorMessage"  : "The backend error. Failed to create a new file or to find the specified pageType: " + pageType,
             "data"          : { }
         }))
     else:

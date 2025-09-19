@@ -4,33 +4,33 @@ import json
 # error response ---------------------------------------
 async def NotImplementedResponse(request,websocket):
     responseString = json.dumps({
-        "status": "NotImplemented",
-        "UUID": request["UUID"],
-        "command": request["command"],
-        "errorMessage": "nothing",
-        "data": { }
+        "status"        : "NotImplemented",
+        "UUID"          : request["UUID"],
+        "command"       : request["command"],
+        "errorMessage"  : "nothing",
+        "data"          : { }
     })
     print(">>>" + responseString)
     await websocket.send(responseString)
 
 async def malformedRequestResponse(request,websocket):
     responseString = json.dumps({
-        "status": "error",
-        "UUID": None,
-        "command": None,
-        "errorMessage": "Non JSON string or corrupted JSON string",
-        "data": { }
+        "status"        : "error",
+        "UUID"          : None,
+        "command"       : None,
+        "errorMessage"  : "Non JSON string or corrupted JSON string",
+        "data"          : { }
     })
     print(">>>" + responseString)
     await websocket.send(responseString)
 
 async def notFound(request,websocket):
     responseString = json.dumps({
-        "status": "error",
-        "UUID": request["UUID"],
-        "command": request["command"],
-        "errorMessage": "command does not exist",
-        "data": { }
+        "status"        : "error",
+        "UUID"          : request["UUID"],
+        "command"       : request["command"],
+        "errorMessage"  : "command does not exist",
+        "data"          : { }
     })
     print(">>>" + responseString)
     await websocket.send(responseString)
