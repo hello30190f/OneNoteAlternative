@@ -16,9 +16,6 @@ async def info(request,websocket):
     root = loadSettings.settings["NotebookRootFolder"]
     
     notebookJSONinfo = None
-    notebooks    = []
-    pages        = []
-    files        = []
 
     # @ Implementation hint
     # - notebooksFolderRoot
@@ -32,7 +29,7 @@ async def info(request,websocket):
     # 		- remoteNotebook3
     # 		...
 
-    # check metadata.json existance
+    # check metadata.json existance for a notebook
     # dont find notebooks recursively
     #TODO: cache folder is exception. currently not implement about that.
     def findNotes():
@@ -49,7 +46,6 @@ async def info(request,websocket):
                     try:
                         with open(currentdir + "/metadata.json","rt") as notebook:
                             data = json.loads(notebook.read())
-                            notebooks.append(data["name"])
                             if(notebookJSONinfo != None):
                                 notebookJSONinfo[data["name"]] = data
                             else:
@@ -64,15 +60,25 @@ async def info(request,websocket):
             elif(loadSettings.settings["isStandalone"] and "-cache" in aFolderOrFile):
                 print("info: cache function is not Implemented for now.")
 
-    # find pages recursively
-    def findPages(notebookName):
-        data = notebookJSONinfo[notebookName]
 
-    # find files recursively
-    def findFiles(notebookName):
-        data = notebookJSONinfo[notebookName]
+    findNotes()
+    if(notebookJSONinfo == None):
+        print("info command ERROR: Unable to prepare the response. There might be no notebooks or unable to access it?")
+        await websocket.send(json.dumps({
+            "status": "error",
+            "UUID": request["UUID"],
+            "command": "info",
+            "errorMessage": "The backend error. Unable to prepare the response. There might be no notebooks or unable to access it?",
+            "data":{ }
+        }))
+        return
 
-
-
-
-    await NotImplementedResponse(websocket)
+    await websocket.send(json.dumps({
+        "status": "ok",
+        "UUID": request["UUID"],
+        "command": "info",
+        "errorMessage": "nothing",
+        "data":{
+            notebookJSONinfo
+        }
+    }))

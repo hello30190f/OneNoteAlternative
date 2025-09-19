@@ -13,6 +13,16 @@
                     "y": 100,
                     "z": 0
                 }
+            },
+            {
+                "ID": "ef3429f5-f150-4ad2-a325-80257fad8f6b",
+                "type": "text",
+                "data": "This is test text. Yukkuri marisa abuse Yukkuri reimu.",
+                "position":{
+                    "x": 200,
+                    "y": 100,
+                    "z": 0
+                }
             }
         ]
     }
