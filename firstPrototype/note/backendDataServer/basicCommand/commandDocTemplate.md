@@ -31,6 +31,7 @@
     "UUID":"UUID string",
     "command": "[commandName]",
     "data":{
+        "mandatoryKeys": ["all","mandatory","keys","list"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

@@ -51,6 +51,7 @@
     "UUID":"UUID string",
     "command": "pageInfo",
     "data":{
+        "mandatoryKeys": ["all","mandatory","keys","list"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

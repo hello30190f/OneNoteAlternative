@@ -63,6 +63,7 @@
     "UUID":"UUID string",
     "command": "fileInfo",
     "data":{
+        "mandatoryKeys": ["all","mandatory","keys","list"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

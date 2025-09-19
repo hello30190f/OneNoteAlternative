@@ -38,6 +38,7 @@
     "UUID":"UUID string",
     "command": "updatePage",
     "data":{
+        "mandatoryKeys": ["all","mandatory","keys","list"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

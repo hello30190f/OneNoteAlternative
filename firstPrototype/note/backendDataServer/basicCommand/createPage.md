@@ -46,6 +46,7 @@
     "UUID":"UUID string",
     "command": "createPage",
     "data":{
+        "mandatoryKeys": ["all","mandatory","keys","list"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }
