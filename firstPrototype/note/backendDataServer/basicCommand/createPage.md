@@ -38,6 +38,20 @@
 ```
 
 ## error cases
+### mandatory key error
+```json
+{
+    "status": "error",
+    "errorMessage": "Mandatory data keys are missing or malformed.",
+    "UUID":"UUID string",
+    "command": "createPage",
+    "data":{
+        "missing": ["missingOrMalformed","key","names"]
+    }
+}
+```
+
+
 ### conflict occur new pageID and existing pageID.
  A new page won't be created.
 ```json
@@ -63,7 +77,7 @@
 ```
 
 ### when failed to create new folder while try to create a new page.
- A new page won't be created. ```result.returncode``` mean result code(int) of ```mkdir -p [filepath]```.
+ A new page won't be created. ```result.returncode``` mean the result code(int) of ```mkdir -p [filepath]```.
 ```json
 {
     "status"        : "error",

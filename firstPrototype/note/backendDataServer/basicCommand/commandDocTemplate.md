@@ -5,11 +5,9 @@
 ## args (frontend to dataserver)
 ```json
 {
-    "command": "info",
+    "command": "[commandName]",
     "UUID": "UUID string",
-    "data": {
-
-    }
+    "data": { }
 }
 ```
 
@@ -20,13 +18,22 @@
     "errorMessage": "nothing",
     "UUID":"UUID string",
     "command": "info",
-    "data":{
-
-    }
+    "data":{ }
 }
 ```
 
 ## error cases
-
+### mandatory key error
+```json
+{
+    "status": "error",
+    "errorMessage": "Mandatory data keys are missing or malformed.",
+    "UUID":"UUID string",
+    "command": "[commandName]",
+    "data":{
+        "missing": ["missingOrMalformed","key","names"]
+    }
+}
+```
 
 

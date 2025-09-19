@@ -96,6 +96,7 @@
 ## command
 ### template
 - [commandDocTemplate](./basicCommand/commandDocTemplate.md)
+- [template](./basicCommand/template.md)
 ### helper
 - [notFound](./basicCommand/helper/notFound.md)
 - [malformedRequest](./basicCommand/helper/malformedRequest.md)
@@ -109,6 +110,9 @@
 ### create
 - [createNotebook](./basicCommand/createNotebook.md)
 - [createPage](./basicCommand/createPage.md)
+### update
+- [updatePage](./basicCommand/updatePage.md)
+
 
 ## helper
 ### template

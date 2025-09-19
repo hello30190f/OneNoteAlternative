@@ -25,6 +25,19 @@
 ```
 
 ## error cases
+### mandatory key error
+```json
+{
+    "status": "error",
+    "errorMessage": "Mandatory data keys are missing or malformed.",
+    "UUID":"UUID string",
+    "command": "createNotebook",
+    "data":{
+        "missing": ["missingOrMalformed","key","names"]
+    }
+}
+```
+
 ### duplicate notebook name
 ```json
 {
