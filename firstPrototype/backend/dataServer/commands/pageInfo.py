@@ -5,8 +5,8 @@ import json
 async def pageInfo(request,websocket):
     root = loadSettings.settings["NotebookRootFolder"]
 
-    pagePathFromContent = request["pageID"]
-    notebookName        = request["notebook"]
+    pagePathFromContent = request["data"]["pageID"]
+    notebookName        = request["data"]["notebook"]
     targetPath          = root + "/" + notebookName + "/contents/" + pagePathFromContent
     
     try:

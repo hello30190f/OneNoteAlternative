@@ -22,9 +22,9 @@ from ..types.pages import controller
 
 async def createPage(request,websocket):
 
-    pageType                    = request["pageType"]
-    notebookName                = request["notebook"]
-    pagePathFromContentFolder   = request["newPageID"]
+    pageType                    = request["data"]["pageType"]
+    notebookName                = request["data"]["notebook"]
+    pagePathFromContentFolder   = request["data"]["newPageID"]
 
     pagePath = loadSettings.settings["NotebookRootFolder"] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
     filename = pagePath.split("/")[-1]
