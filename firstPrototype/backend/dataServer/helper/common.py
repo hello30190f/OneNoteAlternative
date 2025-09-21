@@ -76,14 +76,13 @@ def malformedRequestChecker(message):
 def dataKeyChecker(data:dict,keylist:list):
     missing = []
 
-    for aDataKey in data.keys():
+    for aCompareKey in keylist:
         find = False
-        for aCompareKey in keylist:
+        for aDataKey in data.keys():
             if(aDataKey == aCompareKey):
                 find = True
-                break
         if(not find):
-            missing.append(aDataKey)
+            missing.append(aCompareKey)
 
     if(len(missing) == 0):  return None
     else:                   return missing 
