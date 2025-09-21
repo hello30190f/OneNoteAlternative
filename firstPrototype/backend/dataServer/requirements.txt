@@ -1,0 +1,4 @@
+# if there is error about lack of libraries, please manually install those.
+# https://pip.pypa.io/en/stable/reference/requirements-file-format/
+
+websockets
