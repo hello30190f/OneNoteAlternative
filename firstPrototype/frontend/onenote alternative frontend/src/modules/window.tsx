@@ -27,13 +27,11 @@ export const useAppState = create<AppState>((set, get) => ({
 }))
 
 // show selector of notebooks, pages and files
-export default function Window(){
-    const currentPage = useAppState((s) => s.currentPage)
-    
+export default function Window(){    
     return(
         <>
             <div className="window flex flex-row">
-                <Page pageID={currentPage}></Page>
+                <Page></Page>
                 <Selector></Selector>
                 <ToggleToolsBar></ToggleToolsBar>
             </div>

@@ -5,8 +5,6 @@ import json
 async def pageInfo(request,websocket):
     mandatoryKeys   = ["notebook","pageID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
-    print("pageInfo: mandatory keys checker result")
-    print(missing)
     if(missing != None):
         print("pageInfo ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)

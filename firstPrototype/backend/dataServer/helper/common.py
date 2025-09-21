@@ -81,6 +81,7 @@ def dataKeyChecker(data:dict,keylist:list):
         for aDataKey in data.keys():
             if(aDataKey == aCompareKey):
                 find = True
+                break
         if(not find):
             missing.append(aCompareKey)
 

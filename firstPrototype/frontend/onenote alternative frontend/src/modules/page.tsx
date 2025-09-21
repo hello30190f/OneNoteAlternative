@@ -5,6 +5,7 @@ import Blank from "./pages/blank";
 import Markdown from "./pages/markdown";
 import Texteditor from "./pages/texteditor";
 import { genUUID } from "./common";
+import { useAppState } from "./window";
 
 interface PageInfo {
     status: string;
@@ -29,16 +30,15 @@ export const PageCompornetList = {
     texteditor: Texteditor,
 };
 
-export default function Page({ pageID }: { pageID: string | null }) {
+export default function Page() {
     const websocket = useDatabaseStore((s) => s.websocket);
 
     const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
-    const [currentPageID, setCurrentPageID] = useState<string | null>(pageID);
-    const requestUUID = useRef<string>(genUUID())
 
-    useEffect(() => {
-        setCurrentPageID(pageID);
-    }, [pageID]);
+    const currentPage       = useAppState((s) => s.currentPage)
+    const currentNotebook   = useAppState((s) => s.currentNotebook)
+
+    const requestUUID = useRef<string>(genUUID())
 
     useEffect(() => {
         if (!websocket) return;
@@ -70,16 +70,19 @@ export default function Page({ pageID }: { pageID: string | null }) {
     }, [websocket]);
 
     useEffect(() => {
-        if (!websocket || !currentPageID) return;
+        if (!websocket || !currentPage || !currentNotebook) return;
 
         requestUUID.current = genUUID()
         const request = JSON.stringify({ 
             command: "pageInfo", 
             UUID: requestUUID.current,
-            data: { pageID: currentPageID }
+            data: { 
+                pageID: currentPage, 
+                notebook:currentNotebook 
+            }
         });
         websocket.send(request);
-    }, [websocket, currentPageID]);
+    }, [websocket, currentPage, currentNotebook]);
 
     // render
     function ShowPageContents({ pageInfo }: { pageInfo: PageInfo }) {
@@ -92,23 +95,30 @@ export default function Page({ pageID }: { pageID: string | null }) {
         return (
             <div>
                 <PageCompornet
+                    tags={data.tags}
                     files={data.files}
                     pageData={data.pageData}
                     pageType={data.pageType}
-                    tags={data.tags}
                 />
             </div>
         );
     }
 
     function PageOutlineAndContainer({ children }:{ children:ReactNode }){
-        return <div className="bg-gray-600 w-[97%] h-[90%] ml-[1rem] mt-[1rem] absolute left-0 top-[2rem]">
+        return <div className="
+        bg-gray-600 
+        w-[97%] h-[90%] ml-[1rem] mt-[1rem] 
+        absolute left-0 top-[2rem] 
+        flex 
+        justify-center place-items-center align-middle text-center
+ items-center
+        ">
             {children}
         </div>
     }
 
     function ShowError({ message }: { message: string }) {
-        return <div>{message}</div>
+        return <div className="text-5xl font-medium">{message}</div>
     }
 
     if (!websocket) {
@@ -116,7 +126,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
             <ShowError message="WebSocket error. No connection to the data server." />;
         </PageOutlineAndContainer>
     }
-    if (!currentPageID) {
+    if (!currentPage || !currentNotebook) {
         return<PageOutlineAndContainer>
             <ShowError message="Page is not selected." />
         </PageOutlineAndContainer> 
