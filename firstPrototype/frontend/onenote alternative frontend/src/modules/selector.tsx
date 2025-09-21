@@ -26,6 +26,7 @@ export default function Selector() {
     const requestUUID = useRef<string>(genUUID())
 
     const currentPage       = useAppState((s) => s.currentPage)
+    const currentNotebook   = useAppState((s) => s.currentNotebook)
     const changeCurrentPage = useAppState((s) => s.changeOpenedPage)
 
     const [index, setIndex] = useState<Info>({
@@ -102,30 +103,39 @@ export default function Selector() {
     function CreateList({ index }: { index: Info }) {
         if (!index.data) return null;
 
+        function AnEntry({ pageID, notebook }: { pageID: string, notebook: string }){
+            let anEntryStyle = "text-start pl-[50px] hover:bg-gray-500 selection:bg-transparent m-[5px] mt-0 "
+            if(currentPage == pageID && notebook == currentNotebook){
+                anEntryStyle += " bg-gray-600"
+            }
+
+            return <li 
+                    className={anEntryStyle}
+                    onClick={() => {
+                        changeCurrentPage(notebook,pageID)
+                    }}>
+                    {pageID}
+                </li>
+        }
+
         const notebooks: ReactElement[] = [];
         for (const name in index.data) {
+            let notebookNameStyle = "text-start pl-[10px] underline hover:bg-gray-500 selection:bg-transparent m-[5px] "
+            if(name == currentNotebook){
+                notebookNameStyle += " bg-gray-600"
+            }
             notebooks.push(
-                <div className="notebookEntry bg-gray-800 border-2 border-solid border-gray-600" key={name}>
+                <div className="notebookEntry bg-gray-700 border-2 border-solid border-gray-300" key={name}>
                     <div 
                     onClick={() => {
                         console.log("A notebook is clicked")
                         console.log(name)
                     }}
-                    className="text-start pl-[10px] underline hover:bg-gray-700 selection:bg-transparent"
+                    className={notebookNameStyle}
                     >{name}</div>
                     <ul className="">
                         {index.data[name].pages.map((value, idx) => (
-                            <li 
-                            className="text-start pl-[50px] hover:bg-gray-700 selection:bg-transparent"
-                            onClick={() => {
-                                console.log("A page is clicked")
-                                console.log("notebook: " + name)
-                                console.log("page    : " + value)
-                                changeCurrentPage(name,value)
-                            }}
-                            key={idx}>
-                                {value}
-                            </li>
+                            <AnEntry notebook={name} pageID={value} key={idx}></AnEntry>
                         ))}
                     </ul>
                 </div>

@@ -128,7 +128,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                     setVisible(false)
                     }}></div>
             </div>
-            <div className="content bg-gray-900 min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
+            <div className="content bg-black min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
  items-center">
                 {children}
             </div>
