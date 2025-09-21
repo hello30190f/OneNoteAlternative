@@ -1,7 +1,7 @@
 from helper.common import NotImplementedResponse, dataKeyChecker
 from helper import loadSettings 
 import os , os.path , json , subprocess
-from ..types.pages import controller
+from type.pages import controller
 
 # note
 # {

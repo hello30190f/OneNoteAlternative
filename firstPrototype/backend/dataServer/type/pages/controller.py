@@ -1,5 +1,8 @@
-from free       import free
-from markdown   import markdown
+# from free       import free
+# from markdown   import markdown
+
+from type.pages.free      import free
+from type.pages.markdown  import markdown 
 
 pages = {
     "free"      : free,
