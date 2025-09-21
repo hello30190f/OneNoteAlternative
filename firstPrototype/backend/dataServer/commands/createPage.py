@@ -45,7 +45,7 @@ async def createPage(request,websocket):
     notebookName                = request["data"]["notebook"]
     pagePathFromContentFolder   = request["data"]["newPageID"]
 
-    pagePath = loadSettings.settings["NotebookRootFolder"] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
+    pagePath = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
     filename = pagePath.split("/")[-1]
     folder   = pagePath.replace(filename,"")
 

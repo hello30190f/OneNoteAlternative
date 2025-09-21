@@ -23,7 +23,7 @@ async def pageInfo(request,websocket):
     
     
 
-    root = loadSettings.settings["NotebookRootFolder"]
+    root = loadSettings.settings["NotebookRootFolder"][0]
 
     pagePathFromContent = request["data"]["pageID"]
     notebookName        = request["data"]["notebook"]

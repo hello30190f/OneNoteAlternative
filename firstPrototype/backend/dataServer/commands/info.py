@@ -13,7 +13,7 @@ import os.path
 # file list
 
 async def info(request,websocket):
-    root = loadSettings.settings["NotebookRootFolder"]
+    root = loadSettings.settings["NotebookRootFolder"][0]
     
     notebookJSONinfo = None
 
@@ -33,6 +33,7 @@ async def info(request,websocket):
     # dont find notebooks recursively
     #TODO: cache folder is exception. Currently it is not implemented.
     def findNotes():
+        notebookJSONinfo = None
         # look for notebooks or cache at the notebook root folder in settings.json 
         for aFolderOrFile in os.listdir(root):
 
@@ -46,6 +47,7 @@ async def info(request,websocket):
                     try:
                         with open(currentdir + "/metadata.json","rt") as notebook:
                             data = json.loads(notebook.read())
+                            print(data)
                             if(notebookJSONinfo != None):
                                 notebookJSONinfo[data["name"]] = data
                             else:
@@ -53,6 +55,7 @@ async def info(request,websocket):
                                 notebookJSONinfo[data["name"]] = data 
                     except:
                         print("info: something went worng with: " + currentdir + "/metadata.json")
+                        print(notebookJSONinfo)
                 else:
                     print("info: " + currentdir + " does not include a notebook.")
             
@@ -60,8 +63,10 @@ async def info(request,websocket):
             elif(loadSettings.settings["isStandalone"] and "-cache" in aFolderOrFile):
                 print("info: cache function is not Implemented for now.")
 
+        return notebookJSONinfo
 
-    findNotes()
+    notebookJSONinfo = findNotes()
+
     if(notebookJSONinfo == None):
         print("info command ERROR: Unable to prepare the response. There might be no notebooks or unable to access it?")
         await websocket.send(json.dumps({
@@ -78,7 +83,5 @@ async def info(request,websocket):
         "UUID"          : request["UUID"],
         "command"       : "info",
         "errorMessage"  : "nothing",
-        "data": {
-            notebookJSONinfo
-        }
+        "data"          : notebookJSONinfo
     }))
