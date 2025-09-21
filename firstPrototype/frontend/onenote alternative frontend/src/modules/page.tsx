@@ -90,6 +90,9 @@ export default function Page() {
 
         if (!data) return <ShowError message="There is no data." />;
 
+        // console.log("ShowPageContents: pageType -> " + data.pageType)
+        // console.log("ShowPageContents: pageData -> " + data.pageData)
+        // Fallback as free page
         const PageCompornet = PageCompornetList[data.pageType as keyof typeof PageCompornetList] || PageCompornetList.free;
 
         return (

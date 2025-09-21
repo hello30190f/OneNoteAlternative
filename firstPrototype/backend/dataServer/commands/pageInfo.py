@@ -38,7 +38,7 @@ async def pageInfo(request,websocket):
             # detect page type
             pageType = None
             jsondata = None
-            if("markdown" in targetPath): 
+            if("md" in targetPath): 
                 pageType = "markdown"
             elif("json" in targetPath):
                 jsondata = json.loads(contentString)
