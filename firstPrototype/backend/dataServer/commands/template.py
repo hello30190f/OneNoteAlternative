@@ -10,7 +10,7 @@ async def template(request,websocket):
         print("[CommandName] ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
@@ -19,7 +19,9 @@ async def template(request,websocket):
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing
             }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
     
 

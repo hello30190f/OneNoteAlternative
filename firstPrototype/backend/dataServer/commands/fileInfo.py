@@ -6,19 +6,21 @@ async def fileInfo(request,websocket):
     mandatoryKeys   = ["fileID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("[CommandName] ERROR: Mandatory keys are missing for this command.")
+        print("fileInfo ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
-            "command"       : "[Command Name Here]",
+            "command"       : "fileInfo",
             "data": {
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing
             }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
 
 

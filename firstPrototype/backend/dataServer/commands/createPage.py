@@ -24,19 +24,21 @@ async def createPage(request,websocket):
     mandatoryKeys   = ["noteboook","newPageID","pageType"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("[CommandName] ERROR: Mandatory keys are missing for this command.")
+        print("createPage ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
-            "command"       : "[Command Name Here]",
+            "command"       : "createPage",
             "data": {
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing
             }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
 
 
@@ -61,7 +63,7 @@ async def createPage(request,websocket):
             print("notebook    : " + notebookName) 
             print("contentPath : " + pagePathFromContentFolder)
             print("fill path   : " + pagePath)
-            await websocket.send(json.dumps({
+            responseString = json.dumps({
                 "status"        : "error",
                 "UUID"          : request["UUID"],
                 "command"       : "createPage",
@@ -70,7 +72,9 @@ async def createPage(request,websocket):
                     "folderPath" : folder,
                     "returnCode" : result.returncode
                 }
-            }))
+            })
+            await websocket.send(responseString)
+            print(">>> " + responseString)
             return
 
 
@@ -80,13 +84,15 @@ async def createPage(request,websocket):
         print("notebook    : " + notebookName) 
         print("contentPath : " + pagePathFromContentFolder)
         print("fill path   : " + pagePath)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "UUID"          : request["UUID"],
             "command"       : "createPage",
             "errorMessage"  : "duplicate pageID",
             "data"          : { }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
     
 
@@ -114,18 +120,22 @@ async def createPage(request,websocket):
         print("notebook    : " + notebookName) 
         print("contentPath : " + pagePathFromContentFolder)
         print("fill path   : " + pagePath)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "UUID"          : request["UUID"],
             "command"       : "createPage",
             "errorMessage"  : "The backend error. Failed to create a new file or to find the specified pageType: " + pageType,
             "data"          : { }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
     else:
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "ok",
             "UUID"          : request["UUID"],
             "command"       : "createPage",
             "errorMessage"  : "nothing",
             "data"          : { }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)

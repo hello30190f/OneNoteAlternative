@@ -6,19 +6,21 @@ async def createNotebook(request,websocket):
     mandatoryKeys   = ["notebookName"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("[CommandName] ERROR: Mandatory keys are missing for this command.")
+        print("createNotebook ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
-            "command"       : "[Command Name Here]",
+            "command"       : "createNotebook",
             "data": {
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing
             }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
 
 

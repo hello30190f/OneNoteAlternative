@@ -69,19 +69,23 @@ async def info(request,websocket):
 
     if(notebookJSONinfo == None):
         print("info command ERROR: Unable to prepare the response. There might be no notebooks or unable to access it?")
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "UUID"          : request["UUID"],
             "command"       : "info",
             "errorMessage"  : "The backend error. Unable to prepare the response. There might be no notebooks or unable to access it?",
             "data"          : { }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
 
-    await websocket.send(json.dumps({
+    responseString = json.dumps({
         "status"        : "ok",
         "UUID"          : request["UUID"],
         "command"       : "info",
         "errorMessage"  : "nothing",
         "data"          : notebookJSONinfo
-    }))
+    })
+    await websocket.send(responseString)
+    print(">>> " + responseString)

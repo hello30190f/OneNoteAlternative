@@ -8,19 +8,21 @@ async def updatePage(request,websocket):
     mandatoryKeys   = ["noteboook","pageID","pageType","update"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("[CommandName] ERROR: Mandatory keys are missing for this command.")
+        print("updatePage ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
-            "command"       : "[Command Name Here]",
+            "command"       : "updatePage",
             "data": {
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing
             }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
 
 

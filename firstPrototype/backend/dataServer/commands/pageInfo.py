@@ -6,19 +6,21 @@ async def pageInfo(request,websocket):
     mandatoryKeys   = ["notebook","pageID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("[CommandName] ERROR: Mandatory keys are missing for this command.")
+        print("pageInfo ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
-        await websocket.send(json.dumps({
+        responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
-            "command"       : "[Command Name Here]",
+            "command"       : "pageInfo",
             "data": {
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing
             }
-        }))
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
         return
     
     
@@ -50,8 +52,7 @@ async def pageInfo(request,websocket):
                 tags = jsondata["tags"]
                 # find files
                 files = jsondata["files"]
-
-            await websocket.send(json.dumps({
+            responseString = json.dumps({
                 "status"        : "ok",
                 "UUID"          : request["UUID"],
                 "command"       : "pageInfo",
@@ -62,17 +63,23 @@ async def pageInfo(request,websocket):
                     "files": files,
                     "pageData": contentString
                 }
-            }))
+            })
+            await websocket.send(responseString)
+            print(">>> " + responseString)
+
 
     except:
-       print("pageInfo command ERROR: unable to open or read data.")
-       print(pagePathFromContent)
-       print(notebookName)
-       print(targetPath)
-       await websocket.send(json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "pageInfo",
-            "errorMessage"  : "The backend error. This might mean there is no page or malformed json file.",
-            "data"          : { }
-        }))
+        print("pageInfo command ERROR: unable to open or read data.")
+        print(pagePathFromContent)
+        print(notebookName)
+        print(targetPath)
+        responseString = json.dumps({
+             "status"        : "error",
+             "UUID"          : request["UUID"],
+             "command"       : "pageInfo",
+             "errorMessage"  : "The backend error. This might mean there is no page or malformed json file.",
+             "data"          : { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
+

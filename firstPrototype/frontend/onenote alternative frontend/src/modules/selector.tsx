@@ -101,6 +101,7 @@ export default function Selector() {
         for (const name in index.data) {
             notebooks.push(
                 <div className="notebookEntry" key={name}>
+                    <div>{name}</div>
                     <ul>
                         {index.data[name].pages.map((value, idx) => (
                             <li key={idx}>{value}</li>
