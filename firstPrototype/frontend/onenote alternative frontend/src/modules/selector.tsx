@@ -94,17 +94,32 @@ export default function Selector() {
         init.current = false
     }
 
+
     function CreateList({ index }: { index: Info }) {
         if (!index.data) return null;
 
         const notebooks: ReactElement[] = [];
         for (const name in index.data) {
             notebooks.push(
-                <div className="notebookEntry" key={name}>
-                    <div>{name}</div>
-                    <ul>
+                <div className="notebookEntry bg-gray-800 border-2 border-solid border-gray-600" key={name}>
+                    <div 
+                    onClick={() => {
+                        console.log("anotebook clicked")
+                        console.log(name)
+                    }}
+                    className="text-start pl-[10px] underline hover:bg-gray-700 selection:bg-transparent"
+                    >{name}</div>
+                    <ul className="">
                         {index.data[name].pages.map((value, idx) => (
-                            <li key={idx}>{value}</li>
+                            <li 
+                            className="text-start pl-[50px] hover:bg-gray-700 selection:bg-transparent"
+                            onClick={() => {
+                                console.log("apage clicked")
+                                console.log(value)
+                            }}
+                            key={idx}>
+                                {value}
+                            </li>
                         ))}
                     </ul>
                 </div>
@@ -128,7 +143,7 @@ export default function Selector() {
     }
 
     function SelectorOutline({ children }:{ children:ReactNode }){
-        return <div className="SelectorContainer flex-1 ml-auto bg-gray flex flex-col">
+        return <div className="SelectorContainer flex-1 bg-gray flex flex-col min-w-[175px] m-[10px]">
             {children}
         </div>
     }
@@ -151,7 +166,7 @@ export default function Selector() {
         return (
             <OverlayWindow arg={windowArg}>
                 <SelectorOutline>
-                    <Header></Header>
+                    {/* <Header></Header> */}
                     <CreateList index={index} />
                 </SelectorOutline>
             </OverlayWindow>

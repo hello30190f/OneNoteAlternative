@@ -30,6 +30,8 @@ export default function ToolsBar(){
             className="
             AtoggleableButton 
             h-[2rem] bg-blue-500 min-w-[4rem] 
+            hover:bg-blue-600
+            selection:bg-transparent
             flex 
             pl-[1rem] pr-[1rem] 
             justify-center place-items-center align-middle text-center

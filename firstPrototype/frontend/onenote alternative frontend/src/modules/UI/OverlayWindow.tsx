@@ -122,8 +122,8 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 onTouchStart={windowHandlers.touchstart}
                 >
                     
-                <div className="title h-[1rem] absolute text-white">{arg.title}</div>
-                <div className="close size-[2rem] bg-red-700 ml-auto" onClick={(event:React.MouseEvent) => {
+                <div className="title h-[1rem] absolute text-white p-[4px] selection:bg-transparent">{arg.title}</div>
+                <div className="close size-[2rem] bg-red-700 hover:bg-red-800 ml-auto" onClick={(event:React.MouseEvent) => {
                     event.preventDefault()
                     setVisible(false)
                     }}></div>
