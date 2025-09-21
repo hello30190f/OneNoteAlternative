@@ -45,7 +45,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
 
         const handleMessage = (event: MessageEvent) => {           
             const result = JSON.parse(String(event.data));
-            
+
             if(result.UUID == requestUUID.current && "pageInfo" == result.command){
                 if (!result.status.includes("error")) {
                     setPageInfo(result);
@@ -102,7 +102,7 @@ export default function Page({ pageID }: { pageID: string | null }) {
     }
 
     function PageOutlineAndContainer({ children }:{ children:ReactNode }){
-        return <div className="h-screen w-screen bg-gray-600">
+        return <div className="bg-gray-600 w-[97%] h-[90%] ml-[1rem] mt-[1rem] absolute left-0 top-[2rem]">
             {children}
         </div>
     }

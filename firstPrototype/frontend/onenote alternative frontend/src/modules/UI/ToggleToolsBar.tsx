@@ -57,7 +57,7 @@ export default function ToolsBar(){
         fixed 
         flex flex-row 
         h-[2rem] w-screen 
-        bg-blue-700 
+        bg-blue-900 
         top-0 left-0 
         justify-center place-items-center align-middle text-center
  items-center">

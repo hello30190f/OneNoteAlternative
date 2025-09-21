@@ -3,6 +3,7 @@ import { useDatabaseStore } from "./network/database";
 import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
 import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
 import { genUUID } from "./common";
+import { useAppState } from "./window";
 
 interface Info {
     status: string;
@@ -23,6 +24,9 @@ export default function Selector() {
     const init = useRef(true)
     const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
     const requestUUID = useRef<string>(genUUID())
+
+    const currentPage       = useAppState((s) => s.currentPage)
+    const changeCurrentPage = useAppState((s) => s.changeOpenedPage)
 
     const [index, setIndex] = useState<Info>({
         status: "init",
@@ -104,7 +108,7 @@ export default function Selector() {
                 <div className="notebookEntry bg-gray-800 border-2 border-solid border-gray-600" key={name}>
                     <div 
                     onClick={() => {
-                        console.log("anotebook clicked")
+                        console.log("A notebook is clicked")
                         console.log(name)
                     }}
                     className="text-start pl-[10px] underline hover:bg-gray-700 selection:bg-transparent"
@@ -114,8 +118,10 @@ export default function Selector() {
                             <li 
                             className="text-start pl-[50px] hover:bg-gray-700 selection:bg-transparent"
                             onClick={() => {
-                                console.log("apage clicked")
-                                console.log(value)
+                                console.log("A page is clicked")
+                                console.log("notebook: " + name)
+                                console.log("page    : " + value)
+                                changeCurrentPage(name,value)
                             }}
                             key={idx}>
                                 {value}
