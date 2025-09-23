@@ -1,8 +1,8 @@
 # backendDataServer settings
- This page will expain dataserver settings.
+ This page will expain the dataserver settings.
 
 ## the configure form
- When there is no settings.json for the backend dataserver, configure UI will appear. (Currently not implemented.) 
+ When there is no settings.json for the backend dataserver, the configure UI will appear. (Currently not implemented.) 
 
 ## settings.json
 ```json

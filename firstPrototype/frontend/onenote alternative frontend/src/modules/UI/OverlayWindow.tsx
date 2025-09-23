@@ -12,14 +12,14 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     const visible = arg.visible
     const setVisible = arg.setVisible
 
-    const initPoos = {
+    const initPos = {
         x: 100,
         y: 100
     }
 
     let windowPos = useRef({
-        x:100,
-        y:100
+        x:initPos.x,
+        y:initPos.y
     })
     let onMove = useRef(false)
     let prevPos = useRef({
@@ -27,6 +27,10 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         y:0
     })
     let init = useRef(true)
+
+    function forceRerender(){
+        setVisible(visible)
+    }
 
     const windowHandlers = {
         "mousedown": (event:React.MouseEvent) => {
@@ -100,9 +104,20 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             onMove.current = false
         },
         "resize": (event:UIEvent) => {
-            // TODO: when the viewport are resized make this window not hiding out of the viewport area.
-            
+            // fixed css style 
+            const margin = 100 
+            if(window.innerWidth < windowPos.current.x){
+                windowPos.current.x = window.innerWidth - margin
+            }
 
+            if(window.innerHeight < windowPos.current.y){
+                windowPos.current.y = window.innerHeight - margin
+            }
+
+            setWindowStyle({
+                left: String(windowPos.current.x) + "px",
+                top: String(windowPos.current.y) + "px"
+            })
         }
     }
 
