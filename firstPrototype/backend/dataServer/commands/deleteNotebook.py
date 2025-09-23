@@ -2,19 +2,19 @@ from helper.common import NotImplementedResponse, dataKeyChecker
 from helper import loadSettings 
 import json
 
-async def template(request,websocket): # TODO: write command name
+async def deleteNotebook(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.
-    mandatoryKeys   = ["mandatory","keys","list"] # TODO: add mandatory key of the command
+    mandatoryKeys   = ["mandatory","keys","list"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("[CommandName] ERROR: Mandatory keys are missing for this command.") # TODO: write command name
+        print("deleteNotebook ERROR: Mandatory keys are missing for this command.")
         print(mandatoryKeys)
         print(missing)
         responseString = json.dumps({
             "status"        : "error",
             "errorMessage"  : "Mandatory data keys are missing or malformed.",
             "UUID"          : request["UUID"],
-            "command"       : "[Command Name Here]", # TODO: write command name
+            "command"       : "deleteNotebook",
             "data": {
                 "mandatoryKeys": mandatoryKeys,
                 "missing": missing

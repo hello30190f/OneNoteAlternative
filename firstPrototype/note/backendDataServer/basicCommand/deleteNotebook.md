@@ -1,0 +1,42 @@
+# deleteNotebook command
+## role
+ Delete a notebook immediately. This command will remove all files of the notebook.
+
+## args (frontend to dataserver)
+```json
+{
+    "command": "deleteNotebook",
+    "UUID": "UUID string",
+    "data": { 
+        "noteboook": "notebookName",
+    }
+}
+```
+
+## response (dataserver to frontend)
+```json
+{
+    "status": "ok",
+    "errorMessage": "nothing",
+    "UUID":"UUID string",
+    "command": "deleteNotebook",
+    "data":{ }
+}
+```
+
+## error cases
+### mandatory key error
+```json
+{
+    "status": "error",
+    "errorMessage": "Mandatory data keys are missing or malformed.",
+    "UUID":"UUID string",
+    "command": "deleteNotebook",
+    "data":{
+        "mandatoryKeys": ["notebookName"],
+        "missing": ["missingOrMalformed","key","names"]
+    }
+}
+```
+
+

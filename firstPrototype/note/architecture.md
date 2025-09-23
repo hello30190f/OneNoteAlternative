@@ -65,6 +65,10 @@
 - for each tags, have a record what contents and files are belongs to.
 
 
+# delete pages
+ When delete pages, those will not be immidiately removed from the filesystem. Those are keeped for a certain period of time. User can avoid accidentally delete pages.
+
+
 # network
 ## protocol
 - websocket  
