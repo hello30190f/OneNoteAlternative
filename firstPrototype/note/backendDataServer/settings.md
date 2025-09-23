@@ -23,8 +23,8 @@
 
 ### isStandalone (boolean)
  Specify how the notetaking system work.
-- true  -> this dataserver is a local server listen to localhost.
-- false -> this dataserver is a remote server listen to [ip:port].
+- true  -> this dataserver is a local server working alone. (disable cache function)
+- false -> this dataserver is a local server working with remote dataservers. (enable cache function)
 
 ### NotebookRootFolder (\<string>[])
  Specify where notebooks are stored. Currently only single folder can be Specified. If you add another folders, those will be ignored.
