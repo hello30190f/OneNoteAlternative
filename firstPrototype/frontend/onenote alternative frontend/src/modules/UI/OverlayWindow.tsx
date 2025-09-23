@@ -150,7 +150,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 >
                     
                 <div className="title h-[1rem] absolute text-white p-[4px] selection:bg-transparent">{arg.title}</div>
-                <div className="close size-[2rem] bg-red-700 hover:bg-red-800 ml-auto" onClick={(event:React.MouseEvent) => {
+                <div className="close size-[2rem] bg-red-600 hover:bg-red-800 ml-auto" onClick={(event:React.MouseEvent) => {
                     event.preventDefault()
                     setVisible(false)
                     }}></div>

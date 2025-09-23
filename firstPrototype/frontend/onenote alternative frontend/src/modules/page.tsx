@@ -40,6 +40,17 @@ export default function Page() {
 
     const requestUUID = useRef<string>(genUUID())
 
+    const init = useRef(true)
+    const currentSize = useRef({
+        width: window.innerWidth - 64, // 4rem
+        height: window.innerHeight - 32   // 2rem -> 32px -> 16*2px
+    })
+
+    let [PageOutlineAndContainerStyle,setPageOutlineAndContainerStyle] = useState({
+        width: String(window.innerWidth - 32) + "px",
+        height: String(window.innerHeight - 32) + "px"
+    })
+
     useEffect(() => {
         if (!websocket) return;
 
@@ -107,15 +118,43 @@ export default function Page() {
         );
     }
 
+
+    
+    function clacSize(){
+        let width = window.innerWidth - 32 // 2rem -> 32px -> 16*2px
+        let height = window.innerHeight - 64 // 4rem
+
+        currentSize.current.width = width
+        currentSize.current.height = height
+
+        console.log(currentSize.current)
+
+        setPageOutlineAndContainerStyle({
+            width: String(currentSize.current.width) + "px",
+            height: String(currentSize.current.height) + "px"
+        })
+    }
+    if(init.current){
+        clacSize()
+        addEventListener("resize",clacSize)        
+        init.current = false
+    }
+
+
+
     function PageOutlineAndContainer({ children }:{ children:ReactNode }){
-        return <div className="
-        bg-gray-600 
-        w-[97%] h-[90%] ml-[1rem] mt-[1rem] 
-        absolute left-0 top-[2rem] 
-        flex 
-        justify-center place-items-center align-middle text-center
- items-center
-        ">
+        // 1rem 16px
+        return <div 
+        className="
+            bg-gray-600 
+            ml-[1rem] mt-[1rem] 
+            absolute left-0 top-[2rem] 
+            flex 
+            justify-center place-items-center align-middle text-center
+    items-center
+        "
+        style={PageOutlineAndContainerStyle}
+        >
             {children}
         </div>
     }
