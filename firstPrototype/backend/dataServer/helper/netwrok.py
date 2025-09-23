@@ -18,6 +18,7 @@ async def receiveLoop(websocket,callback):
     while True:
         try: 
             message = await websocket.recv()
+            print("\n\n----------------------")
             print("<<<" + message)
             # callback have to show sent messages.
             await callback(message,websocket)

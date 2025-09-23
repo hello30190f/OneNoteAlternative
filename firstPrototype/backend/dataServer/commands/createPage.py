@@ -59,7 +59,7 @@ async def createPage(request,websocket):
         result = subprocess.run([command],shell=True)
 
         if(result.returncode != 0):
-            print("createPage ERROR: The backend error. Failed to create new folder.")
+            print("createPage ERROR: The backend error. Failed to create an new folder.")
             print("notebook    : " + notebookName) 
             print("contentPath : " + pagePathFromContentFolder)
             print("fill path   : " + pagePath)
@@ -67,7 +67,7 @@ async def createPage(request,websocket):
                 "status"        : "error",
                 "UUID"          : request["UUID"],
                 "command"       : "createPage",
-                "errorMessage"  : "The backend error. Failed to create new folder.",
+                "errorMessage"  : "The backend error. Failed to create an new folder.",
                 "data"          : { 
                     "folderPath" : folder,
                     "returnCode" : result.returncode

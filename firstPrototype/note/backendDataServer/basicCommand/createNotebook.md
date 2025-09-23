@@ -50,3 +50,32 @@
 }
 ```
 
+### failed to create new folders
+- notebookFolder,contentsFolder,filesFolder key  
+ True   -> OK  
+ False  -> Failed  
+```json
+{
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : "createNotebook",
+    "errorMessage"  : "The backend error. Unable to create new folders for a new notebook.",
+    "data"          : {
+        "notebookFolder" : NotebookFolder,
+        "contentsFolder" : contentsFolder,
+        "filesFolder"    : filesFolder
+    }
+}
+```
+
+### fialed to create a new metadata file
+```json
+{
+    "status"        : "error",
+    "UUID"          : "UUID string",
+    "command"       : "createNotebook",
+    "errorMessage"  : "The backend error. Unable to create a new metadata file for a new notebook.",
+    "data"          : { }
+}
+```
+

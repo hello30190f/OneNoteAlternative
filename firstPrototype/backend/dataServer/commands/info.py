@@ -1,6 +1,6 @@
 import websockets
 from helper.netwrok import receiveLoopForClass
-from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse
+from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse, findNotes
 import json
 from helper import loadSettings 
 import os
@@ -13,58 +13,7 @@ import os.path
 # file list
 
 async def info(request,websocket):
-    root = loadSettings.settings["NotebookRootFolder"][0]
     
-    notebookJSONinfo = None
-
-    # @ Implementation hint
-    # - notebooksFolderRoot
-    # 	- localNotebook1
-    # 	- localNotebook2
-    # 	- localNotebook3
-    # 	...
-    # 	- serverName-cache
-    # 		- remoteNotebook1
-    # 		- remoteNotebook2
-    # 		- remoteNotebook3
-    # 		...
-
-    # check metadata.json existance for a notebook
-    # dont find notebooks recursively
-    #TODO: cache folder is exception. Currently it is not implemented.
-    def findNotes():
-        notebookJSONinfo = None
-        # look for notebooks or cache at the notebook root folder in settings.json 
-        for aFolderOrFile in os.listdir(root):
-
-            # files in the notebook root folder will be ignored. 
-            if(not os.path.isfile(aFolderOrFile)):
-
-                # check a notebook existance
-                currentdir = root + "/" + aFolderOrFile
-                FolderOrFiles = os.listdir(currentdir)
-                if("metadata.json" in FolderOrFiles):
-                    try:
-                        with open(currentdir + "/metadata.json","rt") as notebook:
-                            data = json.loads(notebook.read())
-                            print(data)
-                            if(notebookJSONinfo != None):
-                                notebookJSONinfo[data["name"]] = data
-                            else:
-                                notebookJSONinfo = {}
-                                notebookJSONinfo[data["name"]] = data 
-                    except:
-                        print("info: something went worng with: " + currentdir + "/metadata.json")
-                        print(notebookJSONinfo)
-                else:
-                    print("info: " + currentdir + " does not include a notebook.")
-            
-            # check remote notebooks cache existence when this data server running as a local data server on a client with the frontend.
-            elif(loadSettings.settings["isStandalone"] and "-cache" in aFolderOrFile):
-                print("info: cache function is not Implemented for now.")
-
-        return notebookJSONinfo
-
     notebookJSONinfo = findNotes()
 
     if(notebookJSONinfo == None):
