@@ -7,7 +7,7 @@ export interface OverlayWindowArgs{
 }
 
 // show window can be moved around anywhare and closed
-// TODO: expose setVisible to children compornent.
+// TODO: implement z-index for other overlayWindows. 
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
     const visible = arg.visible
     const setVisible = arg.setVisible
@@ -28,9 +28,6 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     })
     let init = useRef(true)
 
-    function forceRerender(){
-        setVisible(visible)
-    }
 
     const windowHandlers = {
         "mousedown": (event:React.MouseEvent) => {
@@ -106,12 +103,16 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         "resize": (event:UIEvent) => {
             // fixed css style 
             const margin = 100 
-            if(window.innerWidth < windowPos.current.x){
+            if(window.innerWidth < windowPos.current.x && window.innerWidth > margin){
                 windowPos.current.x = window.innerWidth - margin
+            }else if(window.innerWidth < windowPos.current.x){
+                windowPos.current.x = 0
             }
 
-            if(window.innerHeight < windowPos.current.y){
+            if(window.innerHeight < windowPos.current.y && window.innerHeight > margin){
                 windowPos.current.y = window.innerHeight - margin
+            }else if(window.innerHeight < windowPos.current.y){
+                windowPos.current.y = 36 // 3rem
             }
 
             setWindowStyle({
@@ -132,7 +133,6 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         addEventListener("resize",windowHandlers.resize)
 
         init.current = false
-        console.log(init.current)
     }
 
     const [windowPosStyle,setWindowStyle] = useState({

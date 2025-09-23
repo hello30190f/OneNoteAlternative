@@ -119,7 +119,7 @@ export default function Page() {
     }
 
 
-    
+
     function clacSize(){
         let width = window.innerWidth - 32 // 2rem -> 32px -> 16*2px
         let height = window.innerHeight - 64 // 4rem
@@ -127,7 +127,7 @@ export default function Page() {
         currentSize.current.width = width
         currentSize.current.height = height
 
-        console.log(currentSize.current)
+        // console.log(currentSize.current)
 
         setPageOutlineAndContainerStyle({
             width: String(currentSize.current.width) + "px",
