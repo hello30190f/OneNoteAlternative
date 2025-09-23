@@ -148,12 +148,6 @@ export default function Selector() {
         }
     }
 
-    function Header(){
-        return <div className="">
-            <p>Notebook List</p>
-        </div>
-    }
-
     function ShowError({ message }: { message: string }) {
         return <div>{message}</div>;
     }
@@ -182,7 +176,6 @@ export default function Selector() {
         return (
             <OverlayWindow arg={windowArg}>
                 <SelectorOutline>
-                    {/* <Header></Header> */}
                     <CreateList index={index} />
                 </SelectorOutline>
             </OverlayWindow>

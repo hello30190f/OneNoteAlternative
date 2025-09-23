@@ -42,9 +42,15 @@ npm run dev
 ### Frontend
 - [ ] implement websocket server selector 
 - [ ] implement automatic retry for dataserver connection 
+- [ ] implement create notebook button
+- [ ] implement create page button
+- [ ] implement delete notebook button
+- [ ] implement delete page button
+- [ ] implement page view and make them editable via the frontend
 
 ### dataserver backend
 - [ ] implement minimal commands  (currently working)
+- [ ] implement setting configure UI 
 
 
 ### clientside backend

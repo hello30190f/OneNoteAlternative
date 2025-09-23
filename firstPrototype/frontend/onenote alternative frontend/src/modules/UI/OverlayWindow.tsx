@@ -12,6 +12,11 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     const visible = arg.visible
     const setVisible = arg.setVisible
 
+    const initPoos = {
+        x: 100,
+        y: 100
+    }
+
     let windowPos = useRef({
         x:100,
         y:100
@@ -93,6 +98,11 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         "touchend": () => {
             // console.log("move window end")
             onMove.current = false
+        },
+        "resize": (event:UIEvent) => {
+            // TODO: when the viewport are resized make this window not hiding out of the viewport area.
+            
+
         }
     }
 
@@ -103,6 +113,8 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
         addEventListener("touchmove",windowHandlers.touchmove)
         addEventListener("mousemove",windowHandlers.mousemove)
+
+        addEventListener("resize",windowHandlers.resize)
 
         init.current = false
         console.log(init.current)

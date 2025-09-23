@@ -93,6 +93,8 @@
 
 
 # detail
+## [settings](./settings.md)
+
 ## command
 ### template
 - [commandDocTemplate](./basicCommand/commandDocTemplate.md)

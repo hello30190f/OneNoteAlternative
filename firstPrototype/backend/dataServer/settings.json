@@ -2,5 +2,6 @@
     "ip":"localhost",
     "port": 50097,
     "isStandalone": true,
-    "NotebookRootFolder":["./notebookData"]
+    "NotebookRootFolder":["./notebookData"],
+    "deletedPagesKeepInterval": "0000/00/10"
 }
