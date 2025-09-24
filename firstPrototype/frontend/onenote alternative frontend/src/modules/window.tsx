@@ -3,6 +3,8 @@ import Page from "./page";
 import Selector from "./selector";
 import { create } from "zustand";
 import ToggleToolsBar from "./UI/ToggleToolsBar";
+import { CreateNotebook } from "./create/notebook";
+import { CreatePage } from "./create/page";
 
 export type AppState = {
     currentPage:string | null,
@@ -33,6 +35,8 @@ export default function Window(){
             <div className="window flex flex-row">
                 <Page></Page>
                 <Selector></Selector>
+                <CreateNotebook></CreateNotebook>
+                <CreatePage></CreatePage>
                 <ToggleToolsBar></ToggleToolsBar>
             </div>
         </>

@@ -37,6 +37,7 @@ export default function Selector() {
         data: null,
     });
 
+
     useEffect(() => {
         if (!websocket) {
             setIndex({
@@ -53,6 +54,30 @@ export default function Selector() {
             const result = JSON.parse(String(event.data));
             console.log(result)
 
+            // dataserver -> frontend
+            // get an interrupt
+            // 
+            // {
+            //     "componentName"  : "Selector",
+            //     "command"        : "update",
+            //     "UUID"           : "UUID string",
+            //     "data"           : { }
+            // }
+            if(result.componentName == "Selector" && result.command == "update"){
+                // update index info
+                requestUUID.current = genUUID()
+
+                const request = JSON.stringify({ 
+                    command: "info", 
+                    UUID: requestUUID.current,
+                    data: null 
+                });
+                websocket.send(request);
+                return
+            }
+
+            // frontend -> dataserver
+            // get response
             if(result.UUID == requestUUID.current && "info" == result.command){
                 if (!result.status.includes("error")) {
                     setIndex(result);
@@ -85,6 +110,7 @@ export default function Selector() {
         // cleanup
         return () => {
             websocket.removeEventListener("message", handleMessage);
+            websocket.removeEventListener("open",whenOpened)
         };
     }, [websocket]);
 

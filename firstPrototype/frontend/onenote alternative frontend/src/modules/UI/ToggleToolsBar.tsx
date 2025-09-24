@@ -33,7 +33,7 @@ export default function ToolsBar(){
             hover:bg-blue-600
             selection:bg-transparent
             flex 
-            pl-[1rem] pr-[1rem] 
+            pl-[1rem] pr-[1rem] ml-[1rem]
             justify-center place-items-center align-middle text-center
  items-center" 
             onClick={() => {
