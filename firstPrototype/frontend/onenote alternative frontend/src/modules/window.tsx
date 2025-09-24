@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Page from "./page";
 import Selector from "./selector";
 import { create } from "zustand";
@@ -14,7 +13,7 @@ export type AppState = {
 }
 
 
-export const useAppState = create<AppState>((set, get) => ({
+export const useAppState = create<AppState>((set) => ({
     currentPage: null,
     currentNotebook: null,
     changeOpenedPage: (notebook: string, pageID: string) => {

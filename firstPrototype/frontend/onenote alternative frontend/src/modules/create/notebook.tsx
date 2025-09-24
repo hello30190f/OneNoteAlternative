@@ -6,6 +6,7 @@ import { genUUID } from "../common"
 
 
 // TODO: implement ERROR dialog with MessageBox Component
+// TODO: implement this
 
 export function CreateNotebook(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent w-full mt-[1.1rem] p-[0.5rem] "

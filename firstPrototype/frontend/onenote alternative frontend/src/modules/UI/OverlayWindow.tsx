@@ -100,7 +100,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             // console.log("move window end")
             onMove.current = false
         },
-        "resize": (event:UIEvent) => {
+        "resize": () => {
             // fixed css style 
             const margin = 100 
             if(window.innerWidth < windowPos.current.x && window.innerWidth > margin){

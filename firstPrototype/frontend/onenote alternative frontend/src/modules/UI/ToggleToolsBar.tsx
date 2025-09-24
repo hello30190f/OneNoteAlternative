@@ -14,7 +14,7 @@ export interface toggleableTools{
 }
 
 //TODO: implement removeToggleable
-export const useToggleableStore = create<toggleableTools>((set,get) => ({
+export const useToggleableStore = create<toggleableTools>((set) => ({
     toggleables:[],
 
     addToggleable: (Atoggleable:toggleable) => {
