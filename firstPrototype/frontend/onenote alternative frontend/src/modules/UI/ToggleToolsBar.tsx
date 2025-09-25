@@ -65,6 +65,8 @@ export default function ToolsBar(){
         </div>
     }
 
+    // TODO: show status indicator (right side).
+    // for example: show text amount, LF amount, file size
     if(toggleables.length == 0){
         return <ToolsBarOutlineStyle>
             <div>No tools exist</div>

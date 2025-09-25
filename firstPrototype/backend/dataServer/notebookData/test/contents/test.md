@@ -1,3 +1,11 @@
+++++
+{
+    files:["なんかよくわかんない絵ジト目口開き3.png"], 
+    tags:[],
+    UUID:"6428f4c7-7622-40b9-a6bc-f895b3f9ada8"
+}
+++++
+
 # hello world
 This is test content.
 
@@ -7,6 +15,7 @@ This is test content.
 　状況に応じてまだ[問題点というか不満点のまとめ](https://google.com)の記事がある程度出来上がってない段階でも、思ったことがあればここにいろいろ書いていこうとは思っています。
 
 ## リポジトリ
+![なんかよくわかんない絵ジト目口開き3.png](imageURLunset)
 [https://github.com/hello30190f/OneNoteAlternative](https://github.com/hello30190f/OneNoteAlternative)
 
 ## TODOs
