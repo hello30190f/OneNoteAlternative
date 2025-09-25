@@ -107,7 +107,7 @@ export default function Page() {
         const PageCompornet = PageCompornetList[data.pageType as keyof typeof PageCompornetList] || PageCompornetList.free;
 
         return (
-            <div>
+            <div className="absolute left-0 top-0 w-full h-full">
                 <PageCompornet
                     tags={data.tags}
                     files={data.files}
@@ -151,7 +151,8 @@ export default function Page() {
             absolute left-0 top-[2rem] 
             flex 
             justify-center place-items-center align-middle text-center
-    items-center
+    items-center 
+            overflow-y-scroll 
         "
         style={PageOutlineAndContainerStyle}
         >
