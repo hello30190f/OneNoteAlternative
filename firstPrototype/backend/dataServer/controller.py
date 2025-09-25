@@ -7,6 +7,7 @@ from commands.fileData          import fileData
 from commands.createPage        import createPage
 from commands.updatePage        import updatePage
 from commands.createNotebook    import createNotebook
+from commands.getPageType       import getPageType
 
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
 # extension should register their command to this dictionary.
@@ -22,7 +23,8 @@ commands = {
     "fileData"      : fileData,
     "createPage"    : createPage,
     "updatePage"    : updatePage,
-    "createNotebook": createNotebook
+    "getPageType"   : getPageType,
+    "createNotebook": createNotebook,
 }
 
 # call command
@@ -44,5 +46,5 @@ async def controler(message,websocket):
 
     # when command is not found.
     if(not commandFound):
-        await notFound(websocket)
+        await notFound(request,websocket)
 

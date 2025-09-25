@@ -1,6 +1,32 @@
 import { useEffect } from "react"
 import { create } from "zustand";
 
+
+
+export interface baseResponseTypesFromDataserver{
+  status: string;
+  errorMessage: string;
+  UUID: string | null;
+  command: string | null;
+}
+
+export interface baseRequestTypesFromFromtend{
+  command: string,
+  UUID: string,
+}
+
+// {
+//     "componentName"  : "Selector",
+//     "command"        : "update",
+//     "UUID"           : "UUID string",
+//     "data"           : { }
+// }
+export interface baseInterruptRequestFromDataserver{
+  componentName: string,
+  command: string,
+  UUID: string
+}
+
 type DatabaseState = {
   websocket: WebSocket | null;
   serverIP: string | null;

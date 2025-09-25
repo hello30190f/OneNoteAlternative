@@ -47,10 +47,12 @@ npm run dev
 - [ ] implement delete notebook button
 - [ ] implement delete page button
 - [ ] implement page view and make them editable via the frontend
+- [ ] use [marked](https://github.com/markedjs/marked) library to render markdown content.
 
 ### dataserver backend
 - [ ] implement minimal commands  (currently working)
 - [ ] implement setting configure UI 
+- [ ] 
 
 
 ### clientside backend
@@ -77,6 +79,7 @@ npm run dev
 - React
 - Tailwind CSS
 - zustand
+- [marked](https://github.com/markedjs/marked)
 
 ### backend
 - python
