@@ -75,10 +75,10 @@ npm run dev
 
 ## frameworks and libraries
 ### frontend
-- Vite
-- React
-- Tailwind CSS
-- zustand
+- [Vite](https://vite.dev/)
+- [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [zustand](https://zustand.docs.pmnd.rs/)
 - [marked](https://github.com/markedjs/marked)
 
 ### backend
