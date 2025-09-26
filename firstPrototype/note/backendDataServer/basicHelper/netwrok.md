@@ -1,6 +1,6 @@
 # network helper
 ## role 
- Include websocket helper to listen a message from the frontend.
+ Include websocket helpers to listen a message from the frontend.
 
 ## receiveLoop func
 ### role

@@ -151,7 +151,7 @@ export default function Selector() {
                 notebookNameStyle += " bg-gray-600"
             }
             notebooks.push(
-                <div className="notebookEntry bg-gray-700 border-2 border-solid border-gray-300" key={name}>
+                <div className="notebookEntry m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={name}>
                     <div 
                     onClick={() => {
                         console.log("A notebook is clicked")

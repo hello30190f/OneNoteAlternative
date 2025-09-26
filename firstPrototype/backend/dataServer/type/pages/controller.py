@@ -13,6 +13,6 @@ pages = {
 def getPageTemplate(pageType,data):
     for aPageType in pages.keys():
         if(aPageType == pageType):
-            return pages[aPageType]
+            return pages[aPageType](data)
 
     return None

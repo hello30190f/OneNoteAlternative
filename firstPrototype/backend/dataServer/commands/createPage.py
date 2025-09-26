@@ -20,6 +20,7 @@ from type.pages import controller
 #     "data":{ }
 # }
 
+# TODO: update notebook metadata.
 async def createPage(request,websocket):
     mandatoryKeys   = ["noteboook","newPageID","pageType"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)

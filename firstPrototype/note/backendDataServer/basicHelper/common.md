@@ -109,3 +109,70 @@
 - ["missing","keys","list"]:list  
  Return what keys are missing.
 
+
+
+
+
+## timeString func
+### role
+ Return current date as string(YYYY/MM/DD).
+
+### args
+ No arguments are required.
+ 
+### return
+- "YYYY/MM/DD":str  
+ Current date string will be returned.
+
+
+
+
+
+
+## findNotes func
+### role
+ List all notebooks and return the metadata info for each notebooks.
+
+### args
+ No arguments are required.
+
+### return
+- notebookJSONinfo:dict  
+ Metadata info of all notebooks.  
+  
+ About the detail of "notebookJSONinfo". check  [response-dataserver-to-frontend](../basicCommand/info.md#response-dataserver-to-frontend) 
+
+### return on error
+#### No metadata
+- None:None
+ This error will be occurred when there is no notebook or the backend error is happened.
+
+
+
+
+
+
+
+## deleteDataSafely func
+### role
+ Delete file safely. Prevent the dataserver backeand from malicious op  erations as possible. 
+
+### args
+- absoluteDataPath:str  
+ The dict data of "data" key inside the request from the forntend.
+
+### return
+- False:bool  
+ False mean no error.
+
+### return on error
+#### when failed to delete the data
+- True:bool  
+ Failed to delete the specified data. Follwing reason can be considered.
+
+    1. Root directory is specified
+    2. Relative path is specified
+    3. Try to delete outside of the notebook stores.
+    4. OS Error
+    5. Unsupported platform  
+    Java env is not supported 

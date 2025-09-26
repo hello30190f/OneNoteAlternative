@@ -1,4 +1,4 @@
-import json, time, os
+import json, time, os, subprocess
 from helper import loadSettings 
 
 # error response ---------------------------------------
@@ -106,7 +106,7 @@ def timeString():
 # arg:
 #   None    : None
 # return value
-#   OK      : formated date string
+#   OK      : notebookJSONinfo
 #   Error   : None will be returned when there are no notebooks or other type error is occured.
 def findNotes():
     # check metadata.json existance for a notebook
@@ -158,3 +158,67 @@ def findNotes():
             print("findNotes helper: cache function is not Implemented for now.")
     
     return notebookJSONinfo
+
+
+
+# NOTE: This function will delete all contents of a folder. There are no notify. Be careful. 
+# arg:
+#   absoluteDataPath    : file or folder path
+# return value
+#   OK      : False will be returned.
+#   Error   : True  will be returned when failed to delete the data or the specified path is malformed.
+def deleteDataSafely(absoluteDataPath:str):
+    # https://docs.python.org/3/library/platform.html#platform.system
+    # 'Linux', 'Darwin', 'Java', 'Windows'
+
+    # check the absoluteDataPath is something malisuous or not.
+    if(absoluteDataPath == "/" or absoluteDataPath == "C:\\"):
+        print("deleteDataSafely: Failed. Try to delete root directory.")
+        return True
+    
+    # check the absoluteDataPath is relative path or not.
+    if(absoluteDataPath[0] == "."):
+        print("deleteDataSafely: Failed. A relative path is specified. Use absolute path.")
+        return True
+
+    # check the absoluteDataPath try to delete outside content of the notebooks or not.
+    isNotebookPath = False
+    for aNotebookStoreRoot in loadSettings.settings["NotebookRootFolder"]:
+        if(aNotebookStoreRoot in absoluteDataPath):
+            isNotebookPath = True
+            break
+    if(not isNotebookPath):
+        print("deleteDataSafely: Failed. The absoluteDataPath is outside of the notebook store.")
+        return True
+    
+
+    # find platform
+    platform = os.system()
+    try:
+        if(platform == "Windows"):
+            print("deleteDataSafely: Currently Windows support is experimental.")
+            if(not os.path.isfile()):
+                # delete all sub folders and files with the specified folder.
+                command = "del /f /s /Q " + absoluteDataPath
+                subprocess.run([command],shell=True)
+                os.rmdir(absoluteDataPath)
+            else:
+                # delete a file.
+                os.remove(absoluteDataPath)            
+        elif(platform == "Java"):
+            print("deleteDataSafely: Java support currently not implemented.")
+            return True
+        elif(platform == "Linux" or platform == "Darwin"):
+            command = "rm -rfd " + absoluteDataPath
+            subprocess.run([command],shell=True)
+    except:
+        print("deleteDataSafely: Unable to delete the specified file or folder.")
+        print(absoluteDataPath)
+        return True
+    
+    # check the data has already been deleted or not.
+    if(os.path.exists(absoluteDataPath)):
+        print("deleteDataSafely: Unable to delete the specified file or folder. The file still exists.")
+        return True
+
+    return False
