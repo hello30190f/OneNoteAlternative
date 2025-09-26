@@ -1,6 +1,9 @@
 import { marked } from "marked";
 import type { PageMetadataAndData } from "../page";
 import { useRef, useState } from "react";
+import type { aMessageBox } from "../UI/messageBox";
+import { genUUID } from "../common";
+import showMessageBox from "../UI/messageBox";
 
 // export interface PageMetadataAndData {
 //     pageType: string;
@@ -14,6 +17,8 @@ import { useRef, useState } from "react";
 export default function Markdown(data:PageMetadataAndData){
     const [html,setHTML] = useState({__html: ""})
     const init = useRef(true)
+    const messageBoxUUID = useRef(genUUID())
+
 
     async function parseMarkdown(){
 
@@ -30,7 +35,13 @@ export default function Markdown(data:PageMetadataAndData){
         let result = data.pageData.split("++++")
         if(result.length != 3){
             // show no data error. Use messageBox component
-            
+            const message:aMessageBox = {
+                title   : "Markdown Page",
+                type    : "error",
+                UUID    : messageBoxUUID.current,
+                message : "Invalid data is received. The backend error.",
+            }
+            showMessageBox(message)
             return
         }
 
