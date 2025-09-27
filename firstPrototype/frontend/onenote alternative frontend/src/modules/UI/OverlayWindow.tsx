@@ -1,4 +1,5 @@
 import { useRef, useState, type ReactNode} from "react"
+import { create } from "zustand"
 
 export interface OverlayWindowArgs{
     title: string,
@@ -19,6 +20,48 @@ export interface OverlayWindowArgs{
 // | ToggleToolsBar.tsx | 100          |
 // | messageBox.tsx     | 150          |
 // | OverlayWindow.tsx  | 200-1200     |
+
+type AoverlayWindow = {
+    name: string,       // window title
+    UUID: string,       
+    isActive: boolean,  // false -> inactive, true -> active
+    zIndex: number      // 200-1200
+}
+
+type overlayWindows = {
+    windows: AoverlayWindow[],
+    zIndexMax: number,
+    zIndesMin: number,
+    addWindow: (window:AoverlayWindow) => void,                             // in first place, z-index will be the highest number.
+    removeWindow: (window:AoverlayWindow) => void,
+    allWindowInactive: () => void,                     // no need to update z-index
+    makeAwindowActive: (window:AoverlayWindow) => void // the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
+}
+
+const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
+    windows: [],
+
+    // const vals
+    zIndesMin: 200,
+    zIndexMax: 1200,
+    
+    // register and deresiger window
+    addWindow: (window:AoverlayWindow) => {
+        set((state) => ({windows: [...state.windows,window]}))
+    },
+    removeWindow: (window:AoverlayWindow) => {
+
+    },
+
+    // window manipulation
+    allWindowInactive: () => {
+
+    },
+    makeAwindowActive: (window:AoverlayWindow) => {
+
+    }
+}))
+
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
     const visible = arg.visible
     const setVisible = arg.setVisible
@@ -146,6 +189,20 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         init.current = false
     }
 
+
+    const windowZindexManagement = {
+        "onWindowClicked":() => {
+
+        },
+        "onOtherWindowsClicked":() => {
+
+        },
+        "onAllWindowInactive":() =>{
+
+        }
+    }
+
+
     const [windowPosStyle,setWindowStyle] = useState({
         left: String(windowPos.current.x) + "px",
         top: String(windowPos.current.y) + "px"
@@ -154,7 +211,10 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col opacity-70 min-w-[5rem] fixed z-200" 
 
     if(visible){
-        return (<div className={OverlayWindowContaierClassName} style={windowPosStyle}>
+        return (<div 
+                    className={OverlayWindowContaierClassName} style={windowPosStyle}
+
+                >
             <div className="windowHeader move bg-yellow-600 w-full h-[2rem] justify-center place-items-center align-middle text-center"
                 onMouseDown={windowHandlers.mousedown}
                 onTouchStart={windowHandlers.touchstart}
