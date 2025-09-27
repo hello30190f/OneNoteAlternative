@@ -100,7 +100,7 @@ export function MessageBoxContainer(){
     }
 
     if(visible){
-        return <div className="messageBoxContainer flex flex-col fixed bottom-[2rem] right-[2rem] w-[10rem] min-h-[5rem] max-h-screen overflow-y-scroll">
+        return <div className="messageBoxContainer z-150 flex flex-col fixed bottom-[2rem] right-[2rem] w-[10rem] min-h-[5rem] max-h-screen overflow-y-scroll">
             {messageBoxes.map((value,index) => <MessageBox message={value} key={index}></MessageBox> )}
         </div>
     }

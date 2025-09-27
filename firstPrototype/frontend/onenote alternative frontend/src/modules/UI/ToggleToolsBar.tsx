@@ -60,7 +60,9 @@ export default function ToolsBar(){
         bg-blue-900 
         top-0 left-0 
         justify-center place-items-center align-middle text-center
- items-center">
+ items-center 
+        z-100
+        ">
             {children}
         </div>
     }

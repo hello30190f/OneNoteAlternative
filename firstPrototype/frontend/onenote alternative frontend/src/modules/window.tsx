@@ -31,7 +31,7 @@ export const useAppState = create<AppState>((set) => ({
 export default function Window(){    
     return(
         <>
-            <div className="window flex flex-row">
+            <div className="window flex flex-row z-2">
                 <Page></Page>
                 <Selector></Selector>
                 <CreateNotebook></CreateNotebook>

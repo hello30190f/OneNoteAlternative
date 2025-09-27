@@ -153,6 +153,7 @@ export default function Page() {
             justify-center place-items-center align-middle text-center
     items-center 
             overflow-y-scroll 
+            z-50
         "
         style={PageOutlineAndContainerStyle}
         >

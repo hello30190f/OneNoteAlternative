@@ -7,7 +7,18 @@ export interface OverlayWindowArgs{
 }
 
 // show window can be moved around anywhare and closed
-// TODO: implement z-index for other overlayWindows. 
+// TODO: manage inactive and active window style. (inactive: oipacity will be lower number)
+// TODO: manage onmove window style.  (inactive: oipacity will be lower number)
+// TODO: implement z-index manegement for other overlayWindows. 
+// ## z-index area map
+// | Component          | z-index area |
+// |--------------------|--------------|
+// | App.tsx            | 1            |
+// | window.tsx         | 2-11         |
+// | page.tsx           | 50           |
+// | ToggleToolsBar.tsx | 100          |
+// | messageBox.tsx     | 150          |
+// | OverlayWindow.tsx  | 200-1200     |
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
     const visible = arg.visible
     const setVisible = arg.setVisible
@@ -140,7 +151,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         top: String(windowPos.current.y) + "px"
     })
 
-    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col opacity-70 min-w-[5rem] fixed" 
+    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col opacity-70 min-w-[5rem] fixed z-200" 
 
     if(visible){
         return (<div className={OverlayWindowContaierClassName} style={windowPosStyle}>
@@ -155,8 +166,10 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                     setVisible(false)
                     }}></div>
             </div>
-            <div className="content bg-black min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
- items-center">
+            <div 
+                className="content bg-black min-h-[5rem] w-full flex justify-center place-items-center align-middle text-center
+    items-center"
+            >
                 {children}
             </div>
 
