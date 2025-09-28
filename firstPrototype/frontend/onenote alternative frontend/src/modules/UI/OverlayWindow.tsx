@@ -1,5 +1,6 @@
 import { useRef, useState, type ReactNode} from "react"
 import { create } from "zustand"
+import { genUUID } from "../common"
 
 export interface OverlayWindowArgs{
     title: string,
@@ -48,10 +49,23 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     
     // register and deresiger window
     addWindow: (window:AoverlayWindow) => {
-        set((state) => ({windows: [...state.windows,window]}))
+        get().allWindowInactive()
+        let newInfo = get().windows
+        for(let i = 0; i < newInfo.length; i++){
+            newInfo[i].zIndex--
+        }
+        window.zIndex = get().zIndexMax
+        set(() => ({windows: [...newInfo,window]}))
     },
     removeWindow: (window:AoverlayWindow) => {
-
+        let oldInfo = get().windows
+        let newInfo = []
+        for(let i = 0; i < newInfo.length; i++){
+            if(oldInfo[i].UUID != window.UUID){
+                newInfo.push(oldInfo[i])
+            }
+        }
+        set(() => ({windows: newInfo}))
     },
 
     // window manipulation
@@ -63,13 +77,34 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         set(() => ({windows: newInfo}))
     },
     makeAwindowActive: (window:AoverlayWindow) => {
-
+        let newInfo = get().windows
+        for(let i = 0; i < newInfo.length; i++){
+            if(window.UUID == newInfo[i].UUID){
+                newInfo[i].isActive = true
+                newInfo[i].zIndex = get().zIndexMax
+            }
+            newInfo[i].isActive = false
+            if(newInfo[i].zIndex > get().zIndesMin){
+                newInfo[i].zIndex--
+            }
+        }
+        set(() => ({windows: newInfo}))
     }
 }))
 
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
     const visible = arg.visible
     const setVisible = arg.setVisible
+
+    const addWindow = useOverlayWindowStore((s) => s.addWindow)
+    const maxZindex = useOverlayWindowStore((s) => s.zIndexMax)
+    const aWindow:AoverlayWindow = {
+        isActive: true,
+        name: arg.title,
+        UUID: genUUID(),
+        zIndex: maxZindex
+    }
+
 
     const initPos = {
         x: 100,
@@ -190,6 +225,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         addEventListener("mousemove",windowHandlers.mousemove)
 
         addEventListener("resize",windowHandlers.resize)
+        addWindow(aWindow)
 
         init.current = false
     }
@@ -197,7 +233,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     const windowZindexManagement = {
         "onWindowClicked":() => {
-
+            
         },
         "onOtherWindowsClicked":() => {
 
