@@ -1,8 +1,8 @@
-import { useEffect, useState, type JSX, type ReactNode } from "react"
+import { useEffect, useRef, useState, type JSX, type ReactNode } from "react"
 import type { PageMetadataAndData } from "../../page"
 import type AnItem from "./element"
 import { create } from "zustand"
-import Text from "./elements/text"
+import ShowItem from "./showItem"
 
 // export interface PageMetadataAndData {
 //     pageType: string;
@@ -48,45 +48,29 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
     }
 }))
 
+
+
+// @ data.pageData
+// This is the string of entire page coming from the backend. 
+// responseString = json.dumps({
+//     "status"        : "ok",
+//     "UUID"          : request["UUID"],
+//     "command"       : "pageInfo",
+//     "errorMessage"  : "nothing",
+//     "data": {
+//         "pageType": pageType,
+//         "tags": tags,
+//         "files": files,
+//         "pageData": contentString
+//     }
+// })
+
+// @ JSON.parse(data.pageData).pageData
+// This is actual pageData for free page. This include "items" key which contain list of "AnItem"s.
+
+
 export default function Free(data:PageMetadataAndData){
     const [jsondata,setJSONdata]    = useState<AnItem[]>(JSON.parse(data.pageData).pageData.items)
-    const elements                  = useFreePageElementStore((s) => s.elements)
-
-    function ShowItem({ item }:{ item:AnItem }){
-        let className = "AnItem absolute flex bg-gray-900 solid border-2px border-gray-400 "
-
-        let zIndexMin = 200
-        let zIndexMax = 1200
-        let zIndex    = item.position.z + zIndexMin
-        if(zIndex > zIndexMax){
-            zIndex = zIndexMax
-        }
-
-        let style = {
-            top: String(item.position.y) + "px",
-            left: String(item.position.x) + "px",
-
-            width: String(item.size.width) + "px",
-            height: String(item.size.height) + "px",
-
-            zIndex: String(zIndex),
-        }
-
-        let ItemView = null
-        for(let anElement of elements){
-            if(anElement.name == item.type){
-                ItemView = anElement.element
-                break
-            }
-        }
-        if(ItemView == null){
-            ItemView = Text
-        }
-
-        return <div className={className} style={style}>
-            <ItemView item={item}></ItemView>
-        </div>
-    }
 
     // console.log(jsondata)
     // console.log(data)
@@ -101,8 +85,4 @@ export default function Free(data:PageMetadataAndData){
             {jsondata.map((value,index) => <ShowItem item={value} key={index}></ShowItem>)}
         </div>
     )
-
-    // return(
-    //     <div className="text-5xl font-medium">Not Implemented yet...</div>
-    // )
 }

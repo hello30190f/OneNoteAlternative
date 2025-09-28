@@ -56,7 +56,11 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
 
     // window manipulation
     allWindowInactive: () => {
-
+        let newInfo = get().windows
+        for(let i = 0; i < newInfo.length; i++){
+            newInfo[i].isActive = false
+        }
+        set(() => ({windows: newInfo}))
     },
     makeAwindowActive: (window:AoverlayWindow) => {
 
@@ -158,15 +162,15 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         "resize": () => {
             // fixed css style 
             const margin = 100 
-            if(window.innerWidth < windowPos.current.x && window.innerWidth > margin){
+            if(window.innerWidth < windowPos.current.x + margin && window.innerWidth > margin){
                 windowPos.current.x = window.innerWidth - margin
-            }else if(window.innerWidth < windowPos.current.x){
+            }else if(window.innerWidth < windowPos.current.x + margin){
                 windowPos.current.x = 0
             }
 
-            if(window.innerHeight < windowPos.current.y && window.innerHeight > margin){
+            if(window.innerHeight < windowPos.current.y + margin && window.innerHeight > margin){
                 windowPos.current.y = window.innerHeight - margin
-            }else if(window.innerHeight < windowPos.current.y){
+            }else if(window.innerHeight < windowPos.current.y + margin){
                 windowPos.current.y = 36 // 3rem
             }
 
