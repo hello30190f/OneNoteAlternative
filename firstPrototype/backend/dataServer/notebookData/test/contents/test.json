@@ -13,6 +13,10 @@
                     "x": 200,
                     "y": 100,
                     "z": 0
+                },
+                "size":{
+                    "width": 300,
+                    "height": 100
                 }
             },
             {
@@ -20,9 +24,13 @@
                 "type": "text",
                 "data": "This is test text. Yukkuri marisa abuse Yukkuri reimu.",
                 "position":{
-                    "x": 200,
-                    "y": 150,
+                    "x": 300,
+                    "y": 250,
                     "z": 1
+                },
+                "size":{
+                    "width": 300,
+                    "height": 100
                 }
             }
         ]

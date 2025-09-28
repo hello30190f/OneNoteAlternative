@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { useDatabaseStore } from "./network/database";
+import { useDatabaseStore, type baseResponseTypesFromDataserver } from "./network/database";
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
 import Markdown from "./pages/markdown";
@@ -7,15 +7,15 @@ import Texteditor from "./pages/texteditor";
 import { genUUID } from "./common";
 import { useAppState } from "./window";
 
-interface PageInfo {
-    status: string;
-    errorMessage: string;
-    UUID: string;
-    command: string;
+interface PageInfo extends baseResponseTypesFromDataserver {
+    // status: string;
+    // errorMessage: string;
+    // UUID: string;
+    // command: string;
     data: PageMetadataAndData | null;
 }
 
-export interface PageMetadataAndData {
+export interface PageMetadataAndData{
     pageType: string;
     tags: any[];
     files: any[];

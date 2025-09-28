@@ -19,7 +19,8 @@ export interface OverlayWindowArgs{
 // | page.tsx           | 50           |
 // | ToggleToolsBar.tsx | 100          |
 // | messageBox.tsx     | 150          |
-// | OverlayWindow.tsx  | 200-1200     |
+// | anyPageView        | 200-1200     |
+// | OverlayWindow.tsx  | 1300-1400    |
 
 type AoverlayWindow = {
     name: string,       // window title
@@ -42,8 +43,8 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     windows: [],
 
     // const vals
-    zIndesMin: 200,
-    zIndexMax: 1200,
+    zIndesMin: 1300,
+    zIndexMax: 1400,
     
     // register and deresiger window
     addWindow: (window:AoverlayWindow) => {
@@ -208,7 +209,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         top: String(windowPos.current.y) + "px"
     })
 
-    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col opacity-70 min-w-[5rem] fixed z-200" 
+    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col opacity-70 min-w-[5rem] fixed z-1300" 
 
     if(visible){
         return (<div 

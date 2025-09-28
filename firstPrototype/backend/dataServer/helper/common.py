@@ -222,3 +222,12 @@ def deleteDataSafely(absoluteDataPath:str):
         return True
 
     return False
+
+
+#TODO: warp basic commands as function to absorb platform difference
+#TODO: implement this
+def mkdirRecursively(folderPath:str):
+    root = loadSettings.settings["NotebookRootFolder"][0]
+    
+    pass
+

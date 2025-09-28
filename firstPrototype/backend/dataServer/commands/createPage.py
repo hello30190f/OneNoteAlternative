@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker
+from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely
 from helper import loadSettings 
 import os , os.path , json , subprocess
 from type.pages import controller
@@ -56,6 +56,7 @@ async def createPage(request,websocket):
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if(not os.path.exists(folder)):
         # create folder
+        
         command = "mkdir -p " + folder
         result = subprocess.run([command],shell=True)
 
@@ -115,7 +116,7 @@ async def createPage(request,websocket):
 
     if(failed):
         # remove the failed page
-        os.remove(pagePath)
+        deleteDataSafely(pagePath)
 
         print("createPage ERROR: The backend error. Failed to create a new file for the new page.")
         print("notebook    : " + notebookName) 

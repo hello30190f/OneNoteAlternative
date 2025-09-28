@@ -7,7 +7,8 @@
 | page.tsx           | 50           |
 | ToggleToolsBar.tsx | 100          |
 | messageBox.tsx     | 150          |
-| OverlayWindow.tsx  | 200-1200     |
+| anyPageView        | 200-1200     |
+| OverlayWindow.tsx  | 1300-1400    |
 
 - z-index - CSS | MDN   
 https://developer.mozilla.org/en-US/docs/Web/CSS/z-index (2025年9月27日) 
