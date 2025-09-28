@@ -5,6 +5,8 @@ import TextView from "./elements/textView"
 
 // TODO: do z-index management
 // TODO: do active and inactive style management
+// TODO: make the background transparent, keep border and itemitself visible,
+//           when the item inactive, the border need to be hide or transparent.
 export default function ShowItem({ item }: { item: AnItem }) {
     const elements = useFreePageElementStore((s) => s.elements)
 

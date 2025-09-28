@@ -68,7 +68,7 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
 // @ JSON.parse(data.pageData).pageData
 // This is actual pageData for free page. This include "items" key which contain list of "AnItem"s.
 
-
+// TODO: automatic update on change
 export default function Free(data:PageMetadataAndData){
     const [jsondata,setJSONdata]    = useState<AnItem[]>(JSON.parse(data.pageData).pageData.items)
 
