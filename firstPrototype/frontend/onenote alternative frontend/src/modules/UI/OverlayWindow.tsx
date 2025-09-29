@@ -54,6 +54,12 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     addWindow: (window:AoverlayWindow,setter:React.Dispatch<AoverlayWindow>) => {
         let newInfo = get().windows
         console.log(newInfo)
+        setter({
+            name: window.name,
+            UUID: window.UUID,
+            isActive: true,
+            zIndex: get().zIndexMax
+        })
         for(let i = 0; i < newInfo.length; i++){
             newInfo[i].setter({
                 name: newInfo[i].data.name,
@@ -62,12 +68,6 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
                 zIndex: newInfo[i].data.zIndex--,
             })
         }
-        setter({
-            name: window.name,
-            UUID: window.UUID,
-            isActive: true,
-            zIndex: get().zIndexMax
-        })
         set(() => ({windows: [...newInfo,{data:window,setter:setter}]}))
     },
     removeWindow: (window:AoverlayWindow) => {
@@ -92,6 +92,7 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
                 zIndex: newInfo[i].data.zIndex--,
             })
         }
+        set(() => ({windows: newInfo}))
     },
     makeAwindowActive: (window:AoverlayWindow) => {
         let newInfo = get().windows
@@ -138,6 +139,7 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
                 })
             }
         }
+        set(() => ({windows: newInfo}))
     }
 }))
 
@@ -147,6 +149,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     const addWindow = useOverlayWindowStore((s) => s.addWindow)
     const maxZindex = useOverlayWindowStore((s) => s.zIndexMax)
+    const windows = useOverlayWindowStore((s) => s.windows)
     const makeAwindowActive = useOverlayWindowStore((s) => s.makeAwindowActive)
     const [aWindow,setAwindow] = useState<AoverlayWindow>({
         isActive: true,
@@ -201,11 +204,21 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 windowPos.current.x = windowPos.current.x + dx
                 windowPos.current.y = windowPos.current.y + dy
  
-                setWindowStyle({
-                    left: String(windowPos.current.x) + "px",
-                    top: String(windowPos.current.y) + "px",
-                    zIndex: String(aWindow.zIndex) 
-                })
+                if(aWindow.isActive){
+                    setWindowStyle({
+                        left: String(windowPos.current.x) + "px",
+                        top: String(windowPos.current.y) + "px",
+                        zIndex: String(aWindow.zIndex),
+                        opacity: String(0.95),
+                    })
+                }else{
+                    setWindowStyle({
+                        left: String(windowPos.current.x) + "px",
+                        top: String(windowPos.current.y) + "px",
+                        zIndex: String(aWindow.zIndex),
+                        opacity: String(0.30),
+                    })
+                }
             }
         },
         "mouseup": () => {
@@ -234,11 +247,21 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                     windowPos.current.x = windowPos.current.x + dx
                     windowPos.current.y = windowPos.current.y + dy
 
-                    setWindowStyle({
-                        left: String(windowPos.current.x) + "px",
-                        top: String(windowPos.current.y) + "px",
-                        zIndex: String(aWindow.zIndex) 
-                    })
+                    if(aWindow.isActive){
+                        setWindowStyle({
+                            left: String(windowPos.current.x) + "px",
+                            top: String(windowPos.current.y) + "px",
+                            zIndex: String(aWindow.zIndex),
+                            opacity: String(0.95),
+                        })
+                    }else{
+                        setWindowStyle({
+                            left: String(windowPos.current.x) + "px",
+                            top: String(windowPos.current.y) + "px",
+                            zIndex: String(aWindow.zIndex),
+                            opacity: String(0.30),
+                        })
+                    }
                 }
             }
         },
@@ -261,11 +284,21 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 windowPos.current.y = 36 // 3rem
             }
 
-            setWindowStyle({
-                left: String(windowPos.current.x) + "px",
-                top: String(windowPos.current.y) + "px",
-                zIndex: String(aWindow.zIndex) 
-            })
+            if(aWindow.isActive){
+                setWindowStyle({
+                    left: String(windowPos.current.x) + "px",
+                    top: String(windowPos.current.y) + "px",
+                    zIndex: String(aWindow.zIndex),
+                    opacity: String(0.95),
+                })
+            }else{
+                setWindowStyle({
+                    left: String(windowPos.current.x) + "px",
+                    top: String(windowPos.current.y) + "px",
+                    zIndex: String(aWindow.zIndex),
+                    opacity: String(0.30),
+                })
+            }
         }
     }
 
@@ -286,7 +319,8 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     const [windowPosStyle,setWindowStyle] = useState({
         left: String(windowPos.current.x) + "px",
         top: String(windowPos.current.y) + "px",
-        zIndex: String(aWindow.zIndex) 
+        zIndex: String(aWindow.zIndex),
+        opacity: String(0.95)
     })
 
     const windowZindexManagement = {
@@ -297,23 +331,30 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     }
 
     useEffect(() => {
-        setWindowStyle({
-            left: String(windowPos.current.x) + "px",
-            top: String(windowPos.current.y) + "px",
-            zIndex: String(aWindow.zIndex) 
-        })
+        if(aWindow.isActive){
+            setWindowStyle({
+                left: String(windowPos.current.x) + "px",
+                top: String(windowPos.current.y) + "px",
+                zIndex: String(aWindow.zIndex),
+                opacity: String(0.95),
+            })
+        }else{
+            setWindowStyle({
+                left: String(windowPos.current.x) + "px",
+                top: String(windowPos.current.y) + "px",
+                zIndex: String(aWindow.zIndex),
+                opacity: String(0.30),
+            })
+        }
     },[aWindow])
 
-    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col min-w-[5rem] fixed " 
+    useEffect(() => {
+        if(visible) makeAwindowActive(aWindow)
+    },[visible])
 
-    if(aWindow.isActive){
-        OverlayWindowContaierClassName += "opacity-90 "
-    }else{
-        OverlayWindowContaierClassName += "opacity-20 "
-    }
+    let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col min-w-[5rem] fixed " 
     console.log(aWindow.zIndex)
-    // OverlayWindowContaierClassName += "z-" + String(aWindow.zIndex - 100) + " "
-    // OverlayWindowContaierClassName += "z-1300 "
+
 
     if(visible){
         return (<div 
