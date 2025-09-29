@@ -87,6 +87,7 @@ export function useDatabaseEffects() {
       console.log("reconnect observer")
       const websocket = getWebsocket()
       if(websocket != null){
+        // when there is no problem
         if(websocket.readyState == WebSocket.OPEN){
           // observe the connection
           setTimeout(() => { 
@@ -95,6 +96,8 @@ export function useDatabaseEffects() {
           return
         }
       }
+
+      // when try to reconnect the dataserver 
       setTimeout(() => { 
         const websocket = new WebSocket(serverIP);
         // websocket.addEventListener("error",reconnectLoop)

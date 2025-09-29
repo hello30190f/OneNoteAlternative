@@ -31,18 +31,20 @@ type AoverlayWindow = {
 }
 
 type overlayWindows = {
-    windows: {data:AoverlayWindow,setter:React.Dispatch<AoverlayWindow>}[],
+    windows: AoverlayWindow[],
     zIndexMax: number,
     zIndesMin: number,
-    addWindow: (window:AoverlayWindow,setter:React.Dispatch<AoverlayWindow>) => void,        // in first place, z-index will be the highest number.
+    addWindow: (window:AoverlayWindow) => void,        // in first place, z-index will be the highest number.
     removeWindow: (window:AoverlayWindow) => void,
     allWindowInactive: () => void,                     // no need to update z-index
-    makeAwindowActive: (window:AoverlayWindow) => void // the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
+    makeAwindowActive: (window:AoverlayWindow) => void,// the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
+    getWindow: (window:AoverlayWindow) => AoverlayWindow, 
 }
 
 //TODO: zindex bug fix
 //          addWindow unable to make a window active
 //          makeAwindowActive unable to update zindex correctlly -> update zustand side data correctly not only setter
+// rewite this with setState getState
 const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     windows: [],
 
@@ -51,35 +53,22 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     zIndexMax: 1400,
     
     // register and deresiger window
-    addWindow: (window:AoverlayWindow,setter:React.Dispatch<AoverlayWindow>) => {
+    addWindow: (window:AoverlayWindow) => {
         let newInfo = get().windows
-        // console.log(newInfo)
-        setter({
-            name: window.name,
-            UUID: window.UUID,
-            isActive: true,
-            zIndex: get().zIndexMax
-        })
         window.isActive = true
         window.zIndex = get().zIndexMax
 
         for(let i = 0; i < newInfo.length; i++){
-            newInfo[i].setter({
-                name: newInfo[i].data.name,
-                isActive: false,
-                UUID: newInfo[i].data.UUID,
-                zIndex: newInfo[i].data.zIndex--,
-            })
-            newInfo[i].data.isActive = false
-            newInfo[i].data.zIndex = newInfo[i].data.zIndex--
+            newInfo[i].isActive = false
+            newInfo[i].zIndex = newInfo[i].zIndex--
         }
-        set(() => ({windows: [...newInfo,{data:window,setter:setter}]}))
+        set(() => ({windows: [...newInfo,window]}))
     },
     removeWindow: (window:AoverlayWindow) => {
         let oldInfo = get().windows
         let newInfo = []
         for(let i = 0; i < newInfo.length; i++){
-            if(oldInfo[i].data.UUID != window.UUID){
+            if(oldInfo[i].UUID != window.UUID){
                 newInfo.push(oldInfo[i])
             }
         }
@@ -88,51 +77,38 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
 
     // window manipulation
     allWindowInactive: () => {
-        let newInfo = get().windows
+        let oldInfo = get().windows
+        let newInfo = []
+        for(const old of oldInfo){
+            newInfo.push(old)
+        }
+
         for(let i = 0; i < newInfo.length; i++){
-            newInfo[i].setter({
-                name: newInfo[i].data.name,
-                isActive: false,
-                UUID: newInfo[i].data.UUID,
-                zIndex: newInfo[i].data.zIndex,
-            })
-            newInfo[i].data.isActive = false
+            newInfo[i].isActive = false
         }
         set(() => ({windows: newInfo}))
     },
     makeAwindowActive: (window:AoverlayWindow) => {
-        let newInfo = get().windows
-        for(let i = 0; i < newInfo.length; i++){
-            let data = {
-                name: newInfo[i].data.name,
-                isActive: newInfo[i].data.isActive,
-                UUID: newInfo[i].data.UUID,
-                zIndex: newInfo[i].data.zIndex,
-            }
+        console.log("make a window active is called")
+        console.log(window.UUID)
+        let oldInfo = get().windows
+        let newInfo = []
+        for(let old of oldInfo){
+            newInfo.push(old)
+        }
 
-            if(window.UUID == newInfo[i].data.UUID){
-                data = {
-                    name: newInfo[i].data.name,
-                    isActive: true,
-                    UUID: newInfo[i].data.UUID,
-                    zIndex: get().zIndexMax,
-                }
-                newInfo[i].setter(data)
-                newInfo[i].data.zIndex = get().zIndexMax
-                newInfo[i].data.isActive = true
+        console.log(newInfo)
+        for(let i = 0; i < newInfo.length; i++){
+            if(window.UUID == newInfo[i].UUID){
+                console.log(newInfo[i])
+                newInfo[i].zIndex = get().zIndexMax
+                newInfo[i].isActive = true
                 continue
             }
-
-            data = {
-                name: newInfo[i].data.name,
-                isActive: false,
-                UUID: newInfo[i].data.UUID,
-                zIndex: newInfo[i].data.zIndex,
-            }
-            newInfo[i].data.isActive = false
+            
+            newInfo[i].isActive = false
 
             // if(window.zIndex == get().zIndexMax) {
-            //     newInfo[i].setter(data)
             //     continue
             // }
             
@@ -140,33 +116,32 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
             // console.log(get().zIndexMax - get().windows.length)
 
             if(
-                newInfo[i].data.zIndex > get().zIndesMin && 
-                newInfo[i].data.zIndex > get().zIndexMax - get().windows.length
+                newInfo[i].zIndex > get().zIndesMin && 
+                newInfo[i].zIndex > get().zIndexMax - get().windows.length
             ){
                 // console.log("working")
-                data = {
-                    name: newInfo[i].data.name,
-                    isActive: false,
-                    UUID: newInfo[i].data.UUID,
-                    zIndex: newInfo[i].data.zIndex--,
-                }
-                newInfo[i].data.isActive = false
-                newInfo[i].data.zIndex = newInfo[i].data.zIndex--
+                newInfo[i].isActive = false
+                newInfo[i].zIndex = newInfo[i].zIndex - 1
             }else{
-                data = {
-                    name: newInfo[i].data.name,
-                    isActive: false,
-                    UUID: newInfo[i].data.UUID,
-                    zIndex: get().zIndexMax - get().windows.length,
-                }
-                newInfo[i].data.isActive = false
-                newInfo[i].data.zIndex = get().zIndexMax - get().windows.length
+                newInfo[i].isActive = false
+                newInfo[i].zIndex = get().zIndexMax - get().windows.length
             }
-            newInfo[i].setter(data)
             // console.log("check")
             // console.log(newInfo[i].data.zIndex)
         }
         set(() => ({windows: newInfo}))
+    },
+    getWindow: (window:AoverlayWindow) => {
+        console.log("get window")
+        console.log(window.UUID)
+        console.log(window)
+        console.log(get().windows)
+        for(let test of get().windows){
+            if(test.UUID == window.UUID) {
+                return test
+            }
+        }
+        return window
     }
 }))
 
@@ -177,8 +152,11 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     const addWindow = useOverlayWindowStore((s) => s.addWindow)
     const maxZindex = useOverlayWindowStore((s) => s.zIndexMax)
     const windows = useOverlayWindowStore((s) => s.windows)
+    const setstate = useOverlayWindowStore.setState
+    const getstate = useOverlayWindowStore.getState
+    const getWindow = useOverlayWindowStore((s) => s.getWindow)
     const makeAwindowActive = useOverlayWindowStore((s) => s.makeAwindowActive)
-    const [aWindow,setAwindow] = useState<AoverlayWindow>({
+    const aWindowINIT = useRef<AoverlayWindow>({
         isActive: true,
         name: arg.title,
         UUID: genUUID(),
@@ -230,18 +208,18 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 windowPos.current.x = windowPos.current.x + dx
                 windowPos.current.y = windowPos.current.y + dy
  
-                if(aWindow.isActive){
+                if(getWindow(aWindowINIT.current).isActive){
                     setWindowStyle({
                         left: String(windowPos.current.x) + "px",
                         top: String(windowPos.current.y) + "px",
-                        zIndex: String(aWindow.zIndex),
+                        zIndex: String(getWindow(aWindowINIT.current).zIndex),
                         opacity: String(0.95),
                     })
                 }else{
                     setWindowStyle({
                         left: String(windowPos.current.x) + "px",
                         top: String(windowPos.current.y) + "px",
-                        zIndex: String(aWindow.zIndex),
+                        zIndex: String(getWindow(aWindowINIT.current).zIndex),
                         opacity: String(0.30),
                     })
                 }
@@ -273,18 +251,18 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                     windowPos.current.x = windowPos.current.x + dx
                     windowPos.current.y = windowPos.current.y + dy
 
-                    if(aWindow.isActive){
+                    if(getWindow(aWindowINIT.current).isActive){
                         setWindowStyle({
                             left: String(windowPos.current.x) + "px",
                             top: String(windowPos.current.y) + "px",
-                            zIndex: String(aWindow.zIndex),
+                            zIndex: String(getWindow(aWindowINIT.current).zIndex),
                             opacity: String(0.95),
                         })
                     }else{
                         setWindowStyle({
                             left: String(windowPos.current.x) + "px",
                             top: String(windowPos.current.y) + "px",
-                            zIndex: String(aWindow.zIndex),
+                            zIndex: String(getWindow(aWindowINIT.current).zIndex),
                             opacity: String(0.30),
                         })
                     }
@@ -310,18 +288,18 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 windowPos.current.y = 36 // 3rem
             }
 
-            if(aWindow.isActive){
+            if(getWindow(aWindowINIT.current).isActive){
                 setWindowStyle({
                     left: String(windowPos.current.x) + "px",
                     top: String(windowPos.current.y) + "px",
-                    zIndex: String(aWindow.zIndex),
+                    zIndex: String(getWindow(aWindowINIT.current).zIndex),
                     opacity: String(0.95),
                 })
             }else{
                 setWindowStyle({
                     left: String(windowPos.current.x) + "px",
                     top: String(windowPos.current.y) + "px",
-                    zIndex: String(aWindow.zIndex),
+                    zIndex: String(getWindow(aWindowINIT.current).zIndex),
                     opacity: String(0.30),
                 })
             }
@@ -337,7 +315,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         addEventListener("mousemove",windowHandlers.mousemove)
 
         addEventListener("resize",windowHandlers.resize)
-        addWindow(aWindow,setAwindow)
+        addWindow(aWindowINIT.current)
 
         init.current = false
     }
@@ -345,37 +323,38 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     const [windowPosStyle,setWindowStyle] = useState({
         left: String(windowPos.current.x) + "px",
         top: String(windowPos.current.y) + "px",
-        zIndex: String(aWindow.zIndex),
+        zIndex: String(getWindow(aWindowINIT.current).zIndex),
         opacity: String(0.95)
     })
 
     const windowZindexManagement = {
         "onWindowClicked":() => {
             // console.log("test")
-            makeAwindowActive(aWindow)
+            makeAwindowActive(aWindowINIT.current)
         }
     }
 
     useEffect(() => {
-        if(aWindow.isActive){
+        console.log("the overlay window info is updated")
+        if(getWindow(aWindowINIT.current).isActive){
             setWindowStyle({
                 left: String(windowPos.current.x) + "px",
                 top: String(windowPos.current.y) + "px",
-                zIndex: String(aWindow.zIndex),
+                zIndex: String(getWindow(aWindowINIT.current).zIndex),
                 opacity: String(0.95),
             })
         }else{
             setWindowStyle({
                 left: String(windowPos.current.x) + "px",
                 top: String(windowPos.current.y) + "px",
-                zIndex: String(aWindow.zIndex),
+                zIndex: String(getWindow(aWindowINIT.current).zIndex),
                 opacity: String(0.30),
             })
         }
-    },[aWindow])
+    },[windows,setstate,getstate])
 
     useEffect(() => {
-        if(visible) makeAwindowActive(aWindow)
+        if(visible) makeAwindowActive(aWindowINIT.current)
     },[visible])
 
     let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col min-w-[5rem] fixed " 
