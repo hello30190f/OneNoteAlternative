@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { useDatabaseStore } from "./network/database";
+import { send, useDatabaseStore } from "./network/database";
 import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
 import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
 import { genUUID } from "./common";
@@ -20,6 +20,7 @@ interface Notebook {
 
 export default function Selector() {
     const websocket = useDatabaseStore((s) => s.websocket);
+    const setstateDatabase  = useDatabaseStore.setState
     const [visible,setVisible] = useState(false)
     const init = useRef(true)
     const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
@@ -39,6 +40,7 @@ export default function Selector() {
 
 
     useEffect(() => {
+        console.log("selector useEffect")
         if (!websocket) {
             setIndex({
                 status: "error",
@@ -72,7 +74,7 @@ export default function Selector() {
                     UUID: requestUUID.current,
                     data: null 
                 });
-                websocket.send(request);
+                send(websocket,request);
                 return
             }
 
@@ -94,6 +96,7 @@ export default function Selector() {
         };
 
         const whenOpened = () => {
+            console.log("selector: whenOpened")
             requestUUID.current = genUUID()
 
             const request = JSON.stringify({ 
@@ -101,7 +104,7 @@ export default function Selector() {
                 UUID: requestUUID.current,
                 data: null 
             });
-            websocket.send(request);
+            send(websocket,request);
         }
 
         websocket.addEventListener("message", handleMessage);

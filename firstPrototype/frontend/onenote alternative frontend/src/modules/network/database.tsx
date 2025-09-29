@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { create } from "zustand";
 
 
@@ -27,6 +27,26 @@ export interface baseInterruptRequestFromDataserver{
   UUID: string
 }
 
+export const interval = 2 // sec
+
+export function send(websocket:WebSocket, request:string, attempt=5){
+  if(attempt == 0){
+    console.log("on websocket send data, all attempts are failed. stop")
+    console.log(request)
+    return
+  }
+  console.log(websocket.readyState)
+  if(
+    websocket.readyState != WebSocket.CONNECTING  && 
+    websocket.readyState != WebSocket.CLOSED      &&
+    websocket.readyState != WebSocket.CLOSING
+  ){
+    websocket.send(request)
+    return
+  }
+  setTimeout(() => { send(websocket,request,attempt - 1) },interval * 1000)
+}
+
 type DatabaseState = {
   websocket: WebSocket | null;
   serverIP: string | null;
@@ -48,22 +68,50 @@ export const useDatabaseStore = create<DatabaseState>((set, get) => ({
     ws?.close();
     set({ websocket: null });
   },
-
   getWebsocket: () => get().websocket,
 }));
 
+
+// TODO: Fix fllikering
+// TODO: Reconnection Loop singleton, there are bug Reconnection Loop are appear mutiple times.
 export function useDatabaseEffects() {
   const serverIP = useDatabaseStore((s) => s.serverIP);
   const setWebsocket = useDatabaseStore.setState;
+  const getWebsocket = useDatabaseStore((s) => s.getWebsocket)
+  // const init = useRef(true)
 
   useEffect(() => {
     if (!serverIP) return;
 
-    const ws = new WebSocket(serverIP);
-    setWebsocket({ websocket: ws });
+    const reconnectLoop = () => { 
+      console.log("reconnect observer")
+      const websocket = getWebsocket()
+      if(websocket != null){
+        if(websocket.readyState == WebSocket.OPEN){
+          // observe the connection
+          setTimeout(() => { 
+            reconnectLoop()
+          },interval * 1000)
+          return
+        }
+      }
+      setTimeout(() => { 
+        const websocket = new WebSocket(serverIP);
+        // websocket.addEventListener("error",reconnectLoop)
+        // websocket.addEventListener("open",reconnectLoop)
+        setWebsocket({ websocket: websocket });
+      },interval / 2 * 1000)
+      setTimeout(() => { 
+        reconnectLoop()
+      },interval * 1000)
+    } 
+    const websocket = new WebSocket(serverIP);
+    websocket.addEventListener("error",reconnectLoop)
+    websocket.addEventListener("open",reconnectLoop)
+    setWebsocket({ websocket: websocket });
 
-    // return () => {
-    //   ws.close();
-    // };
+    return () => {
+      websocket.close();
+    };
   }, [serverIP, setWebsocket]);
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { useDatabaseStore, type baseResponseTypesFromDataserver } from "./network/database";
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "./network/database";
 import Free from "./pages/free/main";
 import Blank from "./pages/blank";
 import Markdown from "./pages/markdown";
@@ -92,7 +92,7 @@ export default function Page() {
                 notebook:currentNotebook 
             }
         });
-        websocket.send(request);
+        send(websocket,request);
     }, [websocket, currentPage, currentNotebook]);
 
     // render

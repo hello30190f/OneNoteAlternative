@@ -47,8 +47,8 @@ export default function Markdown(data:PageMetadataAndData){
 
         const metadata = result[1]
         const render   = result[2]
-        console.log(metadata)
-        console.log(render)
+        // console.log(metadata)
+        // console.log(render)
 
         setHTML({__html: await marked.parse(render)})
     }
