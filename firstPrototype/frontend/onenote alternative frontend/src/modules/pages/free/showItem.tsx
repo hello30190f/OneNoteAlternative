@@ -3,6 +3,7 @@ import type AnItem from "./element"
 import { useFreePageElementStore } from "./main"
 import TextView from "./elements/textView"
 
+// TODO: make mousemove eventhandler not preventing from selection.
 // TODO: do z-index management
 // TODO: do active and inactive style management
 // TODO: make the background transparent, keep border and itemitself visible,

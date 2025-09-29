@@ -41,10 +41,6 @@ type overlayWindows = {
     getWindow: (window:AoverlayWindow) => AoverlayWindow, 
 }
 
-//TODO: zindex bug fix
-//          addWindow unable to make a window active
-//          makeAwindowActive unable to update zindex correctlly -> update zustand side data correctly not only setter
-// rewite this with setState getState
 const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     windows: [],
 
@@ -152,8 +148,6 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     const addWindow = useOverlayWindowStore((s) => s.addWindow)
     const maxZindex = useOverlayWindowStore((s) => s.zIndexMax)
     const windows = useOverlayWindowStore((s) => s.windows)
-    const setstate = useOverlayWindowStore.setState
-    const getstate = useOverlayWindowStore.getState
     const getWindow = useOverlayWindowStore((s) => s.getWindow)
     const makeAwindowActive = useOverlayWindowStore((s) => s.makeAwindowActive)
     const aWindowINIT = useRef<AoverlayWindow>({
@@ -351,7 +345,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 opacity: String(0.30),
             })
         }
-    },[windows,setstate,getstate])
+    },[windows])
 
     useEffect(() => {
         if(visible) makeAwindowActive(aWindowINIT.current)
