@@ -29,6 +29,12 @@ cd "firstPrototype/frontend/onenote alternative frontend"
 npm run dev
 ```
 
+## Build
+```bash
+cd "firstPrototype/frontend/onenote alternative frontend"
+npm run build1
+```
+
 
 ## TODOs
 ### Freespace
@@ -41,13 +47,13 @@ npm run dev
 
 ### Frontend
 - [ ] implement websocket server selector 
-- [ ] implement automatic retry for dataserver connection 
-- [ ] implement create notebook button
+- [x] implement automatic retry for dataserver connection 
+- [x] implement create notebook button
 - [ ] implement create page button
 - [ ] implement delete notebook button
 - [ ] implement delete page button
 - [ ] implement page view and make them editable via the frontend
-- [ ] use [marked](https://github.com/markedjs/marked) library to render markdown content.
+- [x] use [marked](https://github.com/markedjs/marked) library to render markdown content.
 
 ### dataserver backend
 - [ ] implement minimal commands  (currently working)
