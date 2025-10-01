@@ -2,6 +2,8 @@ import type { ReactNode } from "react"
 import { create } from "zustand"
 import { AtoggleableButton } from "./ToggleToolsBar/AtoggleableButton"
 import { StartButton } from "./ToggleToolsBar/StartButton"
+import { useOverlayWindowStore } from "./OverlayWindow"
+import { CloseAllButton } from "./ToggleToolsBar/CloseAllButton"
 
 export interface toggleable{
     name:string,
@@ -24,13 +26,7 @@ export const useToggleableStore = create<toggleableTools>((set) => ({
     }
 }))
 
-// TODO: crate start button
-//       start button menu list
-//          notebooks and pages
-//          files 
-//          tags 
-//          local servers
-//          remote servers
+// TODO: implement start button for toggleable
 export default function ToolsBar(){
     const toggleables = useToggleableStore((s) => s.toggleables)
 
@@ -59,10 +55,15 @@ export default function ToolsBar(){
         </ToolsBarOutlineStyle>
     }else{
         return <ToolsBarOutlineStyle>
+
             <StartButton></StartButton>
+            
             {toggleables.map((value,index) => (
                 <AtoggleableButton Atoggleable={value} key={index}></AtoggleableButton>
             ))}
+
+            <CloseAllButton></CloseAllButton>
+
         </ToolsBarOutlineStyle>
     }
 }

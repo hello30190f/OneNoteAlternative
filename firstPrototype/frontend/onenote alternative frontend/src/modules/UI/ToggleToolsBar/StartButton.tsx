@@ -6,6 +6,10 @@ import { OverlayWindow, type OverlayWindowArgs } from "../OverlayWindow"
 export type AstartButton = {
     name: string,
     displayName: string,
+
+    // tailwindcss classname
+    // "bg-[colorName]-700" -> ignore number and update the number for styling
+    toggleableColor: string,    
     selected: boolean,
     imageBase64: null | string,
     toggleables: toggleable[],
@@ -82,6 +86,7 @@ const basicButton = {
     "notebooksAndPages": {
         name: "notebooksAndPages",
         displayName: "Notebooks And Pages",
+        toggleableColor: "bg-yellow-700",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -89,6 +94,7 @@ const basicButton = {
     "files": {
         name: "files",
         displayName: "Files",
+        toggleableColor: "bg-orange-700",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -96,6 +102,7 @@ const basicButton = {
     "tags": {
         name: "tags",
         displayName: "Tags",
+        toggleableColor: "bg-lime-700",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -103,6 +110,7 @@ const basicButton = {
     "localServers": {
         name: "localServers",
         displayName: "Local Servers",
+        toggleableColor: "bg-teal-700",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -110,6 +118,7 @@ const basicButton = {
     "remoteServers": {
         name: "remoteServers",
         displayName: "Remote Servers",
+        toggleableColor: "bg-indigo-700",   
         selected: false,
         imageBase64: null,
         toggleables: []

@@ -29,7 +29,8 @@ type AoverlayWindow = {
     UUID: string,       
     isActive: boolean,  // false -> inactive, true -> active
     zIndex: number,     // 200-1200
-    color: string       // tailwindcss classname
+    color: string,       // tailwindcss classname
+    windowVisible: {visible:boolean,setVisible:React.Dispatch<boolean>}
 }
 
 type overlayWindows = {
@@ -41,9 +42,10 @@ type overlayWindows = {
     allWindowInactive: () => void,                     // no need to update z-index
     makeAwindowActive: (window:AoverlayWindow) => void,// the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
     getWindow: (window:AoverlayWindow) => AoverlayWindow, 
+    closeAllWindow: () => void,
 }
 
-const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
+export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     windows: [],
 
     // const vals
@@ -97,7 +99,7 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
 
         // console.log(newInfo)
 
-        
+
         for(let i = 0; i < newInfo.length; i++){
             if(window.UUID == newInfo[i].UUID){
                 // console.log(newInfo[i])
@@ -142,6 +144,16 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
             }
         }
         return window
+    },
+    closeAllWindow: () => {
+        const windows = get().windows
+        const newInfo = []
+        for(const Awindow of windows){
+            Awindow.windowVisible.setVisible(false)
+            Awindow.windowVisible.visible = false
+            newInfo.push(Awindow)
+        }   
+        set({windows:newInfo})
     }
 }))
 
@@ -159,7 +171,8 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         name: arg.title,
         UUID: genUUID(),
         zIndex: maxZindex,
-        color: arg.color
+        color: arg.color,
+        windowVisible: {setVisible: setVisible,visible: visible}
     })
 
 
@@ -319,7 +332,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     }
 
     if(init.current){
-        console.log("Overlay window init")
+        // console.log("Overlay window init")
         addEventListener("touchend",windowHandlers.touchend)
         addEventListener("mouseup",windowHandlers.mouseup)
 
