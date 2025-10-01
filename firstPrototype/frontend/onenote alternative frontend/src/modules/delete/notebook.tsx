@@ -13,7 +13,8 @@ export function DeleteNotebook(){
     const overlayWindowArg:OverlayWindowArgs = {
         title: "Delete Notebook",
         setVisible: setVisible,
-        visible: visible
+        visible: visible,
+        color: "bg-yellow-700"
     }
     const init = useRef(true)
     const addToggleable = useToggleableStore((s) => s.addToggleable)

@@ -144,7 +144,8 @@ export function StartButtonMenu(){
     const overlayWindowArg:OverlayWindowArgs = {
         title: "Menu",
         setVisible: setVisibleLocal,
-        visible: visibleLocal
+        visible: visibleLocal,
+        color: "bg-green-700"
     }
 
     if(visible){

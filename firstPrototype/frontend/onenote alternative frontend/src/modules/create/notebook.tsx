@@ -79,6 +79,7 @@ export function CreateNotebook(){
         setVisible: setVisible,
         visible: visible,
         title: "New Notebook",
+        color: "bg-yellow-700"
     }
 
     return <OverlayWindow arg={args}>

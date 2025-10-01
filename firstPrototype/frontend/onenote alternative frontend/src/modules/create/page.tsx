@@ -126,7 +126,8 @@ export function CreatePage(){
     const args:OverlayWindowArgs = {
         setVisible: setVisible,
         visible: visible,
-        title: "New Page"
+        title: "New Page",
+        color: "bg-yellow-700"
     }
 
     // {

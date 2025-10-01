@@ -5,6 +5,7 @@ import { genUUID } from "../common"
 export interface OverlayWindowArgs{
     title: string,
     visible: boolean,
+    color: string,
     setVisible: React.Dispatch<React.SetStateAction<boolean>> 
 }
 
@@ -27,7 +28,8 @@ type AoverlayWindow = {
     name: string,       // window title
     UUID: string,       
     isActive: boolean,  // false -> inactive, true -> active
-    zIndex: number      // 200-1200
+    zIndex: number,     // 200-1200
+    color: string       // tailwindcss classname
 }
 
 type overlayWindows = {
@@ -85,18 +87,20 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         set(() => ({windows: newInfo}))
     },
     makeAwindowActive: (window:AoverlayWindow) => {
-        console.log("make a window active is called")
-        console.log(window.UUID)
+        // console.log("make a window active is called")
+        // console.log(window.UUID)
         let oldInfo = get().windows
         let newInfo = []
         for(let old of oldInfo){
             newInfo.push(old)
         }
 
-        console.log(newInfo)
+        // console.log(newInfo)
+
+        
         for(let i = 0; i < newInfo.length; i++){
             if(window.UUID == newInfo[i].UUID){
-                console.log(newInfo[i])
+                // console.log(newInfo[i])
                 newInfo[i].zIndex = get().zIndexMax
                 newInfo[i].isActive = true
                 continue
@@ -154,7 +158,8 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         isActive: true,
         name: arg.title,
         UUID: genUUID(),
-        zIndex: maxZindex
+        zIndex: maxZindex,
+        color: arg.color
     })
 
 
@@ -342,7 +347,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
     }
 
     useEffect(() => {
-        console.log("the overlay window info is updated")
+        // console.log("the overlay window info is updated")
         if(getWindow(aWindowINIT.current).isActive){
             setWindowStyle({
                 left: String(windowPos.current.x) + "px",
@@ -366,7 +371,8 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     let OverlayWindowContaierClassName = "OverlayWindowContaier flex flex-col min-w-[5rem] fixed " 
     // console.log(aWindow.zIndex)
-
+    let windowHeaderClassName = "windowHeader move w-full h-[2rem] justify-center place-items-center align-middle text-center"
+    windowHeaderClassName += " " + getWindow(aWindowINIT.current).color + " "
 
     if(visible){
         return (<div 
@@ -374,7 +380,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                     onMouseDown={windowZindexManagement.onWindowClicked}
                     onTouchStart={windowZindexManagement.onWindowClicked}
                 >
-            <div className="windowHeader move bg-yellow-600 w-full h-[2rem] justify-center place-items-center align-middle text-center"
+            <div className={windowHeaderClassName}
                 onMouseDown={windowHandlers.mousedown}
                 onTouchStart={windowHandlers.touchstart}
                 >

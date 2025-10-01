@@ -196,7 +196,8 @@ export default function Selector() {
     let windowArg:OverlayWindowArgs = {
         title: "Selector",
         visible: visible,
-        setVisible: setVisible
+        setVisible: setVisible,
+        color: "bg-yellow-700"
     } 
 
     if (index == null) {

@@ -10,7 +10,8 @@ export function Template(){
     const overlayWindowArg:OverlayWindowArgs = {
         title: "Template",
         setVisible: setVisible,
-        visible: visible
+        visible: visible,
+        color: "bg-yello-700"
     }
     const init = useRef(true)
     const addToggleable = useToggleableStore((s) => s.addToggleable)

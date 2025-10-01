@@ -11,7 +11,8 @@ export function DeletePage(){
     const overlayWindowArg:OverlayWindowArgs = {
         title: "Delete Page",
         setVisible: setVisible,
-        visible: visible
+        visible: visible,
+        color: "bg-yellow-700"
     }
     const init = useRef(true)
     const addToggleable = useToggleableStore((s) => s.addToggleable)
