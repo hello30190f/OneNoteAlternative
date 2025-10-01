@@ -3,6 +3,7 @@ import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar"
 import { OverlayWindow, type OverlayWindowArgs } from "../UI/OverlayWindow"
 import { useDatabaseStore } from "../network/database"
 import { genUUID } from "../common"
+import { useStartButtonStore } from "../UI/ToggleToolsBar/StartButton"
 
 
 // TODO: implement ERROR dialog with MessageBox Component
@@ -15,7 +16,7 @@ export function CreateNotebook(){
     const [visible,setVisible] = useState(false)
     const [disabled,setDisabled] = useState(false)
 
-    const addToggleable = useToggleableStore((s) => s.addToggleable)
+    const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const websocket = useDatabaseStore((s) => s.websocket)
 
     const requestUUID = useRef(genUUID())
@@ -61,10 +62,11 @@ export function CreateNotebook(){
     if(init.current){
         const button:toggleable = {
             name: "New Notebook",
+            color: "bg-blue-700",
             visibility: visible,
             setVisibility: setVisible,
         }
-        addToggleable(button)
+        addToggleable("notebooksAndPages",button)
         init.current = false
     }
 

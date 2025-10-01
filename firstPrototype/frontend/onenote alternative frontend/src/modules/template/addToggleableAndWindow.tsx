@@ -19,6 +19,7 @@ export function Template(){
     if(init.current){
         const toggleable:toggleable = {
             name: "Template",
+            color: "bg-blue-700",
             setVisibility: setVisible,
             visibility: visible
         }

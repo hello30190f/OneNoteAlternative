@@ -4,6 +4,7 @@ import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
 import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
 import { genUUID } from "./common";
 import { useAppState } from "./window";
+import { useStartButtonStore } from "./UI/ToggleToolsBar/StartButton";
 
 interface Info {
     status: string;
@@ -23,7 +24,8 @@ export default function Selector() {
     const setstateDatabase  = useDatabaseStore.setState
     const [visible,setVisible] = useState(false)
     const init = useRef(true)
-    const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
+    // const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
+    const toolbarAddTool = useStartButtonStore((s) => s.addToggleable)
     const requestUUID = useRef<string>(genUUID())
 
     const currentPage       = useAppState((s) => s.currentPage)
@@ -121,10 +123,11 @@ export default function Selector() {
     if(init.current){
         const toggleable:toggleable = {
             name: "Selector",
+            color: "bg-blue-700",
             setVisibility: setVisible,
             visibility:visible
         }
-        toolbarAddTool(toggleable)
+        toolbarAddTool("notebooksAndPages",toggleable)
         init.current = false
     }
 

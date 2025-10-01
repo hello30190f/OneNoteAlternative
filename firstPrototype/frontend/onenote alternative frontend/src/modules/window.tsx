@@ -7,6 +7,7 @@ import { CreatePage } from "./create/page";
 import { DeleteNotebook } from "./delete/notebook";
 import { DeletePage } from "./delete/page";
 import { StartButtonMenu } from "./UI/ToggleToolsBar/StartButton";
+import { ColorPalette } from "./ColorPalette";
 
 export type AppState = {
     currentPage:string | null,
@@ -35,6 +36,9 @@ export default function Window(){
     return(
         <>
             <div className="window flex flex-row z-2">
+                <ColorPalette></ColorPalette>
+                <ToggleToolsBar></ToggleToolsBar>
+
                 <Page></Page>
 
                 <Selector></Selector>
@@ -45,7 +49,6 @@ export default function Window(){
 
                 <StartButtonMenu></StartButtonMenu>                
 
-                <ToggleToolsBar></ToggleToolsBar>
             </div>
         </>
     )

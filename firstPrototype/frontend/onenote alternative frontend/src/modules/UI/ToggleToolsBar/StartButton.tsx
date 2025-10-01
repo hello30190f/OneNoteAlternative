@@ -3,6 +3,7 @@ import type { toggleable } from "../ToggleToolsBar"
 import { useEffect, useRef, useState } from "react"
 import { OverlayWindow, type OverlayWindowArgs } from "../OverlayWindow"
 
+// toggleables max amount is 7
 export type AstartButton = {
     name: string,
     displayName: string,
@@ -22,10 +23,12 @@ export type startButtons = {
     removeButton: (buttonName:string) => void,
     getButton: (buttonName:string) => AstartButton | null,
     addToggleable: (buttonName:string,toggleable:toggleable) => void,
-    setSelected: (buttonName:string) => void
+    setSelected: (buttonName:string) => void,
+    getSelected: () => AstartButton | null,
+    clacColor: () => void,
 }
 
-const useStartButtonStore = create<startButtons>((set,get) => ({
+export const useStartButtonStore = create<startButtons>((set,get) => ({
     buttons: [],
     menuVisible: false,
     addButton: (button:AstartButton) => {
@@ -57,6 +60,7 @@ const useStartButtonStore = create<startButtons>((set,get) => ({
             newButtons.push(ANbutton)
         }
         set({buttons:newButtons})
+        get().clacColor()
     },
     setSelected: (buttonName:string) => {
         const buttons = get().buttons
@@ -67,10 +71,47 @@ const useStartButtonStore = create<startButtons>((set,get) => ({
             }else{
                 ANbutton.selected = false
             }
-            newButtons.push(ANbutton)
+            newButtons.push({
+                name            : ANbutton.name,
+                displayName     : ANbutton.displayName,
+                toggleableColor : ANbutton.toggleableColor,    
+                selected        : ANbutton.selected,
+                imageBase64     : ANbutton.imageBase64,
+                toggleables     : ANbutton.toggleables,
+            })
         }
         set({buttons:newButtons})
-    }
+    },
+    getSelected: () => {
+        const buttons = get().buttons
+        for(const button of buttons){
+            if(button.selected) return button
+        }
+        return null
+    },
+    clacColor: () => {
+        const buttons = get().buttons
+        const maxColor = 100
+        const minColor = 30
+        const newButtons = []
+        for(const button of buttons){
+            let counter = 0
+            const newToggleables = []
+            for(const aToggleable of button.toggleables){
+                let colorNum = maxColor - counter * 10
+                if(colorNum < minColor){
+                    colorNum = minColor
+                }
+                const colorName = button.toggleableColor.slice(0,-3) + "600/" + String(colorNum)
+                aToggleable.color = colorName
+                newToggleables.push(aToggleable)
+                counter++
+            }
+            button.toggleables = newToggleables
+            newButtons.push(button)
+        }
+        set({buttons:newButtons})
+    },
 }))
 
 
@@ -82,11 +123,11 @@ const useStartButtonStore = create<startButtons>((set,get) => ({
 //          tags 
 //          local servers
 //          remote servers
-const basicButton = {
+export const basicButton = {
     "notebooksAndPages": {
         name: "notebooksAndPages",
         displayName: "Notebooks And Pages",
-        toggleableColor: "bg-yellow-700",   
+        toggleableColor: "bg-yellow-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -94,7 +135,7 @@ const basicButton = {
     "files": {
         name: "files",
         displayName: "Files",
-        toggleableColor: "bg-orange-700",   
+        toggleableColor: "bg-orange-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -102,7 +143,7 @@ const basicButton = {
     "tags": {
         name: "tags",
         displayName: "Tags",
-        toggleableColor: "bg-lime-700",   
+        toggleableColor: "bg-lime-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -110,7 +151,7 @@ const basicButton = {
     "localServers": {
         name: "localServers",
         displayName: "Local Servers",
-        toggleableColor: "bg-teal-700",   
+        toggleableColor: "bg-teal-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -118,7 +159,7 @@ const basicButton = {
     "remoteServers": {
         name: "remoteServers",
         displayName: "Remote Servers",
-        toggleableColor: "bg-indigo-700",   
+        toggleableColor: "bg-indigo-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -193,22 +234,22 @@ function AmenuItem({ button }:{ button:AstartButton }){
 }
 
 export function StartButton(){
-    const addButton = useStartButtonStore((s) => s.addButton)
+    // const addButton = useStartButtonStore((s) => s.addButton)
     const visible = useStartButtonStore((s) => s.menuVisible)
     const setState = useStartButtonStore.setState
-    const init = useRef(true)
+    // const init = useRef(true)
 
-    if(init.current){
-        // register basic start button
-        for(const button in basicButton){
-            addButton(basicButton[button as keyof typeof basicButton])
-        }
+    // if(init.current){
+    //     // register basic start button
+    //     for(const button in basicButton){
+    //         addButton(basicButton[button as keyof typeof basicButton])
+    //     }
 
-        init.current = false
-    }
+    //     init.current = false
+    // }
 
     return <div 
-                className="w-[2rem] h-[2rem] bg-green-700 hover:bg-green-900 shrink-0" 
+                className="w-[2rem] h-[2rem] bg-green-700 hover:bg-green-900 shrink-0 mr-auto" 
                 onClick={() => {
                     if(visible){
                         setState({menuVisible: false})

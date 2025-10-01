@@ -4,6 +4,7 @@ import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar";
 import { useDatabaseStore, type baseResponseTypesFromDataserver } from "../network/database";
 import { useAppState } from "../window";
 import { genUUID } from "../common";
+import { useStartButtonStore } from "../UI/ToggleToolsBar/StartButton";
 
 // https://stackoverflow.com/questions/41285211/overriding-interface-property-type-defined-in-typescript-d-ts-file
 interface pageType extends baseResponseTypesFromDataserver{
@@ -23,7 +24,7 @@ export function CreatePage(){
     }
 
     const [visible,setVisible] = useState(false)
-    const addToggleable = useToggleableStore((s) => s.addToggleable)
+    const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const init = useRef(true)
     const requestUUID = useRef(genUUID())
 
@@ -116,10 +117,11 @@ export function CreatePage(){
     if(init.current){
         const toggleable:toggleable = {
             name: "New Page",
+            color: "bg-blue-700",
             visibility: visible,
             setVisibility: setVisible,
         }
-        addToggleable(toggleable)
+        addToggleable("notebooksAndPages",toggleable)
         init.current = false
     }
 
