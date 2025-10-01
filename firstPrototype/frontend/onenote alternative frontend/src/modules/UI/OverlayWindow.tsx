@@ -198,9 +198,22 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 // console.log(dx)
                 // console.log(event.screenX)
                 // console.log(windowPos.current.x)
+                const width = String()
 
-                windowPos.current.x = windowPos.current.x + dx
-                windowPos.current.y = windowPos.current.y + dy
+                if(
+                    windowPos.current.x + dx > 0 &&
+                    windowPos.current.x + dx < window.innerWidth - (5 * 16) // 5rem
+                ){
+                    windowPos.current.x = windowPos.current.x + dx
+                }
+
+                if(
+                    windowPos.current.y + dy > 0 &&
+                    windowPos.current.y + dy < window.innerHeight - (5 * 16) // 5rem
+                ){
+                    windowPos.current.y = windowPos.current.y + dy
+                }
+
  
                 if(getWindow(aWindowINIT.current).isActive){
                     setWindowStyle({
