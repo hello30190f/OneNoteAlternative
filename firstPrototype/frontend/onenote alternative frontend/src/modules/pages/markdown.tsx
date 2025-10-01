@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import type { aMessageBox } from "../UI/messageBox";
 import { genUUID } from "../common";
 import showMessageBox from "../UI/messageBox";
+import "./markdown.css"
 
 // export interface PageMetadataAndData {
 //     pageType: string;
@@ -62,7 +63,6 @@ export default function Markdown(data:PageMetadataAndData){
     return(
         <div className="markdownViewer">
             <div className="markdownContainer ml-[5%] mr-[5%] absolute pb-[2rem] left-0 w-[90%]" dangerouslySetInnerHTML={html}></div>                    
-            <link href="/src/modules/pages/markdown.css" type="text/css" rel="stylesheet"></link>
         </div>
     )
 }
