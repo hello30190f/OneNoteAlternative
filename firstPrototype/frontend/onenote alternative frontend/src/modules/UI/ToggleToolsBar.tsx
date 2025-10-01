@@ -29,11 +29,11 @@ export default function ToolsBar(){
         return <div 
             className="
             AtoggleableButton 
-            h-[2rem] bg-blue-500 min-w-[4rem] 
+            h-[2rem] bg-blue-500 min-w-[4rem] w-[inherit]
             hover:bg-blue-600
             selection:bg-transparent
             flex 
-            pl-[1rem] pr-[1rem] ml-[1rem]
+            pl-[1rem] pr-[1rem] ml-[1rem] mr-[1rem]
             justify-center place-items-center align-middle text-center
  items-center" 
             onClick={() => {
@@ -61,6 +61,7 @@ export default function ToolsBar(){
         top-0 left-0 
         justify-center place-items-center align-middle text-center
  items-center 
+        overflow-x-auto 
         z-100
         ">
             {children}
