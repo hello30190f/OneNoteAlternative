@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 import { create } from "zustand"
+import { AtoggleableButton } from "./ToggleToolsBar/AtoggleableButton"
+import { StartButton } from "./ToggleToolsBar/StartButton"
 
 export interface toggleable{
     name:string,
@@ -22,34 +24,15 @@ export const useToggleableStore = create<toggleableTools>((set) => ({
     }
 }))
 
+// TODO: crate start button
+//       start button menu list
+//          notebooks and pages
+//          files 
+//          tags 
+//          local servers
+//          remote servers
 export default function ToolsBar(){
     const toggleables = useToggleableStore((s) => s.toggleables)
-
-    function AtoggleableButton({ Atoggleable }:{ Atoggleable:toggleable }) {
-        return <div 
-            className="
-            AtoggleableButton 
-            h-[2rem] bg-blue-500 min-w-[4rem] w-[inherit]
-            hover:bg-blue-600
-            selection:bg-transparent
-            flex 
-            pl-[1rem] pr-[1rem] ml-[1rem] mr-[1rem]
-            justify-center place-items-center align-middle text-center
- items-center" 
-            onClick={() => {
-                // TODO: fix this button only works once problem.
-                // setVisibility may be broken.
-                console.log("ToolsBar:" + Atoggleable.name)
-                console.log(Atoggleable.setVisibility) 
-                console.log(Atoggleable.visibility) 
-                if(Atoggleable.visibility){
-                    Atoggleable.setVisibility(false)
-                }else{
-                    Atoggleable.setVisibility(true)
-                }
-            }}
-        >{Atoggleable.name}</div>
-    }
 
     function ToolsBarOutlineStyle({ children }:{ children:ReactNode }){
         return <div className="
@@ -76,6 +59,7 @@ export default function ToolsBar(){
         </ToolsBarOutlineStyle>
     }else{
         return <ToolsBarOutlineStyle>
+            <StartButton></StartButton>
             {toggleables.map((value,index) => (
                 <AtoggleableButton Atoggleable={value} key={index}></AtoggleableButton>
             ))}

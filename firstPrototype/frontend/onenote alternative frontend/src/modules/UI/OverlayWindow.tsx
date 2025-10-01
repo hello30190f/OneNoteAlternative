@@ -128,10 +128,10 @@ const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         set(() => ({windows: newInfo}))
     },
     getWindow: (window:AoverlayWindow) => {
-        console.log("get window")
-        console.log(window.UUID)
-        console.log(window)
-        console.log(get().windows)
+        // console.log("get window")
+        // console.log(window.UUID)
+        // console.log(window)
+        // console.log(get().windows)
         for(let test of get().windows){
             if(test.UUID == window.UUID) {
                 return test

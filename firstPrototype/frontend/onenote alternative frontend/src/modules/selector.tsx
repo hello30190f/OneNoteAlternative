@@ -177,6 +177,12 @@ export default function Selector() {
         }
     }
 
+    // function Tools(){
+    //     return <div className="w-[2rem] h-full bg-green-700 ">
+
+    //     </div>
+    // }
+
     function ShowError({ message }: { message: string }) {
         return <div>{message}</div>;
     }
@@ -207,6 +213,7 @@ export default function Selector() {
                 <SelectorOutline>
                     <CreateList index={index} />
                 </SelectorOutline>
+                {/* <Tools></Tools> */}
             </OverlayWindow>
         );
     }

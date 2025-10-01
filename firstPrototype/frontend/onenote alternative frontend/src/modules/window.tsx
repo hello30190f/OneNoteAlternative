@@ -6,6 +6,7 @@ import { CreateNotebook } from "./create/notebook";
 import { CreatePage } from "./create/page";
 import { DeleteNotebook } from "./delete/notebook";
 import { DeletePage } from "./delete/page";
+import { StartButtonMenu } from "./UI/ToggleToolsBar/StartButton";
 
 export type AppState = {
     currentPage:string | null,
@@ -35,11 +36,15 @@ export default function Window(){
         <>
             <div className="window flex flex-row z-2">
                 <Page></Page>
+
                 <Selector></Selector>
                 <CreateNotebook></CreateNotebook>
                 <CreatePage></CreatePage>
                 <DeleteNotebook></DeleteNotebook>
                 <DeletePage></DeletePage>
+
+                <StartButtonMenu></StartButtonMenu>                
+
                 <ToggleToolsBar></ToggleToolsBar>
             </div>
         </>
