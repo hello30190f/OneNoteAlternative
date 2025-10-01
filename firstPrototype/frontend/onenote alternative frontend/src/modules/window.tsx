@@ -4,6 +4,8 @@ import { create } from "zustand";
 import ToggleToolsBar from "./UI/ToggleToolsBar";
 import { CreateNotebook } from "./create/notebook";
 import { CreatePage } from "./create/page";
+import { DeleteNotebook } from "./delete/notebook";
+import { DeletePage } from "./delete/page";
 
 export type AppState = {
     currentPage:string | null,
@@ -36,6 +38,8 @@ export default function Window(){
                 <Selector></Selector>
                 <CreateNotebook></CreateNotebook>
                 <CreatePage></CreatePage>
+                <DeleteNotebook></DeleteNotebook>
+                <DeletePage></DeletePage>
                 <ToggleToolsBar></ToggleToolsBar>
             </div>
         </>

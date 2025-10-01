@@ -208,7 +208,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 }
 
                 if(
-                    windowPos.current.y + dy > 0 &&
+                    windowPos.current.y + dy > (16 * 2) && // 2rem
                     windowPos.current.y + dy < window.innerHeight - (5 * 16) // 5rem
                 ){
                     windowPos.current.y = windowPos.current.y + dy
