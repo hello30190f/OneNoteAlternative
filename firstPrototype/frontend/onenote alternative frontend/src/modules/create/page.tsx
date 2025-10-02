@@ -22,6 +22,8 @@ export function CreatePage(){
     }else{
         submitButtonStyle += " bg-gray-800 hover:bg-gray-700"    
     }
+    const currentNotebook = useAppState((s) => s.currentNotebook)
+    const currentPage     = useAppState((s) => s.currentPage)
 
     const [visible,setVisible] = useState(false)
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
@@ -156,9 +158,10 @@ export function CreatePage(){
                 {pageTypeList}
             </div>
             <div className="item flex mt-[0.7rem]">
-                <div className="label">Location:</div>
+                <div className="label">Location: </div>
                 <div className="locationSelector">
-
+                    {" " + currentNotebook + "/"}
+                    {currentPage}
                 </div>
             </div>
             <div className={submitButtonStyle}>Create New Page</div>

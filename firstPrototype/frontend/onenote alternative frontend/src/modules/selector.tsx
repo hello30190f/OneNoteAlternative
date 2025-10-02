@@ -160,8 +160,9 @@ export default function Selector() {
                 <div className="notebookEntry m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={name}>
                     <div 
                     onClick={() => {
-                        console.log("A notebook is clicked")
-                        console.log(name)
+                        // console.log("A notebook is clicked")
+                        // console.log(name)
+                        changeCurrentPage(name,"")
                     }}
                     className={notebookNameStyle}
                     >{name}</div>

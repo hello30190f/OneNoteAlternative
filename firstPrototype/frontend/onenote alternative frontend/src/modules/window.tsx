@@ -16,7 +16,6 @@ export type AppState = {
     oepnBlankPage:() => void
 }
 
-
 export const useAppState = create<AppState>((set) => ({
     currentPage: null,
     currentNotebook: null,
