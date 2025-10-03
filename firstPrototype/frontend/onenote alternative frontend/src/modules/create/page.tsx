@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactElement } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type ReactElement } from "react";
 import { OverlayWindow, type OverlayWindowArgs } from "../UI/OverlayWindow";
 import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar";
 import { useDatabaseStore, type baseResponseTypesFromDataserver } from "../network/database";
@@ -23,7 +23,12 @@ export function CreatePage(){
         submitButtonStyle += " bg-gray-800 hover:bg-gray-700"    
     }
     const currentNotebook = useAppState((s) => s.currentNotebook)
-    const currentPage     = useAppState((s) => s.currentPage)
+    // const currentPage     = useAppState((s) => s.currentPage)
+    const [newPageInfo,setNewPageInfo]     = useState({
+        "notebook": "",
+        "pagename": "",
+        "pageType": ""
+    })
 
     const [visible,setVisible] = useState(false)
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
@@ -91,27 +96,38 @@ export function CreatePage(){
     },[websocket])
 
 
+    
     useEffect(() => {
         console.log(pageType)
         const optionStyle = "bg-gray-800 hover:bg-gray-700"
+        
+        const typeSelected = (event:ChangeEvent<HTMLSelectElement>) => {
+            console.log("type selected")
+            console.log(newPageInfo)
+            setNewPageInfo({
+                notebook: newPageInfo.notebook,
+                pagename: newPageInfo.pagename,
+                pageType: event.target.value
+            })
+        }
 
         if(pageType == null){
             setPageTypeList([
-            <select key="NoValueExistError" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
+            <select onChange={typeSelected} key="NoValueExistError" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
                 <option className={optionStyle} value="currently">No value exist.</option>
             </select>])
         }else if(pageType["data"] == null){
             setPageTypeList([
-            <select key="NoValueExistError" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
+            <select onChange={typeSelected} key="NoValueExistError" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
                 <option className={optionStyle} value="currently">Currently, no value exist.</option>
             </select>])
         }else{
             setPageTypeList([
-            <select key="ValueExist" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
+            <select onChange={typeSelected} key="ValueExist" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
                 {pageType.data.map((value,index) => <option className={optionStyle} value={value} key={index}>{value}</option>)}
             </select>])
         }
-    },[pageType])
+    },[pageType,newPageInfo])
 
 
     
@@ -144,6 +160,42 @@ export function CreatePage(){
     //     }
     // }
 
+    useEffect(() => {
+        if(currentNotebook){
+            setNewPageInfo({
+                ...newPageInfo,
+                notebook: currentNotebook
+            })
+        }else{
+            setNewPageInfo({
+                ...newPageInfo,
+                notebook: "No notebook is selected."
+            })
+        }
+    },[currentNotebook])
+
+    useEffect(() => {
+        if(
+            newPageInfo.pageType != "markdown" &&
+            newPageInfo.pagename.includes(".md")
+        ){
+            const newName = newPageInfo.pagename.replace(".md",".json")
+            setNewPageInfo({
+                ...newPageInfo,
+                pagename: newName
+            })
+        }else if(
+            newPageInfo.pageType == "markdown" &&
+            newPageInfo.pagename.includes(".json")
+        ){
+            const newName = newPageInfo.pagename.replace(".json",".md")
+            setNewPageInfo({
+                ...newPageInfo,
+                pagename: newName
+            })
+        }
+    },[newPageInfo])
+
     // https://www.w3schools.com/tags/tag_select.asp
     // pagetype -> automaticly get the info by getPageType command from the dataserver
     // loclation -> use info command, drag and drop
@@ -151,17 +203,38 @@ export function CreatePage(){
         <div className="m-[1rem] flex flex-col">
             <div className="item pagename flex">
                 <div className="label">Name:</div>
-                <input className="ml-[1rem] border-gray-700 soild border-[2px]" id="newPageName" type="text"></input>
+                <input 
+                    className="ml-[1rem] border-gray-700 soild border-[2px]" 
+                    id="newPageName" 
+                    type="text"
+                    onChange={(event:ChangeEvent<HTMLInputElement>) => {
+                        let newPageName = event.target.value
+                        if(newPageInfo.pageType == "markdown"){
+                            newPageName += ".md"
+                        }else{
+                            newPageName += ".json"
+                        }
+
+                        setNewPageInfo({
+                            ...newPageInfo,
+                            pagename:newPageName})
+                        }}></input>
             </div>
             <div className="item pageType flex mt-[0.5rem]">
                 <div className="label">Type: </div>
                 {pageTypeList}
             </div>
-            <div className="item flex mt-[0.7rem]">
-                <div className="label">Location: </div>
-                <div className="locationSelector">
-                    {" " + currentNotebook + "/"}
-                    {currentPage}
+            <div className="item flex flex-col mt-[0.7rem]">
+                <div className="label mr-auto">Location: </div>
+                <div className="PathPreview border-l-4 border-l-gray-800 flex flex-col pl-[0.7rem] bg-gray-950">
+                    <div className="notebook flex p-[0.5rem]">
+                        <div className="mr-auto">Notebook: </div>
+                        <div>{newPageInfo.notebook}</div>
+                    </div>
+                    <div className="page flex p-[0.5rem] pt-[0]">
+                        <div className="mr-auto">Page:     </div>
+                        <div>{newPageInfo.pagename}</div>
+                    </div>
                 </div>
             </div>
             <div className={submitButtonStyle}>Create New Page</div>

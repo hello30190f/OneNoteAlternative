@@ -46,19 +46,19 @@ export function DeletePage(){
 
 
     return <OverlayWindow arg={overlayWindowArg}>
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-[20rem] p-[0.5rem] m-[0.5rem]">
             <div className="PathPreview flex flex-col">
-                <div className="notebook flex">
-                    <div className="">Notebook: </div>
+                <div className="notebook flex p-[0.5rem]">
+                    <div className="mr-auto">Notebook: </div>
                     <div>{currentNotebook}</div>
                 </div>
-                <div className="page flex">
-                    <div className="">Page:     </div>
+                <div className="page flex p-[0.5rem]">
+                    <div className="mr-auto">Page:     </div>
                     <div>{currentPage}</div>
                 </div>
             </div>
             <div className={submitButtonStyle}>
-                Delete the page.
+                Delete the page
             </div>
         </div>
     </OverlayWindow>
