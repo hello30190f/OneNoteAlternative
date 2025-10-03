@@ -45,11 +45,17 @@ export function DeleteNotebook(){
     // init -----------------------------------------
 
 
+    let notebookName = currentNotebook
+    console.log(currentNotebook)
+    if(currentNotebook == null){
+        notebookName = "No notebook is selected."
+    }
+
     return <OverlayWindow arg={overlayWindowArg}>
         <div className="flex flex-col m-[0.5rem] p-[0.5rem] min-w-[20rem]">
             <div className="flex p-[0.5rem]">
                 <div className="mr-auto">Notebook: </div>
-                <div>{currentNotebook}</div>
+                <div>{notebookName}</div>
             </div>
             <div className={submitButtonStyle}>
                 Delete the notebook

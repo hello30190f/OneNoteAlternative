@@ -172,7 +172,7 @@ export default function Page() {
     }
     if (!currentPage || !currentNotebook) {
         return<PageOutlineAndContainer>
-            <ShowError message="Page is not selected." />
+            <ShowError message="No page is selected." />
         </PageOutlineAndContainer> 
     }
     if (!pageInfo) {

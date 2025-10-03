@@ -196,6 +196,12 @@ export function CreatePage(){
         }
     },[newPageInfo])
 
+
+    let pageName = newPageInfo.pagename
+    if(pageName == ""){
+        pageName = "No page name is entered."
+    }
+
     // https://www.w3schools.com/tags/tag_select.asp
     // pagetype -> automaticly get the info by getPageType command from the dataserver
     // loclation -> use info command, drag and drop
@@ -233,7 +239,7 @@ export function CreatePage(){
                     </div>
                     <div className="page flex p-[0.5rem] pt-[0]">
                         <div className="mr-auto">Page:     </div>
-                        <div>{newPageInfo.pagename}</div>
+                        <div>{pageName}</div>
                     </div>
                 </div>
             </div>

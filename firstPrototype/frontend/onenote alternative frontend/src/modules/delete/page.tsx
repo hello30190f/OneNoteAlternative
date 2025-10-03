@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { OverlayWindow, type OverlayWindowArgs } from "../UI/OverlayWindow"
 import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar"
 import { useStartButtonStore } from "../UI/ToggleToolsBar/StartButton"
@@ -43,18 +43,25 @@ export function DeletePage(){
     }
     // init -----------------------------------------
     // init -----------------------------------------
-
+    let notebookName = currentNotebook
+    if(notebookName == null){
+        notebookName = "No notebook is selected."
+    }
+    let pageName = currentPage
+    if(pageName == null || pageName == ""){
+        pageName = "No page is selected."
+    }
 
     return <OverlayWindow arg={overlayWindowArg}>
         <div className="flex flex-col min-w-[20rem] p-[0.5rem] m-[0.5rem]">
             <div className="PathPreview flex flex-col">
                 <div className="notebook flex p-[0.5rem]">
                     <div className="mr-auto">Notebook: </div>
-                    <div>{currentNotebook}</div>
+                    <div>{notebookName}</div>
                 </div>
                 <div className="page flex p-[0.5rem]">
                     <div className="mr-auto">Page:     </div>
-                    <div>{currentPage}</div>
+                    <div>{pageName}</div>
                 </div>
             </div>
             <div className={submitButtonStyle}>
