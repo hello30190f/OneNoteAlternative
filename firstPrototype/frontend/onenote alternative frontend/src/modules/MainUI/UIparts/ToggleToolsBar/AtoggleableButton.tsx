@@ -19,17 +19,6 @@ export function AtoggleableButton({ Atoggleable }: { Atoggleable: toggleable }) 
     return <div
         className={AtoggleableButtonClassName}
         onClick={() => {
-            // TODO: fix this button only works once problem.
-            // setVisibility may be broken.
-            // console.log("ToolsBar:" + Atoggleable.name)
-            // console.log(Atoggleable.setVisibility)
-            // console.log(Atoggleable.visibility)
-            // console.log(Atoggleable.visibility)
-            // if (Atoggleable.visibility) {
-            //     Atoggleable.setVisibility(false)
-            // } else {
-            //     Atoggleable.setVisibility(true)
-            // }
             filpToggleable(Atoggleable)
         }}
     >{Atoggleable.name}</div>

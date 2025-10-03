@@ -173,7 +173,13 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         set({windows:newInfo})
     },
     syncStateToToggleable: () => {
-        
+        const setToggleable = useStartButtonStore((s) => s.setToggleable)
+        for(const window of get().windows){
+            if(window.toggleable != null){
+                console.log(window.toggleable)
+                setToggleable(window.toggleable)
+            }
+        }
     },
 }))
 

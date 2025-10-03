@@ -2,6 +2,7 @@ import { useRef, type ReactNode } from "react"
 import { AtoggleableButton } from "./UIparts/ToggleToolsBar/AtoggleableButton"
 import { basicButton, StartButton, useStartButtonStore, type AstartButton } from "./UIparts/ToggleToolsBar/StartButton"
 import { CloseAllButton } from "./UIparts/ToggleToolsBar/CloseAllButton"
+import { useOverlayWindowStore } from "./UIparts/OverlayWindow"
 
 export interface toggleable{
     name:string,
@@ -15,6 +16,7 @@ export default function ToolsBar(){
     const buttons = useStartButtonStore((s) => s.buttons)
     const init = useRef(true)
     const addButton = useStartButtonStore((s) => s.addButton)
+
 
     if(init.current){
         // register basic start button

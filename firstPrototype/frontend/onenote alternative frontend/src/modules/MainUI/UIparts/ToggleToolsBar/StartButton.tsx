@@ -20,7 +20,6 @@ export type startButtons = {
     buttons: AstartButton[],
     menuVisible: boolean,
 
-
     addButton: (button:AstartButton) => void,
     removeButton: (buttonName:string) => void,
     getButton: (buttonName:string) => AstartButton | null,
@@ -32,6 +31,7 @@ export type startButtons = {
     getSelected: () => AstartButton | null,
     clacColor: () => void,
     syncOverlayWindowState: () => void,
+    setToggleable: (toggleable:toggleable) => void,
 }
 
 export const useStartButtonStore = create<startButtons>((set,get) => ({
@@ -175,6 +175,22 @@ export const useStartButtonStore = create<startButtons>((set,get) => ({
     syncOverlayWindowState: () => {
 
     },
+    setToggleable: (toggleable:toggleable) => {
+        const buttons = get().buttons
+        const newButtons = []
+        for(const button of buttons){
+            const newToggleables = []
+            for(const aToggleable of button.toggleables){
+                if(aToggleable.name == toggleable.name){
+                    aToggleable.visibility = toggleable.visibility
+                }
+                newToggleables.push(aToggleable)
+            }
+            button.toggleables = newToggleables
+            newButtons.push(button)
+        }
+        set({buttons:newButtons})
+    },
 }))
 
 
@@ -273,7 +289,7 @@ export function StartButtonMenu(){
 
     if(visible){
         return <OverlayWindow arg={overlayWindowArg}>
-            <div className="flex flex-col bg-gray-900 pt-[0.5rem]">
+            <div className="flex flex-row w-[32rem] bg-gray-900 pt-[0.5rem] flex-wrap">
                 {buttons.map((value,index) => <AmenuItem button={value} key={index}></AmenuItem>)}
             </div>
         </OverlayWindow>
@@ -282,8 +298,9 @@ export function StartButtonMenu(){
 
 function AmenuItem({ button }:{ button:AstartButton }){
     let className = `
-                    m-[0.5rem] mt-0 min-w-[5rem] p-[1rem] hover:bg-gray-500 
+                    m-[0.5rem] mt-0 min-w-[15rem] p-[1rem] hover:bg-gray-500 
                     justify-center place-items-center align-middle text-center
+                    flex-[1 1 50%] 
  items-center
     `
     const setSelected = useStartButtonStore((s) => s.setSelected)
