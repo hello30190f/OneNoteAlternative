@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type JSX, type ReactNode } from "react"
-import type { PageMetadataAndData } from "../../page"
+import type { PageMetadataAndData } from "../../MainUI/page"
 import type AnItem from "./element"
 import { create } from "zustand"
 import ShowItem from "./showItem"

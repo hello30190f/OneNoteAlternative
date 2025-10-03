@@ -1,6 +1,9 @@
-import type { toggleable } from "../ToggleToolsBar"
+import type { toggleable } from "../../ToggleToolsBar"
+import { useStartButtonStore } from "./StartButton"
 
 export function AtoggleableButton({ Atoggleable }: { Atoggleable: toggleable }) {
+    const filpToggleable = useStartButtonStore((s) => s.flipAtoggleable)
+
     let AtoggleableButtonClassName = `
             AtoggleableButton 
             h-[2rem] min-w-[4rem] w-[inherit]
@@ -21,12 +24,13 @@ export function AtoggleableButton({ Atoggleable }: { Atoggleable: toggleable }) 
             // console.log("ToolsBar:" + Atoggleable.name)
             // console.log(Atoggleable.setVisibility)
             // console.log(Atoggleable.visibility)
-            console.log(Atoggleable.visibility)
-            if (Atoggleable.visibility) {
-                Atoggleable.setVisibility(false)
-            } else {
-                Atoggleable.setVisibility(true)
-            }
+            // console.log(Atoggleable.visibility)
+            // if (Atoggleable.visibility) {
+            //     Atoggleable.setVisibility(false)
+            // } else {
+            //     Atoggleable.setVisibility(true)
+            // }
+            filpToggleable(Atoggleable)
         }}
     >{Atoggleable.name}</div>
 }

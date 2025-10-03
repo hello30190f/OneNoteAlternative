@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState, type ReactNode} from "react"
 import { create } from "zustand"
-import { genUUID } from "../common"
+import { genUUID } from "../../helper/common"
+import { useStartButtonStore } from "./ToggleToolsBar/StartButton"
+import type { toggleable } from "../ToggleToolsBar"
 
 export interface OverlayWindowArgs{
     title: string,
     visible: boolean,
+    toggleable: toggleable | null,
     color: string,
-    setVisible: React.Dispatch<React.SetStateAction<boolean>> 
+    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
+    initPos: {x:number,y:number}
 }
 
 // show window can be moved around anywhare and closed
@@ -27,6 +31,7 @@ export interface OverlayWindowArgs{
 type AoverlayWindow = {
     name: string,       // window title
     UUID: string,       
+    toggleable: toggleable | null,
     isActive: boolean,  // false -> inactive, true -> active
     zIndex: number,     // 200-1200
     color: string,       // tailwindcss classname
@@ -42,7 +47,10 @@ type overlayWindows = {
     allWindowInactive: () => void,                     // no need to update z-index
     makeAwindowActive: (window:AoverlayWindow) => void,// the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
     getWindow: (window:AoverlayWindow) => AoverlayWindow, 
+    getWindowByArg: (windowArg:OverlayWindowArgs) => AoverlayWindow | null,
+    makeAwindowActiveByArg: (windowArg:OverlayWindowArgs) => void,
     closeAllWindow: () => void,
+    syncStateToToggleable: () => void,
 }
 
 export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
@@ -55,13 +63,13 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
     // register and deresiger window
     addWindow: (window:AoverlayWindow) => {
         let newInfo = get().windows
-        window.isActive = true
-        window.zIndex = get().zIndexMax
+        // window.isActive = true
+        // window.zIndex = get().zIndexMax
 
-        for(let i = 0; i < newInfo.length; i++){
-            newInfo[i].isActive = false
-            newInfo[i].zIndex = newInfo[i].zIndex--
-        }
+        // for(let i = 0; i < newInfo.length; i++){
+        //     newInfo[i].isActive = false
+        //     newInfo[i].zIndex = newInfo[i].zIndex--
+        // }
         set(() => ({windows: [...newInfo,window]}))
     },
     removeWindow: (window:AoverlayWindow) => {
@@ -134,16 +142,25 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         set(() => ({windows: newInfo}))
     },
     getWindow: (window:AoverlayWindow) => {
-        // console.log("get window")
-        // console.log(window.UUID)
-        // console.log(window)
-        // console.log(get().windows)
         for(let test of get().windows){
             if(test.UUID == window.UUID) {
                 return test
             }
         }
         return window
+    },
+    getWindowByArg: (windowArg:OverlayWindowArgs) => {
+        for(const Awindow of get().windows){
+            if(Awindow.name == windowArg.title) return Awindow
+        }
+        return null
+    },
+    makeAwindowActiveByArg: (windowArg:OverlayWindowArgs) => {
+        for(const Awindow of get().windows){
+            if(Awindow.name == windowArg.title){               
+                get().makeAwindowActive(Awindow)
+            }
+        }
     },
     closeAllWindow: () => {
         const windows = get().windows
@@ -154,7 +171,10 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
             newInfo.push(Awindow)
         }   
         set({windows:newInfo})
-    }
+    },
+    syncStateToToggleable: () => {
+        
+    },
 }))
 
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
@@ -170,6 +190,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         isActive: true,
         name: arg.title,
         UUID: genUUID(),
+        toggleable: arg.toggleable,
         zIndex: maxZindex,
         color: arg.color,
         windowVisible: {setVisible: setVisible,visible: visible}
@@ -177,10 +198,9 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
 
     const initPos = {
-        x: 100,
-        y: 100
+        x: arg.initPos.x,
+        y: arg.initPos.y
     }
-
     let windowPos = useRef({
         x:initPos.x,
         y:initPos.y

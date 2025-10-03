@@ -1,13 +1,13 @@
-import Page from "./page";
-import Selector from "./selector";
+import Page from "./MainUI/page";
+import Selector from "./tools/notebookAndPages/selector";
 import { create } from "zustand";
-import ToggleToolsBar from "./UI/ToggleToolsBar";
-import { CreateNotebook } from "./create/notebook";
-import { CreatePage } from "./create/page";
-import { DeleteNotebook } from "./delete/notebook";
-import { DeletePage } from "./delete/page";
-import { StartButtonMenu } from "./UI/ToggleToolsBar/StartButton";
-import { ColorPalette } from "./ColorPalette";
+import ToggleToolsBar from "./MainUI/ToggleToolsBar";
+import { CreateNotebook } from "./tools/notebookAndPages/create/notebook";
+import { CreatePage } from "./tools/notebookAndPages/create/page";
+import { DeleteNotebook } from "./tools/notebookAndPages/delete/notebook";
+import { DeletePage } from "./tools/notebookAndPages/delete/page";
+import { StartButtonMenu } from "./MainUI/UIparts/ToggleToolsBar/StartButton";
+import { ColorPalette } from "./helper/ColorPalette";
 
 export type AppState = {
     currentPage:string | null,

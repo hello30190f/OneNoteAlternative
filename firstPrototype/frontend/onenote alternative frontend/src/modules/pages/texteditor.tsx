@@ -1,4 +1,4 @@
-import type { PageMetadataAndData } from "../page";
+import type { PageMetadataAndData } from "../MainUI/page";
 
 export default function Texteditor(data:PageMetadataAndData){
     

@@ -101,3 +101,11 @@
     margin-right: 0;
     padding-left: 20px;
 }
+
+.markdownContainer .LF {
+    line-break: anywhere
+}
+
+.markdownEditor .LF {
+    line-break: anywhere
+}

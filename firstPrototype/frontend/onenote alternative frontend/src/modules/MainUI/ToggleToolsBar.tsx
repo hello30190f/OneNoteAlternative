@@ -1,33 +1,16 @@
-import { useEffect, useRef, type ReactNode } from "react"
-import { create } from "zustand"
-import { AtoggleableButton } from "./ToggleToolsBar/AtoggleableButton"
-import { basicButton, StartButton, useStartButtonStore, type AstartButton } from "./ToggleToolsBar/StartButton"
-import { CloseAllButton } from "./ToggleToolsBar/CloseAllButton"
+import { useRef, type ReactNode } from "react"
+import { AtoggleableButton } from "./UIparts/ToggleToolsBar/AtoggleableButton"
+import { basicButton, StartButton, useStartButtonStore, type AstartButton } from "./UIparts/ToggleToolsBar/StartButton"
+import { CloseAllButton } from "./UIparts/ToggleToolsBar/CloseAllButton"
 
 export interface toggleable{
     name:string,
+    menu:string,
     color: string,
     visibility: boolean,
     setVisibility: React.Dispatch<React.SetStateAction<boolean>>    
 }
 
-
-
-export interface toggleableTools{
-    toggleables:toggleable[],
-    addToggleable: (toggleable:toggleable) => void
-}
-export const useToggleableStore = create<toggleableTools>((set) => ({
-    toggleables:[],
-
-    addToggleable: (Atoggleable:toggleable) => {
-        set((state) => ({toggleables:[...state.toggleables,Atoggleable]}))
-    }
-}))
-
-
-
-// TODO: implement start button for toggleable
 export default function ToolsBar(){
     const buttons = useStartButtonStore((s) => s.buttons)
     const init = useRef(true)
@@ -41,13 +24,8 @@ export default function ToolsBar(){
 
         init.current = false
     }
-    // const selected = getSelected()
-    // const buttons = useStartButtonStore((s) => s.buttons)
 
-    // useEffect(() => {
-    //     console.log("test")
-    // },[buttons])
-
+    // find selected button to show in the bar
     let selected: null | AstartButton = null
     for(const anButton of buttons){
         if(anButton.selected) {
@@ -76,60 +54,28 @@ export default function ToolsBar(){
 
     if(selected == null){
         ToolsBarOutlineStyleClassName += " bg-blue-900 "
-
         return <ToolsBarOutlineStyle>
             <StartButton></StartButton>
-
             <div>No tools selected</div>
-
             <CloseAllButton></CloseAllButton>
         </ToolsBarOutlineStyle>
+
     }else if(selected.toggleables.length != 0){
-        // ToolsBarOutlineStyleClassName += " " + selected.toggleableColor.slice(0,-3) + "700 "
         ToolsBarOutlineStyleClassName += selected.toggleableColor
-
         return <ToolsBarOutlineStyle>
-
             <StartButton></StartButton>
-            
             {selected.toggleables.map((value,index) => (
                 <AtoggleableButton Atoggleable={value} key={index}></AtoggleableButton>
             ))}
-
             <CloseAllButton></CloseAllButton>
-
         </ToolsBarOutlineStyle>
-    }else{
-        // ToolsBarOutlineStyleClassName += " " + selected.toggleableColor.slice(0,-3) + "300 "
-        ToolsBarOutlineStyleClassName += selected.toggleableColor
 
+    }else{
+        ToolsBarOutlineStyleClassName += selected.toggleableColor
         return <ToolsBarOutlineStyle>
             <StartButton></StartButton>
-
             <div>No tools exist</div>
-
             <CloseAllButton></CloseAllButton>
         </ToolsBarOutlineStyle>
     }
-
-
-    // // TODO: show status indicator (right side).
-    // // for example: show text amount, LF amount, file size
-    // if(toggleables.length == 0){
-    //     return <ToolsBarOutlineStyle>
-    //         <div>No tools exist</div>
-    //     </ToolsBarOutlineStyle>
-    // }else{
-    //     return <ToolsBarOutlineStyle>
-
-    //         <StartButton></StartButton>
-            
-    //         {toggleables.map((value,index) => (
-    //             <AtoggleableButton Atoggleable={value} key={index}></AtoggleableButton>
-    //         ))}
-
-    //         <CloseAllButton></CloseAllButton>
-
-    //     </ToolsBarOutlineStyle>
-    // }
 }

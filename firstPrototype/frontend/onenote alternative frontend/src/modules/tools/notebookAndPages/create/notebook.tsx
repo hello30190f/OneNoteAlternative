@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ChangeEventHandler, type ReactNode } from "react"
-import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar"
-import { OverlayWindow, type OverlayWindowArgs } from "../UI/OverlayWindow"
-import { useDatabaseStore } from "../network/database"
-import { genUUID } from "../common"
-import { useStartButtonStore } from "../UI/ToggleToolsBar/StartButton"
+import { type toggleable } from "../../../MainUI/ToggleToolsBar"
+import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
+import { useDatabaseStore } from "../../../helper/network"
+import { genUUID } from "../../../helper/common"
+import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 
 
 // TODO: implement ERROR dialog with MessageBox Component
@@ -58,14 +58,15 @@ export function CreateNotebook(){
     },[websocket])
 
 
-
+    
+    const button:toggleable = {
+        name: "New Notebook",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        visibility: visible,
+        setVisibility: setVisible,
+    }
     if(init.current){
-        const button:toggleable = {
-            name: "New Notebook",
-            color: "bg-blue-700",
-            visibility: visible,
-            setVisibility: setVisible,
-        }
         addToggleable("notebooksAndPages",button)
         init.current = false
     }
@@ -80,8 +81,10 @@ export function CreateNotebook(){
     const args:OverlayWindowArgs = {
         setVisible: setVisible,
         visible: visible,
+        toggleable: button,
         title: "New Notebook",
-        color: "bg-yellow-700"
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
     }
 
     return <OverlayWindow arg={args}>

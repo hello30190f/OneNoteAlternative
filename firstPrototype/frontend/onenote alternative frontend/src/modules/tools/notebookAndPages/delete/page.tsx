@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import { OverlayWindow, type OverlayWindowArgs } from "../UI/OverlayWindow"
-import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar"
-import { useStartButtonStore } from "../UI/ToggleToolsBar/StartButton"
-import { useAppState } from "../window"
+import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
+import { type toggleable } from "../../../MainUI/ToggleToolsBar"
+import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
+import { useAppState } from "../../../window"
 
 
 
@@ -22,22 +22,26 @@ export function DeletePage(){
     // init -----------------------------------------
     // init -----------------------------------------
     const [visible,setVisible] = useState(false)
+    const toggleable:toggleable = {
+        name: "Delete Page",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        setVisibility: setVisible,
+        visibility: visible
+    }
     const overlayWindowArg:OverlayWindowArgs = {
         title: "Delete Page",
+        toggleable: toggleable,
         setVisible: setVisible,
         visible: visible,
-        color: "bg-yellow-700"
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
     }
     const init = useRef(true)
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
 
     if(init.current){
-        const toggleable:toggleable = {
-            name: "Delete Page",
-            color: "bg-blue-700",
-            setVisibility: setVisible,
-            visibility: visible
-        }
+
         addToggleable("notebooksAndPages",toggleable)
         init.current = false
     }

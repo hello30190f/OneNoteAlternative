@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { toggleable } from "../ToggleToolsBar"
+import type { toggleable } from "../../ToggleToolsBar"
 import { useEffect, useRef, useState } from "react"
 import { OverlayWindow, type OverlayWindowArgs } from "../OverlayWindow"
 
@@ -19,13 +19,19 @@ export type AstartButton = {
 export type startButtons = {
     buttons: AstartButton[],
     menuVisible: boolean,
+
+
     addButton: (button:AstartButton) => void,
     removeButton: (buttonName:string) => void,
     getButton: (buttonName:string) => AstartButton | null,
     addToggleable: (buttonName:string,toggleable:toggleable) => void,
+    removeToggleable: (buttonName:string,toggleable:toggleable) => void,
+    removeAllToggleables: (buttonName:string) => void,
+    flipAtoggleable: (toggleable:toggleable) => void,
     setSelected: (buttonName:string) => void,
     getSelected: () => AstartButton | null,
     clacColor: () => void,
+    syncOverlayWindowState: () => void,
 }
 
 export const useStartButtonStore = create<startButtons>((set,get) => ({
@@ -61,6 +67,60 @@ export const useStartButtonStore = create<startButtons>((set,get) => ({
         }
         set({buttons:newButtons})
         get().clacColor()
+    },
+    removeToggleable: (buttonName:string,toggleable:toggleable) => {
+        const buttons = get().buttons
+        const newButtons = []
+        for(const ANbutton of buttons){
+            if(ANbutton.name == buttonName){
+                const newToggleables = []
+                for(const Atoggleable of ANbutton.toggleables){
+                    if(Atoggleable.name == toggleable.name) continue
+                    newToggleables.push(Atoggleable)
+                }
+                ANbutton.toggleables = newToggleables
+            }
+            newButtons.push(ANbutton)
+        }
+        set({buttons:newButtons})
+        get().clacColor()
+    },
+    removeAllToggleables: (buttonName:string) => {
+        const buttons = get().buttons
+        const newButtons = []
+        for(const ANbutton of buttons){
+            if(ANbutton.name == buttonName){
+                const newToggleables:toggleable[] = []
+                ANbutton.toggleables = newToggleables
+            }
+            newButtons.push(ANbutton)
+        }
+        set({buttons:newButtons})
+        get().clacColor()
+    },
+    flipAtoggleable: (toggleable:toggleable) => {
+        const buttons = get().buttons
+        const newButtons = []
+        for(const ANbutton of buttons){
+            if(ANbutton.name == toggleable.menu){
+                const newToggleables = []
+                for(const Atoggleable of ANbutton.toggleables){
+                    if(Atoggleable.name == toggleable.name) {
+                        if(toggleable.visibility){
+                            toggleable.setVisibility(false)
+                            toggleable.visibility = false
+                        }else{
+                            toggleable.setVisibility(true)
+                            toggleable.visibility = true                            
+                        }
+                    }
+                    newToggleables.push(Atoggleable)
+                }
+                ANbutton.toggleables = newToggleables
+            }
+            newButtons.push(ANbutton)
+        }
+        set({buttons:newButtons}) 
     },
     setSelected: (buttonName:string) => {
         const buttons = get().buttons
@@ -112,6 +172,9 @@ export const useStartButtonStore = create<startButtons>((set,get) => ({
         }
         set({buttons:newButtons})
     },
+    syncOverlayWindowState: () => {
+
+    },
 }))
 
 
@@ -128,6 +191,14 @@ export const basicButton = {
         name: "notebooksAndPages",
         displayName: "Notebooks And Pages",
         toggleableColor: "bg-yellow-950",   
+        selected: false,
+        imageBase64: null,
+        toggleables: []
+    },
+    "edit": {
+        name: "edit",
+        displayName: "Edit",
+        toggleableColor: "bg-green-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
@@ -194,8 +265,10 @@ export function StartButtonMenu(){
     const overlayWindowArg:OverlayWindowArgs = {
         title: "Menu",
         setVisible: setVisibleLocal,
+        toggleable: null,
         visible: visibleLocal,
-        color: "bg-green-700"
+        color: "bg-green-700",
+        initPos: {x:100,y:100}
     }
 
     if(visible){

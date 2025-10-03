@@ -86,6 +86,7 @@ npm run build1
 - [Tailwind CSS](https://tailwindcss.com/)
 - [zustand](https://zustand.docs.pmnd.rs/)
 - [marked](https://github.com/markedjs/marked)
+- [highlight.js](https://highlightjs.org/)
 
 ### backend
 - python

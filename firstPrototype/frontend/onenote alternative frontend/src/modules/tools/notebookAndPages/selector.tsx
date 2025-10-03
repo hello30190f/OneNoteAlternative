@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { send, useDatabaseStore } from "./network/database";
-import { OverlayWindow, type OverlayWindowArgs } from "./UI/OverlayWindow";
-import { useToggleableStore, type toggleable } from "./UI/ToggleToolsBar";
-import { genUUID } from "./common";
-import { useAppState } from "./window";
-import { useStartButtonStore } from "./UI/ToggleToolsBar/StartButton";
+import { send, useDatabaseStore } from "../../helper/network";
+import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
+import { type toggleable } from "../../MainUI/ToggleToolsBar";
+import { genUUID } from "../../helper/common";
+import { useAppState } from "../../window";
+import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
 
 interface Info {
     status: string;
@@ -120,13 +120,14 @@ export default function Selector() {
     }, [websocket]);
 
     // TODO: toolbar registor bug fix
+    const toggleable:toggleable = {
+        name: "Selector",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        setVisibility: setVisible,
+        visibility:visible
+    }
     if(init.current){
-        const toggleable:toggleable = {
-            name: "Selector",
-            color: "bg-blue-700",
-            setVisibility: setVisible,
-            visibility:visible
-        }
         toolbarAddTool("notebooksAndPages",toggleable)
         init.current = false
     }
@@ -199,9 +200,11 @@ export default function Selector() {
 
     let windowArg:OverlayWindowArgs = {
         title: "Selector",
+        toggleable: toggleable,
         visible: visible,
         setVisible: setVisible,
-        color: "bg-yellow-700"
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
     } 
 
     if (index == null) {

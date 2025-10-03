@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "./network/database";
-import Free from "./pages/free/main";
-import Blank from "./pages/blank";
-import Markdown from "./pages/markdown";
-import Texteditor from "./pages/texteditor";
-import { genUUID } from "./common";
-import { useAppState } from "./window";
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../helper/network";
+import Free from "../pages/free/main";
+import Blank from "../pages/blank";
+import Markdown from "../pages/markdown";
+import Texteditor from "../pages/texteditor";
+import { genUUID } from "../helper/common";
+import { useAppState } from "../window";
+import { useStartButtonStore } from "./UIparts/ToggleToolsBar/StartButton";
 
 interface PageInfo extends baseResponseTypesFromDataserver {
     // status: string;
@@ -30,8 +31,11 @@ export const PageCompornetList = {
     texteditor: Texteditor,
 };
 
+// TODO: create editor view for each pages
+// TODO: clean up edit toggleables for edit tab
 export default function Page() {
     const websocket = useDatabaseStore((s) => s.websocket);
+    const removeAllToggleables = useStartButtonStore((s) => s.removeAllToggleables)
 
     const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
 
@@ -100,6 +104,9 @@ export default function Page() {
         const data = pageInfo.data;
 
         if (!data) return <ShowError message="There is no data." />;
+
+        // clean up edit tab for a new page.
+        removeAllToggleables("edit")
 
         // console.log("ShowPageContents: pageType -> " + data.pageType)
         // console.log("ShowPageContents: pageData -> " + data.pageData)

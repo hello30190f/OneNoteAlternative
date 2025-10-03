@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import './App.css'
 import Window from './modules/window'
 import { create } from 'zustand'
-import { useDatabaseEffects, useDatabaseStore } from './modules/network/database';
+import { useDatabaseEffects, useDatabaseStore } from './modules/helper/network';
 
 
 

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement } from "react";
-import { OverlayWindow, type OverlayWindowArgs } from "../UI/OverlayWindow";
-import { useToggleableStore, type toggleable } from "../UI/ToggleToolsBar";
-import { useDatabaseStore, type baseResponseTypesFromDataserver } from "../network/database";
-import { useAppState } from "../window";
-import { genUUID } from "../common";
-import { useStartButtonStore } from "../UI/ToggleToolsBar/StartButton";
+import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
+import { type toggleable } from "../../../MainUI/ToggleToolsBar";
+import { useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+import { useAppState } from "../../../window";
+import { genUUID } from "../../../helper/common";
+import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
 
 // https://stackoverflow.com/questions/41285211/overriding-interface-property-type-defined-in-typescript-d-ts-file
 interface pageType extends baseResponseTypesFromDataserver{
@@ -133,22 +133,26 @@ export function CreatePage(){
 
     
 
+    const toggleable:toggleable = {
+        name: "New Page",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        visibility: visible,
+        setVisibility: setVisible,
+    }
+
     if(init.current){
-        const toggleable:toggleable = {
-            name: "New Page",
-            color: "bg-blue-700",
-            visibility: visible,
-            setVisibility: setVisible,
-        }
         addToggleable("notebooksAndPages",toggleable)
         init.current = false
     }
 
     const args:OverlayWindowArgs = {
+        toggleable: toggleable,
         setVisible: setVisible,
         visible: visible,
         title: "New Page",
-        color: "bg-yellow-700"
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
     }
 
     // {
