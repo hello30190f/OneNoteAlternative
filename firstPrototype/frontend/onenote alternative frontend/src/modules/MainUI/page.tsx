@@ -159,7 +159,7 @@ export default function Page() {
             flex 
             justify-center place-items-center align-middle text-center
     items-center 
-            overflow-y-scroll 
+            overflow-y-auto 
             z-50
         "
         style={PageOutlineAndContainerStyle}

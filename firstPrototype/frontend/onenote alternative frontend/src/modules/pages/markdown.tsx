@@ -309,8 +309,8 @@ export default function Markdown(data:PageMetadataAndData){
         let codeStyle   = ""
 
         if(!viewState.split){
-            preStyle = "text-start p-[2rem] h-full"
-            codeStyle = "markdownEditor language-md m-[1rem] p-[1rem]  h-full flex flex-col"
+            preStyle = "text-start px-[2rem] h-full"
+            codeStyle = "markdownEditor language-md mx-[1rem] px-[1rem]  h-full flex flex-col"
         }else{
             preStyle = "text-start w-[50%] h-full"
             codeStyle = "markdownEditor language-md flex h-full flex-col"
@@ -371,7 +371,10 @@ export default function Markdown(data:PageMetadataAndData){
 
     useEffect(() => {
         hijs.highlightAll()
-    },[html,markdownBuffer,viewState,lineBreak])
+    },[
+        html,markdownBuffer,viewState,lineBreak,
+        lineBreakStateVisible,ChangeViewStateButtonVisible,saveButtonVisible
+    ])
 
     // TODO: fix focus problem
     useEffect(() => {
