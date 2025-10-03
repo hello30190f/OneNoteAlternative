@@ -68,6 +68,9 @@
 # delete pages
  When delete pages, those will not be immediately removed from the filesystem. Those are kept for a certain period of time. User can avoid accidentally delete pages.
 
+1. remove page ref from metadata.json of the notebook. (still recoverable)
+2. gabage collection will work at scaduled time.
+3. when gabage collection find pages has no ref to the matadata.json, delete the file permanently.
 
 # network
 ## protocol
