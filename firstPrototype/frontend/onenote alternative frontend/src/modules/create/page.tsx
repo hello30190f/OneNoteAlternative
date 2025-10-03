@@ -24,9 +24,11 @@ export function CreatePage(){
     }
     const currentNotebook = useAppState((s) => s.currentNotebook)
     // const currentPage     = useAppState((s) => s.currentPage)
+    const currentPlace = useAppState((s) => s.currentPlace)
     const [newPageInfo,setNewPageInfo]     = useState({
         "notebook": "",
         "pagename": "",
+        "place"   : "",    
         "pageType": ""
     })
 
@@ -105,8 +107,7 @@ export function CreatePage(){
             console.log("type selected")
             console.log(newPageInfo)
             setNewPageInfo({
-                notebook: newPageInfo.notebook,
-                pagename: newPageInfo.pagename,
+                ...newPageInfo,
                 pageType: event.target.value
             })
         }
@@ -172,7 +173,23 @@ export function CreatePage(){
                 notebook: "No notebook is selected."
             })
         }
+        console.log(currentNotebook)
+        console.log(newPageInfo)
     },[currentNotebook])
+
+    useEffect(() => {
+        if(currentPlace){
+            setNewPageInfo({
+                ...newPageInfo,
+                place: currentPlace
+            })
+        }else{
+            setNewPageInfo({
+                ...newPageInfo,
+                place: "No place is selected."
+            })
+        }
+    },[currentPlace])
 
     useEffect(() => {
         if(
@@ -201,6 +218,11 @@ export function CreatePage(){
     if(pageName == ""){
         pageName = "No page name is entered."
     }
+
+    // let place = newPageInfo.place
+    // if(place == ""){
+    //     place = "No place is selected."
+    // }
 
     // https://www.w3schools.com/tags/tag_select.asp
     // pagetype -> automaticly get the info by getPageType command from the dataserver
@@ -236,6 +258,10 @@ export function CreatePage(){
                     <div className="notebook flex p-[0.5rem]">
                         <div className="mr-auto">Notebook: </div>
                         <div>{newPageInfo.notebook}</div>
+                    </div>
+                    <div className="page flex p-[0.5rem] pt-[0]">
+                        <div className="mr-auto">Place:     </div>
+                        <div>{newPageInfo.place}</div>
                     </div>
                     <div className="page flex p-[0.5rem] pt-[0]">
                         <div className="mr-auto">Page:     </div>

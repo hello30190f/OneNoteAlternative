@@ -3,6 +3,6 @@
     "createDate": "2025/09/13",
     "updateDate": "2025/09/13",
     "id"        : "bb6f7d1c-c722-495c-923b-ab9e9574ef5b",
-    "pages"     : ["test.md","test.json","test/anArticle.md","test/anArticle1.md"],
+    "pages"     : ["test.md","test.json","test/anArticle.md","test/anArticle1.md","test/test2/anArticle.md"],
     "files"     : ["testfile.txt"]
 }
