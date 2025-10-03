@@ -97,7 +97,7 @@ export function DeleteNotebook(){
     // networking -----------------------------------------
     function tryToDeleteNotebook(){
         // when there is no selected notebook, ignore the user request.
-        if(currentNotebook == null && currentNotebook == "") return 
+        if(currentNotebook == null || currentNotebook == "") return 
 
         // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
         if(websocket == null){

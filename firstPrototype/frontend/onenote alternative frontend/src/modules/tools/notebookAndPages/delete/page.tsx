@@ -4,9 +4,11 @@ import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useAppState } from "../../../window"
 import { genUUID } from "../../../helper/common"
-import { useDatabaseStore } from "../../../helper/network"
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
 
-
+interface deletePage extends baseResponseTypesFromDataserver{
+    data: { }
+}
 
 export function DeletePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
@@ -63,7 +65,7 @@ export function DeletePage(){
     //     "UUID": "UUID string",
     //     "data": { 
     //         "noteboook": "notebookName",
-    //         "newPageID": "Path/to/newPageName.md"
+    //         "newPageID": "Path/to/targetPageName.md"
     //     }
     // }
     //
@@ -81,10 +83,42 @@ export function DeletePage(){
 
     // networking -----------------------------------------
     // networking -----------------------------------------
+    function tryToDeletePage(){
+        // when there is no selected notebook, ignore the user request.
+        if(currentNotebook == null || currentNotebook == "") return
+        // when there is no selected page, ignore the user request.
+        if(currentPage == null || currentPage == "") return 
 
+        // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
+        if(websocket == null){
+            // TODO: show messagebox
+            return
+        }
+
+        const requsetString = JSON.stringify({
+            "command": "deletePage",
+            "UUID": requestUUID.current,
+            "data": { 
+                "noteboook": currentNotebook,
+                "newPageID": currentPage
+            }
+        })
+        console.log(requsetString)
+        send(websocket,requsetString)
+    }
 
     function netwrokHander(event:MessageEvent){
-        
+        const jsondata:deletePage = JSON.parse(event.data)
+
+        if(jsondata.UUID == requestUUID.current && jsondata.command == "deletePage"){
+            if(jsondata.status == "ok"){
+                //TODO: show messagebox inform the user the request is success.
+
+            }else{
+                //TODO: show messagebox inform the user the request is failed.
+
+            }
+        }
     }
 
     useEffect(() => {
@@ -124,7 +158,7 @@ export function DeletePage(){
                     <div>{pageName}</div>
                 </div>
             </div>
-            <div className={submitButtonStyle}>
+            <div className={submitButtonStyle} onClick={tryToDeletePage}>
                 Delete the page
             </div>
         </div>
