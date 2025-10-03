@@ -11,7 +11,7 @@ interface pageType extends baseResponseTypesFromDataserver{
     data: [] | null
 }
 
-// TODO: implement this
+// TODO: write network request to the backend when submit button pressed.
 export function CreatePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const websocket = useDatabaseStore((s) => s.websocket)
@@ -63,7 +63,7 @@ export function CreatePage(){
         }
     },[])
 
-    
+
     useEffect(() => {
         if(!websocket){
             setDisabled(true)
