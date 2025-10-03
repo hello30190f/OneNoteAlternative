@@ -12,16 +12,39 @@ import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/Star
 export function CreateNotebook(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent w-full mt-[1.1rem] p-[0.5rem] "
 
-    const init = useRef(true)
     const [visible,setVisible] = useState(false)
     const [disabled,setDisabled] = useState(false)
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
+    const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
     const websocket = useDatabaseStore((s) => s.websocket)
 
     const requestUUID = useRef(genUUID())
     const notebookName = useRef("")
 
+    const toggleable:toggleable = {
+        name: "New Notebook",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        visibility: visible,
+        setVisibility: setVisible,
+    }
+    const args:OverlayWindowArgs = {
+        setVisible: setVisible,
+        visible: visible,
+        toggleable: toggleable,
+        title: "New Notebook",
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
+    }
+    // init and end
+    useEffect(() => {
+        addToggleable("notebooksAndPages",toggleable)
+        
+        return () => {
+            removeToggleable("notebooksAndPages",toggleable)
+        }
+    },[])
 
 
     useEffect(() => {
@@ -59,32 +82,14 @@ export function CreateNotebook(){
 
 
     
-    const button:toggleable = {
-        name: "New Notebook",
-        menu: "notebooksAndPages",
-        color: "bg-blue-700",
-        visibility: visible,
-        setVisibility: setVisible,
-    }
-    if(init.current){
-        addToggleable("notebooksAndPages",button)
-        init.current = false
-    }
+
+
 
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){
         submitButtonStyle += " bg-gray-800 hover:bg-gray-900"    
     }else{
         submitButtonStyle += " bg-gray-800 hover:bg-gray-700"    
-    }
-
-    const args:OverlayWindowArgs = {
-        setVisible: setVisible,
-        visible: visible,
-        toggleable: button,
-        title: "New Notebook",
-        color: "bg-yellow-700",
-        initPos: {x:100,y:100}
     }
 
     return <OverlayWindow arg={args}>

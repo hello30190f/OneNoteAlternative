@@ -9,6 +9,10 @@ import { useAppState } from "../../../window"
 export function DeletePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const [disabled,setDisabled] = useState(false)
+    
+    const addToggleable = useStartButtonStore((s) => s.addToggleable)
+    const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){
         submitButtonStyle += " bg-gray-800 hover:bg-gray-900"    
@@ -37,16 +41,17 @@ export function DeletePage(){
         color: "bg-yellow-700",
         initPos: {x:100,y:100}
     }
-    const init = useRef(true)
-    const addToggleable = useStartButtonStore((s) => s.addToggleable)
-
-    if(init.current){
-
+    useEffect(() => {
         addToggleable("notebooksAndPages",toggleable)
-        init.current = false
-    }
+
+        return () => {
+            removeToggleable("notebooksAndPages",toggleable)
+        }
+    },[])
     // init -----------------------------------------
     // init -----------------------------------------
+
+    
     let notebookName = currentNotebook
     if(notebookName == null){
         notebookName = "No notebook is selected."

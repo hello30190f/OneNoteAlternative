@@ -23,9 +23,10 @@ export default function Selector() {
     const websocket = useDatabaseStore((s) => s.websocket);
     const setstateDatabase  = useDatabaseStore.setState
     const [visible,setVisible] = useState(false)
-    const init = useRef(true)
-    // const toolbarAddTool = useToggleableStore((s) => s.addToggleable)
+
     const toolbarAddTool = useStartButtonStore((s) => s.addToggleable)
+    const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+
     const requestUUID = useRef<string>(genUUID())
 
     const currentPage       = useAppState((s) => s.currentPage)
@@ -39,6 +40,30 @@ export default function Selector() {
         command: null,
         data: null,
     });
+
+    
+    const toggleable:toggleable = {
+        name: "Selector",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        setVisibility: setVisible,
+        visibility:visible
+    }
+    let windowArg:OverlayWindowArgs = {
+        title: "Selector",
+        toggleable: toggleable,
+        visible: visible,
+        setVisible: setVisible,
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
+    } 
+    useEffect(() => {
+        toolbarAddTool("notebooksAndPages",toggleable)
+
+        return () => {
+            removeToggleable("notebooksAndPages",toggleable)
+        }
+    },[])
 
 
     useEffect(() => {
@@ -119,18 +144,8 @@ export default function Selector() {
         };
     }, [websocket]);
 
-    // TODO: toolbar registor bug fix
-    const toggleable:toggleable = {
-        name: "Selector",
-        menu: "notebooksAndPages",
-        color: "bg-blue-700",
-        setVisibility: setVisible,
-        visibility:visible
-    }
-    if(init.current){
-        toolbarAddTool("notebooksAndPages",toggleable)
-        init.current = false
-    }
+
+
 
 
     function CreateList({ index }: { index: Info }) {
@@ -182,11 +197,6 @@ export default function Selector() {
         }
     }
 
-    // function Tools(){
-    //     return <div className="w-[2rem] h-full bg-green-700 ">
-
-    //     </div>
-    // }
 
     function ShowError({ message }: { message: string }) {
         return <div>{message}</div>;
@@ -198,14 +208,6 @@ export default function Selector() {
         </div>
     }
 
-    let windowArg:OverlayWindowArgs = {
-        title: "Selector",
-        toggleable: toggleable,
-        visible: visible,
-        setVisible: setVisible,
-        color: "bg-yellow-700",
-        initPos: {x:100,y:100}
-    } 
 
     if (index == null) {
         return (
@@ -221,7 +223,6 @@ export default function Selector() {
                 <SelectorOutline>
                     <CreateList index={index} />
                 </SelectorOutline>
-                {/* <Tools></Tools> */}
             </OverlayWindow>
         );
     }

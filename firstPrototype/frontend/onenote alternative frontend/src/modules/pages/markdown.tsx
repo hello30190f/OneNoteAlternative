@@ -31,16 +31,15 @@ export default function Markdown(data:PageMetadataAndData){
     const unsavedMarkdownBuffer = useRef<null | string>(null)
     // data
     
-    const init = useRef(true)
     const messageBoxUUID = useRef(genUUID())
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
+    const removeAllToggleables = useStartButtonStore((s) => s.removeAllToggleables)
 
     const [lineBreak,setLineBreak] = useState({
         view: false,
         editor: false,
     })
-
-    const [lineBreakStateVisible,setLineBreakStateVisible] = useState(true)
+    const [lineBreakStateVisible,setLineBreakStateVisible] = useState(false)
     const lineBreakStateTaggleable:toggleable = {
         name: "Line Break",
         color: "bg-green-950",
@@ -54,7 +53,7 @@ export default function Markdown(data:PageMetadataAndData){
         toggleable:lineBreakStateTaggleable,
         setVisible: setLineBreakStateVisible,
         visible: lineBreakStateVisible,
-        initPos: {x:window.innerWidth - 360, y: window.innerHeight - 240}
+        initPos: {x:window.innerWidth - 360, y: window.innerHeight - 360}
     }
 
     
@@ -64,7 +63,6 @@ export default function Markdown(data:PageMetadataAndData){
         "split": false,
         "editor": false
     })
-
     const [ChangeViewStateButtonVisible,setChangeViewStateButtonVisible] = useState(true)
     const viewStateToggleable:toggleable = {
         name: "View",
@@ -96,7 +94,7 @@ export default function Markdown(data:PageMetadataAndData){
         toggleable: viewStateToggleable,
         setVisible: setSaveButtonVisible,
         visible: saveButtonVisible,
-        initPos: {x:window.innerWidth - 360,y: window.innerHeight - 360} 
+        initPos: {x:window.innerWidth - 170,y: window.innerHeight - 240} 
     }
 
     async function parseMarkdown(){
@@ -136,13 +134,17 @@ export default function Markdown(data:PageMetadataAndData){
     }
 
 
-    if(init.current){
+
+    useEffect(() => {
         parseMarkdown()
         addToggleable("edit",viewStateToggleable)
         addToggleable("edit",lineBreakStateTaggleable)
         addToggleable("edit",saveButtonToggleable)
-        init.current = false
-    }
+
+        return () => {
+            removeAllToggleables("edit")
+        }
+    },[])
 
 
     useEffect(() => {
@@ -187,6 +189,7 @@ export default function Markdown(data:PageMetadataAndData){
                     className="preview bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.preview}
                     onClick={() => {
+                        if(viewState.preview) return
                         setViewState({
                             editor: false,
                             preview: true,
@@ -198,6 +201,7 @@ export default function Markdown(data:PageMetadataAndData){
                     className="editor bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.editor}
                     onClick={() => {
+                        if(viewState.editor) return
                         setViewState({
                             editor: true,
                             preview: false,
@@ -209,6 +213,7 @@ export default function Markdown(data:PageMetadataAndData){
                     className="split bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.split}
                     onClick={() => {
+                        if(viewState.split) return
                         setViewState({
                             editor: false,
                             preview: false,

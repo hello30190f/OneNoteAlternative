@@ -1,4 +1,4 @@
-import { useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
@@ -12,6 +12,10 @@ export function DeleteNotebook(){
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const [disabled,setDisabled] = useState(false)
+    
+    const addToggleable = useStartButtonStore((s) => s.addToggleable)
+    const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){
         submitButtonStyle += " bg-gray-800 hover:bg-gray-900"    
@@ -37,14 +41,13 @@ export function DeleteNotebook(){
         color: "bg-yellow-700",
         initPos: {x:100,y:100}
     }
-    const init = useRef(true)
-    const addToggleable = useStartButtonStore((s) => s.addToggleable)
 
-    if(init.current){
-
-        addToggleable("notebooksAndPages",toggleable)
-        init.current = false
-    }
+    useEffect(() => {
+        addToggleable("notebooksAndPages",toggleable) 
+        return () => {
+            removeToggleable("notebooksAndPages",toggleable)
+        }
+    },[])
     // init -----------------------------------------
     // init -----------------------------------------
 

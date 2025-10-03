@@ -106,7 +106,7 @@ export default function Page() {
         if (!data) return <ShowError message="There is no data." />;
 
         // clean up edit tab for a new page.
-        removeAllToggleables("edit")
+        // removeAllToggleables("edit")
 
         // console.log("ShowPageContents: pageType -> " + data.pageType)
         // console.log("ShowPageContents: pageData -> " + data.pageData)

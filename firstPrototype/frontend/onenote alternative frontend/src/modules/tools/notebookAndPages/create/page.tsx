@@ -34,11 +34,35 @@ export function CreatePage(){
 
     const [visible,setVisible] = useState(false)
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
-    const init = useRef(true)
+    const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
     const requestUUID = useRef(genUUID())
 
     const [pageType,setPageType] = useState<pageType | null>(null)
     const [pageTypeList,setPageTypeList] = useState<ReactElement[]>()
+    
+    const toggleable:toggleable = {
+        name: "New Page",
+        menu: "notebooksAndPages",
+        color: "bg-blue-700",
+        visibility: visible,
+        setVisibility: setVisible,
+    }
+    const args:OverlayWindowArgs = {
+        toggleable: toggleable,
+        setVisible: setVisible,
+        visible: visible,
+        title: "New Page",
+        color: "bg-yellow-700",
+        initPos: {x:100,y:100}
+    }
+    useEffect(() => {
+        addToggleable("notebooksAndPages",toggleable)
+
+        return () => {
+            removeToggleable("notebooksAndPages",toggleable)
+        }
+    },[])
+
     
     useEffect(() => {
         if(!websocket){
@@ -133,27 +157,9 @@ export function CreatePage(){
 
     
 
-    const toggleable:toggleable = {
-        name: "New Page",
-        menu: "notebooksAndPages",
-        color: "bg-blue-700",
-        visibility: visible,
-        setVisibility: setVisible,
-    }
 
-    if(init.current){
-        addToggleable("notebooksAndPages",toggleable)
-        init.current = false
-    }
 
-    const args:OverlayWindowArgs = {
-        toggleable: toggleable,
-        setVisible: setVisible,
-        visible: visible,
-        title: "New Page",
-        color: "bg-yellow-700",
-        initPos: {x:100,y:100}
-    }
+
 
     // {
     //     "command": "createPage",
