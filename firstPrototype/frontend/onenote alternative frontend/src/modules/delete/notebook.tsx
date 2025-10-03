@@ -46,7 +46,7 @@ export function DeleteNotebook(){
 
 
     return <OverlayWindow arg={overlayWindowArg}>
-        <div className="flex flex-col m-[0.5rem] min-w-[20rem]">
+        <div className="flex flex-col m-[0.5rem] p-[0.5rem] min-w-[20rem]">
             <div className="flex p-[0.5rem]">
                 <div className="mr-auto">Notebook: </div>
                 <div>{currentNotebook}</div>
