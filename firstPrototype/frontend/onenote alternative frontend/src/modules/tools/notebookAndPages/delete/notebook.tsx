@@ -3,15 +3,32 @@ import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/O
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { useAppState } from "../../../window";
+import { genUUID } from "../../../helper/common";
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+
+    // @ response
+    // ```json
+    // {
+    //     "status": "ok",
+    //     "errorMessage": "nothing",
+    //     "UUID":"UUID string",
+    //     "command": "deleteNotebook",
+    //     "data":{ }
+    // }
+    // ```
 
 
-
+interface deleteNotebookResponse extends baseResponseTypesFromDataserver{
+    data: { }
+}
 
 
 export function DeleteNotebook(){
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const [disabled,setDisabled] = useState(false)
+    const requestUUID = useRef(genUUID())
+    const websocket = useDatabaseStore((s) => s.websocket)
     
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
@@ -52,6 +69,7 @@ export function DeleteNotebook(){
     // init -----------------------------------------
 
 
+ 
 
 
     // @ request
@@ -75,6 +93,57 @@ export function DeleteNotebook(){
     // ```
 
 
+    // networking -----------------------------------------
+    // networking -----------------------------------------
+    function tryToDeleteNotebook(){
+        // when there is no selected notebook, ignore the user request.
+        if(currentNotebook == null && currentNotebook == "") return 
+
+        // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
+        if(websocket == null){
+            // TODO: show messagebox
+            return
+        }
+
+        requestUUID.current = genUUID()
+
+        const requestString = JSON.stringify({
+            "command": "deleteNotebook",
+            "UUID": requestUUID,
+            "data": { 
+                "noteboook": currentNotebook,
+            }
+        })
+        console.log(requestString)
+        send(websocket,requestString)
+    }
+
+    function networkHandler(event:MessageEvent){
+        const jsondata:deleteNotebookResponse = JSON.parse(event.data)
+        
+        if(jsondata.UUID == requestUUID.current && jsondata.command == "deleteNotebook"){
+            if(jsondata.status == "ok"){
+                //TODO: show success message
+
+            }else{
+                //TODO: show error message
+
+            }
+        }
+    }
+
+    useEffect(() => {
+        if(websocket == null) return
+
+        websocket.addEventListener("message",networkHandler)
+
+        return () => {
+            websocket.removeEventListener("message",networkHandler)
+        }
+    },[websocket])
+    // networking -----------------------------------------
+    // networking -----------------------------------------
+
 
     let notebookName = currentNotebook
     console.log(currentNotebook)
@@ -88,7 +157,7 @@ export function DeleteNotebook(){
                 <div className="mr-auto">Notebook: </div>
                 <div>{notebookName}</div>
             </div>
-            <div className={submitButtonStyle}>
+            <div className={submitButtonStyle} onClick={tryToDeleteNotebook}>
                 Delete the notebook
             </div>
         </div>

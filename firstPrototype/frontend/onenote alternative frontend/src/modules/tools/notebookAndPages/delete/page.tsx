@@ -3,12 +3,16 @@ import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/O
 import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useAppState } from "../../../window"
+import { genUUID } from "../../../helper/common"
+import { useDatabaseStore } from "../../../helper/network"
 
 
 
 export function DeletePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const [disabled,setDisabled] = useState(false)
+    const requestUUID = useRef(genUUID())
+    const websocket = useDatabaseStore((s) => s.websocket)
     
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
@@ -75,7 +79,25 @@ export function DeletePage(){
 
 
 
+    // networking -----------------------------------------
+    // networking -----------------------------------------
 
+
+    function netwrokHander(event:MessageEvent){
+        
+    }
+
+    useEffect(() => {
+        if(websocket == null) return
+
+        websocket.addEventListener("message",netwrokHander)
+
+        return () => { 
+            websocket.removeEventListener("message",netwrokHander)
+        }
+    },[websocket])
+    // networking -----------------------------------------
+    // networking -----------------------------------------
 
 
 
