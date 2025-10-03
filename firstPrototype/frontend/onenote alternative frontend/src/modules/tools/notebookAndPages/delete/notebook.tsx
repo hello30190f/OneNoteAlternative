@@ -52,6 +52,30 @@ export function DeleteNotebook(){
     // init -----------------------------------------
 
 
+
+
+    // @ request
+    // {
+    //     "command": "deleteNotebook",
+    //     "UUID": "UUID string",
+    //     "data": { 
+    //         "noteboook": "notebookName",
+    //     }
+    // }
+    // 
+    // @ response
+    // ```json
+    // {
+    //     "status": "ok",
+    //     "errorMessage": "nothing",
+    //     "UUID":"UUID string",
+    //     "command": "deleteNotebook",
+    //     "data":{ }
+    // }
+    // ```
+
+
+
     let notebookName = currentNotebook
     console.log(currentNotebook)
     if(currentNotebook == null){

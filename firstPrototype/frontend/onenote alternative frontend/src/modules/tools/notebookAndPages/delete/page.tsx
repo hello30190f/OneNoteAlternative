@@ -51,7 +51,36 @@ export function DeletePage(){
     // init -----------------------------------------
     // init -----------------------------------------
 
-    
+
+
+    // @ request
+    // {
+    //     "command": "deletePage",
+    //     "UUID": "UUID string",
+    //     "data": { 
+    //         "noteboook": "notebookName",
+    //         "newPageID": "Path/to/newPageName.md"
+    //     }
+    // }
+    //
+    // @ response
+    // {
+    //     "status": "ok",
+    //     "errorMessage": "nothing",
+    //     "UUID":"UUID string",
+    //     "command": "deletePage",
+    //     "data":{ }
+    // }
+
+
+
+
+
+
+
+
+
+
     let notebookName = currentNotebook
     if(notebookName == null){
         notebookName = "No notebook is selected."
