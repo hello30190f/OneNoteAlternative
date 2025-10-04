@@ -171,36 +171,6 @@ export function CreatePage(){
     //     }
     // }
 
-    // useEffect(() => {
-    //     if(currentNotebook){
-    //         setNewPageInfo({
-    //             ...newPageInfo,
-    //             notebook: currentNotebook
-    //         })
-    //     }else{
-    //         setNewPageInfo({
-    //             ...newPageInfo,
-    //             notebook: "No notebook is selected."
-    //         })
-    //     }
-    //     console.log(currentNotebook)
-    //     console.log(newPageInfo)
-    // },[currentNotebook])
-
-    // useEffect(() => {
-    //     if(currentPlace){
-    //         setNewPageInfo({
-    //             ...newPageInfo,
-    //             place: currentPlace
-    //         })
-    //     }else{
-    //         setNewPageInfo({
-    //             ...newPageInfo,
-    //             place: "No place is selected."
-    //         })
-    //     }
-    // },[currentPlace])
-
     useEffect(() => {
         const newInfo = {
             ...newPageInfo
