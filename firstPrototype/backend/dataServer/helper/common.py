@@ -224,6 +224,19 @@ def deleteDataSafely(absoluteDataPath:str):
     return False
 
 
+# arg:
+#   notebookName     : notebook name
+#   notebookMatadata : entire updated notebook metadata
+# return value
+#   OK      : False
+#   Error   : True will be returned when there are no notebooks or other type error is occured.
+def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
+    
+    
+    return False
+
+
+
 #TODO: warp basic commands as function to absorb platform difference
 #TODO: implement this
 def mkdirRecursively(folderPath:str):

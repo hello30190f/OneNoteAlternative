@@ -3,6 +3,7 @@
  Create a new page of the specific notebook.
 
 ## args (frontend to dataserver)
+ `newPageID` is `pagePathFromContentFolder`.
 ```json
 {
     "command": "createPage",

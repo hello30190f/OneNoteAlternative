@@ -1,9 +1,9 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely
+from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata
 from helper import loadSettings 
 import os , os.path , json , subprocess
 from type.pages import controller
 
-# note
+# response note
 # {
 #     "status": "ok",
 #     "UUID":"UUID string",
@@ -20,9 +20,11 @@ from type.pages import controller
 #     "data":{ }
 # }
 
+
+
 # TODO: update notebook metadata.
 async def createPage(request,websocket):
-    mandatoryKeys   = ["noteboook","newPageID","pageType"]
+    mandatoryKeys   = ["notebook","newPageID","pageType"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
         print("createPage ERROR: Mandatory keys are missing for this command.")
@@ -48,7 +50,11 @@ async def createPage(request,websocket):
     notebookName                = request["data"]["notebook"]
     pagePathFromContentFolder   = request["data"]["newPageID"]
 
+    if(pagePathFromContentFolder[0] == "/"):
+        pagePathFromContentFolder = pagePathFromContentFolder[1:]
+
     pagePath = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
+    pagePath = pagePath.replace("//","/")
     filename = pagePath.split("/")[-1]
     folder   = pagePath.replace(filename,"")
 
@@ -56,7 +62,6 @@ async def createPage(request,websocket):
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if(not os.path.exists(folder)):
         # create folder
-        
         command = "mkdir -p " + folder
         result = subprocess.run([command],shell=True)
 
@@ -81,7 +86,7 @@ async def createPage(request,websocket):
 
 
     # check the page existance
-    if(not os.path.exists(pagePath)): 
+    if(os.path.exists(pagePath)): 
         print("createPage ERROR: duplicate pageID")
         print("notebook    : " + notebookName) 
         print("contentPath : " + pagePathFromContentFolder)
@@ -95,6 +100,76 @@ async def createPage(request,websocket):
         })
         await websocket.send(responseString)
         print(">>> " + responseString)
+        return
+
+
+    # NOTE: the notebookJSONinfo structure
+    # {
+    #     "notebooksName1":{
+    #         "pages":[
+    #             "path/to/page.md",
+    #             "pageAtRootDir.md",
+    #             "OneNoteStylePage.json",
+    #             ...
+    #         ],
+    #         "files":[
+    #             "img.png",
+    #             "video.mp4",
+    #             "metadata.json",
+    #             ...
+    #         ]
+    #     },
+    #     "notebooksName2":{
+    #         "pages":[
+    #             ...
+    #         ],
+    #         "files":[
+    #             ...
+    #         ]
+    #     }
+    #     ...
+    # }
+
+    async def UnableUpdateNotebookMetadataResponse():
+        print("createPage ERROR: Unable to update the notebook metadata")
+        print("notebook     : " + notebookName) 
+        print("contentPath  : " + pagePathFromContentFolder)
+        print("fill path    : " + pagePath)
+        responseString = json.dumps({
+            "status"        : "error",
+            "UUID"          : request["UUID"],
+            "command"       : "createPage",
+            "errorMessage"  : "Unable to update the notebook metadata",
+            "data"          : { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
+
+    # update notebook metadata.json
+    try:
+        notebookJSONinfo = findNotes()
+        if(notebookJSONinfo == None):
+            await UnableUpdateNotebookMetadataResponse()
+            return
+
+        targetNotebookMetadata = None
+        for notebook in notebookJSONinfo.keys():
+            if(notebook == notebookName):
+                targetNotebookMetadata = notebookJSONinfo[notebook]
+                break
+
+        if(targetNotebookMetadata == None):
+            await UnableUpdateNotebookMetadataResponse()
+            return
+        
+        # register new page ref to notebook metadata.json
+        targetNotebookMetadata["pages"].append(pagePathFromContentFolder)
+        if(updateNotebookMatadata(notebookName,targetNotebookMetadata)):
+            await UnableUpdateNotebookMetadataResponse()
+            return
+
+    except:
+        await UnableUpdateNotebookMetadataResponse()
         return
     
 

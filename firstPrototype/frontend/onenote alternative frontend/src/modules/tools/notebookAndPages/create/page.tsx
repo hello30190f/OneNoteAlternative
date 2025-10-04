@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement } from "react";
 import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
-import { useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
 import { useAppState } from "../../../window";
 import { genUUID } from "../../../helper/common";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
@@ -11,7 +11,7 @@ interface pageType extends baseResponseTypesFromDataserver{
     data: [] | null
 }
 
-// TODO: write network request to the backend when submit button pressed.
+// TODO: notebook name shuold not be include "/"
 export function CreatePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const websocket = useDatabaseStore((s) => s.websocket)
@@ -29,7 +29,7 @@ export function CreatePage(){
         "notebook": "",
         "pagename": "",
         "place"   : "",    
-        "pageType": ""
+        "pageType": "markdown"
     })
 
     const [visible,setVisible] = useState(false)
@@ -64,6 +64,66 @@ export function CreatePage(){
     },[])
 
 
+
+    // {
+    //     "command": "createPage",
+    //     "UUID": "UUID string",
+    //     "data": {
+    //         "noteboook": "notebookName",
+    //         "newPageID": "Path/to/newPageName.md",
+    //         "pageType": "typeOfPage"
+    //     }
+    // }
+
+
+    // networking -----------------------------------------
+    // networking -----------------------------------------
+    // @ createPage command request
+    function tryToCreatePage(){
+        // when there is no selected notebook, ignore the user request.
+        if(newPageInfo.notebook == null || newPageInfo.notebook == "No notebook is selected.") return 
+
+        // when there is no selected place, ignore the user request
+        if(newPageInfo.place == null || newPageInfo.place == "No place is selected.") return 
+
+        // when there is no pagename is entered, ignore the user request
+        if(newPageInfo.pagename == null || newPageInfo.pagename == "") return
+
+        // when pageType is not obtained collectly, ignore the user request
+        if(newPageInfo.pageType == "error"){
+            // TODO: inform the user about pageType error
+
+            return
+        }
+
+
+        // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
+        if(websocket == null){
+            // TODO: show messagebox
+
+            return
+        }   
+
+        requestUUID.current = genUUID()
+
+        const requestJSON = {
+            "command": "createPage",
+            "UUID": requestUUID.current,
+            "data": {
+                "notebook": newPageInfo.notebook,
+                "newPageID": newPageInfo.place + "/" + newPageInfo.pagename,
+                "pageType": newPageInfo.pageType
+            }
+        }
+        if(newPageInfo.place == "/"){
+            requestJSON.data.newPageID = newPageInfo.pagename
+        }
+        const requestString = JSON.stringify(requestJSON)
+        console.log(requestString)
+        send(websocket,requestString)
+    }
+
+    // @ pageType command request
     useEffect(() => {
         if(!websocket){
             setDisabled(true)
@@ -79,14 +139,10 @@ export function CreatePage(){
             UUID: requestUUID.current,
             data: null
         })
-        websocket.send(request)
+        send(websocket,request)
         return
     },[visible])
 
-
-    // networking -----------------------------------------
-    // networking -----------------------------------------
-    
 
     useEffect(() => {
         // get pageType info
@@ -105,6 +161,18 @@ export function CreatePage(){
 
 
             // frontend -> dataserver
+            // @ createPage command response
+            if(result.UUID == requestUUID.current && "createPage" == result.command){
+                if(result.status == "error"){
+                    // TODO: inform the user failed to create the page
+
+                }else{
+                    // TODO: inform the use the new page is created successfully
+
+                }
+            }
+
+            // @ pageType command response
             if(result.UUID == requestUUID.current && "getPageType" == result.command){
                 if (!result.status.includes("error")) {
                     setPageType(result)
@@ -145,16 +213,16 @@ export function CreatePage(){
         if(pageType == null){
             setPageTypeList([
             <select onChange={typeSelected} key="NoValueExistError" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
-                <option className={optionStyle} value="currently">No value exist.</option>
+                <option className={optionStyle} value="error">No value exist.</option>
             </select>])
         }else if(pageType["data"] == null){
             setPageTypeList([
             <select onChange={typeSelected} key="NoValueExistError" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
-                <option className={optionStyle} value="currently">Currently, no value exist.</option>
+                <option className={optionStyle} value="error">No value exist.</option>
             </select>])
         }else{
             setPageTypeList([
-            <select onChange={typeSelected} key="ValueExist" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
+            <select onChange={typeSelected} defaultValue={"markdown"} key="ValueExist" className="ml-auto border-[2px] border-gray-700 solid" name="pageType" id="pageType">
                 {pageType.data.map((value,index) => <option className={optionStyle} value={value} key={index}>{value}</option>)}
             </select>])
         }
@@ -163,15 +231,6 @@ export function CreatePage(){
 
 
 
-    // {
-    //     "command": "createPage",
-    //     "UUID": "UUID string",
-    //     "data": {
-    //         "noteboook": "notebookName",
-    //         "newPageID": "Path/to/newPageName.md",
-    //         "pageType": "typeOfPage"
-    //     }
-    // }
 
     useEffect(() => {
         const newInfo = {
@@ -267,7 +326,7 @@ export function CreatePage(){
                     </div>
                 </div>
             </div>
-            <div className={submitButtonStyle}>Create New Page</div>
+            <div className={submitButtonStyle} onClick={tryToCreatePage}>Create New Page</div>
         </div>
     </OverlayWindow>
 }

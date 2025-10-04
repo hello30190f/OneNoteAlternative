@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ChangeEventHandler, type ReactNode } from "react"
 import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
-import { useDatabaseStore } from "../../../helper/network"
+import { send, useDatabaseStore } from "../../../helper/network"
 import { genUUID } from "../../../helper/common"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 
 
 // TODO: implement ERROR dialog with MessageBox Component
-// TODO: implement this
-
+// TODO: notebook name shuold not be include "/"
 export function CreateNotebook(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent w-full mt-[1.1rem] p-[0.5rem] "
 
@@ -155,7 +154,8 @@ export function CreateNotebook(){
                 const jsonstring = JSON.stringify(jsondata)
                 console.log(jsonstring)
                 console.log(jsondata)
-                websocket.send(jsonstring)
+                send(websocket,jsonstring)
+                // websocket.send(jsonstring)
             }}
             >Create New Notebook</div>
         </div>
