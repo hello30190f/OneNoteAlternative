@@ -1,4 +1,4 @@
-import json, time, os, subprocess, sys, shutil
+import json, time, os, subprocess, sys, shutil, platform
 from helper import loadSettings 
 
 # error response ---------------------------------------
@@ -194,9 +194,9 @@ def deleteDataSafely(absoluteDataPath:str):
     
 
     # find platform
-    platform = os.system()
+    currnetOS = platform.system()
     try:
-        if(platform == "Windows"):
+        if(currnetOS == "Windows"):
             print("deleteDataSafely: Currently Windows support is experimental.")
             if(not os.path.isfile()):
                 # delete all sub folders and files with the specified folder.
@@ -206,12 +206,15 @@ def deleteDataSafely(absoluteDataPath:str):
             else:
                 # delete a file.
                 os.remove(absoluteDataPath)            
-        elif(platform == "Java"):
+        elif(currnetOS == "Java"):
             print("deleteDataSafely: Java support currently not implemented.")
             return True
-        elif(platform == "Linux" or platform == "Darwin"):
+        elif(currnetOS == "Linux" or currnetOS == "Darwin"):
             command = "rm -rfd " + absoluteDataPath
             subprocess.run([command],shell=True)
+        else:
+            print("deleteDataSafely: Unknown platfrom support currently not implemented.")
+            return True
     except:
         print("deleteDataSafely: Unable to delete the specified file or folder.")
         print(absoluteDataPath)

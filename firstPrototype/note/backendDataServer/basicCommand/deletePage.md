@@ -9,7 +9,7 @@
     "command": "deletePage",
     "UUID": "UUID string",
     "data": { 
-        "noteboook": "notebookName",
+        "notebook": "notebookName",
         "newPageID": "Path/to/targetPageName.md"
     }
 }

@@ -8,7 +8,7 @@
     "command": "deleteNotebook",
     "UUID": "UUID string",
     "data": { 
-        "noteboook": "notebookName",
+        "notebook": "notebookName",
     }
 }
 ```

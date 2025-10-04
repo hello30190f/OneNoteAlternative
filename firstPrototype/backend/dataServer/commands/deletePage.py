@@ -2,6 +2,29 @@ from helper.common import NotImplementedResponse, dataKeyChecker
 from helper import loadSettings 
 import json
 
+# ## args (frontend to dataserver)
+# ```json
+# {
+#     "command": "deletePage",
+#     "UUID": "UUID string",
+#     "data": { 
+#         "noteboook": "notebookName",
+#         "newPageID": "Path/to/targetPageName.md"
+#     }
+# }
+# ```
+
+# ## response (dataserver to frontend)
+# ```json
+# {
+#     "status": "ok",
+#     "errorMessage": "nothing",
+#     "UUID":"UUID string",
+#     "command": "deletePage",
+#     "data":{ }
+# }
+# ```
+
 async def deletePage(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.
     mandatoryKeys   = ["mandatory","keys","list"]

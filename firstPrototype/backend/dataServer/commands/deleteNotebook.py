@@ -1,10 +1,32 @@
-from helper.common import NotImplementedResponse, dataKeyChecker
+from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely
 from helper import loadSettings 
-import json
+import json, os, os.path
+
+# ## args (frontend to dataserver)
+# ```json
+# {
+#     "command": "deleteNotebook",
+#     "UUID": "UUID string",
+#     "data": { 
+#         "notebook": "notebookName",
+#     }
+# }
+# ```
+
+# ## response (dataserver to frontend)
+# ```json
+# {
+#     "status": "ok",
+#     "errorMessage": "nothing",
+#     "UUID":"UUID string",
+#     "command": "deleteNotebook",
+#     "data":{ }
+# }
+# ```
 
 async def deleteNotebook(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.
-    mandatoryKeys   = ["mandatory","keys","list"]
+    mandatoryKeys   = ["notebook"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
         print("deleteNotebook ERROR: Mandatory keys are missing for this command.")
@@ -24,5 +46,49 @@ async def deleteNotebook(request,websocket):
         print(">>> " + responseString)
         return
     
+    notebookName        = request["data"]["notebook"]
+    notebookFolderPath  = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName
+    notebookFolderPath  = notebookFolderPath.replace("//","/")
 
-    await NotImplementedResponse(request,websocket)
+    # check the notebook existance
+    if(not os.path.exists(notebookFolderPath)):
+        print("deleteNotebook ERROR: The notebook has already not existed.")
+        print(mandatoryKeys)
+        print(missing)
+        responseString = json.dumps({
+            "status"        : "error",
+            "errorMessage"  : "The notebook has already not existed.",
+            "UUID"          : request["UUID"],
+            "command"       : "deleteNotebook",
+            "data": { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
+        return
+    
+    # delete the notebook and then error handling.
+    if(deleteDataSafely(notebookFolderPath)):
+        print("deleteNotebook ERROR: Unable to delete the notebook.")
+        print(mandatoryKeys)
+        print(missing)
+        responseString = json.dumps({
+            "status"        : "error",
+            "errorMessage"  : "Unable to delete the notebook.",
+            "UUID"          : request["UUID"],
+            "command"       : "deleteNotebook",
+            "data": { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
+        return
+
+    # no error state
+    responseString = json.dumps({
+        "status"        : "ok",
+        "UUID"          : request["UUID"],
+        "command"       : "deleteNotebook",
+        "errorMessage"  : "nothing",
+        "data"          : { }
+    })
+    await websocket.send(responseString)
+    print(">>> " + responseString)

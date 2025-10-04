@@ -77,7 +77,7 @@ export function DeleteNotebook(){
     //     "command": "deleteNotebook",
     //     "UUID": "UUID string",
     //     "data": { 
-    //         "noteboook": "notebookName",
+    //         "notebook": "notebookName",
     //     }
     // }
     // 
@@ -111,7 +111,7 @@ export function DeleteNotebook(){
             "command": "deleteNotebook",
             "UUID": requestUUID,
             "data": { 
-                "noteboook": currentNotebook,
+                "notebook": currentNotebook,
             }
         })
         console.log(requestString)
