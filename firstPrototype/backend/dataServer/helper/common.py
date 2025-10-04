@@ -1,4 +1,4 @@
-import json, time, os, subprocess
+import json, time, os, subprocess, sys, shutil
 from helper import loadSettings 
 
 # error response ---------------------------------------
@@ -167,6 +167,7 @@ def findNotes():
 # return value
 #   OK      : False will be returned.
 #   Error   : True  will be returned when failed to delete the data or the specified path is malformed.
+# TODO: use shutil.rmtree
 def deleteDataSafely(absoluteDataPath:str):
     # https://docs.python.org/3/library/platform.html#platform.system
     # 'Linux', 'Darwin', 'Java', 'Windows'
@@ -231,9 +232,35 @@ def deleteDataSafely(absoluteDataPath:str):
 #   OK      : False
 #   Error   : True will be returned when there are no notebooks or other type error is occured.
 def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
+    notebookMatadata['updateDate'] = timeString()
+    notebookStoreRoot = loadSettings.settings["NotebookRootFolder"][0]
+    notebookMetadataPath = notebookStoreRoot + "/" + notebookName + "/metadata.json"
+
+    print("updateNotebookMatadata info: ")
+    print(notebookMatadata)
+    print(notebookName)
+    print(notebookMetadataPath)
     
-    
+    if(not os.path.exists(notebookMetadataPath)):
+        print("updateNotebookMatadata ERROR: the metadata file does not exist.")
+        return True
+
+    # https://stackoverflow.com/questions/123198/how-do-i-copy-a-file
+    # update metadata
+    try:
+        # create metadata backup
+        shutil.copyfile(notebookMetadataPath,notebookMetadataPath + ".backup")
+        
+        with open(notebookMetadataPath,"wt") as metadata:
+            metadata.write(json.dumps(notebookMatadata))
+            pass
+    except:
+        print("updateNotebookMatadata ERROR: Unable to create metadata backupfile or to update metadata.json of the notebook.")
+        return True
+
     return False
+
+
 
 
 
