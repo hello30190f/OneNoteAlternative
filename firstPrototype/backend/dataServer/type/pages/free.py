@@ -5,7 +5,7 @@ def free(data):
         "pageType": "free",
         "tags": [],
         "files": [],
-        "UUID": uuid.uuid4(),
+        "UUID": str(uuid.uuid4()),
         "pageData":{
             "items":[]
         }

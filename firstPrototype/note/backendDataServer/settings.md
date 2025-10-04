@@ -9,6 +9,7 @@
 {
     "ip":"localhost",
     "port": 50097,
+    "taskInterval": 10,
     "isStandalone": true,
     "NotebookRootFolder":["./notebookData"],
     "deletedPagesKeepInterval": "0000/00/10"
@@ -20,6 +21,9 @@
 
 ### port (number)
  The dataserver wait for connections with the port number.
+
+### taskInterval (number)
+ Define how long to wait for execution of next task loop(tasks.py). The unit is "second".
 
 ### isStandalone (boolean)
  Specify how the notetaking system work.

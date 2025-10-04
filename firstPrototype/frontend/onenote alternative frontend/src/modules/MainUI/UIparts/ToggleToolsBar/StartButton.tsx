@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import type { toggleable } from "../../ToggleToolsBar"
 import { useEffect, useRef, useState } from "react"
-import { OverlayWindow, type OverlayWindowArgs } from "../OverlayWindow"
+import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../OverlayWindow"
 
 // toggleables max amount is 7
 export type AstartButton = {
@@ -219,38 +219,38 @@ export const basicButton = {
         imageBase64: null,
         toggleables: []
     },
-    "files": {
-        name: "files",
-        displayName: "Files",
+    "metadata": {
+        name: "metadata",
+        displayName: "Metadata",
         toggleableColor: "bg-orange-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
     },
-    "tags": {
-        name: "tags",
-        displayName: "Tags",
-        toggleableColor: "bg-lime-950",   
-        selected: false,
-        imageBase64: null,
-        toggleables: []
-    },
-    "localServers": {
-        name: "localServers",
-        displayName: "Local Servers",
+    // "tags": {
+    //     name: "tags",
+    //     displayName: "Tags",
+    //     toggleableColor: "bg-lime-950",   
+    //     selected: false,
+    //     imageBase64: null,
+    //     toggleables: []
+    // },
+    "server": {
+        name: "server",
+        displayName: "Server",
         toggleableColor: "bg-teal-950",   
         selected: false,
         imageBase64: null,
         toggleables: []
     },
-    "remoteServers": {
-        name: "remoteServers",
-        displayName: "Remote Servers",
-        toggleableColor: "bg-indigo-950",   
-        selected: false,
-        imageBase64: null,
-        toggleables: []
-    }
+    // "remoteServers": {
+    //     name: "remoteServers",
+    //     displayName: "Remote Servers",
+    //     toggleableColor: "bg-indigo-950",   
+    //     selected: false,
+    //     imageBase64: null,
+    //     toggleables: []
+    // }
 }
 
 
@@ -290,13 +290,13 @@ export function StartButtonMenu(){
     if(visible){
         return <OverlayWindow arg={overlayWindowArg}>
             <div className="flex flex-row w-[32rem] bg-gray-900 pt-[0.5rem] flex-wrap">
-                {buttons.map((value,index) => <AmenuItem button={value} key={index}></AmenuItem>)}
+                {buttons.map((value,index) => <AmenuItem button={value} parentWindow={overlayWindowArg} key={index}></AmenuItem>)}
             </div>
         </OverlayWindow>
     }
 }
 
-function AmenuItem({ button }:{ button:AstartButton }){
+function AmenuItem({ button,parentWindow }:{ button:AstartButton,parentWindow:OverlayWindowArgs }){
     let className = `
                     m-[0.5rem] mt-0 min-w-[15rem] p-[1rem] hover:bg-gray-500 
                     justify-center place-items-center align-middle text-center
@@ -304,6 +304,8 @@ function AmenuItem({ button }:{ button:AstartButton }){
  items-center
     `
     const setSelected = useStartButtonStore((s) => s.setSelected)
+    const getWindow   = useOverlayWindowStore((s) => s.getWindowByArg)
+    const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
 
     if(button.selected){
         className += " bg-gray-800"
@@ -313,6 +315,8 @@ function AmenuItem({ button }:{ button:AstartButton }){
 
     const onclikced = () => {
         setSelected(button.name)
+        const aOverlayWindow = getWindow(parentWindow)
+        if(aOverlayWindow) closeWindow(aOverlayWindow)
     }
 
     return  <div 

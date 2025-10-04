@@ -104,7 +104,7 @@ export default function Markdown(data:PageMetadataAndData){
         toggleable: viewStateToggleable,
         setVisible: setSaveButtonVisible,
         visible: saveButtonVisible,
-        initPos: {x:window.innerWidth - 170,y: window.innerHeight - 240} 
+        initPos: {x:window.innerWidth - 360,y: window.innerHeight - 240} 
     }
 
     async function parseMarkdown(){
@@ -233,10 +233,10 @@ export default function Markdown(data:PageMetadataAndData){
 
             // execute updatePage command
             // join pagedata text and metadata string
-            const pagedataString = "++++\n" + metadata + "\n++++\n" + markdownBuffer
+            const pagedataString = "++++\n" + metadata.replaceAll("\n","") + "\n++++\n" + markdownBuffer
 
             // create the request
-            const jsonstring = JSON.stringify({
+            const jsondata = {
                 "command": "updatePage",
                 "UUID": requestUUID.current,
                 "data": {
@@ -245,11 +245,13 @@ export default function Markdown(data:PageMetadataAndData){
                     "pageType"  : "markdown",
                     "update"    : pagedataString,
                 }
-            })
+            }
+            const jsonstring = JSON.stringify(jsondata)
 
-            console.log(jsonstring)
+            console.log(jsondata)
+            console.log(pagedataString)
             // send the request
-            // TODO: enable this by uncommenting a line below.
+            // TODO: enable this by uncommenting the line below.
             // send(websocket,jsonstring)
         }
     }

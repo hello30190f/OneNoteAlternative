@@ -77,6 +77,9 @@
 ## controller.py
  where accept requests from the forntend via websocket. try to call a command which is requested. By default, there are no commands corresponed to a request, notFound command will be executed. 
 
+## tasks.py
+ Where scheduled task will be executed repeatedly. For example, delete permanently a specific page which has already the ref deleted from the notebook metadata info.
+
 ## commands
  where command logics are stored. For each commands, single script should be exist. 
 

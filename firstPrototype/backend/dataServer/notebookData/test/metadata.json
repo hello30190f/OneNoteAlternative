@@ -11,7 +11,8 @@
         "test/test2/anArticle.md",
         "test/test2/newpage.md",
         "newpage.md",
-        "test/newpage.md"
+        "test/newpage.md",
+        "test/test2/testaaaa.json"
     ],
     "files": [
         "testfile.txt"
