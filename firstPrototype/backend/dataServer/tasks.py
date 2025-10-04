@@ -11,7 +11,12 @@ jobs = [
 
 
 
-async def taskController(interval:int):    
+async def taskController(interval:int):   
+    if(interval == 0 or interval < 1):
+        print("taskController: The interval setting is too short.: {} sec".format(interval))    
+        print("taskController: Please make it longer.")
+        interval = 1
+
     for aJob in jobs:
         aJob()
 
