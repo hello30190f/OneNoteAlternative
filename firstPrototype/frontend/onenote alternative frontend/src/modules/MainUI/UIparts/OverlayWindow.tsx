@@ -169,9 +169,14 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         for(const Awindow of windows){
             Awindow.windowVisible.setVisible(false)
             Awindow.windowVisible.visible = false
+            if(Awindow.toggleable) {
+                Awindow.toggleable.visibility = false
+            }
             newInfo.push(Awindow)
         }   
         set({windows:newInfo})
+        try {get().syncStateToToggleable()}
+        catch {console.log("ignore the error.")}
     },
     closeAwindow:(window:AoverlayWindow) => {
         const newWindows = []
