@@ -23,7 +23,7 @@ export function CreatePage(){
         submitButtonStyle += " bg-gray-800 hover:bg-gray-700"    
     }
     const currentNotebook = useAppState((s) => s.currentNotebook)
-    // const currentPage     = useAppState((s) => s.currentPage)
+    const currentPage     = useAppState((s) => s.currentPage)
     const currentPlace = useAppState((s) => s.currentPlace)
     const [newPageInfo,setNewPageInfo]     = useState({
         "notebook": "",
@@ -171,35 +171,55 @@ export function CreatePage(){
     //     }
     // }
 
-    useEffect(() => {
-        if(currentNotebook){
-            setNewPageInfo({
-                ...newPageInfo,
-                notebook: currentNotebook
-            })
-        }else{
-            setNewPageInfo({
-                ...newPageInfo,
-                notebook: "No notebook is selected."
-            })
-        }
-        console.log(currentNotebook)
-        console.log(newPageInfo)
-    },[currentNotebook])
+    // useEffect(() => {
+    //     if(currentNotebook){
+    //         setNewPageInfo({
+    //             ...newPageInfo,
+    //             notebook: currentNotebook
+    //         })
+    //     }else{
+    //         setNewPageInfo({
+    //             ...newPageInfo,
+    //             notebook: "No notebook is selected."
+    //         })
+    //     }
+    //     console.log(currentNotebook)
+    //     console.log(newPageInfo)
+    // },[currentNotebook])
+
+    // useEffect(() => {
+    //     if(currentPlace){
+    //         setNewPageInfo({
+    //             ...newPageInfo,
+    //             place: currentPlace
+    //         })
+    //     }else{
+    //         setNewPageInfo({
+    //             ...newPageInfo,
+    //             place: "No place is selected."
+    //         })
+    //     }
+    // },[currentPlace])
 
     useEffect(() => {
-        if(currentPlace){
-            setNewPageInfo({
-                ...newPageInfo,
-                place: currentPlace
-            })
-        }else{
-            setNewPageInfo({
-                ...newPageInfo,
-                place: "No place is selected."
-            })
+        const newInfo = {
+            ...newPageInfo
         }
-    },[currentPlace])
+
+        if(currentNotebook != null){
+            newInfo.notebook = currentNotebook
+        }else{
+            newInfo.notebook = "No notebook is selected."
+        }
+
+        if(currentPlace != null){
+            newInfo.place = currentPlace
+        }else{
+            newInfo.place = "No place is selected."
+        }
+
+        setNewPageInfo(newInfo)
+    },[currentNotebook,currentPlace,currentPage])
 
     useEffect(() => {
         if(
