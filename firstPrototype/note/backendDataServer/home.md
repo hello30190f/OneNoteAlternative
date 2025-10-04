@@ -86,6 +86,9 @@
 ## helper
  where commonly used functions are stored. This is optional.
 
+## jobs
+ where schaduled jobs which is executed repeatedly are stored.
+
 ## types
  where data types are stored. For each data types, single script should be exist.
 
