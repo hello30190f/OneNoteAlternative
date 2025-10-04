@@ -8,6 +8,8 @@ from commands.createPage        import createPage
 from commands.updatePage        import updatePage
 from commands.createNotebook    import createNotebook
 from commands.getPageType       import getPageType
+from commands.deleteNotebook    import deleteNotebook
+from commands.deletePage        import deletePage
 
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
 # extension should register their command to this dictionary.
@@ -25,6 +27,8 @@ commands = {
     "updatePage"    : updatePage,
     "getPageType"   : getPageType,
     "createNotebook": createNotebook,
+    "deleteNotebook": deleteNotebook,
+    "deletePage"    : deletePage,
 }
 
 # call command

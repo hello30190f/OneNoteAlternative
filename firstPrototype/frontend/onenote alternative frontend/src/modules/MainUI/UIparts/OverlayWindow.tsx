@@ -50,6 +50,7 @@ type overlayWindows = {
     getWindowByArg: (windowArg:OverlayWindowArgs) => AoverlayWindow | null,
     makeAwindowActiveByArg: (windowArg:OverlayWindowArgs) => void,
     closeAllWindow: () => void,
+    closeAwindow:(window:AoverlayWindow) => void,
     syncStateToToggleable: () => void,
 }
 
@@ -172,6 +173,20 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
         }   
         set({windows:newInfo})
     },
+    closeAwindow:(window:AoverlayWindow) => {
+        const newWindows = []
+        for(const aWindow of get().windows){
+            if(aWindow.UUID == window.UUID){
+                aWindow.windowVisible.setVisible(false)
+                aWindow.windowVisible.visible = false
+                if(aWindow.toggleable){
+                    aWindow.toggleable.visibility = false
+                }
+            }
+            newWindows.push(aWindow)
+        }
+        set({windows:newWindows})
+    },
     syncStateToToggleable: () => {
         const setToggleable = useStartButtonStore((s) => s.setToggleable)
         for(const window of get().windows){
@@ -186,7 +201,10 @@ export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
 export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:OverlayWindowArgs }){
     const visible = arg.visible
     const setVisible = arg.setVisible
+    
+    const setToggleable = useStartButtonStore((s) => s.setToggleable)
 
+    const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const addWindow = useOverlayWindowStore((s) => s.addWindow)
     const maxZindex = useOverlayWindowStore((s) => s.zIndexMax)
     const windows = useOverlayWindowStore((s) => s.windows)
@@ -427,7 +445,13 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 <div className="title h-[1rem] absolute text-white p-[4px] selection:bg-transparent">{arg.title}</div>
                 <div className="close size-[2rem] bg-red-600 hover:bg-red-800 ml-auto" onClick={(event:React.MouseEvent) => {
                     event.preventDefault()
-                    setVisible(false)
+                    closeWindow(aWindowINIT.current)
+
+                    const toggleable = getWindow(aWindowINIT.current).toggleable
+                    console.log(toggleable)
+                    if(toggleable){
+                        setToggleable(toggleable)
+                    }
                     }}></div>
             </div>
             <div 

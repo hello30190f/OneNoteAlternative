@@ -48,6 +48,11 @@ export const useAppState = create<AppState>((set,get) => ({
     },
 }))
 
+
+
+
+
+
 // show selector of notebooks, pages and files
 export default function Window(){    
     return(
