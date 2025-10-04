@@ -10,7 +10,7 @@
     "UUID": "UUID string",
     "data": { 
         "notebook": "notebookName",
-        "newPageID": "Path/to/targetPageName.md"
+        "PageID": "Path/to/targetPageName.md"
     }
 }
 ```

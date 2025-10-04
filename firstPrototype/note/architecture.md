@@ -72,6 +72,21 @@
 2. gabage collection will work at scaduled time.
 3. when gabage collection find pages has no ref to the matadata.json, delete the file permanently.
 
+ To find how long time passed from deleting the page ref, under notebook store root folder, `deleted.json` will be created or updated.
+
+```json
+// deleted.json example
+{
+    "notebookName":[{
+        "pageID": "",
+        "date": "YYYY/MM/DD"
+    },{
+        "pageID": "",
+        "date": "YYYY/MM/DD"
+    }]
+} 
+```
+
 # network
 ## protocol
 - websocket  

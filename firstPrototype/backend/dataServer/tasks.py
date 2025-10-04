@@ -1,11 +1,12 @@
 import time, asyncio
 
-from jobs.showPingMessage import showPingMessage
+from jobs.showPingMessage   import showPingMessage
+from jobs.pageCleaner       import pageCleaner
 
 # NOTE: add job to execute repeatedly for certain amount of time here without any args.
 jobs = [
-    showPingMessage    
-    
+    showPingMessage,
+    pageCleaner
     ]
 
 

@@ -8,8 +8,8 @@ import json
 #     "command": "deletePage",
 #     "UUID": "UUID string",
 #     "data": { 
-#         "noteboook": "notebookName",
-#         "newPageID": "Path/to/targetPageName.md"
+#         "notebook": "notebookName",
+#         "PageID": "Path/to/targetPageName.md"
 #     }
 # }
 # ```
@@ -27,7 +27,7 @@ import json
 
 async def deletePage(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.
-    mandatoryKeys   = ["mandatory","keys","list"]
+    mandatoryKeys   = ["notebook","PageID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
         print("deletePage ERROR: Mandatory keys are missing for this command.")
@@ -47,5 +47,42 @@ async def deletePage(request,websocket):
         print(">>> " + responseString)
         return
     
+    # gather infomation 
+    notebookName                = request["data"]["notebook"]
+    pagePathFromContentFolder   = request["data"]["PageID"]
+
+    if(pagePathFromContentFolder[0] == "/"):
+        pagePathFromContentFolder = pagePathFromContentFolder[1:]
+
+    pagePath = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
+    pagePath = pagePath.replace("//","/")
+    filename = pagePath.split("/")[-1]
+    folder   = pagePath.replace(filename,"")
+    
+    # gather infomation 
+
+
+    # check the page existance
+
+
+    # update the notebook metadata if the ref still exist
+        
+
+    # and then write deleted pages info and the date
+    # info -> notebokname pageid date
+    # {
+    #     "notebookName":[{
+    #         "pageID": "",
+    #         "date": "YYYY/MM/DD"
+    #     },{
+    #         "pageID": "",
+    #         "date": "YYYY/MM/DD"
+    #     }]
+    # }
+
+
+
+
+
 
     await NotImplementedResponse(request,websocket)

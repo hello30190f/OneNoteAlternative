@@ -64,7 +64,7 @@ export function DeletePage(){
     //     "command": "deletePage",
     //     "UUID": "UUID string",
     //     "data": { 
-    //         "noteboook": "notebookName",
+    //         "notebook": "notebookName",
     //         "newPageID": "Path/to/targetPageName.md"
     //     }
     // }
@@ -99,8 +99,8 @@ export function DeletePage(){
             "command": "deletePage",
             "UUID": requestUUID.current,
             "data": { 
-                "noteboook": currentNotebook,
-                "newPageID": currentPage
+                "notebook": currentNotebook,
+                "PageID": currentPage
             }
         })
         console.log(requsetString)
