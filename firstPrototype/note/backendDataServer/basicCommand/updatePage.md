@@ -11,9 +11,7 @@
         "noteboook" : "notebookName",
         "pageID"    : "Path/to/newPageName",
         "pageType"  : "typeOfPage",
-        "update"    : {
-            "depend": "on page type",
-        }
+        "update"    : "entire page data string to save. the frontend responsible for the integrality",
     }
 }
 ```
@@ -43,6 +41,13 @@
     }
 }
 ```
+
+### the page does not exist
+
+
+### metadata is malformed
+
+
 
 
 

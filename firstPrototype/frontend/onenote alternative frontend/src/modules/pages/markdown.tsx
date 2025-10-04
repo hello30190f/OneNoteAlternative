@@ -12,6 +12,8 @@ import { useStartButtonStore } from "../MainUI/UIparts/ToggleToolsBar/StartButto
 // https://blog.robbie.digital/posts/highlight-js
 import "highlight.js/styles/vs2015.min.css";
 import hijs from "highlight.js"
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../helper/network";
+import { useAppState } from "../window";
 
 // export interface PageMetadataAndData {
 //     pageType: string;
@@ -19,6 +21,10 @@ import hijs from "highlight.js"
 //     files: any[];
 //     pageData: string; // JSON string data
 // }
+
+interface updatePage extends baseResponseTypesFromDataserver{
+    data: { }
+}
 
 // TODO: make this ediable -> add edit UI which separated from view UI. 
 // https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html
@@ -32,8 +38,12 @@ export default function Markdown(data:PageMetadataAndData){
     // data
     
     const messageBoxUUID = useRef(genUUID())
+    const requestUUID = useRef(genUUID())
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeAllToggleables = useStartButtonStore((s) => s.removeAllToggleables)
+    const websocket = useDatabaseStore((s) => s.websocket)
+    const currentNotebook = useAppState((s) => s.currentNotebook)
+    const currentPage     = useAppState((s) => s.currentPage)
 
     const [lineBreak,setLineBreak] = useState({
         view: false,
@@ -162,6 +172,93 @@ export default function Markdown(data:PageMetadataAndData){
     },[markdownBuffer])
 
 
+    // networking ---------------------------------------
+    // networking ---------------------------------------
+    // ## args (frontend to dataserver)
+    // ```json
+    // {
+    //     "command": "updatePage",
+    //     "UUID": "UUID string",
+    //     "data": {
+    //         "noteboook" : "notebookName",
+    //         "pageID"    : "Path/to/newPageName",
+    //         "pageType"  : "typeOfPage",
+    //         "update"    : "entire page data string to save. the frontend responsible for the integrality",
+    //     }
+    // }
+    // ```
+
+    // ## response (dataserver to frontend)
+    // ```json
+    // {
+    //     "status": "ok",
+    //     "errorMessage": "nothing",
+    //     "UUID":"UUID string",
+    //     "command": "updatePage",
+    //     "data":{ }
+    // }
+    // ```
+
+    function netwrokHander(event:MessageEvent){
+        const jsondata:updatePage = JSON.parse(event.data)
+
+        if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
+            if(jsondata.status != "error"){
+                // TODO: inform the user the page is successfully saved
+
+            }else{
+                // TODO: inform the user the attempt to save the page is failed
+
+            }
+        }
+    }
+
+    useEffect(() => {
+        if(!websocket) return
+
+        websocket.addEventListener("message",netwrokHander)
+
+        return () => {
+            websocket.removeEventListener("message",netwrokHander)
+        }
+    },[websocket])
+
+    function saveCurrentContent(){
+        if(
+            currentNotebook != null && currentNotebook != "" &&
+            currentPage != null && currentPage != "" &&
+            websocket != null
+        ){  
+            requestUUID.current = genUUID()
+
+            // execute updatePage command
+            // join pagedata text and metadata string
+            const pagedataString = "++++\n" + metadata + "\n++++\n" + markdownBuffer
+
+            // create the request
+            const jsonstring = JSON.stringify({
+                "command": "updatePage",
+                "UUID": requestUUID.current,
+                "data": {
+                    "noteboook" : currentNotebook,
+                    "pageID"    : currentPage,
+                    "pageType"  : "markdown",
+                    "update"    : pagedataString,
+                }
+            })
+
+            console.log(jsonstring)
+            // send the request
+            // TODO: enable this by uncommenting a line below.
+            // send(websocket,jsonstring)
+        }
+    }
+    // networking ---------------------------------------
+    // networking ---------------------------------------
+
+
+    // edit tools ---------------------------------------
+    // edit tools ---------------------------------------
     function ChangeViewStateButton(){
         const style = {
             preview: {
@@ -287,17 +384,33 @@ export default function Markdown(data:PageMetadataAndData){
     
     function SaveButton(){
         return <OverlayWindow arg={saveButtonOverlayWindowArg}>
-            <div 
-                className="savebutton text-center m-[0.5rem] p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
-                onClick={() => {
-                    if(unsavedMarkdownBuffer.current != null){
-                        setMarkdownBuffer(unsavedMarkdownBuffer.current)
-                    }
-                }}
-                >Save (Ctrl + S)</div>
+            <div className="flex">
+                <div 
+                    className="updatebutton text-center m-[0.5rem] p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
+                    onClick={() => {
+                        if(unsavedMarkdownBuffer.current != null){
+                            setMarkdownBuffer(unsavedMarkdownBuffer.current)
+                        }
+                    }}
+                    >Update (Ctrl + U)</div>
+                <div 
+                    className="updatebutton text-center m-[0.5rem] p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
+                    onClick={() => {
+                        if(unsavedMarkdownBuffer.current != null){
+                            setMarkdownBuffer(unsavedMarkdownBuffer.current)
+                            //TODO: execute updatePage command of the dataserver here.
+                            saveCurrentContent()
+                        }
+                    }}
+                    >Save (Ctrl + S)</div>
+            </div>
         </OverlayWindow>
     }
+    // edit tools ---------------------------------------
+    // edit tools ---------------------------------------
 
+    // main UI ------------------------------------------
+    // main UI ------------------------------------------
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/contenteditable
     // https://developer.mozilla.org/en-US/docs/Web/API/VirtualKeyboard_API
     function Editor({ show }:{ show:boolean }){
@@ -330,10 +443,18 @@ export default function Markdown(data:PageMetadataAndData){
                     event.target.onselectionchange
                 }}
                 onKeyDown={(event:KeyboardEvent) => {
-                    if(event.ctrlKey && event.key == "s"){
+                    if(event.ctrlKey && event.key == "u"){
+                        // update
                         event.preventDefault()
                         if(unsavedMarkdownBuffer.current){
                             setMarkdownBuffer(unsavedMarkdownBuffer.current)
+                        }
+                    }else if(event.ctrlKey && event.key == "s"){
+                        // save
+                        event.preventDefault()
+                        if(unsavedMarkdownBuffer.current){
+                            setMarkdownBuffer(unsavedMarkdownBuffer.current)
+                            saveCurrentContent()
                         }
                     }
                 }}
@@ -368,6 +489,8 @@ export default function Markdown(data:PageMetadataAndData){
                 className={style} 
                 dangerouslySetInnerHTML={html}></div>                    
     }
+    // main UI ------------------------------------------
+    // main UI ------------------------------------------
 
     useEffect(() => {
         hijs.highlightAll()
