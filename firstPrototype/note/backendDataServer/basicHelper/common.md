@@ -176,3 +176,55 @@
     4. OS Error
     5. Unsupported platform  
     Java env is not supported 
+
+
+
+## updateNotebookMatadata func
+### role
+ Update metadata of a specific notebook.
+
+### args
+- notebookName:str  
+ Specifiy the target notebook for the metadata update.
+- notebookMatadata:dict  
+ Entire the new notebook metadata.
+
+```json
+// notebookMatadata data structure sample
+{
+    "name": "test",
+    "createDate": "2025/09/13",
+    "updateDate": "2025/10/4",
+    "id": "bb6f7d1c-c722-495c-923b-ab9e9574ef5b",
+    "pages": [
+        "test.md",
+        "test.json",
+        "test/anArticle.md",
+        "test/anArticle1.md",
+        "test/test2/anArticle.md",
+        "test/test2/newpage.md",
+        "newpage.md",
+        "test/newpage.md"
+    ],
+    "files": [
+        "testfile.txt"
+    ]
+}
+```
+
+### return 
+- False:bool  
+ The metadata is updated successfully.
+
+### return on error
+#### when failed to check the original metadata file existance
+- True:bool  
+ The metadata is not updated to the new one.
+
+#### when failed to create an backup file of the metadata file
+- True:bool  
+ The metadata is not updated to the new one.
+
+#### when failed to update the metadata
+- True:bool  
+ The metadata is not updated to the new one.

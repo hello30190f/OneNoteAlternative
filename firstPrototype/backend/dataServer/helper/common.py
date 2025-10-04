@@ -241,6 +241,7 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
     print(notebookName)
     print(notebookMetadataPath)
     
+    # check the metadata file exist.
     if(not os.path.exists(notebookMetadataPath)):
         print("updateNotebookMatadata ERROR: the metadata file does not exist.")
         return True
