@@ -49,9 +49,9 @@ npm run build1
 - [ ] implement websocket server selector 
 - [x] implement automatic retry for dataserver connection 
 - [x] implement create notebook button
-- [ ] implement create page button
-- [ ] implement delete notebook button
-- [ ] implement delete page button
+- [x] implement create page button
+- [x] implement delete notebook button
+- [x] implement delete page button
 - [ ] implement page view and make them editable via the frontend
 - [x] use [marked](https://github.com/markedjs/marked) library to render markdown content.
 

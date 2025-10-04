@@ -83,6 +83,11 @@ export function CreatePage(){
         return
     },[visible])
 
+
+    // networking -----------------------------------------
+    // networking -----------------------------------------
+    
+
     useEffect(() => {
         // get pageType info
         if(!websocket){
@@ -120,7 +125,8 @@ export function CreatePage(){
             websocket.removeEventListener("message",handleMessage)
         }
     },[websocket])
-
+    // networking -----------------------------------------
+    // networking -----------------------------------------
 
     
     useEffect(() => {
@@ -153,10 +159,6 @@ export function CreatePage(){
             </select>])
         }
     },[pageType,newPageInfo])
-
-
-    
-
 
 
 
@@ -219,10 +221,6 @@ export function CreatePage(){
         pageName = "No page name is entered."
     }
 
-    // let place = newPageInfo.place
-    // if(place == ""){
-    //     place = "No place is selected."
-    // }
 
     // https://www.w3schools.com/tags/tag_select.asp
     // pagetype -> automaticly get the info by getPageType command from the dataserver
