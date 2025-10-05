@@ -132,7 +132,7 @@ def findNotes():
     for aFolderOrFile in os.listdir(root):
 
         # files in the notebook root folder will be ignored. 
-        if(not os.path.isfile(aFolderOrFile)):
+        if(not os.path.isfile(root + "/" + aFolderOrFile)):
 
             # check a notebook existance
             currentdir = root + "/" + aFolderOrFile

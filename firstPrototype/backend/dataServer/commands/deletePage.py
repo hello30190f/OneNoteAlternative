@@ -25,6 +25,7 @@ import json, os.path
 # }
 # ```
 
+#TODO: implement this
 async def deletePage(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.
     mandatoryKeys   = ["notebook","PageID"]
@@ -116,7 +117,7 @@ async def deletePage(request,websocket):
 
 
     # update the notebook metadata if the ref still exist
-    
+
 
 
     # and then write deleted pages info and the date
