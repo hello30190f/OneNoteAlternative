@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, findNotes
+from helper.common import NotImplementedResponse, dataKeyChecker, findNotes, updateNotebookMatadata
 from helper import loadSettings 
 import json, os.path
 
@@ -115,11 +115,67 @@ async def deletePage(request,websocket):
         print(">>> " + responseString)
         return       
 
+    async def UnableUpdateNotebookMetadataResponse():
+        print("createPage ERROR: Unable to update the notebook metadata")
+        print("notebook     : " + notebookName) 
+        print("contentPath  : " + pagePathFromContentFolder)
+        print("fill path    : " + pagePath)
+        responseString = json.dumps({
+            "status"        : "error",
+            "UUID"          : request["UUID"],
+            "command"       : "createPage",
+            "errorMessage"  : "Unable to update the notebook metadata",
+            "data"          : { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
 
     # update the notebook metadata if the ref still exist
+    notebookJSONinfo = findNotes()
+    if(notebookJSONinfo == None):
+        await UnableUpdateNotebookMetadataResponse()
+        return
+
+    targetNotebook = None
+    for aNotebook in notebookJSONinfo.keys():
+        if(aNotebook == notebookName):
+            targetNotebook = notebookJSONinfo[aNotebook]
+    if(targetNotebook == None):
+        await UnableUpdateNotebookMetadataResponse()
+        return
+    
+    # check the page still exists or not.
+    find = False
+    files = []
+    for aPage in targetNotebook["pages"]:
+        if(pagePathFromContentFolder == aPage):
+            find = True
+        else:
+            files.append(aPage)
+    targetNotebook["pages"] = files
+    
+    # when the page seems to be deleted.
+    if(not find):
+        print("createPage ERROR: The page has already been deleted.")
+        print("notebook     : " + notebookName) 
+        print("contentPath  : " + pagePathFromContentFolder)
+        print("fill path    : " + pagePath)
+        responseString = json.dumps({
+            "status"        : "error",
+            "UUID"          : request["UUID"],
+            "command"       : "createPage",
+            "errorMessage"  : "The page has already been deleted.",
+            "data"          : { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
+
+    if(updateNotebookMatadata(notebookName,targetNotebook)):
+        await UnableUpdateNotebookMetadataResponse()
+        return
 
 
-
+    # check deleted.json exists or not.
     # and then write deleted pages info and the date
     # info -> notebokname pageid date
     # {
