@@ -115,6 +115,8 @@
 ### File 
 - [fileInfo](./basicCommand/fileInfo.md)
 - [fileData](./basicCommand/fileData.md)
+- [fileAdd](./basicCommand/fileAdd.md)
+- [fileDelete](./basicCommand/fileDelete.md)
 ### create
 - [createNotebook](./basicCommand/createNotebook.md)
 - [createPage](./basicCommand/createPage.md)

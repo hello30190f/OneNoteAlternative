@@ -1,4 +1,3 @@
-# TODO: write this
 # deletePage command
 ## role
  Delete a page immediately.
