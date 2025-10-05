@@ -58,6 +58,7 @@ async def deletePage(request,websocket):
     pagePath = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
     pagePath = pagePath.replace("//","/")
     filename = pagePath.split("/")[-1]
+    deleted  = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/deleted.json"
     folder   = pagePath.replace(filename,"")
     # gather infomation 
 
@@ -169,14 +170,44 @@ async def deletePage(request,websocket):
         })
         await websocket.send(responseString)
         print(">>> " + responseString)
+        return
 
     if(updateNotebookMatadata(notebookName,targetNotebook)):
         await UnableUpdateNotebookMetadataResponse()
         return
 
 
+
+    async def UnableToUpdateNotebookDeletedResponse():
+        print("createPage ERROR: Unable to update the notebook deleted.json")
+        print("notebook     : " + notebookName) 
+        print("contentPath  : " + pagePathFromContentFolder)
+        print("fill path    : " + pagePath)
+        print("deleted.json : " + deleted)
+        responseString = json.dumps({
+            "status"        : "error",
+            "UUID"          : request["UUID"],
+            "command"       : "createPage",
+            "errorMessage"  : "Unable to update the notebook deleted.json",
+            "data"          : { }
+        })
+        await websocket.send(responseString)
+        print(">>> " + responseString)
+
     # check deleted.json exists or not.
+    if(not os.path.exists(deleted)):
+        await UnableToUpdateNotebookDeletedResponse()
+        return
+
     # and then write deleted pages info and the date
+    deletedJSONinfo = None
+    try:
+        with open(deleted,"rt") as deletedJSONstring:
+            deletedJSONinfo = json.loads(deletedJSONstring.read())
+    except:
+        await UnableToUpdateNotebookDeletedResponse()
+        return
+    
     # info -> notebokname pageid date
     # {
     #     "notebookName":[{
@@ -187,6 +218,20 @@ async def deletePage(request,websocket):
     #         "date": "YYYY/MM/DD"
     #     }]
     # }
+
+    targetDeletedInfo = None
+    for aNotebook in deletedJSONinfo.keys():
+        if(aNotebook == notebookName):
+            targetDeletedInfo = deletedJSONinfo[aNotebook]
+    if(targetDeletedInfo == None):
+        await UnableToUpdateNotebookDeletedResponse()
+        return
+    
+    find = False
+    for aPageInfo in targetDeletedInfo:
+        if(aPageInfo["pageID"] == pagePath):
+            
+            pass
 
 
 
