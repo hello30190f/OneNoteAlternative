@@ -285,7 +285,7 @@ export default function Markdown(data:PageMetadataAndData){
         return <OverlayWindow arg={viewStateOverlayWindowArg}>
             <div className="changeViewState flex bg-gray-950 m-[0.5rem]">
                 <div 
-                    className="preview bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
+                    className="preview shrink-0 bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.preview}
                     onClick={() => {
                         if(viewState.preview) return
@@ -297,7 +297,7 @@ export default function Markdown(data:PageMetadataAndData){
                     }}
                     >Preveiw</div>
                 <div 
-                    className="editor bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
+                    className="editor shrink-0 bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.editor}
                     onClick={() => {
                         if(viewState.editor) return
@@ -309,7 +309,7 @@ export default function Markdown(data:PageMetadataAndData){
                     }}
                     >Editor</div>
                 <div 
-                    className="split bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
+                    className="split shrink-0 bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.split}
                     onClick={() => {
                         if(viewState.split) return
@@ -345,7 +345,7 @@ export default function Markdown(data:PageMetadataAndData){
         return <OverlayWindow arg={lineBreakStateOverlayWindowArg}>
             <div className="changeLineBreakState flex bg-gray-950 m-[0.5rem]">
                 <div
-                    className="viewer bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
+                    className="viewer shrink-0 bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.viewer}
                     onClick={() => {
                         if(lineBreak.view){
@@ -363,7 +363,7 @@ export default function Markdown(data:PageMetadataAndData){
                     Viewer
                 </div>
                 <div
-                    className="editor bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
+                    className="editor shrink-0 bg-gray-600 hover:bg-gray-700 p-[0.5rem] m-[0.5rem] min-w-[6rem]"
                     style={style.editor}
                     onClick={() => {
                         if(lineBreak.editor){
@@ -388,7 +388,7 @@ export default function Markdown(data:PageMetadataAndData){
         return <OverlayWindow arg={saveButtonOverlayWindowArg}>
             <div className="flex">
                 <div 
-                    className="updatebutton text-center m-[0.5rem] p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
+                    className="updatebutton shrink-0 text-center p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
                     onClick={() => {
                         if(unsavedMarkdownBuffer.current != null){
                             setMarkdownBuffer(unsavedMarkdownBuffer.current)
@@ -396,7 +396,7 @@ export default function Markdown(data:PageMetadataAndData){
                     }}
                     >Update (Ctrl + U)</div>
                 <div 
-                    className="updatebutton text-center m-[0.5rem] p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
+                    className="updatebutton shrink-0 text-center p-[0.5rem] mx-[1rem] bg-gray-600 hover:bg-gray-700"
                     onClick={() => {
                         if(unsavedMarkdownBuffer.current != null){
                             setMarkdownBuffer(unsavedMarkdownBuffer.current)
@@ -478,7 +478,7 @@ export default function Markdown(data:PageMetadataAndData){
 
         let style = ""
         if(!viewState.split){
-            style = "markdownContainer ml-[3rem] mr-[3rem] pb-[2rem] w-[90%]"
+            style = "markdownContainer px-[3rem] pb-[2rem]"
         }else{
             style = "markdownContainer w-[50%] h-full overflow-x-auto " 
         }   

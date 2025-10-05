@@ -44,16 +44,6 @@ export default function Page() {
 
     const requestUUID = useRef<string>(genUUID())
 
-    // const init = useRef(true)
-    // const currentSize = useRef({
-    //     width: window.innerWidth - 64, // 4rem
-    //     height: window.innerHeight - 32   // 2rem -> 32px -> 16*2px
-    // })
-
-    // const [PageOutlineAndContainerStyle,setPageOutlineAndContainerStyle] = useState({
-    //     width: String(window.innerWidth - 32) + "px",
-    //     height: String(window.innerHeight - 32) + "px"
-    // })
 
     useEffect(() => {
         if (!websocket) return;
@@ -125,37 +115,9 @@ export default function Page() {
         );
     }
 
-
-
-    // function clacSize(){
-    //     let width = window.innerWidth - 32 // 2rem -> 32px -> 16*2px
-    //     let height = window.innerHeight - 64 // 4rem
-
-    //     currentSize.current.width = width
-    //     currentSize.current.height = height
-
-    //     // console.log(currentSize.current)
-
-    //     setPageOutlineAndContainerStyle({
-    //         width: String(currentSize.current.width) + "px",
-    //         height: String(currentSize.current.height) + "px"
-    //     })
-    // }
-    // if(init.current){
-    //     // TODO: reimplement this without resize event handler and style change
-    //     // this impletation cause page component to be recreated and then the component variable state got lose.
-    //     // clacSize()
-    //     // addEventListener("resize",clacSize)        
-    //     init.current = false
-    // }
-
-
-
     function PageOutlineAndContainer({ children }:{ children:ReactNode }){
         // 1rem 16px
 
-        // TODO: reimplement this without resize event handler and style change
-        // this impletation cause page component to be recreated and then the component variable state got lose.
         return <div className="h-full w-full z-50 p-[1rem] pt-[3rem]"><div 
         className="
             bg-gray-600 
@@ -165,7 +127,6 @@ export default function Page() {
             z-51
             h-full w-full
         "
-        // style={PageOutlineAndContainerStyle}
         >
             {children}
         </div></div>
