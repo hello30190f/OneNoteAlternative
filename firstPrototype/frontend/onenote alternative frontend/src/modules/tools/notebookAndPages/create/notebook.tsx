@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ChangeEventHandler, type ReactNode } from "react"
 import { type toggleable } from "../../../MainUI/ToggleToolsBar"
-import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
+import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
 import { send, useDatabaseStore } from "../../../helper/network"
 import { genUUID } from "../../../helper/common"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
@@ -16,6 +16,8 @@ export function CreateNotebook(){
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+    const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
+    const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
     const websocket = useDatabaseStore((s) => s.websocket)
 
     const requestUUID = useRef(genUUID())
@@ -63,7 +65,8 @@ export function CreateNotebook(){
                     // notifiy create notebook success. Use MessageBox component
                     // update selector -> send dataserver to selector an interrupt.
 
-                    setVisible(false)
+                    const window = getWindow(args)
+                    if(window) closeWindow(window)
                 } else {
                     // notifiy the dataserver error. Use MessageBox component
                     

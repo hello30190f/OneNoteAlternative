@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement } from "react";
-import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
+import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
 import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
 import { useAppState } from "../../../window";
@@ -36,6 +36,9 @@ export function CreatePage(){
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
     const requestUUID = useRef(genUUID())
+
+    const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
+    const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
 
     const [pageType,setPageType] = useState<pageType | null>(null)
     const [pageTypeList,setPageTypeList] = useState<ReactElement[]>()
@@ -166,9 +169,12 @@ export function CreatePage(){
                 if(result.status == "error"){
                     // TODO: inform the user failed to create the page
 
+
                 }else{
                     // TODO: inform the use the new page is created successfully
-
+                    
+                    const window = getWindow(args)
+                    if(window) closeWindow(window)
                 }
             }
 

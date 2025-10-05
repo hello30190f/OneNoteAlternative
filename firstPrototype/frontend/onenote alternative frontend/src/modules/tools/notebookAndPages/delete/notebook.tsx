@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
+import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { useAppState } from "../../../window";
@@ -30,6 +30,9 @@ export function DeleteNotebook(){
     const requestUUID = useRef(genUUID())
     const websocket = useDatabaseStore((s) => s.websocket)
     
+    const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
+    const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
+
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
 
@@ -125,6 +128,8 @@ export function DeleteNotebook(){
             if(jsondata.status == "ok"){
                 //TODO: show success message
 
+                const window = getWindow(overlayWindowArg)
+                if(window) closeWindow(window)
             }else{
                 //TODO: show error message
 

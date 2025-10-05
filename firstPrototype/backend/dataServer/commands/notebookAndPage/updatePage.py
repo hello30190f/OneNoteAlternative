@@ -54,5 +54,21 @@ async def updatePage(request,websocket):
         return
 
 
+    # gather infomation
+    # gather infomation
+
+
+    # check the page exist or not
+
+
+    # check the update string include metadata (markdown, others)
+
+
+    # update "updateDate" key
+
+
+    # write the update string to the page
+
+
 
     await NotImplementedResponse(request,websocket)
