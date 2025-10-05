@@ -62,7 +62,7 @@ def malformedRequestChecker(message):
         ):
         return request
     else:
-        print("malformedRequestChecker: This is not valid JSON data. command or data key are not found.")
+        print("malformedRequestChecker: This is not valid JSON data. command, UUID or data key are not found.")
         print("command: " + str("command" in request.keys()))
         print("data   : " + str("data" in request.keys()))
         return None
