@@ -104,7 +104,7 @@ export default function Page() {
         const PageCompornet = PageCompornetList[data.pageType as keyof typeof PageCompornetList] || PageCompornetList.free;
 
         return (
-            <div className="w-full">
+            <div className="w-full h-full">
                 <PageCompornet
                     tags={data.tags}
                     files={data.files}

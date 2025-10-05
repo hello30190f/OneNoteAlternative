@@ -425,10 +425,10 @@ export default function Markdown(data:PageMetadataAndData){
 
         if(!viewState.split){
             preStyle = "text-start p-[2rem] py-[3rem] h-full"
-            codeStyle = "markdownEditor language-md mx-[1rem] px-[1rem] flex flex-col"
+            codeStyle = "markdownEditor language-md min-h-full mx-[1rem] px-[1rem] flex flex-col"
         }else{
             preStyle = "text-start w-[50%] h-full"
-            codeStyle = "markdownEditor language-md flex flex-col"
+            codeStyle = "markdownEditor language-md h-full overflow-y-auto flex flex-col"
         }
         if(lineBreak.editor){
             codeStyle += " break-all"
