@@ -8,20 +8,32 @@ import { DeleteNotebook } from "./tools/notebookAndPages/delete/notebook";
 import { DeletePage } from "./tools/notebookAndPages/delete/page";
 import { StartButtonMenu } from "./MainUI/UIparts/ToggleToolsBar/StartButton";
 import { ColorPalette } from "./helper/ColorPalette";
+import { PageInfo } from "./tools/metadata/metadataInfo";
+
+export type basicMetadata = {
+    files       : string[],
+    tags        : string[],
+    UUID        : string,
+    createDate  : string, // "2025/10/6" yyyy/mm/dd
+    updateDate  : string, // "2025/10/6" yyyy/mm/dd
+}
 
 export type AppState = {
     currentPage:string | null,
     currentNotebook:string | null,
     currentPlace: string | null,
+    metadata    : basicMetadata | null
     changeOpenedPage: (notebook: string, pageID: string) => void,
     oepnBlankPage:() => void,
     findCurrentPlace: () => void,
+    setMetadata :(metadata:basicMetadata | null) => void,
 }
 
 export const useAppState = create<AppState>((set,get) => ({
     currentPage: null,
     currentNotebook: null,
     currentPlace: null,
+    metadata: null,
     changeOpenedPage: (notebook: string, pageID: string) => {
         set({ currentPage: pageID, currentNotebook:notebook })
         get().findCurrentPlace()
@@ -46,6 +58,9 @@ export const useAppState = create<AppState>((set,get) => ({
         }
         set(({currentPlace: newPlace}))
     },
+    setMetadata :(metadata:basicMetadata | null) => {  
+        set({metadata: metadata})
+    },
 }))
 
 
@@ -54,7 +69,7 @@ export const useAppState = create<AppState>((set,get) => ({
 
 
 // show selector of notebooks, pages and files
-export default function Window(){    
+export default function Window(){      
     return(
             <div className="window flex flex-row z-2 w-full h-full">
                 <ColorPalette></ColorPalette>
@@ -67,6 +82,8 @@ export default function Window(){
                 <CreatePage></CreatePage>
                 <DeleteNotebook></DeleteNotebook>
                 <DeletePage></DeletePage>
+
+                <PageInfo></PageInfo>
 
                 <StartButtonMenu></StartButtonMenu>                
 

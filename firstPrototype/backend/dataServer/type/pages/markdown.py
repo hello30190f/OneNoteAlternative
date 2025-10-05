@@ -1,3 +1,4 @@
+from helper.common import timeString
 import uuid , json
 
 blank = """# Blank Page
@@ -9,6 +10,8 @@ def markdown(data):
     return "++++\n" + json.dumps({
         "files": [],
         "tags": [],
+        "createDate": timeString(),
+        "updateDate": timeString(),
         "UUID": str(uuid.uuid4())
     }) + "\n++++\n\n" + blank
 

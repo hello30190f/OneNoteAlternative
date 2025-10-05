@@ -194,14 +194,6 @@ export const useStartButtonStore = create<startButtons>((set,get) => ({
 }))
 
 
-
-// TODO: crate start button
-//       start button menu list
-//          notebooks and pages
-//          files 
-//          tags 
-//          local servers
-//          remote servers
 export const basicButton = {
     "notebooksAndPages": {
         name: "notebooksAndPages",
@@ -227,14 +219,6 @@ export const basicButton = {
         imageBase64: null,
         toggleables: []
     },
-    // "tags": {
-    //     name: "tags",
-    //     displayName: "Tags",
-    //     toggleableColor: "bg-lime-950",   
-    //     selected: false,
-    //     imageBase64: null,
-    //     toggleables: []
-    // },
     "server": {
         name: "server",
         displayName: "Server",
@@ -243,14 +227,6 @@ export const basicButton = {
         imageBase64: null,
         toggleables: []
     },
-    // "remoteServers": {
-    //     name: "remoteServers",
-    //     displayName: "Remote Servers",
-    //     toggleableColor: "bg-indigo-950",   
-    //     selected: false,
-    //     imageBase64: null,
-    //     toggleables: []
-    // }
 }
 
 
@@ -328,19 +304,8 @@ function AmenuItem({ button,parentWindow }:{ button:AstartButton,parentWindow:Ov
 }
 
 export function StartButton(){
-    // const addButton = useStartButtonStore((s) => s.addButton)
     const visible = useStartButtonStore((s) => s.menuVisible)
     const setState = useStartButtonStore.setState
-    // const init = useRef(true)
-
-    // if(init.current){
-    //     // register basic start button
-    //     for(const button in basicButton){
-    //         addButton(basicButton[button as keyof typeof basicButton])
-    //     }
-
-    //     init.current = false
-    // }
 
     return <div 
                 className="w-[2rem] h-[2rem] bg-green-700 hover:bg-green-900 shrink-0 mr-auto" 

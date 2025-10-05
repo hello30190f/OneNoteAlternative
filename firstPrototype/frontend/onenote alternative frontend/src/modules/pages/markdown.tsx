@@ -13,7 +13,7 @@ import { useStartButtonStore } from "../MainUI/UIparts/ToggleToolsBar/StartButto
 import "highlight.js/styles/vs2015.min.css";
 import hijs from "highlight.js"
 import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../helper/network";
-import { useAppState } from "../window";
+import { useAppState, type basicMetadata } from "../window";
 
 // export interface PageMetadataAndData {
 //     pageType: string;
@@ -21,6 +21,10 @@ import { useAppState } from "../window";
 //     files: any[];
 //     pageData: string; // JSON string data
 // }
+
+// ++++
+// {"files": [], "tags": [], "UUID": "ef126209-2763-40b5-b9fd-b2d208da9360"}
+// ++++
 
 interface updatePage extends baseResponseTypesFromDataserver{
     data: { }
@@ -36,7 +40,7 @@ export default function Markdown(data:PageMetadataAndData){
     const [markdownBuffer,setMarkdownBuffer] = useState("")
     const unsavedMarkdownBuffer = useRef<null | string>(null)
     // data
-    
+
     const messageBoxUUID = useRef(genUUID())
     const requestUUID = useRef(genUUID())
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
@@ -66,6 +70,23 @@ export default function Markdown(data:PageMetadataAndData){
         initPos: {x:window.innerWidth - 360, y: window.innerHeight - 360}
     }
 
+    // To show metadata info to the user
+    const setMetadataToAppState = useAppState((s) => s.setMetadata)
+    useEffect(() => {
+        if(metadata == null || metadata == ""){
+            setMetadataToAppState(null)
+            return
+        }
+
+        try{
+            const metadataParsed:basicMetadata = JSON.parse(metadata) 
+            setMetadataToAppState(metadataParsed)
+        }catch(e){
+            console.log("Set metadata info to the appState is failed.")
+            console.log(metadata)
+            console.log(e)
+        }
+    },[metadata])
     
     // preview splitview editorview
     const [viewState,setViewState]  = useState({
@@ -145,6 +166,7 @@ export default function Markdown(data:PageMetadataAndData){
 
 
 
+    // init and deactivate
     useEffect(() => {
         parseMarkdown()
         addToggleable("edit",viewStateToggleable)
@@ -153,6 +175,7 @@ export default function Markdown(data:PageMetadataAndData){
 
         return () => {
             removeAllToggleables("edit")
+            setMetadataToAppState(null)
         }
     },[])
 
@@ -252,7 +275,7 @@ export default function Markdown(data:PageMetadataAndData){
             console.log(pagedataString)
             // send the request
             // TODO: enable this by uncommenting the line below.
-            // send(websocket,jsonstring)
+            send(websocket,jsonstring)
         }
     }
     // networking ---------------------------------------
@@ -473,8 +496,8 @@ export default function Markdown(data:PageMetadataAndData){
 
     function Viewer({ show }:{ show:boolean }){
         if(!show) return
-        console.log("Viewer")
-        console.log(show)
+        // console.log("Viewer")
+        // console.log(show)
 
         let style = ""
         if(!viewState.split){

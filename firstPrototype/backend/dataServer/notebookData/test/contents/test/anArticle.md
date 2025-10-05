@@ -1,8 +1,10 @@
 ++++
 {
-    files: [],
-    tags: ["linux" , "Command" , "Surge-XT" , "Drumstick-MIDI" , "issue"],
-    UUID: "f5423db7-948a-4509-8078-e1e8c175dd06"
+    "files": [],
+    "createDate": "2025/10/6",
+    "updateDate": "2025/10/6",
+    "tags": ["linux" , "Command" , "Surge-XT" , "Drumstick-MIDI" , "issue"],
+    "UUID": "f5423db7-948a-4509-8078-e1e8c175dd06"
 }
 ++++
 

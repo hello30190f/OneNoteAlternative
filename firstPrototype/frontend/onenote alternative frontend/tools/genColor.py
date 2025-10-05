@@ -20,7 +20,8 @@ colors = [
     "gray",
     "zinc",
     "neutral",
-    "stone"
+    "stone",
+    "orange"
     ]
 
 maxColor = 900
