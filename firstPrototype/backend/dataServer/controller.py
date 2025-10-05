@@ -4,6 +4,8 @@ from commands.info              import info
 from commands.pageInfo          import pageInfo
 from commands.fileInfo          import fileInfo
 from commands.fileData          import fileData
+from commands.fileAdd           import fileAdd
+from commands.fileDelete        import fileDelete
 from commands.createPage        import createPage
 from commands.updatePage        import updatePage
 from commands.createNotebook    import createNotebook
@@ -29,6 +31,8 @@ commands = {
     "createNotebook": createNotebook,
     "deleteNotebook": deleteNotebook,
     "deletePage"    : deletePage,
+    "fileAdd"       : fileAdd,
+    "fileDelete"    : fileDelete,
 }
 
 # call command
