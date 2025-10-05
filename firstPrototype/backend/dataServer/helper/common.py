@@ -265,6 +265,7 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
     return False
 
 
+# TODO: create function show and return error response for all command
 
 
 
