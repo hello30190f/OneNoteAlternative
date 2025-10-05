@@ -44,16 +44,16 @@ export default function Page() {
 
     const requestUUID = useRef<string>(genUUID())
 
-    const init = useRef(true)
-    const currentSize = useRef({
-        width: window.innerWidth - 64, // 4rem
-        height: window.innerHeight - 32   // 2rem -> 32px -> 16*2px
-    })
+    // const init = useRef(true)
+    // const currentSize = useRef({
+    //     width: window.innerWidth - 64, // 4rem
+    //     height: window.innerHeight - 32   // 2rem -> 32px -> 16*2px
+    // })
 
-    let [PageOutlineAndContainerStyle,setPageOutlineAndContainerStyle] = useState({
-        width: String(window.innerWidth - 32) + "px",
-        height: String(window.innerHeight - 32) + "px"
-    })
+    // const [PageOutlineAndContainerStyle,setPageOutlineAndContainerStyle] = useState({
+    //     width: String(window.innerWidth - 32) + "px",
+    //     height: String(window.innerHeight - 32) + "px"
+    // })
 
     useEffect(() => {
         if (!websocket) return;
@@ -114,7 +114,7 @@ export default function Page() {
         const PageCompornet = PageCompornetList[data.pageType as keyof typeof PageCompornetList] || PageCompornetList.free;
 
         return (
-            <div className="absolute left-0 top-0 w-full h-full">
+            <div className="w-full">
                 <PageCompornet
                     tags={data.tags}
                     files={data.files}
@@ -127,45 +127,48 @@ export default function Page() {
 
 
 
-    function clacSize(){
-        let width = window.innerWidth - 32 // 2rem -> 32px -> 16*2px
-        let height = window.innerHeight - 64 // 4rem
+    // function clacSize(){
+    //     let width = window.innerWidth - 32 // 2rem -> 32px -> 16*2px
+    //     let height = window.innerHeight - 64 // 4rem
 
-        currentSize.current.width = width
-        currentSize.current.height = height
+    //     currentSize.current.width = width
+    //     currentSize.current.height = height
 
-        // console.log(currentSize.current)
+    //     // console.log(currentSize.current)
 
-        setPageOutlineAndContainerStyle({
-            width: String(currentSize.current.width) + "px",
-            height: String(currentSize.current.height) + "px"
-        })
-    }
-    if(init.current){
-        clacSize()
-        addEventListener("resize",clacSize)        
-        init.current = false
-    }
+    //     setPageOutlineAndContainerStyle({
+    //         width: String(currentSize.current.width) + "px",
+    //         height: String(currentSize.current.height) + "px"
+    //     })
+    // }
+    // if(init.current){
+    //     // TODO: reimplement this without resize event handler and style change
+    //     // this impletation cause page component to be recreated and then the component variable state got lose.
+    //     // clacSize()
+    //     // addEventListener("resize",clacSize)        
+    //     init.current = false
+    // }
 
 
 
     function PageOutlineAndContainer({ children }:{ children:ReactNode }){
         // 1rem 16px
-        return <div 
+
+        // TODO: reimplement this without resize event handler and style change
+        // this impletation cause page component to be recreated and then the component variable state got lose.
+        return <div className="h-full w-full z-50 p-[1rem] pt-[3rem]"><div 
         className="
             bg-gray-600 
-            ml-[1rem] mt-[1rem] 
-            absolute left-0 top-[2rem] 
-            flex 
             justify-center place-items-center align-middle text-center
     items-center 
             overflow-y-auto 
-            z-50
+            z-51
+            h-full w-full
         "
-        style={PageOutlineAndContainerStyle}
+        // style={PageOutlineAndContainerStyle}
         >
             {children}
-        </div>
+        </div></div>
     }
 
     function ShowError({ message }: { message: string }) {

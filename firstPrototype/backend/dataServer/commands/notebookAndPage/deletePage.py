@@ -25,7 +25,6 @@ import json, os.path
 # }
 # ```
 
-# TODO: test this
 async def deletePage(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.
     mandatoryKeys   = ["notebook","PageID"]

@@ -56,8 +56,7 @@ export const useAppState = create<AppState>((set,get) => ({
 // show selector of notebooks, pages and files
 export default function Window(){    
     return(
-        <>
-            <div className="window flex flex-row z-2">
+            <div className="window flex flex-row z-2 w-full h-full">
                 <ColorPalette></ColorPalette>
                 <ToggleToolsBar></ToggleToolsBar>
 
@@ -72,7 +71,6 @@ export default function Window(){
                 <StartButtonMenu></StartButtonMenu>                
 
             </div>
-        </>
     )
 }
 

@@ -265,7 +265,6 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
                 // console.log(dx)
                 // console.log(event.screenX)
                 // console.log(windowPos.current.x)
-                const width = String()
 
                 if(
                     windowPos.current.x + dx > 0 &&

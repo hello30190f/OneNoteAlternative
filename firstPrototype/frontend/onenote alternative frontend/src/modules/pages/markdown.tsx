@@ -425,10 +425,10 @@ export default function Markdown(data:PageMetadataAndData){
 
         if(!viewState.split){
             preStyle = "text-start px-[2rem] h-full"
-            codeStyle = "markdownEditor language-md mx-[1rem] px-[1rem]  h-full flex flex-col"
+            codeStyle = "markdownEditor language-md mx-[1rem] px-[1rem] flex flex-col"
         }else{
             preStyle = "text-start w-[50%] h-full"
-            codeStyle = "markdownEditor language-md flex h-full flex-col"
+            codeStyle = "markdownEditor language-md flex flex-col"
         }
         if(lineBreak.editor){
             codeStyle += " break-all"
@@ -478,7 +478,7 @@ export default function Markdown(data:PageMetadataAndData){
 
         let style = ""
         if(!viewState.split){
-            style = "markdownContainer ml-[3rem] mr-[3rem] absolute pb-[2rem] left-0 w-[90%]"
+            style = "markdownContainer ml-[3rem] mr-[3rem] pb-[2rem] w-[90%]"
         }else{
             style = "markdownContainer w-[50%] h-full overflow-x-auto " 
         }   
