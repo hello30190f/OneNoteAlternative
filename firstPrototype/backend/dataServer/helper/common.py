@@ -265,8 +265,39 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
     return False
 
 
-# TODO: create function show and return error response for all command
+# TODO: use this command for all commands error responses.
+# TODO: write the document
+# arg:
+#   websocket       : the connection to the frontend via websocket
+#   request         : the frontend reqiuest entire JSON data
+#   errorMessage    : an error message to show in the stdout and response to the frontend 
+#   variablesList   : an error related vars list to show in the stdout and response to the frontend 
+# return value
+#   OK      : None
+#   Error   : Error state does not exist.
+async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:list):
+    print("updatePage ERROR: {}".format(errorMessage))
 
+    variableState = {}
+    print("updatePage ERROR: variable state --------------------------")
+    for aVar in variablesList:
+        # print variable name and data
+        # https://stackoverflow.com/questions/18425225/getting-the-name-of-a-variable-as-a-string
+        # f'{aaa=}'.split("=")[0]
+        varName = f'{aVar=}'.split("=")[0]
+        print("{}:\n{}\n".format(varName,aVar))
+        variableState[varName] = str(aVar)
+    print("updatePage ERROR: variable state end --------------------------")
+
+    responseString = json.dumps({
+        "status"        : "error",
+        "errorMessage"  : errorMessage,
+        "UUID"          : request["UUID"],
+        "command"       : request["command"],
+        "data"          : variableState
+    })
+    await websocket.send(responseString)
+    print(">>> " + responseString)
 
 
 #TODO: warp basic commands as function to absorb platform difference

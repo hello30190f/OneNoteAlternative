@@ -64,7 +64,10 @@ async def updatePage(request,websocket):
     # check the update string include metadata (markdown, others)
 
 
-    # update "updateDate" key
+    # update "updateDate" key in the page metadata
+
+
+    # update "updateDate" key in the notebook metadata
 
 
     # write the update string to the page
