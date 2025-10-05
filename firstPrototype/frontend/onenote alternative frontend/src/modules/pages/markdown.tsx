@@ -424,7 +424,7 @@ export default function Markdown(data:PageMetadataAndData){
         let codeStyle   = ""
 
         if(!viewState.split){
-            preStyle = "text-start px-[2rem] h-full"
+            preStyle = "text-start p-[2rem] py-[3rem] h-full"
             codeStyle = "markdownEditor language-md mx-[1rem] px-[1rem] flex flex-col"
         }else{
             preStyle = "text-start w-[50%] h-full"

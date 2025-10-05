@@ -6,6 +6,31 @@ from helper.common import NotImplementedResponse, dataKeyChecker
 from helper import loadSettings 
 import json
 
+# ## args (frontend to dataserver)
+# ```json
+# {
+#     "command": "updatePage",
+#     "UUID": "UUID string",
+#     "data": {
+#         "noteboook" : "notebookName",
+#         "pageID"    : "Path/to/newPageName",
+#         "pageType"  : "typeOfPage",
+#         "update"    : "entire page data string to save. the frontend responsible for the integrality",
+#     }
+# }
+# ```
+
+# ## response (dataserver to frontend)
+# ```json
+# {
+#     "status": "ok",
+#     "errorMessage": "nothing",
+#     "UUID":"UUID string",
+#     "command": "updatePage",
+#     "data":{ }
+# }
+# ```
+
 #TODO: implement this
 async def updatePage(request,websocket):
     mandatoryKeys   = ["noteboook","pageID","pageType","update"]
