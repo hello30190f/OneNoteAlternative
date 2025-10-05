@@ -1,7 +1,7 @@
 TODO: write this document 
 # fileAdd command
 ## role
- Add a file to a notebook.
+ Add a file to a notebook. Not multiple files.
 
 ## args (frontend to dataserver)
 ### under 100 MB
