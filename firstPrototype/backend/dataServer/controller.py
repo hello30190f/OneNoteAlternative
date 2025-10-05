@@ -1,17 +1,20 @@
 from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse, notFound
 import json
-from commands.info              import info 
-from commands.pageInfo          import pageInfo
-from commands.fileInfo          import fileInfo
-from commands.fileData          import fileData
-from commands.fileAdd           import fileAdd
-from commands.fileDelete        import fileDelete
-from commands.createPage        import createPage
-from commands.updatePage        import updatePage
-from commands.createNotebook    import createNotebook
-from commands.getPageType       import getPageType
-from commands.deleteNotebook    import deleteNotebook
-from commands.deletePage        import deletePage
+
+from commands.info                              import info 
+
+from commands.fileAPI.fileInfo                  import fileInfo
+from commands.fileAPI.fileData                  import fileData
+from commands.fileAPI.fileAdd                   import fileAdd
+from commands.fileAPI.fileDelete                import fileDelete
+
+from commands.notebookAndPage.pageInfo          import pageInfo
+from commands.notebookAndPage.createPage        import createPage
+from commands.notebookAndPage.createNotebook    import createNotebook
+from commands.notebookAndPage.deleteNotebook    import deleteNotebook
+from commands.notebookAndPage.getPageType       import getPageType
+from commands.notebookAndPage.updatePage        import updatePage
+from commands.notebookAndPage.deletePage        import deletePage
 
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
 # extension should register their command to this dictionary.
