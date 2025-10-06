@@ -258,19 +258,19 @@ export default function Markdown(data:PageMetadataAndData){
             websocket != null
         ){  
             console.log("saveCurrentContent: send the save data")
-            
+
             requestUUID.current = genUUID()
 
             // execute updatePage command
             // join pagedata text and metadata string
-            const pagedataString = "++++\n" + metadata.replaceAll("\n","") + "\n++++\n" + markdownBuffer
+            const pagedataString = "++++\n" + metadata.replaceAll("\n","") + "\n++++\n" + unsavedMarkdownBuffer.current
 
             // create the request
             const jsondata = {
                 "command": "updatePage",
                 "UUID": requestUUID.current,
                 "data": {
-                    "noteboook" : currentNotebook,
+                    "notebook" : currentNotebook,
                     "pageID"    : currentPage,
                     "pageType"  : "markdown",
                     "update"    : pagedataString,
@@ -472,7 +472,6 @@ export default function Markdown(data:PageMetadataAndData){
                 className={preStyle}
                 onInput={(event:ChangeEvent<HTMLPreElement>) => {
                     unsavedMarkdownBuffer.current = event.target.textContent
-                    event.target.onselectionchange
                 }}
                 onKeyDown={(event:KeyboardEvent) => {
                     if(event.ctrlKey && event.key == "u"){

@@ -33,7 +33,7 @@ import json, os.path
 
 #TODO: test this
 async def updatePage(request,websocket):
-    mandatoryKeys   = ["noteboook","pageID","pageType","update"]
+    mandatoryKeys   = ["notebook","pageID","pageType","update"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
         print("updatePage ERROR: Mandatory keys are missing for this command.")
@@ -191,7 +191,7 @@ async def updatePage(request,websocket):
     try:
         saveString = ""
         if(pageType == "markdown"):
-            saveString = "++++\n{}\n++++\n\n{}".format(
+            saveString = "++++\n{}\n++++\n{}".format(
                 json.dumps(pageMetadataJSON),
                 pageContent
             )
