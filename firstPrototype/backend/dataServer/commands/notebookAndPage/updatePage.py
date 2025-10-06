@@ -31,7 +31,6 @@ import json, os.path
 # }
 # ```
 
-#TODO: test this
 async def updatePage(request,websocket):
     mandatoryKeys   = ["notebook","pageID","pageType","update"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
