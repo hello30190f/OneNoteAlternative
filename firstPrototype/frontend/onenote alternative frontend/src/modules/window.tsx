@@ -23,7 +23,7 @@ export type AppState = {
     currentNotebook:string | null,
     currentPlace: string | null,
     metadata    : basicMetadata | null
-    changeOpenedPage: (notebook: string, pageID: string) => void,
+    changeOpenedPage: (notebook: string | null, pageID: string | null, place: string | null) => void,
     oepnBlankPage:() => void,
     findCurrentPlace: () => void,
     setMetadata :(metadata:basicMetadata | null) => void,
@@ -34,9 +34,16 @@ export const useAppState = create<AppState>((set,get) => ({
     currentNotebook: null,
     currentPlace: null,
     metadata: null,
-    changeOpenedPage: (notebook: string, pageID: string) => {
-        set({ currentPage: pageID, currentNotebook:notebook })
-        get().findCurrentPlace()
+    changeOpenedPage: (notebook: string | null, pageID: string | null, place: string | null) => {
+        if(notebook != null && pageID != null && place != null){
+            set({ currentPage: pageID, currentNotebook: notebook, currentPlace: place })
+        }else if(notebook != null && pageID == null && place != null){
+            set({ currentPage: null, currentNotebook: notebook, currentPlace: place })
+        }else if(notebook != null && pageID == null && place == null){
+            set({ currentPage: null, currentNotebook: notebook, currentPlace: null })
+        }else{
+            set({ currentPage: null, currentNotebook: null, currentPlace: null })
+        }
     },
     oepnBlankPage: () =>{
         set({
@@ -56,6 +63,7 @@ export const useAppState = create<AppState>((set,get) => ({
                 newPlace = "/"
             }
         }
+        console.log(newPlace)
         set(({currentPlace: newPlace}))
     },
     setMetadata :(metadata:basicMetadata | null) => {  

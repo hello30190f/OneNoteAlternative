@@ -33,6 +33,7 @@ export default function Selector() {
 
     const currentPage       = useAppState((s) => s.currentPage)
     const currentNotebook   = useAppState((s) => s.currentNotebook)
+    const currentPlace      = useAppState((s) => s.currentPlace)
     const changeCurrentPage = useAppState((s) => s.changeOpenedPage)
 
     const [index, setIndex] = useState<Info>({
@@ -153,7 +154,7 @@ export default function Selector() {
     function CreateList({ index }: { index: Info }) {
         if (!index.data) return null;
 
-        function AnEntry({ pageID, notebook }: { pageID: string, notebook: string }){
+        function AnEntry({ pageID, pageName, notebook, place }: { pageID: string, pageName:string, notebook: string, place: string }){
             let anEntryStyle = "text-start pl-[50px] hover:bg-gray-500 selection:bg-transparent m-[5px] mt-0 "
             if(currentPage == pageID && notebook == currentNotebook){
                 anEntryStyle += " bg-gray-600"
@@ -162,9 +163,9 @@ export default function Selector() {
             return <li 
                     className={anEntryStyle}
                     onClick={() => {
-                        changeCurrentPage(notebook,pageID)
+                        changeCurrentPage(notebook,pageID,place)
                     }}>
-                    {pageID}
+                    {pageName}
                 </li>
         }
 
@@ -226,18 +227,42 @@ export default function Selector() {
             // TODO: update AnEntry register pageID and place independently
             // TODO: update useAppState to be able to register pageID,notebook and place independently 
             // TODO: check page.tsx integrality to useAppState
+            let PlaceAndPageEntry:ReactElement[] = []
+            for(const aPlace in newPageList){
+                let placeEntryClassName = "text-start pl-[10px] hover:bg-gray-500 selection:bg-transparent m-[5px] "
+                if(aPlace == currentPlace && notebookName == currentNotebook){
+                    placeEntryClassName += " bg-gray-600"
+                }
+
+                // show place entry
+                PlaceAndPageEntry.push(<li 
+                        className={placeEntryClassName}
+                        key={aPlace}
+                        onClick={() => {
+                            // when a place is selected 
+                            changeCurrentPage(notebookName,null,aPlace)
+                        }}
+                    >
+                        {aPlace}
+                    </li>)
+
+                // show page entry
+                for(const aPage of newPageList[aPlace]){
+                    PlaceAndPageEntry.push(<AnEntry notebook={notebookName} pageID={aPage.pageID} place={aPlace} pageName={aPage.name}></AnEntry>)
+                }
+            }
+
             notebooks.push(
-                <div className="notebookEntry m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={notebookName}>
+                <div className="notebookEntry min-w-[15rem] m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={notebookName}>
                     <div 
                     onClick={() => {
-                        changeCurrentPage(notebookName,"")
+                        // when a notebook is selected
+                        changeCurrentPage(notebookName,null,null)
                     }}
                     className={notebookNameStyle}
                     >{notebookName}</div>
                     <ul className="">
-                        {index.data[notebookName].pages.map((value, idx) => (
-                            <AnEntry notebook={notebookName} pageID={value} key={idx}></AnEntry>
-                        ))}
+                        {PlaceAndPageEntry}
                     </ul>
                 </div>
             );
