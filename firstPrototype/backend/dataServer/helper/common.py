@@ -266,7 +266,6 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
 
 
 # TODO: use this command for all commands error responses.
-# TODO: write the document
 # arg:
 #   websocket       : the connection to the frontend via websocket
 #   request         : the frontend reqiuest entire JSON data

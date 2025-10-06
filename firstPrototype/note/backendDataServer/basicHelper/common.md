@@ -106,7 +106,7 @@
 
 ### return on error
 #### when missing data key is found
-- ["missing","keys","list"]:list  
+- \["missing","keys","list"]:list  
  Return what keys are missing.
 
 
@@ -144,7 +144,7 @@
 
 ### return on error
 #### No metadata
-- None:None
+- None:None  
  This error will be occurred when there is no notebook or the backend error is happened.
 
 
@@ -155,7 +155,7 @@
 
 ## deleteDataSafely func
 ### role
- Delete file safely. Prevent the dataserver backeand from malicious op  erations as possible. 
+ Delete file safely. Prevent the dataserver backeand from malicious operations as possible. 
 
 ### args
 - absoluteDataPath:str  
