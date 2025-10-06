@@ -19,6 +19,8 @@ interface Notebook {
     files: string[];
 }
 
+//TODO: show place independently
+//TODO: show pages without page path but the hierarchy kept by margin.
 export default function Selector() {
     const websocket = useDatabaseStore((s) => s.websocket);
     const setstateDatabase  = useDatabaseStore.setState
@@ -167,29 +169,80 @@ export default function Selector() {
         }
 
         const notebooks: ReactElement[] = [];
-        for (const name in index.data) {
+        // for each notebook
+        for (const notebookName in index.data) {
             let notebookNameStyle = "text-start pl-[10px] underline hover:bg-gray-500 selection:bg-transparent m-[5px] "
-            if(name == currentNotebook){
+            if(notebookName == currentNotebook){
                 notebookNameStyle += " bg-gray-600"
             }
+
+            // manage place
+            // The idea origin of using Record here -> ChatGPT-5 (The suggestion working for this code) 
+            let newPageList:Record<string,{"pageID":string,"name":string}[]> = {}
+            // NOTE: content of newPageList
+            // {
+            //     "placeName1":[
+            //                    {"pageID":"path/to.pageID","name":"pageNameOnly.md"},
+            //                    {"pageID":"path/to.pageID","name":"pageNameOnly.md"},
+            //                  ],
+            //     ...
+            // }
+            for(const aPageID of index.data[notebookName].pages){
+                const splitResult = aPageID.split("/")
+
+                let find = false
+                let place = "/"
+                let pageName = splitResult.slice(-1)[0] // to display
+                let pageID   = aPageID                  // to open
+                // find place for each pages
+                if(splitResult.length > 1){
+                    // subfolder
+                    place += splitResult.slice(0,-1).join("/")
+                }else{
+                    // root of the content folder
+                    // do nothing
+                }
+
+                // check the place has already been registered.
+                for(const Aplace in newPageList){
+                    if(Aplace == place){
+                        find = true
+                        break
+                    }
+                }
+
+                // register place, append pageID
+                if(find){
+                    // when the place has already been registered
+                    newPageList[place].push({"pageID":pageID,"name":pageName})
+                }else{
+                    // when the place has not been registered
+                    newPageList[place] = [{"pageID":pageID,"name":pageName}]
+                }
+            }
+
+            // for each page entry
+            // TODO: use newPageList and show hierarchy  
+            // TODO: update AnEntry register pageID and place independently
+            // TODO: update useAppState to be able to register pageID,notebook and place independently 
+            // TODO: check page.tsx integrality to useAppState
             notebooks.push(
-                <div className="notebookEntry m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={name}>
+                <div className="notebookEntry m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={notebookName}>
                     <div 
                     onClick={() => {
-                        // console.log("A notebook is clicked")
-                        // console.log(name)
-                        changeCurrentPage(name,"")
+                        changeCurrentPage(notebookName,"")
                     }}
                     className={notebookNameStyle}
-                    >{name}</div>
+                    >{notebookName}</div>
                     <ul className="">
-                        {index.data[name].pages.map((value, idx) => (
-                            <AnEntry notebook={name} pageID={value} key={idx}></AnEntry>
+                        {index.data[notebookName].pages.map((value, idx) => (
+                            <AnEntry notebook={notebookName} pageID={value} key={idx}></AnEntry>
                         ))}
                     </ul>
                 </div>
             );
         }
+
         if(notebooks.length != 0){
             return <>{notebooks}</>;
         }else{
