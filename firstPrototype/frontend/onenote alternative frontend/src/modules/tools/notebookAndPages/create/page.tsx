@@ -12,6 +12,7 @@ interface pageType extends baseResponseTypesFromDataserver{
 }
 
 // TODO: notebook name shuold not be include "/"
+// TODO: create place function
 export function CreatePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const websocket = useDatabaseStore((s) => s.websocket)

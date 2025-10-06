@@ -228,3 +228,23 @@
 #### when failed to update the metadata
 - True:bool  
  The metadata is not updated to the new one.
+
+
+
+## errorResponse func
+### role
+ Show error message to the stdout of the dataserver backend and send the error response to the forntend.
+
+### args
+- websocket:websockets.asyncio.server.ServerConnection  
+ The connection to the frontend via websocket
+- request:dict  
+ The frontend reqiuest entire JSON data
+- errorMessage:str  
+ An error message to show in the stdout and response to the frontend 
+- variablesList:list  
+ An error related vars list to show in the stdout and response to the frontend 
+
+### return
+- None:None  
+ Nothing will be returned.
