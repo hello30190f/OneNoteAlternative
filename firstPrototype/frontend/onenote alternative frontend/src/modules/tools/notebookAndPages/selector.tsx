@@ -248,7 +248,7 @@ export default function Selector() {
 
                 // show page entry
                 for(const aPage of newPageList[aPlace]){
-                    PlaceAndPageEntry.push(<AnEntry notebook={notebookName} pageID={aPage.pageID} place={aPlace} pageName={aPage.name}></AnEntry>)
+                    PlaceAndPageEntry.push(<AnEntry key={notebookName + aPlace + "/" + aPage.name} notebook={notebookName} pageID={aPage.pageID} place={aPlace} pageName={aPage.name}></AnEntry>)
                 }
             }
 
