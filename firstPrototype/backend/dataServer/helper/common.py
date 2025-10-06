@@ -276,10 +276,10 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
 #   OK      : None
 #   Error   : Error state does not exist.
 async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:list):
-    print("updatePage ERROR: {}".format(errorMessage))
+    print("{} ERROR: {}".format(request["command"],errorMessage))
 
     variableState = {}
-    print("updatePage ERROR: variable state --------------------------")
+    print("{} ERROR: variable state --------------------------".format(request["command"]))
     for aVar in variablesList:
         # print variable name and data
         # https://stackoverflow.com/questions/18425225/getting-the-name-of-a-variable-as-a-string
@@ -287,7 +287,7 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
         varName = f'{aVar=}'.split("=")[0]
         print("{}:\n{}\n".format(varName,aVar))
         variableState[varName] = str(aVar)
-    print("updatePage ERROR: variable state end --------------------------")
+    print("{} ERROR: variable state end --------------------------".format(request["command"]))
 
     responseString = json.dumps({
         "status"        : "error",

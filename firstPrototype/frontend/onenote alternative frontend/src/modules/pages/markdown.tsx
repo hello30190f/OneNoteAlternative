@@ -247,11 +247,18 @@ export default function Markdown(data:PageMetadataAndData){
     },[websocket])
 
     function saveCurrentContent(){
+        console.log("saveCurrentContent: enter")
+        console.log(currentNotebook)
+        console.log(currentPage)
+        console.log(websocket)
+
         if(
             currentNotebook != null && currentNotebook != "" &&
             currentPage != null && currentPage != "" &&
             websocket != null
         ){  
+            console.log("saveCurrentContent: send the save data")
+            
             requestUUID.current = genUUID()
 
             // execute updatePage command
