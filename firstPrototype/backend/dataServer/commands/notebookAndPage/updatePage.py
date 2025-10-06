@@ -2,7 +2,7 @@
 # Currently to keep things simple, just rewite entire page string into new one.
 # No partial update function exist.
 
-from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse, findNotes
+from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse, findNotes, timeString, updateNotebookMatadata
 from helper import loadSettings 
 import json, os.path
 
@@ -118,6 +118,7 @@ async def updatePage(request,websocket):
 
     # check the update string include metadata (markdown, others)
     pageMetadataJSON = None
+    pageContent = None # for markdown
     if(pageType == "markdown"):
         # markdown format
         splitResult = updateDataString.split("++++")
@@ -131,6 +132,7 @@ async def updatePage(request,websocket):
             return
         try:
             pageMetadataJSON = json.loads(splitResult[1])
+            pageContent = splitResult[2]
         except:
             await errorResponse(
                 websocket,
@@ -146,18 +148,18 @@ async def updatePage(request,websocket):
             
             # check metadata keys exist or not
             if(
-                not "pageType" in pageMetadataJSON.keys() or
-                not "tags" in pageMetadataJSON.keys() or
-                not "files" in pageMetadataJSON.keys() or
-                not "createDate" in pageMetadataJSON.keys() or
-                not "updateDate" in pageMetadataJSON.keys() or
-                not "UUID" in pageMetadataJSON.keys()
+                not "pageType"      in pageMetadataJSON.keys() or
+                not "tags"          in pageMetadataJSON.keys() or
+                not "files"         in pageMetadataJSON.keys() or
+                not "createDate"    in pageMetadataJSON.keys() or
+                not "updateDate"    in pageMetadataJSON.keys() or
+                not "UUID"          in pageMetadataJSON.keys()
             ):
                 await errorResponse(
                     websocket,
                     request,
                     "The update string is malformed. Unable to find the metadata.",
-                    [notebookName,pageID,pageType,pagePath,splitResult,updateDataString]
+                    [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON]
                     )
                 return
         except:
@@ -165,20 +167,65 @@ async def updatePage(request,websocket):
                 websocket,
                 request,
                 "The update string is malformed. Unable to find the metadata.",
-                [notebookName,pageID,pageType,pagePath,splitResult,updateDataString]
+                [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON]
                 )
             return
 
-    
 
     # update "updateDate" key in the page metadata
-
+    pageMetadataJSON["updateDate"] = timeString()
 
     # update "updateDate" key in the notebook metadata
+    targetNotebookMetadata["updateDate"] = timeString()
+    if(updateNotebookMatadata(notebookName,targetNotebookMetadata)):
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to update the notebook metadata information.",
+            [notebookName,pageID,pageType,pagePath,targetNotebookMetadata]
+            )
+        return
 
+
+    # prepare the update string to the page
+    try:
+        saveString = ""
+        if(pageType == "markdown"):
+            saveString = "++++\n{}\n++++\n\n{}".format(
+                json.dumps(pageMetadataJSON),
+                pageContent
+            )
+        else:
+            saveString = json.dumps(pageMetadataJSON)
+    except:
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to prepare update data string. This might be caused by malformed update data for the forntend.",
+            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString]
+            )
+        return
 
     # write the update string to the page
+    try:
+        with open(pagePath,"wt") as saveTarget:
+            saveTarget.write(saveString)
+    except:
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to write the updated page.",
+            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString]
+            )
+        return
 
-
-
-    await NotImplementedResponse(request,websocket)
+    # when the update page is finished successfully.
+    responseString = json.dumps({
+        "status"        : "ok",
+        "UUID"          : request["UUID"],
+        "command"       : "updatePage",
+        "errorMessage"  : "nothing",
+        "data"          : { }
+    })
+    await websocket.send(responseString)
+    print(">>> " + responseString)
