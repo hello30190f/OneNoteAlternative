@@ -198,11 +198,12 @@ def deleteDataSafely(absoluteDataPath:str):
     try:
         if(currnetOS == "Windows"):
             print("deleteDataSafely: Currently Windows support is experimental.")
-            if(not os.path.isfile()):
+            if(not os.path.isfile(absoluteDataPath)):
                 # delete all sub folders and files with the specified folder.
-                command = "del /f /s /Q " + absoluteDataPath
-                subprocess.run([command],shell=True)
-                os.rmdir(absoluteDataPath)
+                # command = "del /f /s /Q " + absoluteDataPath
+                # subprocess.run([command],shell=True)
+                # os.rmdir(absoluteDataPath)
+                shutil.rmtree(absoluteDataPath)
             else:
                 # delete a file.
                 os.remove(absoluteDataPath)            
@@ -215,8 +216,9 @@ def deleteDataSafely(absoluteDataPath:str):
         else:
             print("deleteDataSafely: Unknown platfrom support currently not implemented.")
             return True
-    except:
+    except Exception as error:
         print("deleteDataSafely: Unable to delete the specified file or folder.")
+        print(error)
         print(absoluteDataPath)
         return True
     
