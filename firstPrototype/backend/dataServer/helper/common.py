@@ -161,13 +161,13 @@ def findNotes():
 
 
 
+# TODO: show all exception the error message from python or other module -> Exception as error -> print(error)
 # NOTE: This function will delete all contents of a folder. There are no notify. Be careful. 
 # arg:
 #   absoluteDataPath    : file or folder path
 # return value
 #   OK      : False will be returned.
 #   Error   : True  will be returned when failed to delete the data or the specified path is malformed.
-# TODO: use shutil.rmtree
 def deleteDataSafely(absoluteDataPath:str):
     # https://docs.python.org/3/library/platform.html#platform.system
     # 'Linux', 'Darwin', 'Java', 'Windows'
