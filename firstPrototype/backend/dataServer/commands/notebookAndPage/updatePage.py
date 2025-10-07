@@ -207,7 +207,7 @@ async def updatePage(request,websocket):
 
     # write the update string to the page
     try:
-        with open(pagePath,"wt") as saveTarget:
+        with open(pagePath,"wt",encoding="utf-8") as saveTarget:
             saveTarget.write(saveString)
     except:
         await errorResponse(

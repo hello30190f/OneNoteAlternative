@@ -196,7 +196,7 @@ async def deletePage(request,websocket):
     # check deleted.json exists or not.
     if(not os.path.exists(deleted)):
         # create new one
-        with open(deleted,"wt") as deletedJSONstring:
+        with open(deleted,"wt",encoding="utf-8") as deletedJSONstring:
             deletedJSONstring.write(json.dumps({
                 notebookName: []
             }))
@@ -204,7 +204,7 @@ async def deletePage(request,websocket):
     # and then write deleted pages info and the date
     deletedJSONinfo = None
     try:
-        with open(deleted,"rt") as deletedJSONstring:
+        with open(deleted,"rt",encoding="utf-8") as deletedJSONstring:
             deletedJSONinfo = json.loads(deletedJSONstring.read())
     except:
         await UnableToUpdateNotebookDeletedResponse()
@@ -259,7 +259,7 @@ async def deletePage(request,websocket):
     deletedJSONinfo[notebookName] = targetDeletedInfo
 
     try:
-        with open(deleted,"wt") as deletedJSONstring:
+        with open(deleted,"wt",encoding="utf-8") as deletedJSONstring:
             deletedJSONstring.write(json.dumps(deletedJSONinfo))
     except:
         await UnableToUpdateNotebookDeletedResponse()

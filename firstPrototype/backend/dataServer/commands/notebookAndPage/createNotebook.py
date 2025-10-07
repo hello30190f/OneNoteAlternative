@@ -121,7 +121,7 @@ async def createNotebook(request,websocket):
 
     # create metadata.json
     try:
-        with open(metadataPath,"wt") as metadata:
+        with open(metadataPath,"wt",encoding="utf-8") as metadata:
             metadata.write(json.dumps(newNotebookMetadata))
     except:
         print("createNotebook ERROR: failed to create a new metadata file for the new notebook.")
@@ -144,11 +144,11 @@ async def createNotebook(request,websocket):
     # create index file
     try:
         #  tags.json
-        with open(tagIndexPath,"wt") as tagIndex:
+        with open(tagIndexPath,"wt",encoding="utf-8") as tagIndex:
             tagIndex.write(json.dumps({}))
 
         #  files.json
-        with open(filesIndexPath,"wt") as fileIndex:
+        with open(filesIndexPath,"wt",encoding="utf-8") as fileIndex:
             fileIndex.write(json.dumps({}))
     except:
         print("createNotebook ERROR: failed to create new index metadata files for the new notebook.")
@@ -172,7 +172,7 @@ async def createNotebook(request,websocket):
 
     # create a default blank page. (markdown)
     try:
-        with open(blankPagePath,"wt") as blank:
+        with open(blankPagePath,"wt",encoding="utf-8") as blank:
             pageTemplate = controller.getPageTemplate("markdown",None)
             if(pageTemplate != None):
                 blank.write(pageTemplate)

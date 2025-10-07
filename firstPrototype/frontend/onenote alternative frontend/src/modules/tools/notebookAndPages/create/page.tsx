@@ -88,7 +88,7 @@ export function CreatePage(){
         if(newPageInfo.notebook == null || newPageInfo.notebook == "No notebook is selected.") return 
 
         // when there is no selected place, ignore the user request
-        if(newPageInfo.place == null || newPageInfo.place == "No place is selected.") return 
+        if(newPageInfo.place == null || newPageInfo.place == "No place is selected or created.") return 
 
         // when there is no pagename is entered, ignore the user request
         if(newPageInfo.pagename == null || newPageInfo.pagename == "") return
@@ -253,7 +253,7 @@ export function CreatePage(){
         if(currentPlace != null){
             newInfo.place = currentPlace
         }else{
-            newInfo.place = "No place is selected."
+            newInfo.place = "No place is selected or created."
         }
 
         setNewPageInfo(newInfo)
@@ -294,7 +294,7 @@ export function CreatePage(){
     return <OverlayWindow arg={args}>
         <div className="m-[1rem] flex flex-col">
             <div className="item pagename flex">
-                <div className="label">Name:</div>
+                <div className="label mr-auto">Name:</div>
                 <input 
                     className="ml-[1rem] border-gray-700 soild border-[2px]" 
                     id="newPageName" 
@@ -311,6 +311,25 @@ export function CreatePage(){
                             ...newPageInfo,
                             pagename:newPageName})
                         }}></input>
+            </div>
+            <div className="item place flex mt-[0.5rem]">
+                <div className="label mr-auto">Place:</div>
+                <input 
+                    className="ml-[1rem] border-gray-700 soild border-[2px]" 
+                    id="newPlace" 
+                    type="text"
+                    value={newPageInfo.place}
+                    onChange={(event:ChangeEvent<HTMLInputElement>) => {
+                        let place = event.target.value
+
+                        if(!place.includes("/")){
+                            place = "/" + place
+                        }
+
+                        setNewPageInfo({
+                            ...newPageInfo,
+                            place:place})
+                        }}></input> 
             </div>
             <div className="item pageType flex mt-[0.5rem]">
                 <div className="label">Type: </div>

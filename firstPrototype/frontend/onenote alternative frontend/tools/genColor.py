@@ -49,5 +49,5 @@ for color in colors:
     for ColorDepth in ColorDepthList:
         style += '\n<div className="bg-{}-{}"></div>'.format(color,str(ColorDepth),)
 
-with open("ColorPalette.txt","wt") as text:
+with open("ColorPalette.txt","wt",encoding="utf-8") as text:
     text.write(style)

@@ -139,7 +139,7 @@ def findNotes():
             FolderOrFiles = os.listdir(currentdir)
             if("metadata.json" in FolderOrFiles):
                 try:
-                    with open(currentdir + "/metadata.json","rt") as notebook:
+                    with open(currentdir + "/metadata.json","rt",encoding="utf-8") as notebook:
                         data = json.loads(notebook.read())
                         print(data)
                         if(notebookJSONinfo != None):
@@ -255,7 +255,7 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
         # create metadata backup
         shutil.copyfile(notebookMetadataPath,notebookMetadataPath + ".backup")
         
-        with open(notebookMetadataPath,"wt") as metadata:
+        with open(notebookMetadataPath,"wt",encoding="utf-8") as metadata:
             metadata.write(json.dumps(notebookMatadata))
             pass
     except:

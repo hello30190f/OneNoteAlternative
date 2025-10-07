@@ -2,6 +2,7 @@ from helper.common import NotImplementedResponse, dataKeyChecker
 from helper import loadSettings 
 import json
 
+#TODO: all with open -> encoding="utf-8"
 async def pageInfo(request,websocket):
     mandatoryKeys   = ["notebook","pageID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
@@ -32,7 +33,7 @@ async def pageInfo(request,websocket):
     targetPath          = root + "/" + notebookName + "/contents/" + pagePathFromContent
     
     try:
-        with open(targetPath,"rt") as aPage:
+        with open(targetPath,"rt",encoding="utf-8") as aPage:
             contentString = aPage.read()
 
             # detect page type

@@ -58,6 +58,7 @@ async def createPage(request,websocket):
     filename = pagePath.split("/")[-1]
     folder   = pagePath.replace(filename,"")
 
+    # TODO: support windows env -> implement and use mkdirRecursively function in helper.common
     # check the directory existance
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if(not os.path.exists(folder)):
@@ -176,7 +177,7 @@ async def createPage(request,websocket):
     # create a new page
     failed = False
     try:
-        with open(pagePath,"wt") as page:
+        with open(pagePath,"wt",encoding="utf-8") as page:
             # call page template
             # TODO: implement data for generating init page
             pageTemplate = controller.getPageTemplate(pageType,None)

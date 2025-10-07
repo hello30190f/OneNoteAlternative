@@ -4,7 +4,7 @@ settingFilePath = "settings.json"
 settings = None
 RootFolder = None
 
-with open(settingFilePath,"rt") as jsondata:
+with open(settingFilePath,"rt",encoding="utf-8") as jsondata:
     settings = json.loads(jsondata.read())
 
 if(settings == None):
