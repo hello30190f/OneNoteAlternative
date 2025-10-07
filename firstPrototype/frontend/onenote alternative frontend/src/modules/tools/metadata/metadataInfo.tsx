@@ -107,3 +107,23 @@ export function PageInfo(){
         </div>
     </OverlayWindow>
 }
+
+export function NotebookInfo(){
+
+    return <div>Not Implemented yet...</div>
+}
+
+export function TagToPageList(){
+
+    return <div>Not Implemented yet...</div>
+}
+
+export function FilesToPagesList(){
+
+    return <div>Not Implemented yet...</div>
+}
+
+export function PagesToFilesList(){
+
+    return <div>Not Implemented yet...</div>
+}
