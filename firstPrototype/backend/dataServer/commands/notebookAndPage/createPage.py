@@ -59,10 +59,11 @@ async def createPage(request,websocket):
     filename = pagePath.split("/")[-1]
     folder   = pagePath.replace(filename,"")
 
-    # TODO: support windows env -> implement and use mkdirRecursively function in helper.common
     # check the directory existance
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if(not os.path.exists(folder)):
+        # TODO: ~~support windows env -> implement and use mkdirRecursively function in helper.common~~ -> mkdir
+        # TODO: implement createFolder function as a helper.common func
         # create folder
         # command = "mkdir -p " + folder
         if(platform.system() == "Windows"):

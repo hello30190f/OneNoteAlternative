@@ -225,6 +225,8 @@ export default function Markdown(data:PageMetadataAndData){
     function netwrokHander(event:MessageEvent){
         const jsondata:updatePage = JSON.parse(event.data)
 
+        
+
         if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
             if(jsondata.status != "error"){
                 // TODO: inform the user the page is successfully saved

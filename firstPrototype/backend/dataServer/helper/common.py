@@ -301,10 +301,23 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
     print(">>> " + responseString)
 
 
+
+
+
 #TODO: warp basic commands as function to absorb platform difference
 #TODO: implement this
-def mkdirRecursively(folderPath:str):
+def mkdir(folderPath:str):
     root = loadSettings.settings["NotebookRootFolder"][0]
-    
+
+    # NOTE: this is a hint for the implementation
+    # if(platform.system() == "Windows"):
+    #     winpath = folder.replace("//","/").replace("/","\\")
+    #     command = ["mkdir",winpath]
+    #     print("winpath     : " + winpath)
+    # else:
+    #     command = ["mkdir -p " + folder]
+    # result = subprocess.run(command,shell=True)
+    # print("folder path : " + folder)
+
     pass
 
