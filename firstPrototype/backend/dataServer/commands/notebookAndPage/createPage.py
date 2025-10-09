@@ -2,6 +2,7 @@ from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafe
 from helper import loadSettings 
 import os , os.path , json , subprocess
 from type.pages import controller
+import platform
 
 # response note
 # {
@@ -63,14 +64,22 @@ async def createPage(request,websocket):
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if(not os.path.exists(folder)):
         # create folder
-        command = "mkdir -p " + folder
-        result = subprocess.run([command],shell=True)
+        # command = "mkdir -p " + folder
+        if(platform.system() == "Windows"):
+            winpath = folder.replace("//","/").replace("/","\\")
+            command = ["mkdir",winpath]
+            print("winpath     : " + winpath)
+        else:
+            command = ["mkdir -p " + folder]
+        result = subprocess.run(command,shell=True)
+        print("folder path : " + folder)
 
         if(result.returncode != 0):
             print("createPage ERROR: The backend error. Failed to create an new folder.")
             print("notebook    : " + notebookName) 
             print("contentPath : " + pagePathFromContentFolder)
             print("fill path   : " + pagePath)
+            print("folder path : " + folder)
             responseString = json.dumps({
                 "status"        : "error",
                 "UUID"          : request["UUID"],
