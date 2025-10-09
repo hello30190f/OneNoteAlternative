@@ -107,6 +107,10 @@ files folder
 
 
 ## buffer version management
+### point
+- Manage buffers based on the last time the buffer modified
+- Show marge UI when conflict detected. When more than 2 unsaved buffer exist for a page, the UI will be appear.
+
 ### buffer data structure
 ```json
 {
