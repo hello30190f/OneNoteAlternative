@@ -54,35 +54,23 @@ async def deletePage(request,websocket):
 
     # check the page existance
     if(not os.path.exists(pagePath)):
-        print("deletePage ERROR: The page has already been deleted or not exist.")
-        print(notebookName)
-        print(pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "The page has already been deleted or not exist.",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "The page has already been deleted or not exist.",
+            [notebookName,pagePath]
+        )
         return
 
     # get notebooks metadata
     notebookJSONinfo = findNotes()
     if(notebookJSONinfo == None):
-        print("deletePage ERROR: Unable to get the notebook metadata infomation.")
-        print(notebookName)
-        print(pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "Unable to get the notebook metadata infomation.",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to get the notebook metadata infomation.",
+            [notebookName,pagePath]
+        )
         return       
 
     # get the target notebook metadata
@@ -92,34 +80,21 @@ async def deletePage(request,websocket):
             targetNotebookInfo = notebookJSONinfo[aNotebook]
             break
     if(targetNotebookInfo == None):
-        print("deletePage ERROR: The specified notebook does not exist.")
-        print(notebookName)
-        print(pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "The specified notebook does not exist.",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "The specified notebook does not exist.",
+            [notebookName,pagePath]
+        )
         return       
 
     async def UnableUpdateNotebookMetadataResponse():
-        print("deletePage ERROR: Unable to update the notebook metadata")
-        print("notebook     : " + notebookName) 
-        print("contentPath  : " + pagePathFromContentFolder)
-        print("fill path    : " + pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "errorMessage"  : "Unable to update the notebook metadata",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to update the notebook metadata",
+            [notebookName,pagePath,pagePathFromContentFolder]
+        )
 
     # update the notebook metadata if the ref still exist
     notebookJSONinfo = findNotes()
@@ -147,19 +122,12 @@ async def deletePage(request,websocket):
     
     # when the page seems to be deleted.
     if(not find):
-        print("deletePage ERROR: The page has already been deleted.")
-        print("notebook     : " + notebookName) 
-        print("contentPath  : " + pagePathFromContentFolder)
-        print("fill path    : " + pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "errorMessage"  : "The page has already been deleted.",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "The page has already been deleted.",
+            [notebookName,pagePath,pagePathFromContentFolder]
+        )
         return
 
     if(updateNotebookMatadata(notebookName,targetNotebook)):
@@ -169,20 +137,12 @@ async def deletePage(request,websocket):
 
 
     async def UnableToUpdateNotebookDeletedResponse():
-        print("deletePage ERROR: Unable to update the notebook deleted.json")
-        print("notebook     : " + notebookName) 
-        print("contentPath  : " + pagePathFromContentFolder)
-        print("fill path    : " + pagePath)
-        print("deleted.json : " + deleted)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "errorMessage"  : "Unable to update the notebook deleted.json",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to update the notebook deleted.json",
+            [notebookName,pagePath,pagePathFromContentFolder,deleted]
+        )
 
     # check deleted.json exists or not.
     if(not os.path.exists(deleted)):
@@ -226,21 +186,12 @@ async def deletePage(request,websocket):
             find = True
             break
     if(find):
-        print("deletePage ERROR: The page has already been deleted ")
-        print("even the notebook metadata still has the ref to the page. The integrality may be corrupted.")
-        print("notebook     : " + notebookName) 
-        print("contentPath  : " + pagePathFromContentFolder)
-        print("fill path    : " + pagePath)
-        print("deleted.json : " + deleted)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "errorMessage"  : "The page has already been deleted even the notebook metadata still has the ref to the page. The integrality may be corrupted.",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "The page has already been deleted even the notebook metadata still has the ref to the page. The integrality may be corrupted.",
+            [notebookName,pagePath,pagePathFromContentFolder,deleted]
+        )
         return
 
     targetDeletedInfo.append({

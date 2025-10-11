@@ -61,17 +61,10 @@ async def pageInfo(request,websocket):
 
 
     except:
-        print("pageInfo command ERROR: unable to open or read data.")
-        print(pagePathFromContent)
-        print(notebookName)
-        print(targetPath)
-        responseString = json.dumps({
-             "status"        : "error",
-             "UUID"          : request["UUID"],
-             "command"       : "pageInfo",
-             "errorMessage"  : "The backend error. This might mean there is no page or malformed json file.",
-             "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "unable to open or read data.",
+            [pagePathFromContent,notebookName,targetPath]
+        )
 

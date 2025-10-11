@@ -43,30 +43,22 @@ async def deleteNotebook(request,websocket):
 
     # check the notebook existance
     if(not os.path.exists(notebookFolderPath)):
-        print("deleteNotebook ERROR: The notebook has already not existed.")
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "The notebook has already not existed.",
-            "UUID"          : request["UUID"],
-            "command"       : "deleteNotebook",
-            "data": { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "The notebook has already not existed.",
+            []
+        )
         return
     
     # delete the notebook and then error handling.
     if(deleteDataSafely(notebookFolderPath)):
-        print("deleteNotebook ERROR: Unable to delete the notebook.")
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "Unable to delete the notebook.",
-            "UUID"          : request["UUID"],
-            "command"       : "deleteNotebook",
-            "data": { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to delete the notebook.",
+            []
+        )
         return
 
     # no error state
