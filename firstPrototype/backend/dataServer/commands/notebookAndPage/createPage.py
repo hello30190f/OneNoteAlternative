@@ -67,41 +67,23 @@ async def createPage(request,websocket):
         print("folder path : " + folder)
 
         if(result.returncode != 0):
-            print("createPage ERROR: The backend error. Failed to create an new folder.")
-            print("notebook    : " + notebookName) 
-            print("contentPath : " + pagePathFromContentFolder)
-            print("fill path   : " + pagePath)
-            print("folder path : " + folder)
-            responseString = json.dumps({
-                "status"        : "error",
-                "UUID"          : request["UUID"],
-                "command"       : "createPage",
-                "errorMessage"  : "The backend error. Failed to create an new folder.",
-                "data"          : { 
-                    "folderPath" : folder,
-                    "returnCode" : result.returncode
-                }
-            })
-            await websocket.send(responseString)
-            print(">>> " + responseString)
+            await errorResponse(
+                websocket,
+                request,
+                "The backend error. Failed to create an new folder.",
+                [notebookName,pagePathFromContentFolder,pagePath,folder]
+            )
             return
 
 
     # check the page existance
     if(os.path.exists(pagePath)): 
-        print("createPage ERROR: duplicate pageID")
-        print("notebook    : " + notebookName) 
-        print("contentPath : " + pagePathFromContentFolder)
-        print("fill path   : " + pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createPage",
-            "errorMessage"  : "duplicate pageID",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "duplicate pageID",
+            [notebookName,pagePathFromContentFolder,pagePath]
+        )
         return
 
 
@@ -133,19 +115,12 @@ async def createPage(request,websocket):
     # }
 
     async def UnableUpdateNotebookMetadataResponse():
-        print("createPage ERROR: Unable to update the notebook metadata")
-        print("notebook     : " + notebookName) 
-        print("contentPath  : " + pagePathFromContentFolder)
-        print("fill path    : " + pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createPage",
-            "errorMessage"  : "Unable to update the notebook metadata",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to update the notebook metadata",
+            [notebookName,pagePathFromContentFolder,pagePath]
+        )
 
     # update notebook metadata.json
     try:
@@ -194,20 +169,12 @@ async def createPage(request,websocket):
     if(failed):
         # remove the failed page
         deleteDataSafely(pagePath)
-
-        print("createPage ERROR: The backend error. Failed to create a new file for the new page.")
-        print("notebook    : " + notebookName) 
-        print("contentPath : " + pagePathFromContentFolder)
-        print("fill path   : " + pagePath)
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createPage",
-            "errorMessage"  : "The backend error. Failed to create a new file or to find the specified pageType: " + pageType,
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "The backend error. Failed to create a new file for the new page.",
+            [notebookName,pagePathFromContentFolder,pagePath]
+        )
     else:
         responseString = json.dumps({
             "status"        : "ok",
