@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, findNotes, updateNotebookMatadata, timeString
+from helper.common import NotImplementedResponse, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
 from helper import loadSettings 
 import json, os.path
 
@@ -30,21 +30,12 @@ async def deletePage(request,websocket):
     mandatoryKeys   = ["notebook","PageID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("deletePage ERROR: Mandatory keys are missing for this command.")
-        print(mandatoryKeys)
-        print(missing)
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "Mandatory data keys are missing or malformed.",
-            "UUID"          : request["UUID"],
-            "command"       : "deletePage",
-            "data": {
-                "mandatoryKeys": mandatoryKeys,
-                "missing": missing
-            }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Mandatory keys are missing for this command.",
+            [mandatoryKeys,missing]
+        )
         return
     
     # gather infomation 

@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely
+from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, errorResponse
 from helper import loadSettings 
 import json, os, os.path
 
@@ -29,21 +29,12 @@ async def deleteNotebook(request,websocket):
     mandatoryKeys   = ["notebook"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
-        print("deleteNotebook ERROR: Mandatory keys are missing for this command.")
-        print(mandatoryKeys)
-        print(missing)
-        responseString = json.dumps({
-            "status"        : "error",
-            "errorMessage"  : "Mandatory data keys are missing or malformed.",
-            "UUID"          : request["UUID"],
-            "command"       : "deleteNotebook",
-            "data": {
-                "mandatoryKeys": mandatoryKeys,
-                "missing": missing
-            }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Mandatory keys are missing for this command.",
+            [mandatoryKeys,missing]
+        )
         return
     
     notebookName        = request["data"]["notebook"]

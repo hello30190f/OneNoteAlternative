@@ -306,8 +306,8 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
 
 #TODO: warp basic commands as function to absorb platform difference
 #TODO: implement this
-def mkdir(folderPath:str):
-    root = loadSettings.settings["NotebookRootFolder"][0]
+def mkdir(absoluteFolderPath:str):
+
 
     # NOTE: this is a hint for the implementation
     # if(platform.system() == "Windows"):
