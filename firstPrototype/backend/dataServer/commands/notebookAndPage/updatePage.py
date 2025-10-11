@@ -124,12 +124,13 @@ async def updatePage(request,websocket):
         try:
             pageMetadataJSON = json.loads(splitResult[1])
             pageContent = splitResult[2]
-        except:
+        except Exception as error:
             await errorResponse(
                 websocket,
                 request,
                 "The update string is malformed. Unable to find the metadata.",
-                [notebookName,pageID,pageType,pagePath,splitResult,updateDataString]
+                [notebookName,pageID,pageType,pagePath,splitResult,updateDataString],
+                error
                 )
             return
     else:
@@ -153,12 +154,13 @@ async def updatePage(request,websocket):
                     [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON]
                     )
                 return
-        except:
+        except Exception as error:
             await errorResponse(
                 websocket,
                 request,
                 "The update string is malformed. Unable to find the metadata.",
-                [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON]
+                [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON],
+                error
                 )
             return
 
@@ -188,12 +190,13 @@ async def updatePage(request,websocket):
             )
         else:
             saveString = json.dumps(pageMetadataJSON)
-    except:
+    except Exception as error:
         await errorResponse(
             websocket,
             request,
             "Unable to prepare update data string. This might be caused by malformed update data for the forntend.",
-            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString]
+            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString],
+            error
             )
         return
 
@@ -201,12 +204,13 @@ async def updatePage(request,websocket):
     try:
         with open(pagePath,"wt",encoding="utf-8") as saveTarget:
             saveTarget.write(saveString)
-    except:
+    except Exception as error:
         await errorResponse(
             websocket,
             request,
             "Unable to write the updated page.",
-            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString]
+            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString],
+            error
             )
         return
 

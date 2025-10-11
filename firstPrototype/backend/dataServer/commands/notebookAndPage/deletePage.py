@@ -138,12 +138,13 @@ async def deletePage(request,websocket):
 
 
 
-    async def UnableToUpdateNotebookDeletedResponse():
+    async def UnableToUpdateNotebookDeletedResponse(error = None):
         await errorResponse(
             websocket,
             request,
             "Unable to update the notebook deleted.json",
-            [notebookName,pagePath,pagePathFromContentFolder,deleted]
+            [notebookName,pagePath,pagePathFromContentFolder,deleted],
+            error
         )
 
     # check deleted.json exists or not.
@@ -159,8 +160,8 @@ async def deletePage(request,websocket):
     try:
         with open(deleted,"rt",encoding="utf-8") as deletedJSONstring:
             deletedJSONinfo = json.loads(deletedJSONstring.read())
-    except:
-        await UnableToUpdateNotebookDeletedResponse()
+    except Exception as error:
+        await UnableToUpdateNotebookDeletedResponse(error)
         return
     
     # info -> notebokname pageid date
@@ -205,8 +206,8 @@ async def deletePage(request,websocket):
     try:
         with open(deleted,"wt",encoding="utf-8") as deletedJSONstring:
             deletedJSONstring.write(json.dumps(deletedJSONinfo))
-    except:
-        await UnableToUpdateNotebookDeletedResponse()
+    except Exception as error:
+        await UnableToUpdateNotebookDeletedResponse(error)
         return
 
 

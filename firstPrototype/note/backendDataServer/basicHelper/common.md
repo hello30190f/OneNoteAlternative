@@ -244,6 +244,8 @@
  An error message to show in the stdout and response to the frontend 
 - variablesList:list  
  An error related vars list to show in the stdout and response to the frontend 
+- exception:Exception | None
+ Exception message. This is optional.
 
 ### return
 - None:None  

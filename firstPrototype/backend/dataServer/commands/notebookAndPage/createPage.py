@@ -115,12 +115,13 @@ async def createPage(request,websocket):
     #     ...
     # }
 
-    async def UnableUpdateNotebookMetadataResponse():
+    async def UnableUpdateNotebookMetadataResponse(error = None):
         await errorResponse(
             websocket,
             request,
             "Unable to update the notebook metadata",
-            [notebookName,pagePathFromContentFolder,pagePath]
+            [notebookName,pagePathFromContentFolder,pagePath],
+            error
         )
 
     # update notebook metadata.json
@@ -146,13 +147,14 @@ async def createPage(request,websocket):
             await UnableUpdateNotebookMetadataResponse()
             return
 
-    except:
-        await UnableUpdateNotebookMetadataResponse()
+    except Exception as error:
+        await UnableUpdateNotebookMetadataResponse(error)
         return
     
 
     # create a new page
     failed = False
+    errorMessageFromPy = None
     try:
         with open(pagePath,"wt",encoding="utf-8") as page:
             # call page template
@@ -163,8 +165,9 @@ async def createPage(request,websocket):
             else:
                 print("createPage ERROR: Failed to find pageTemplate for '" + pageType + "'")
                 failed = True
-    except:
+    except Exception as error:
         failed = True
+        errorMessageFromPy = error
 
 
     if(failed):
@@ -174,7 +177,8 @@ async def createPage(request,websocket):
             websocket,
             request,
             "The backend error. Failed to create a new file for the new page.",
-            [notebookName,pagePathFromContentFolder,pagePath]
+            [notebookName,pagePathFromContentFolder,pagePath],
+            error
         )
     else:
         responseString = json.dumps({

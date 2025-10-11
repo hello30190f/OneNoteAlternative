@@ -37,6 +37,7 @@ npm run build1
 
 
 ## TODOs
+For more detail, see [躓いたところ | nyanmo main blog](https://www.nyanmo.info/posts/idea/research/onenotealternativecreation/whereistumbled/).
 ### Freespace
 - [x] create empty project
 - [x] write a simple architecture discription
@@ -52,16 +53,16 @@ npm run build1
 - [x] implement create page button
 - [x] implement delete notebook button
 - [x] implement delete page button
-- [ ] implement page view and make them editable via the frontend
+- [x] implement page view and make them editable via the frontend
 - [x] use [marked](https://github.com/markedjs/marked) library to render markdown content.
 
 ### dataserver backend
 - [ ] implement minimal commands  (currently working)
 - [ ] implement setting configure UI 
-- [ ] 
-
 
 ### clientside backend
+- [ ] integrate the function to the dataserver.
+
 
 ## note list
 ### basic

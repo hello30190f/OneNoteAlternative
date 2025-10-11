@@ -59,11 +59,12 @@ async def pageInfo(request,websocket):
             print(">>> " + responseString)
 
 
-    except:
+    except Exception as error:
         await errorResponse(
             websocket,
             request,
             "unable to open or read data.",
-            [pagePathFromContent,notebookName,targetPath]
+            [pagePathFromContent,notebookName,targetPath],
+            error
         )
 

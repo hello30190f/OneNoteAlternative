@@ -75,7 +75,7 @@ async def createNotebook(request,websocket):
         filesFolder     = True
         os.mkdir(indexFolderPath)
         indexFolder     = True
-    except:
+    except Exception as error:
         # when failed to create an new notebook due to folder creation failed.
         await errorResponse(
             websocket,
@@ -85,7 +85,8 @@ async def createNotebook(request,websocket):
              NotebookfolderPath,NotebookFolder,
              contentsFolderPath, contentsFolder,
              filesFolderPath, filesFolder,
-             indexFolderPath, indexFolder]
+             indexFolderPath, indexFolder],
+             error
         )
         return
 
@@ -93,13 +94,14 @@ async def createNotebook(request,websocket):
     try:
         with open(metadataPath,"wt",encoding="utf-8") as metadata:
             metadata.write(json.dumps(newNotebookMetadata))
-    except:
+    except Exception as error:
         await errorResponse(
             websocket,
             request,
             "failed to create a new metadata file for the new notebook.",
             [notebookName,notebookJSONinfo,
-             metadataPath,newNotebookMetadata]
+             metadataPath,newNotebookMetadata],
+             error
         )
         return
     
@@ -112,14 +114,15 @@ async def createNotebook(request,websocket):
         #  files.json
         with open(filesIndexPath,"wt",encoding="utf-8") as fileIndex:
             fileIndex.write(json.dumps({}))
-    except:
+    except Exception as error:
         await errorResponse(
             websocket,
             request,
             "failed to create new index metadata files for the new notebook.",
             [notebookName,notebookJSONinfo,
              metadataPath,newNotebookMetadata,
-             tagIndexPath,filesFolderPath]
+             tagIndexPath,filesFolderPath],
+             error
         )
         return
 
@@ -129,14 +132,15 @@ async def createNotebook(request,websocket):
             pageTemplate = controller.getPageTemplate("markdown",None)
             if(pageTemplate != None):
                 blank.write(pageTemplate)
-    except:
+    except Exception as error:
         await errorResponse(
             websocket,
             request,
             "failed to create a new blank page file for the new notebook.",
             [notebookName,notebookJSONinfo,
              metadataPath,newNotebookMetadata,
-             tagIndexPath,filesIndexPath,blankPagePath]
+             tagIndexPath,filesIndexPath,blankPagePath],
+             error
         )
         return
 

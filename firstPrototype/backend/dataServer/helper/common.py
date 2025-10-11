@@ -273,10 +273,11 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
 #   request         : the frontend reqiuest entire JSON data
 #   errorMessage    : an error message to show in the stdout and response to the frontend 
 #   variablesList   : an error related vars list to show in the stdout and response to the frontend 
+#   exception       : Exception message. The default is None.  
 # return value
 #   OK      : None
 #   Error   : Error state does not exist.
-async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:list):
+async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:list,exception = None):
     print("{} ERROR: {}".format(request["command"],errorMessage))
 
     variableState = {}
@@ -289,6 +290,9 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
         print("{}:\n{}\n".format(varName,aVar))
         variableState[varName] = str(aVar)
     print("{} ERROR: variable state end --------------------------".format(request["command"]))
+    print("{} ERROR: exception message --------------------------".format(request["command"]))
+    print(exception)
+    print("{} ERROR: exception message end --------------------------".format(request["command"]))
 
     responseString = json.dumps({
         "status"        : "error",
@@ -301,6 +305,14 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
     print(">>> " + responseString)
 
 
+# TODO: implement this
+# arg:
+#   websocket       : the connection to the frontend via websocket
+# return value
+#   OK      : None
+#   Error   : Error state does not exist.
+def sendIntterupt(websocket):
+    pass
 
 
 
