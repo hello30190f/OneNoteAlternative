@@ -2,7 +2,6 @@ from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse
 from helper import loadSettings 
 import json
 
-#TODO: all with open -> encoding="utf-8"
 async def pageInfo(request,websocket):
     mandatoryKeys   = ["notebook","pageID"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)

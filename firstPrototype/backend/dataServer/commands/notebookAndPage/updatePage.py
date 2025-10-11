@@ -31,6 +31,7 @@ import json, os.path
 # }
 # ```
 
+# TODO: send an interrupt to the all forntends to notify this update.
 async def updatePage(request,websocket):
     mandatoryKeys   = ["notebook","pageID","pageType","update"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)

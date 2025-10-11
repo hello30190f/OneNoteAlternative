@@ -1,6 +1,7 @@
 # TODO: implement this
 # TODO: wirte the document
 
+# TODO: send an interrupt to the all forntends to notify this update.
 
 from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse
 from helper import loadSettings 

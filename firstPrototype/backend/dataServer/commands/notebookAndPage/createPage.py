@@ -24,6 +24,7 @@ import platform
 
 
 # TODO: update notebook metadata.
+# TODO: send an interrupt to the all forntends to notify this update.
 async def createPage(request,websocket):
     mandatoryKeys   = ["notebook","newPageID","pageType"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)

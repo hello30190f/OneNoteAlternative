@@ -23,6 +23,7 @@ import json, os, os.path
 #     "data":{ }
 # }
 # ```
+# TODO: send an interrupt to the all forntends to notify this update.
 
 async def deleteNotebook(request,websocket):
     # If there are no mandatory keys for the command, this checker code can be omitted.

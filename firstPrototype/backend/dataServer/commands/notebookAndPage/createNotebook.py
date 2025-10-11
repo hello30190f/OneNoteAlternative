@@ -4,6 +4,7 @@ from type.pages import controller
 import json, uuid, os
 
 # TODO: if failed to create a new notebook, remove the folders and the files.
+# TODO: send an interrupt to the all forntends to notify this update.
 async def createNotebook(request,websocket):
     mandatoryKeys   = ["notebookName"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)

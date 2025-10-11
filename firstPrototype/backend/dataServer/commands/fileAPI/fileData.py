@@ -2,6 +2,7 @@ from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse
 from helper import loadSettings 
 import json
 
+# TODO: send an interrupt to the all forntends to notify this update.
 async def fileData(request,websocket):
     mandatoryKeys   = ["fileID","splitIndex"]
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
