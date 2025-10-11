@@ -112,7 +112,7 @@ export function DeleteNotebook(){
 
         const requestString = JSON.stringify({
             "command": "deleteNotebook",
-            "UUID": requestUUID,
+            "UUID": requestUUID.current,
             "data": { 
                 "notebook": currentNotebook,
             }
