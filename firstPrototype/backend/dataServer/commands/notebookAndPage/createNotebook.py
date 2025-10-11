@@ -22,19 +22,13 @@ async def createNotebook(request,websocket):
     notebookJSONinfo = findNotes()
     for aNotebook in notebookJSONinfo.keys():
         if(notebookName == aNotebook):
-            print("createNotebook ERROR: duplicate notebook name -> " + notebookName)
-            print(notebookJSONinfo)
-
             # when has already notebook with same name as "notebookName" exist.
-            responseString = json.dumps({
-                "status"        : "error",
-                "UUID"          : request["UUID"],
-                "command"       : "createNotebook",
-                "errorMessage"  : "duplicate notebook name",
-                "data"          : { }
-            })
-            await websocket.send(responseString)
-            print(">>> " + responseString)
+            await errorResponse(
+                websocket,
+                request,
+                "duplicate notebook",
+                [notebookName,notebookJSONinfo]
+            )
             return
 
 
@@ -82,32 +76,16 @@ async def createNotebook(request,websocket):
         indexFolder     = True
     except:
         # when failed to create an new notebook due to folder creation failed.
-        print("createNotebook ERROR: Unable to create new folders.")
-        print(notebookName)
-        print(notebookJSONinfo)
-        print("  " + NotebookfolderPath)
-        print("  notebookFolder OK? : " + str(NotebookFolder))
-        print("  " + filesFolderPath)
-        print("  filesFolder    OK? : " + str(filesFolder))
-        print("  " + contentsFolderPath)
-        print("  contentsFolder OK? : " + str(contentsFolder))
-        print("  " + indexFolderPath)
-        print("  indexFolder    OK? : " + str(indexFolder))
-
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createNotebook",
-            "errorMessage"  : "The backend error. Unable to create new folders for a new notebook.",
-            "data"          : {
-                "notebookFolder" : NotebookFolder,
-                "contentsFolder" : contentsFolder,
-                "filesFolder"    : filesFolder,
-                "indexFolder"    : indexFolder,
-            }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to create new folders.",
+            [notebookName,notebookJSONinfo,
+             NotebookfolderPath,NotebookFolder,
+             contentsFolderPath, contentsFolder,
+             filesFolderPath, filesFolder,
+             indexFolderPath, indexFolder]
+        )
         return
 
     # create metadata.json
@@ -115,21 +93,13 @@ async def createNotebook(request,websocket):
         with open(metadataPath,"wt",encoding="utf-8") as metadata:
             metadata.write(json.dumps(newNotebookMetadata))
     except:
-        print("createNotebook ERROR: failed to create a new metadata file for the new notebook.")
-        print(notebookName)
-        print(notebookJSONinfo)
-        print(metadataPath)
-        print(newNotebookMetadata)
-
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createNotebook",
-            "errorMessage"  : "The backend error. Unable to create a new metadata file for a new notebook.",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "failed to create a new metadata file for the new notebook.",
+            [notebookName,notebookJSONinfo,
+             metadataPath,newNotebookMetadata]
+        )
         return
     
     # create index file
@@ -142,23 +112,14 @@ async def createNotebook(request,websocket):
         with open(filesIndexPath,"wt",encoding="utf-8") as fileIndex:
             fileIndex.write(json.dumps({}))
     except:
-        print("createNotebook ERROR: failed to create new index metadata files for the new notebook.")
-        print(notebookName)
-        print(notebookJSONinfo)
-        print(metadataPath)
-        print(newNotebookMetadata)
-        print(tagIndexPath)
-        print(filesIndexPath)
-
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createNotebook",
-            "errorMessage"  : "The backend error. Unable to create new index metadata files for the new notebook.",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "failed to create new index metadata files for the new notebook.",
+            [notebookName,notebookJSONinfo,
+             metadataPath,newNotebookMetadata,
+             tagIndexPath,filesFolderPath]
+        )
         return
 
     # create a default blank page. (markdown)
@@ -168,24 +129,14 @@ async def createNotebook(request,websocket):
             if(pageTemplate != None):
                 blank.write(pageTemplate)
     except:
-        print("createNotebook ERROR: failed to create a new blank page file for the new notebook.")
-        print(notebookName)
-        print(notebookJSONinfo)
-        print(metadataPath)
-        print(newNotebookMetadata)
-        print(tagIndexPath)
-        print(filesIndexPath)
-        print(blankPagePath)
-
-        responseString = json.dumps({
-            "status"        : "error",
-            "UUID"          : request["UUID"],
-            "command"       : "createNotebook",
-            "errorMessage"  : "The backend error. Unable to create a new blank page file for the new notebook.",
-            "data"          : { }
-        })
-        await websocket.send(responseString)
-        print(">>> " + responseString)
+        await errorResponse(
+            websocket,
+            request,
+            "failed to create a new blank page file for the new notebook.",
+            [notebookName,notebookJSONinfo,
+             metadataPath,newNotebookMetadata,
+             tagIndexPath,filesIndexPath,blankPagePath]
+        )
         return
 
 
