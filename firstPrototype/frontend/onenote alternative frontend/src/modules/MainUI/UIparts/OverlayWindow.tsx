@@ -5,13 +5,17 @@ import { useStartButtonStore } from "./ToggleToolsBar/StartButton"
 import type { toggleable } from "../ToggleToolsBar"
 
 export interface OverlayWindowArgs{
-    title: string,
-    visible: boolean,
-    toggleable: toggleable | null,
-    color: string,
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
-    initPos: {x:number,y:number}
+    title               : string,
+    visible             : boolean,
+    setVisible          : React.Dispatch<React.SetStateAction<boolean>>,
+    toggleable          : toggleable | null,
+    color               : string,
+    initPos             : {x:number,y:number},
+    // windowSize          : {width:number,height:number},
+    // windowResizeEnable  : boolean
 }
+
+// TODO: resize, overflow scroll and fix size
 
 // show window can be moved around anywhare and closed
 // TODO: manage inactive and active window style. (inactive: oipacity will be lower number)
@@ -29,29 +33,29 @@ export interface OverlayWindowArgs{
 // | OverlayWindow.tsx  | 1300-1400    |
 
 type AoverlayWindow = {
-    name: string,       // window title
-    UUID: string,       
-    toggleable: toggleable | null,
-    isActive: boolean,  // false -> inactive, true -> active
-    zIndex: number,     // 200-1200
-    color: string,       // tailwindcss classname
-    windowVisible: {visible:boolean,setVisible:React.Dispatch<boolean>}
+    name            : string,       // window title
+    UUID            : string,       
+    toggleable      : toggleable | null,
+    isActive        : boolean,      // false -> inactive, true -> active
+    zIndex          : number,       // 200-1200
+    color           : string,       // tailwindcss classname
+    windowVisible   : {visible:boolean,setVisible:React.Dispatch<boolean>}
 }
 
 type overlayWindows = {
-    windows: AoverlayWindow[],
-    zIndexMax: number,
-    zIndesMin: number,
-    addWindow: (window:AoverlayWindow) => void,        // in first place, z-index will be the highest number.
-    removeWindow: (window:AoverlayWindow) => void,
-    allWindowInactive: () => void,                     // no need to update z-index
-    makeAwindowActive: (window:AoverlayWindow) => void,// the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
-    getWindow: (window:AoverlayWindow) => AoverlayWindow, 
-    getWindowByArg: (windowArg:OverlayWindowArgs) => AoverlayWindow | null,
-    makeAwindowActiveByArg: (windowArg:OverlayWindowArgs) => void,
-    closeAllWindow: () => void,
-    closeAwindow:(window:AoverlayWindow) => void,
-    syncStateToToggleable: () => void,
+    windows                 : AoverlayWindow[],
+    zIndexMax               : number,
+    zIndesMin               : number,
+    addWindow               : (window:AoverlayWindow) => void,  // in first place, z-index will be the highest number.
+    removeWindow            : (window:AoverlayWindow) => void,
+    allWindowInactive       : () => void,                       // no need to update z-index
+    makeAwindowActive       : (window:AoverlayWindow) => void,  // the active window need to update z-index to the highest number. need to update other windows z-index subtracted by 1.
+    getWindow               : (window:AoverlayWindow) => AoverlayWindow, 
+    getWindowByArg          : (windowArg:OverlayWindowArgs) => AoverlayWindow | null,
+    makeAwindowActiveByArg  : (windowArg:OverlayWindowArgs) => void,
+    closeAllWindow          : () => void,
+    closeAwindow            : (window:AoverlayWindow) => void,
+    syncStateToToggleable   : () => void,
 }
 
 export const useOverlayWindowStore = create<overlayWindows>((set,get) => ({
@@ -211,6 +215,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const addWindow = useOverlayWindowStore((s) => s.addWindow)
+    const removeWindow = useOverlayWindowStore((s) => s.removeWindow)
     const maxZindex = useOverlayWindowStore((s) => s.zIndexMax)
     const windows = useOverlayWindowStore((s) => s.windows)
     const getWindow = useOverlayWindowStore((s) => s.getWindow)
@@ -239,7 +244,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         x:0,
         y:0
     })
-    let init = useRef(true)
+    const init = useRef(true)
 
 
     const windowHandlers = {
@@ -346,7 +351,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
             // console.log("move window end")
             onMove.current = false
         },
-        "resize": () => {
+        "resize": () => { // when the viewport is resized, not for resize button
             // fixed css style 
             const margin = 100 
             if(window.innerWidth < windowPos.current.x + margin && window.innerWidth > margin){
@@ -379,8 +384,29 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
         }
     }
 
+    const windowResizeHanders = {
+        "mouseup": () => {
+
+        },
+        "mousemove": () => {
+
+        },
+        "mousedown": () => {
+
+        },
+        "touchstart": () => {
+
+        },
+        "touchmove": () => {
+
+        },
+        "touchend": () => {
+
+        },
+    }
+
+    // init and clean up 
     if(init.current){
-        // console.log("Overlay window init")
         addEventListener("touchend",windowHandlers.touchend)
         addEventListener("mouseup",windowHandlers.mouseup)
 
@@ -389,7 +415,7 @@ export function OverlayWindow({ children, arg }:{ children:ReactNode, arg:Overla
 
         addEventListener("resize",windowHandlers.resize)
         addWindow(aWindowINIT.current)
-
+        
         init.current = false
     }
 

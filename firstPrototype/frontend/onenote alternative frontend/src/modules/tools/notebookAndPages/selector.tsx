@@ -173,15 +173,15 @@ export default function Selector() {
         let notebookSelector: ReactElement[] = [];
         const notebookSelectorInner: ReactElement[] = [];
 
-        notebookSelectorInner.push(<option value={"None"}>No notebook selected</option>)
+        notebookSelectorInner.push(<option value={"None"} key={"None"}>No notebook selected</option>)
 
         // for each notebook
         for (const notebookName in index.data) {
             // notebook selector
             if(currentNotebook != notebookName){
-                notebookSelectorInner.push(<option value={notebookName}>{notebookName}</option>)
+                notebookSelectorInner.push(<option key={notebookName} value={notebookName}>{notebookName}</option>)
             }else{ 
-                notebookSelectorInner.push(<option value={notebookName} selected={true}>{notebookName}</option>)
+                notebookSelectorInner.push(<option key={notebookName} value={notebookName} selected={true}>{notebookName}</option>)
             }
 
 
@@ -240,6 +240,7 @@ export default function Selector() {
             notebookSelector.push(<select 
                                     id="notebookSelector" 
                                     className="bg-gray-950 w-full border-[2px] border-gray-800"
+                                    key={"notebookSelector"}
                                     onChange={(event:ChangeEvent<HTMLSelectElement>) => {
                                         if(event.target.value == "None") {
                                             changeCurrentPage(null,null,null)
