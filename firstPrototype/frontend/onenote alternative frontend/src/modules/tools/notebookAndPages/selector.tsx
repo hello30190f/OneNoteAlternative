@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type ReactElement, type ReactNode } from "react";
 import { send, useDatabaseStore } from "../../helper/network";
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
@@ -170,8 +170,22 @@ export default function Selector() {
         }
 
         const notebooks: ReactElement[] = [];
+        let notebookSelector: ReactElement[] = [];
+        const notebookSelectorInner: ReactElement[] = [];
+
+        notebookSelectorInner.push(<option value={"None"}>No notebook selected</option>)
+
         // for each notebook
         for (const notebookName in index.data) {
+            // notebook selector
+            if(currentNotebook != notebookName){
+                notebookSelectorInner.push(<option value={notebookName}>{notebookName}</option>)
+            }else{ 
+                notebookSelectorInner.push(<option value={notebookName} selected={true}>{notebookName}</option>)
+            }
+
+
+            // page selector
             let notebookNameStyle = "text-start pl-[10px] underline hover:bg-gray-500 selection:bg-transparent m-[5px] "
             if(notebookName == currentNotebook){
                 notebookNameStyle += " bg-gray-600"
@@ -222,6 +236,21 @@ export default function Selector() {
                 }
             }
 
+            notebookSelector = []
+            notebookSelector.push(<select 
+                                    id="notebookSelector" 
+                                    className="bg-gray-950 w-full border-[2px] border-gray-800"
+                                    onChange={(event:ChangeEvent<HTMLSelectElement>) => {
+                                        if(event.target.value == "None") {
+                                            changeCurrentPage(null,null,null)
+                                            return
+                                        }
+                                        changeCurrentPage(event.target.value,null,null)
+                                    }}
+                                    >
+                {notebookSelectorInner}
+            </select>)
+
             // for each page entry
             // TODO: use newPageList and show hierarchy  
             // TODO: update AnEntry register pageID and place independently
@@ -252,8 +281,15 @@ export default function Selector() {
                 }
             }
 
+            let aNotebookEntryStyle = {
+                "display": "none"
+            } 
+            if(currentNotebook == notebookName){
+                aNotebookEntryStyle.display = ""
+            }
+
             notebooks.push(
-                <div className="notebookEntry min-w-[15rem] m-[0.5rem] bg-gray-700 border-2 border-solid border-gray-300" key={notebookName}>
+                <div style={aNotebookEntryStyle} className="notebookEntry min-w-[15rem] m-[0.5rem] mt-[1rem] bg-gray-700 border-2 border-solid border-gray-300" key={notebookName}>
                     <div 
                     onClick={() => {
                         // when a notebook is selected
@@ -268,8 +304,15 @@ export default function Selector() {
             );
         }
 
+        if(currentNotebook == null || currentNotebook == ""){
+            notebooks.push(<div className="mt-[0.5rem]">Select notebook.</div>)
+        }
+
         if(notebooks.length != 0){
-            return <>{notebooks}</>;
+            return <div>
+                {notebookSelector}
+                {notebooks}
+            </div>;
         }else{
             return <p>There are no notebooks to show.</p>
         }
