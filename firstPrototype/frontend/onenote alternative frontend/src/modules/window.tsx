@@ -12,9 +12,9 @@ import { PageInfo } from "./tools/metadata/metadataInfo";
 
 
 
-// TODO: define buffer data structure for each unsaved pages
 // TODO: create buffer store for each page
 // TODO: make all pages use the buffer store to prevent from losing the unsaved data.
+// TODO: if there are unsaved buffers, ask the user to save or throw away the data before the frontend is closed.
 // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Date
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal
 export type AnUnsavedBuffer = {
@@ -26,7 +26,7 @@ export type AnUnsavedBuffer = {
     bufferContentString : string,
 }
 
-// NOTE: normally single page will add single buffer and upadte constantly if there are any modification.
+// NOTE: normally single page will add single buffer and update constantly if there are any modification.
 export type unsavedBuffers = {
     buffers             : AnUnsavedBuffer[],
     addBuffer           : (unsavedBuffer:AnUnsavedBuffer) => void,
