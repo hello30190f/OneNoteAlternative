@@ -316,20 +316,27 @@ def sendIntterupt(websocket):
 
 
 
-#TODO: warp basic commands as function to absorb platform difference
-#TODO: implement this
+#TODO: test this
+#TODO: use this for creating folder
+# arg:
+#   absoluteFolderPath : full folder path to create
+# return value
+#   OK      : False
+#   Error   : True will be returned when failed to create folder.
 def mkdir(absoluteFolderPath:str):
+    if(platform.system() == "Windows"):
+        winpath = absoluteFolderPath.replace("//","/").replace("/","\\")
+        command = ["mkdir",winpath]
+        print("winpath     : " + winpath)
+    else:
+        command = ["mkdir -p " + absoluteFolderPath]
+    result = subprocess.run(command,shell=True,capture_output=True)
+    print("folder path : " + absoluteFolderPath)
 
+    if(result.returncode != 0):
+        print("mkdir helper: Unable to create the folder.")
+        print(str(result.stdout))
+        print(str(result.stderr))
+        return True
 
-    # NOTE: this is a hint for the implementation
-    # if(platform.system() == "Windows"):
-    #     winpath = folder.replace("//","/").replace("/","\\")
-    #     command = ["mkdir",winpath]
-    #     print("winpath     : " + winpath)
-    # else:
-    #     command = ["mkdir -p " + folder]
-    # result = subprocess.run(command,shell=True)
-    # print("folder path : " + folder)
-
-    pass
-
+    return False
