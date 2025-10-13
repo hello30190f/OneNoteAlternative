@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata, errorResponse
+from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata, errorResponse, mkdir
 from helper import loadSettings 
 import os , os.path , json , subprocess
 from type.pages import controller
@@ -55,19 +55,8 @@ async def createPage(request,websocket):
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if(not os.path.exists(folder)):
         # TODO: ~~support windows env -> implement and use mkdirRecursively function in helper.common~~ -> mkdir
-        # TODO: implement createFolder function as a helper.common func
         # create folder
-        # command = "mkdir -p " + folder
-        if(platform.system() == "Windows"):
-            winpath = folder.replace("//","/").replace("/","\\")
-            command = ["mkdir",winpath]
-            print("winpath     : " + winpath)
-        else:
-            command = ["mkdir -p " + folder]
-        result = subprocess.run(command,shell=True)
-        print("folder path : " + folder)
-
-        if(result.returncode != 0):
+        if(mkdir(folder)):
             await errorResponse(
                 websocket,
                 request,
@@ -75,6 +64,7 @@ async def createPage(request,websocket):
                 [notebookName,pagePathFromContentFolder,pagePath,folder]
             )
             return
+
 
 
     # check the page existance
