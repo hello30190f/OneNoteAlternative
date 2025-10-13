@@ -10,6 +10,13 @@ import { StartButtonMenu } from "./MainUI/UIparts/ToggleToolsBar/StartButton";
 import { ColorPalette } from "./helper/ColorPalette";
 import { PageInfo } from "./tools/metadata/metadataInfo";
 
+
+// TODO: define buffer data structure for each unsaved pages
+// TODO: create buffer store for each page
+// TODO: make all pages use the buffer store to prevent from losing the unsaved data.
+
+
+
 export type basicMetadata = {
     files       : string[],
     tags        : string[],

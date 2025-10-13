@@ -4,6 +4,17 @@ import type AnItem from "./element"
 import { create } from "zustand"
 import ShowItem from "./showItem"
 
+
+//TODO: when right click is detected, show menu
+//TODO: when left double click detected, add element
+//TODO: when the cursor hover specific element, highlight the element
+//TODO: when the specific element is clicked, enter the editor mode
+//TODO: when exit the editor mode, save the content if the content is modified.
+//TODO: when the side of the specific element is draged, enter move or resize mode
+//TODO: when the side of the specific element is hovered by the curosor, show the border, the resize button, the move button,
+//TODO: make other page embedded into this page by adding ref to the page as an item.
+
+
 // export interface PageMetadataAndData {
 //     pageType: string;
 //     tags: any[];
