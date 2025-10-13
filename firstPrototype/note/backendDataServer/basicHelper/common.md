@@ -250,3 +250,53 @@
 ### return
 - None:None  
  Nothing will be returned.
+
+
+
+## mkdir func
+### role
+ Create folder.
+
+### args
+- absoluteFolderPath:str  
+ The absolute path to the folder which will be created.
+
+### return 
+- False:bool  
+ There is no error.
+
+### return on error
+#### `mkdir` command is finished not with returncode 0
+- True:bool  
+ Failed to create the folder.
+
+#### The path is malformed
+- True:bool  
+ The new folder path is malformed. Follwing reason can be considered.  
+
+    1. Root directory is specified
+    2. Relative path is specified
+    3. Try to delete outside of the notebook stores.
+
+
+
+## checkTheAbsolutePath func
+### role
+ Check the path is malformed or not.
+
+### args
+- absolutePath:str  
+ The target path to check
+
+### return 
+- False:bool  
+ There is no error for the path.
+
+### return on error
+#### The path is malformed
+- True:bool  
+ The path is malformed. Follwing reason can be considered.  
+
+    1. Root directory is specified
+    2. Relative path is specified
+    3. Try to delete outside of the notebook stores.

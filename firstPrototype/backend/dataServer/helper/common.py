@@ -160,6 +160,35 @@ def findNotes():
     return notebookJSONinfo
 
 
+# arg:
+#   absolutePath    : file or folder path
+# return value
+#   OK      : False will be returned.
+#   Error   : True  will be returned when the path is malformed.
+def checkTheAbsolutePath(absolutePath:str):
+    # check the absoluteDataPath is something malisuous or not.
+    if(absolutePath == "/" or absolutePath == "C:\\"):
+        print("checkTheAbsolutePath: Failed. Try to delete root directory.")
+        return True
+    
+    # check the absoluteDataPath is relative path or not.
+    if(absolutePath[0] == "."):
+        print("checkTheAbsolutePath: Failed. A relative path is specified. Use absolute path.")
+        return True
+
+    # check the absoluteDataPath try to delete outside content of the notebooks or not.
+    isNotebookPath = False
+    for aNotebookStoreRoot in loadSettings.settings["NotebookRootFolder"]:
+        if(aNotebookStoreRoot in absolutePath):
+            isNotebookPath = True
+            break
+    if(not isNotebookPath):
+        print("checkTheAbsolutePath: Failed. The absoluteDataPath is outside of the notebook store.")
+        return True
+    
+    return False
+
+
 
 # TODO: show all exception the error message from python or other module -> Exception as error -> print(error)
 # NOTE: This function will delete all contents of a folder. There are no notify. Be careful. 
@@ -171,27 +200,11 @@ def findNotes():
 def deleteDataSafely(absoluteDataPath:str):
     # https://docs.python.org/3/library/platform.html#platform.system
     # 'Linux', 'Darwin', 'Java', 'Windows'
-
-    # check the absoluteDataPath is something malisuous or not.
-    if(absoluteDataPath == "/" or absoluteDataPath == "C:\\"):
-        print("deleteDataSafely: Failed. Try to delete root directory.")
-        return True
     
-    # check the absoluteDataPath is relative path or not.
-    if(absoluteDataPath[0] == "."):
-        print("deleteDataSafely: Failed. A relative path is specified. Use absolute path.")
+    if(checkTheAbsolutePath(absoluteDataPath)):
+        print("deleteDataSafely: This is malformed path.")
+        print(absoluteDataPath)
         return True
-
-    # check the absoluteDataPath try to delete outside content of the notebooks or not.
-    isNotebookPath = False
-    for aNotebookStoreRoot in loadSettings.settings["NotebookRootFolder"]:
-        if(aNotebookStoreRoot in absoluteDataPath):
-            isNotebookPath = True
-            break
-    if(not isNotebookPath):
-        print("deleteDataSafely: Failed. The absoluteDataPath is outside of the notebook store.")
-        return True
-    
 
     # find platform
     currnetOS = platform.system()
@@ -318,13 +331,18 @@ def sendIntterupt(websocket):
 
 #TODO: test this
 #TODO: use this for creating folder
-#TODO: write the document
 # arg:
 #   absoluteFolderPath : full folder path to create
 # return value
 #   OK      : False
 #   Error   : True will be returned when failed to create folder.
 def mkdir(absoluteFolderPath:str):
+
+    if(checkTheAbsolutePath(absoluteFolderPath)):
+        print("mkdir helper: This is malformed path")
+        print(absoluteFolderPath)
+        return True
+
     if(platform.system() == "Windows"):
         winpath = absoluteFolderPath.replace("//","/").replace("/","\\")
         command = ["mkdir",winpath]
