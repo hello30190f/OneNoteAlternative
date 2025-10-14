@@ -294,15 +294,14 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
 async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:list,exception = None):
     print("{} ERROR: {}".format(request["command"],errorMessage))
 
-    variableState = {}
+    variableState = []
     print("{} ERROR: variable state --------------------------".format(request["command"]))
     for aVar in variablesList:
         # print variable name and data
         # https://stackoverflow.com/questions/18425225/getting-the-name-of-a-variable-as-a-string
         # f'{aaa=}'.split("=")[0]
-        varName = f'{aVar=}'.split("=")[0]
-        print("{}:\n{}\n".format(varName,aVar))
-        variableState[varName] = str(aVar)
+        print("{}\n".format(aVar))
+        variableState.append(str(aVar))
     print("{} ERROR: variable state end --------------------------".format(request["command"]))
     print("{} ERROR: exception message --------------------------".format(request["command"]))
     print(exception)
