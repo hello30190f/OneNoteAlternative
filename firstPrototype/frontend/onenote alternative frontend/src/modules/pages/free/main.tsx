@@ -3,6 +3,10 @@ import type { PageMetadataAndData } from "../../MainUI/page"
 import type AnItem from "./element"
 import { create } from "zustand"
 import ShowItem from "./showItem"
+import { Menu } from "./showMenu"
+import { AddItem } from "./editTools/add"
+import { DeleteItem } from "./editTools/del"
+import { useFreePageItemsStore, useFreePageItemStoreEffect } from "./element"
 
 
 //TODO: when right click is detected, show menu
@@ -33,6 +37,8 @@ import ShowItem from "./showItem"
 // | anyPageView        | 200-1200     |
 // | OverlayWindow.tsx  | 1300-1400    |
 
+// manage item viewers. not to manage item itself. ----------------------------
+// manage item viewers. not to manage item itself. ----------------------------
 export type FreePageElement = {
     element: ({ item }:{ item:AnItem }) => JSX.Element,
     name: string
@@ -55,9 +61,14 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
         set((state) => ({elements: [...state.elements,element]}))
     },
     removeElement: (element:FreePageElement) => {
-        // not implemented yet...
+        // const oldElements = 
     }
 }))
+// manage item viewers. not to manage item itself. ----------------------------
+// manage item viewers. not to manage item itself. ----------------------------
+
+
+
 
 
 
@@ -80,8 +91,37 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
 // This is actual pageData for free page. This include "items" key which contain list of "AnItem"s.
 
 // TODO: automatic update on change
+// NOTE: any modification immediately saved. So no buffer is needed for this page type.
 export default function Free(data:PageMetadataAndData){
     const [jsondata,setJSONdata]    = useState<AnItem[]>(JSON.parse(data.pageData).pageData.items)
+    const addItem   = useFreePageItemsStore((s) => s.addItem)
+    const getItem   = useFreePageItemsStore((s) => s.getItem)
+    const cleanItem = useFreePageItemsStore((s) => s.cleanItem)
+
+    // NOTE: metadata list
+    // "pageType": "free",
+    // "tags": ["This","is","testpage"],
+    // "files": ["testfile.txt"],
+    // "createDate": "2025/10/6",
+    // "updateDate": "2025/10/6",
+    // "UUID": "950b0810-702c-4489-bbce-bc9fdd9f0b22",
+    // "pageData":{
+
+    // init and cleanup ------------------------
+    // init and cleanup ------------------------
+    useEffect(() => {
+        useFreePageItemStoreEffect()
+        for(const item of jsondata){
+            addItem(item)
+        }
+
+        return () => {
+            cleanItem()
+        }
+    },[])
+    // init and cleanup ------------------------
+    // init and cleanup ------------------------
+
 
     // console.log(jsondata)
     // console.log(data)
@@ -92,8 +132,11 @@ export default function Free(data:PageMetadataAndData){
 
     return(
         <div 
-            className="markdownContainer absolute top-0 left-0">
-            {jsondata.map((value,index) => <ShowItem item={value} key={index}></ShowItem>)}
+            className="freeContainer absolute top-0 left-0 w-full h-full">
+            {getItem().map((value,index) => <ShowItem item={value} key={index}></ShowItem>)}
+            <Menu></Menu>
+            <AddItem></AddItem>
+            <DeleteItem></DeleteItem>
         </div>
     )
 }

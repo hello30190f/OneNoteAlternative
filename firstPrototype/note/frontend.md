@@ -21,3 +21,21 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/z-index (2025年9月27日)
 ### window store
  overlayWindows have to register itself into the store for z-index management.
 
+## page types
+### free page
+#### overview
+ The oneNote style page.
+
+#### edit function
+- add item
+- remove item
+- resize item 
+- move item
+- range selection
+- drop item
+
+
+
+### markdown
+ The plain markdown page.
+

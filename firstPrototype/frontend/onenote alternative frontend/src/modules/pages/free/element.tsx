@@ -9,6 +9,12 @@
 //     }
 // },
 
+import { useEffect, useRef } from "react"
+import { create } from "zustand"
+import { useDatabaseStore } from "../../helper/network"
+import { genUUID } from "../../helper/common"
+
+// TODO: add the color property with rgba
 export default interface AnItem{
     ID:string
     type:string
@@ -21,8 +27,131 @@ export default interface AnItem{
         z:number
     }
 
+    color: {
+        r:number,   // 0-255
+        g:number,   // 0-255
+        b:number,   // 0-255
+        a:number    // 0-1 
+    }
+
     size:{
         width:number,
         height:number
     }
+}
+
+export type FreePageItems = {
+    items:AnItem[],
+    init:boolean,
+    addItem: (item:AnItem) => void,
+    removeItem: (item:AnItem) => void,
+    cleanItem: () => void,
+    updateItem: (item:AnItem) => void,
+    getItem: () => AnItem[]
+}
+
+export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
+    items: [],
+    init: true,
+    addItem: (item:AnItem) => {
+        const oldItems = get().items
+        const newItems = []
+        for(const oldItem of oldItems){
+            if(oldItem.ID == item.ID) return
+            newItems.push(oldItem)
+        }
+        newItems.push(item)
+        set({items: newItems,init:false})
+    },
+    removeItem: (item:AnItem) => {
+        const oldItems = get().items
+        const newItems = []
+        for(const oldItem of oldItems){
+            if(item.ID == oldItem.ID) continue
+            newItems.push(oldItem)
+        }
+        set({items: newItems})
+    },
+    updateItem: (item:AnItem) => {
+        const oldItems = get().items
+        const newItems = []
+        for(const oldItem of oldItems){
+            if(item.ID == oldItem.ID){
+                newItems.push(item)
+                continue 
+            }
+            newItems.push(oldItem)
+        }
+        set({items: newItems})
+    },
+    cleanItem: () => {
+        set({items:[],init:true})
+    },
+    getItem: () => {
+        return get().items
+    }
+}))
+
+
+// ## args (frontend to dataserver)
+// ```json
+// {
+//     "command": "updatePage",
+//     "UUID": "UUID string",
+//     "data": {
+//         "noteboook" : "notebookName",
+//         "pageID"    : "Path/to/newPageName",
+//         "pageType"  : "typeOfPage",
+//         "update"    : "entire page data string to save. the frontend responsible for the integrality",
+//     }
+// }
+// ```
+
+// TODO: implement this 
+export function useFreePageItemStoreEffect(){
+    const items         = useFreePageItemsStore((s) => s.items)
+    const init          = useFreePageItemsStore((s) => s.init)
+    const websocket     = useDatabaseStore((s) => s.websocket)
+    const requestUUID   = useRef(genUUID())
+
+    useEffect(() => {
+        if(init) return // avoid the blank data overwrite the original data.
+        
+        // do network things
+        // update page when item is added, deleted or modified 
+
+        // create json string wtih metadata and items data
+
+        // do not send request directory from websocket.send. 
+        // use send function in network.tsx
+
+    },[items])
+
+
+    useEffect(() => {
+        if(websocket == null) return
+
+        const getResponse = (event:MessageEvent) => {
+            // ## response (dataserver to frontend)
+            // ```json
+            // {
+            //     "status": "ok",
+            //     "errorMessage": "nothing",
+            //     "UUID":"UUID string",
+            //     "command": "updatePage",
+            //     "data":{ }
+            // }
+            // ```
+
+
+
+        }
+
+        websocket.addEventListener("message",getResponse)
+
+        return () => {
+            websocket.addEventListener("message",getResponse)
+        }
+    },[websocket])
+
 }

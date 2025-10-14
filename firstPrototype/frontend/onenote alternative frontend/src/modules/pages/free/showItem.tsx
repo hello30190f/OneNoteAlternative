@@ -53,7 +53,9 @@ export default function ShowItem({ item }: { item: AnItem }) {
     let init = useRef(true)
 
     const windowHandlers = {
+        // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
         "mousedown": (event: React.MouseEvent) => {
+            if(event.button != 0) return
             event.preventDefault()
             onMove.current = true
             prevPos.current.x = event.screenX
