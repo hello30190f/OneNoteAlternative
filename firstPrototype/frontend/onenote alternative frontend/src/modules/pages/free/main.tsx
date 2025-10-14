@@ -6,7 +6,9 @@ import ShowItem from "./showItem"
 import { Menu } from "./showMenu"
 import { AddItem } from "./editTools/add"
 import { DeleteItem } from "./editTools/del"
-import { useFreePageItemsStore, useFreePageItemStoreEffect } from "./element"
+import { useFreePageItemsStore } from "./element"
+import { useDatabaseStore } from "../../helper/network"
+import { genUUID } from "../../helper/common"
 
 
 //TODO: when right click is detected, show menu
@@ -98,6 +100,11 @@ export default function Free(data:PageMetadataAndData){
     const getItem   = useFreePageItemsStore((s) => s.getItem)
     const cleanItem = useFreePageItemsStore((s) => s.cleanItem)
 
+    const items         = useFreePageItemsStore((s) => s.items)
+    const init          = useFreePageItemsStore((s) => s.init)
+    const websocket     = useDatabaseStore((s) => s.websocket)
+    const requestUUID   = useRef(genUUID())
+
     // NOTE: metadata list
     // "pageType": "free",
     // "tags": ["This","is","testpage"],
@@ -110,7 +117,6 @@ export default function Free(data:PageMetadataAndData){
     // init and cleanup ------------------------
     // init and cleanup ------------------------
     useEffect(() => {
-        useFreePageItemStoreEffect()
         for(const item of jsondata){
             addItem(item)
         }
@@ -123,6 +129,61 @@ export default function Free(data:PageMetadataAndData){
     // init and cleanup ------------------------
 
 
+    useEffect(() => {
+        if(init) return // avoid the blank data overwrite the original data.
+        
+        // do network things
+        // update page when item is added, deleted or modified 
+
+        // create json string wtih metadata and items data
+
+        // do not send request directory from websocket.send. 
+        // use send function in network.tsx
+
+    },[items])
+
+
+    useEffect(() => {
+        if(websocket == null) return
+
+        // ## args (frontend to dataserver)
+        // ```json
+        // {
+        //     "command": "updatePage",
+        //     "UUID": "UUID string",
+        //     "data": {
+        //         "noteboook" : "notebookName",
+        //         "pageID"    : "Path/to/newPageName",
+        //         "pageType"  : "typeOfPage",
+        //         "update"    : "entire page data string to save. the frontend responsible for the integrality",
+        //     }
+        // }
+        // ```
+        const getResponse = (event:MessageEvent) => {
+            // ## response (dataserver to frontend)
+            // ```json
+            // {
+            //     "status": "ok",
+            //     "errorMessage": "nothing",
+            //     "UUID":"UUID string",
+            //     "command": "updatePage",
+            //     "data":{ }
+            // }
+            // ```
+
+
+
+        }
+
+        websocket.addEventListener("message",getResponse)
+
+        return () => {
+            websocket.addEventListener("message",getResponse)
+        }
+    },[websocket])
+
+
+    
     // console.log(jsondata)
     // console.log(data)
     // console.log(data.files)
