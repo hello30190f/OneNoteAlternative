@@ -15,11 +15,12 @@ export interface aMessageBox{
 type messageBoxStore = {
     messageBoxes: aMessageBox[];
     addMessageBoxes: (message:aMessageBox) => void;
+    showMessageBox: (message:aMessageBox) => void;
     removeMessageBoxes: (message:aMessageBox) => void;
 }
 
 // to show messagebox, add "aMessageBox" item to "messageBoxes".
-const useMessageBoxStore = create<messageBoxStore>((set,get) => ({
+export const useMessageBoxStore = create<messageBoxStore>((set,get) => ({
     messageBoxes: [],
     addMessageBoxes: (message:aMessageBox) => {set((state) => ({messageBoxes: [...state.messageBoxes,message]}))},
     removeMessageBoxes: (message:aMessageBox) => {
@@ -48,17 +49,25 @@ const useMessageBoxStore = create<messageBoxStore>((set,get) => ({
             ...state.messageBoxes.slice(0,targetIndex),
             ...state.messageBoxes.slice(targetIndex + 1)
         ]}))
+    },
+    showMessageBox: (message:aMessageBox) => {
+        const addMessageBox = get().addMessageBoxes
+        const removeMessageBox = get().removeMessageBoxes
+
+        const interval = 3 // sec
+        addMessageBox(message)
+        setTimeout(() => {removeMessageBox(message)},interval * 1000)
     }
 }))
 
-export default function showMessageBox(message:aMessageBox){
-    const addMessageBox = useMessageBoxStore((s) => s.addMessageBoxes)
-    const removeMessageBox = useMessageBoxStore((s) => s.removeMessageBoxes)
+// export default function showMessageBox(message:aMessageBox){
+//     const addMessageBox = useMessageBoxStore((s) => s.addMessageBoxes)
+//     const removeMessageBox = useMessageBoxStore((s) => s.removeMessageBoxes)
 
-    const interval = 3 // sec
-    addMessageBox(message)
-    setTimeout(() => {removeMessageBox(message)},interval * 1000)
-}
+//     const interval = 3 // sec
+//     addMessageBox(message)
+//     setTimeout(() => {removeMessageBox(message)},interval * 1000)
+// }
 
 export function MessageBoxContainer(){
     const messageBoxes = useMessageBoxStore((s) => s.messageBoxes)
@@ -68,7 +77,8 @@ export function MessageBoxContainer(){
     useEffect(() => {
         if(messageBoxes.length == 0) {
             setVisible(false)
-            return
+        }else{
+            setVisible(true)
         }
     },[messageBoxes])
 
@@ -88,19 +98,19 @@ export function MessageBoxContainer(){
             // do nothing
         }
             
-            return <div className="aMessageBox w-[9rem] m-[0.5rem] h-[5rem] flex flex-col">
+            return <div className="aMessageBox w-[15rem] m-[0.5rem] flex flex-col bg-black">
             <div className="">
-                <div className="titlebar w-full h-[1.5rem]">{message.title}</div>
-                <div className="w-full h-[3.5rem]">
-                    <img className="messageBoxIcon w-[2rem] h-[2rem]" src={imageURL}></img>
-                    <div className="message h-[2rem] w-[7rem]">{message.message}</div>
+                <div className="titlebar w-full h-[2rem] text-center">{message.title}</div>
+                <div className="w-full flex">
+                    <img className="messageBoxIcon w-[4rem] h-[4rem]" src={imageURL}></img>
+                    <div className="message h-[3rem] w-[10rem] m-[0.5rem] text-center">{message.message}</div>
                 </div>
             </div> 
         </div>
     }
 
     if(visible){
-        return <div className="messageBoxContainer z-150 flex flex-col fixed bottom-[2rem] right-[2rem] w-[10rem] min-h-[5rem] max-h-screen overflow-y-scroll">
+        return <div className="messageBoxContainer z-150 flex flex-col fixed bottom-[1rem] right-[1rem] w-[16rem] min-h-[5rem] max-h-screen overflow-y-auto">
             {messageBoxes.map((value,index) => <MessageBox message={value} key={index}></MessageBox> )}
         </div>
     }

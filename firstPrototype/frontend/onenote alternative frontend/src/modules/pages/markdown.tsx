@@ -1,9 +1,8 @@
 import { marked } from "marked";
 import type { PageMetadataAndData } from "../MainUI/page";
 import { useEffect, useRef, useState, type ChangeEvent, type InputEventHandler, type KeyboardEvent, type KeyboardEventHandler } from "react";
-import type { aMessageBox } from "../MainUI/UIparts/messageBox";
+import { useMessageBoxStore, type aMessageBox } from "../MainUI/UIparts/messageBox";
 import { genUUID } from "../helper/common";
-import showMessageBox from "../MainUI/UIparts/messageBox";
 import "./markdown.css"
 import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../MainUI/UIparts/OverlayWindow";
 import type { toggleable } from "../MainUI/ToggleToolsBar";
@@ -48,6 +47,7 @@ export default function Markdown(data:PageMetadataAndData){
     const websocket = useDatabaseStore((s) => s.websocket)
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const currentPage     = useAppState((s) => s.currentPage)
+    const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
 
     const [lineBreak,setLineBreak] = useState({
         view: false,

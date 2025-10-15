@@ -9,6 +9,7 @@ import { DeletePage } from "./tools/notebookAndPages/delete/page";
 import { StartButtonMenu } from "./MainUI/UIparts/ToggleToolsBar/StartButton";
 import { ColorPalette } from "./helper/ColorPalette";
 import { PageInfo } from "./tools/metadata/metadataInfo";
+import { MessageBoxContainer } from "./MainUI/UIparts/messageBox";
 
 
 
@@ -191,7 +192,7 @@ export default function Window(){
                 <PageInfo></PageInfo>
 
                 <StartButtonMenu></StartButtonMenu>                
-
+                <MessageBoxContainer></MessageBoxContainer>
             </div>
     )
 }

@@ -4,6 +4,7 @@ import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "..
 import { send, useDatabaseStore } from "../../../helper/network"
 import { genUUID } from "../../../helper/common"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
+import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
 
 
 // TODO: implement ERROR dialog with MessageBox Component
@@ -19,6 +20,9 @@ export function CreateNotebook(){
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
     const websocket = useDatabaseStore((s) => s.websocket)
+    const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
+    const messageBoxUUID = useRef(genUUID())
+
 
     const requestUUID = useRef(genUUID())
     const notebookName = useRef("")
@@ -69,14 +73,14 @@ export function CreateNotebook(){
                     if(window) closeWindow(window)
                 } else {
                     // notifiy the dataserver error. Use MessageBox component
-                    
-
                     // when the notebook name is malformed. Use MessageBox component
-
-
                     // when the dataserver backend error. Use MessageBox component
-
-
+                    showMessageBox({
+                        message: result.errorMessage,
+                        title: "Create Notebook",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
                 }
             }
         }
@@ -119,21 +123,36 @@ export function CreateNotebook(){
                 if(disabled){
                     // notifiy no connection to dataserver error. Use MessageBox component
                     console.log("CreateNotebook: no connection to dataserver")
-
+                    showMessageBox({
+                        message: "no connection to dataserver",
+                        title: "Create Notebook",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
                     return
                 }
 
                 if(notebookName.current.length == 0){
                     // notifiy no notebookname error. Use MessageBox component
                     console.log("CreateNotebook: no notebookname")
-
+                    showMessageBox({
+                        message: "no notebookname",
+                        title: "Create Notebook",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
                     return
                 }
 
                 if(!websocket){
                     // notifiy there are no dataserver connection. Use MessageBox component
                     console.log("CreateNotebook: no connection to dataserver")
-
+                    showMessageBox({
+                        message: "no connection to dataserver",
+                        title: "Create Notebook",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
                     return
                 }
 
