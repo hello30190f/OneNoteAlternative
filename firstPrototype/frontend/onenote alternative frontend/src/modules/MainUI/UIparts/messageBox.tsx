@@ -1,9 +1,13 @@
 
 // type list
 // {"error" | "wrring" | "ok" | "info"}
-
+// https://create-react-app.dev/docs/adding-images-fonts-and-files/
 import { useEffect, useState } from "react";
 import { create } from "zustand"
+import error    from "../../../assets/imgs/messageBoxIcons/error.png"
+import ok       from "../../../assets/imgs/messageBoxIcons/ok.png"
+import info     from "../../../assets/imgs/messageBoxIcons/info.png"
+import warning  from "../../../assets/imgs/messageBoxIcons/warning.png"
 
 export interface aMessageBox{
     title   : string,
@@ -87,15 +91,15 @@ export function MessageBoxContainer(){
     function MessageBox({ message }:{ message:aMessageBox }){
         let imageURL = ""
         if(message.type == "error"){
-
+            imageURL = error
         }else if(message.type == "ok"){
-
+            imageURL = ok
         }else if(message.type == "warning"){
-
+            imageURL = warning
         }else if(message.type == "info"){
-
+            imageURL = info
         }else{
-            // do nothing
+            imageURL = error
         }
             
             return <div className="aMessageBox w-[15rem] m-[0.5rem] flex flex-col bg-black">
