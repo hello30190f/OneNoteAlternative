@@ -23,6 +23,7 @@ type messageBoxStore = {
     removeMessageBoxes: (message:aMessageBox) => void;
 }
 
+// TODO: use message box
 // to show messagebox, add "aMessageBox" item to "messageBoxes".
 export const useMessageBoxStore = create<messageBoxStore>((set,get) => ({
     messageBoxes: [],
@@ -87,7 +88,6 @@ export function MessageBoxContainer(){
     },[messageBoxes])
 
     // {"error" | "wrring" | "ok" | "info"}
-    // TODO: add imageURLs
     function MessageBox({ message }:{ message:aMessageBox }){
         let imageURL = ""
         if(message.type == "error"){
