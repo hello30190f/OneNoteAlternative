@@ -35,7 +35,18 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/z-index (2025年9月27日)
 - drop item
 
 
-
 ### markdown
  The plain markdown page.
+
+
+
+
+## other resources
+### free space
+- [dataStoreList](./dataStoreList.md)
+
+### UI parts
+- [messageBox](./UIparts/messageBox.md)
+- [OverlayWindow](./UIparts/OverlayWindow.md)
+- [toolsBar](./UIparts/toolsBar.md)
 

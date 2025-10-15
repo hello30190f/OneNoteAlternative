@@ -72,7 +72,7 @@ For more detail, see [躓いたところ | nyanmo main blog](https://www.nyanmo.
 ### description of implementation
 - [backend-CilentSide](note/backendClientSide.md)
 - [backend-DataServer](note/backendDataServer/home.md)
-- [frontend](note/frontend.md)
+- [frontend](note/frontend/home.md)
 ### Just summary for first prototype
 - [Summary](note/Summary.md)
 ### page type
