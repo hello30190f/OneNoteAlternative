@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, type ChangeEvent, type ReactElement, type 
 import { send, useDatabaseStore } from "../../helper/network";
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
+import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { genUUID } from "../../helper/common";
 import { useAppState } from "../../window";
-import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
 
 interface Info {
     status: string;
