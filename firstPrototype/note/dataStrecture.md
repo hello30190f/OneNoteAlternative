@@ -114,13 +114,13 @@ files folder
 ### buffer data structure
 ```json
 {
-    "date"          : "YYYY/MM/DD",
-    "time"          : "11:12:30", // hour minute second
-    "notebookName"  : "notebookName",
-    "notebookUUID"  : "the UUID of the notebook",
-    "pageID"        : "the path to target page form the content directory of the notebook",
-    "pageUUID"      : "the UUID of the page",
-    "bufferContent" : "the entire unsaved page string"
+    "notebookName"          : "notebookName",
+    "notebookUUID"          : "the UUID of the notebook",
+    "pageID"                : "the path to target page form the content directory of the notebook",
+    "pageUUID"              : "the UUID of the page",
+    "timestamp"             : "Date class instance",
+    "UUID"                  : "to identify each buffers",
+    "bufferContentString"   : "the entire unsaved page string"
 }
 ```
 

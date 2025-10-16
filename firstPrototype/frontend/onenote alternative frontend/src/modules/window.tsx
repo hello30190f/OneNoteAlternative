@@ -20,7 +20,9 @@ import { MessageBoxContainer } from "./MainUI/UIparts/messageBox";
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal
 export type AnUnsavedBuffer = {
     notebookName        : string,
+    notebookUUID        : string,
     pageID              : string,
+    pageUUID            : string,
     pageType            : string,
     UUID                : string, // to identify each buffers.
     timestamp           : Date,
