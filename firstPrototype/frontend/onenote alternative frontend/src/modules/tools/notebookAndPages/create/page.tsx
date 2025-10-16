@@ -5,6 +5,7 @@ import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "..
 import { useAppState } from "../../../window";
 import { genUUID } from "../../../helper/common";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
+import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
 
 // https://stackoverflow.com/questions/41285211/overriding-interface-property-type-defined-in-typescript-d-ts-file
 interface pageType extends baseResponseTypesFromDataserver{
@@ -37,9 +38,12 @@ export function CreatePage(){
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
     const requestUUID = useRef(genUUID())
+    const messageBoxUUID = useRef(genUUID())
 
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
+
+    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
 
     const [pageType,setPageType] = useState<pageType | null>(null)
     const [pageTypeList,setPageTypeList] = useState<ReactElement[]>()
@@ -96,7 +100,12 @@ export function CreatePage(){
         // when pageType is not obtained collectly, ignore the user request
         if(newPageInfo.pageType == "error"){
             // TODO: inform the user about pageType error
-
+            showMessageBox({
+                message: "Unable to find which pageType available.",
+                title: "Create Page",
+                type: "error",
+                UUID: messageBoxUUID.current
+            })
             return
         }
 
@@ -104,7 +113,12 @@ export function CreatePage(){
         // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
         if(websocket == null){
             // TODO: show messagebox
-
+            showMessageBox({
+                message: "There is no dataserver connection.",
+                title: "Create Page",
+                type: "error",
+                UUID: messageBoxUUID.current
+            })
             return
         }   
 
@@ -169,11 +183,21 @@ export function CreatePage(){
             if(result.UUID == requestUUID.current && "createPage" == result.command){
                 if(result.status == "error"){
                     // TODO: inform the user failed to create the page
-
+                    showMessageBox({
+                        message: "Failed to create the new page: " + result.errorMessage,
+                        title: "Create Page",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
 
                 }else{
                     // TODO: inform the use the new page is created successfully
-                    
+                    showMessageBox({
+                        message: "The new page is created",
+                        title: "Create Page",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
                     const window = getWindow(args)
                     if(window) closeWindow(window)
                 }
@@ -191,6 +215,13 @@ export function CreatePage(){
                         command: result.command,
                         data: null,
                     });
+
+                    showMessageBox({
+                        message: "Unable to get pageType: " + result.errorMessage,
+                        title: "Create Page",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
                 }
             }
         }

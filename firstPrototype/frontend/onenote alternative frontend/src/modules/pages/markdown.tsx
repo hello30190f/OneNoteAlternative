@@ -230,10 +230,20 @@ export default function Markdown(data:PageMetadataAndData){
         if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
             if(jsondata.status != "error"){
                 // TODO: inform the user the page is successfully saved
-
+                showMessageBox({
+                    message: "Successfully saved.",
+                    title: "Markdown",
+                    type: "ok",
+                    UUID: messageBoxUUID.current
+                })
             }else{
                 // TODO: inform the user the attempt to save the page is failed
-
+                showMessageBox({
+                    message: "Failed to save.",
+                    title: "Markdown",
+                    type: "ok",
+                    UUID: messageBoxUUID.current
+                })
             }
         }
     }

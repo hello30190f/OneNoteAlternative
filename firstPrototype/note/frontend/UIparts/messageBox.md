@@ -13,6 +13,7 @@
 import { useMessageBoxStore, type aMessageBox } from "../MainUI/UIparts/messageBox";
 ...
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
+    const messageBoxUUID = useRef(genUUID())
 ...
             const message:aMessageBox = {
                 title   : "Markdown Page",

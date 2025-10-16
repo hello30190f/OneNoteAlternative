@@ -5,6 +5,7 @@ import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/Star
 import { useAppState } from "../../../window"
 import { genUUID } from "../../../helper/common"
 import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
+import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
 
 interface deletePage extends baseResponseTypesFromDataserver{
     data: { }
@@ -14,6 +15,7 @@ export function DeletePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const [disabled,setDisabled] = useState(false)
     const requestUUID = useRef(genUUID())
+    const messageBoxUUID = useRef(genUUID())
     const websocket = useDatabaseStore((s) => s.websocket)
     
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
@@ -21,6 +23,8 @@ export function DeletePage(){
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+
+    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
 
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){
@@ -95,6 +99,12 @@ export function DeletePage(){
         // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
         if(websocket == null){
             // TODO: show messagebox
+            showMessageBox({
+                message: "There is no dataserver connection.",
+                title: "Delete page",
+                type: "error",
+                UUID: messageBoxUUID.current
+            })
             return
         }
 
@@ -116,12 +126,22 @@ export function DeletePage(){
         if(jsondata.UUID == requestUUID.current && jsondata.command == "deletePage"){
             if(jsondata.status == "ok"){
                 //TODO: show messagebox inform the user the request is success.
-
+                showMessageBox({
+                    message: "The page is deleted successfully.",
+                    title: "Delete page",
+                    type: "error",
+                    UUID: messageBoxUUID.current
+                })
                 const window = getWindow(overlayWindowArg)
                 if(window) closeWindow(window)
             }else{
                 //TODO: show messagebox inform the user the request is failed.
-
+                showMessageBox({
+                    message: "Failed to delete the page: " + jsondata.errorMessage,
+                    title: "Delete page",
+                    type: "error",
+                    UUID: messageBoxUUID.current
+                })
             }
         }
     }

@@ -5,6 +5,7 @@ import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/Star
 import { useAppState } from "../../../window";
 import { genUUID } from "../../../helper/common";
 import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
 
     // @ response
     // ```json
@@ -28,6 +29,7 @@ export function DeleteNotebook(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
     const [disabled,setDisabled] = useState(false)
     const requestUUID = useRef(genUUID())
+    const messageBoxUUID = useRef(genUUID())
     const websocket = useDatabaseStore((s) => s.websocket)
     
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
@@ -35,6 +37,8 @@ export function DeleteNotebook(){
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+
+    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
 
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){
@@ -105,6 +109,12 @@ export function DeleteNotebook(){
         // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
         if(websocket == null){
             // TODO: show messagebox
+            showMessageBox({
+                message: "There is no dataserver connection.",
+                title: "Delete Notebook",
+                type: "error",
+                UUID: messageBoxUUID.current
+            })
             return
         }
 
@@ -127,12 +137,22 @@ export function DeleteNotebook(){
         if(jsondata.UUID == requestUUID.current && jsondata.command == "deleteNotebook"){
             if(jsondata.status == "ok"){
                 //TODO: show success message
-
+                showMessageBox({
+                    message: "The notebook is deleted successfully.",
+                    title: "Delete Notebook",
+                    type: "error",
+                    UUID: messageBoxUUID.current
+                })
                 const window = getWindow(overlayWindowArg)
                 if(window) closeWindow(window)
             }else{
                 //TODO: show error message
-
+                showMessageBox({
+                    message: "Failed to delete the notebook: " + jsondata.errorMessage,
+                    title: "Delete Notebook",
+                    type: "error",
+                    UUID: messageBoxUUID.current
+                })
             }
         }
     }
