@@ -3,7 +3,7 @@
  Show message box.
 
 ## Sample image
-
+![messageBox](./imgs/messageBox.png)
 
 ## Usage
  This is the example code of `src\modules\pages\markdown.tsx`.

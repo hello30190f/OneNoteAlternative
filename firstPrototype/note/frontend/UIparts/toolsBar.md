@@ -3,7 +3,7 @@
  `toolsBar` is toggler of `OverlayWindow`. `toolsBar` does not intended to be used without `OverlayWindow`.
 
 ## Sample image
-
+![toolsBar](./imgs/toolsBar.png)
 
 ## Usage
  This is the example code of `src\modules\tools\notebookAndPages\selector.tsx`.
