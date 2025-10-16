@@ -68,7 +68,12 @@ export function CreateNotebook(){
                 if (!result.status.includes("error")) {
                     // notifiy create notebook success. Use MessageBox component
                     // update selector -> send dataserver to selector an interrupt.
-
+                    showMessageBox({
+                        message: "The notebook is created successfully.",
+                        title: "Create Notebook",
+                        type: "ok",
+                        UUID: messageBoxUUID.current
+                    })
                     const window = getWindow(args)
                     if(window) closeWindow(window)
                 } else {

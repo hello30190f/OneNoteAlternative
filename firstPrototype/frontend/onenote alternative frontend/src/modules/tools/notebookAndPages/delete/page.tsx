@@ -129,7 +129,7 @@ export function DeletePage(){
                 showMessageBox({
                     message: "The page is deleted successfully.",
                     title: "Delete page",
-                    type: "error",
+                    type: "ok",
                     UUID: messageBoxUUID.current
                 })
                 const window = getWindow(overlayWindowArg)

@@ -195,7 +195,7 @@ export function CreatePage(){
                     showMessageBox({
                         message: "The new page is created",
                         title: "Create Page",
-                        type: "error",
+                        type: "ok",
                         UUID: messageBoxUUID.current
                     })
                     const window = getWindow(args)

@@ -140,7 +140,7 @@ export function DeleteNotebook(){
                 showMessageBox({
                     message: "The notebook is deleted successfully.",
                     title: "Delete Notebook",
-                    type: "error",
+                    type: "ok",
                     UUID: messageBoxUUID.current
                 })
                 const window = getWindow(overlayWindowArg)
