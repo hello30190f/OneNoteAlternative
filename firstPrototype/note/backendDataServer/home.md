@@ -57,11 +57,32 @@
 
 
 ### dataserver to frontend
+#### note in the frontend code
+```
+// dataserver -> frontend
+// get an interrupt
+// 
+// {
+//     "componentName"  : "Selector",
+//     "command"        : "update",
+//     "UUID"           : "UUID string",
+//     "data"           : { }
+// }
+```
 #### server interrupt reqest(JSON)
-
+```json
+{
+    "componentName"  : "componentName",
+    "interrupt"      : "update",
+    "UUID"           : "UUID string",
+    "data"           : { }
+}
+```
 
 #### frontend response(JSON)
+```json
 
+```
 
 
 # data server architecture

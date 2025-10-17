@@ -91,7 +91,7 @@ export default function Selector() {
             // 
             // {
             //     "componentName"  : "Selector",
-            //     "command"        : "update",
+            //     "interrupt"      : "update",
             //     "UUID"           : "UUID string",
             //     "data"           : { }
             // }
