@@ -26,10 +26,13 @@ async def dataserver():
         try:
             await server.serve_forever()
         except asyncio.CancelledError:
-            print("The dataserver is stopped.")
+            print("The dataserver func is stopped.")
 
 def dataserverThread():
-    asyncio.run(dataserver())
+    try:
+        asyncio.run(dataserver())
+    except KeyboardInterrupt:
+        print("The dataserverThread func is stopped.")
 
 def serviceThread():
     try:
