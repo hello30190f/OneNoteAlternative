@@ -324,8 +324,23 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
 # return value
 #   OK      : None
 #   Error   : Error state does not exist.
-def sendIntterupt(websocket):
-    pass
+async def sendInterrupt(websocket,interrupt:dict):
+#   "componentName"  : "componentName",
+#   "interrupt"      : "update",
+#   "UUID"           : "UUID string",
+#   "data"           : { }
+    
+    if(
+        "componentName" in interrupt.keys() and
+        "interrupt"     in interrupt.keys() and
+        "UUID"          in interrupt.keys() and
+        "data"          in interrupt.keys()
+        ):
+        await websocket.send(json.dumps(interrupt))
+    else:
+        print("sendInterrupt helper ERROR: Mandatory keys are missing")
+        print("componentName,interrupt,UUID,data")
+        print(interrupt)
 
 
 

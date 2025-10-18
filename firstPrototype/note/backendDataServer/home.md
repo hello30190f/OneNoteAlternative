@@ -78,6 +78,14 @@
     "data"           : { }
 }
 ```
+- componentName  
+ React component name
+- interrupt  
+ Specify interrupt type
+- UUID  
+ Identifier of the interrupt request
+- data  
+ Any data
 
 #### frontend response(JSON)
 ```json
@@ -91,6 +99,18 @@
 }
 ```
 
+- status  
+ Interrupt error status. 
+- UUID  
+ Identifier of the interrupt request
+- interrupt  
+ The interrupt name which is received by the frontend 
+- componentName  
+ The React component name receive the interrupt
+- errorMessage  
+ The error message when the intrrupt request failed
+- data
+ Any data
 
 # data server architecture
 ## basic
