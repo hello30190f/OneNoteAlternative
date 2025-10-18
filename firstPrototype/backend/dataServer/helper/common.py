@@ -318,9 +318,11 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
     print(">>> " + responseString)
 
 
-# TODO: implement this
+# TODO: test and use this
+# TODO: write the document
 # arg:
 #   websocket       : the connection to the frontend via websocket
+#   interrupt       : content of the interrupt
 # return value
 #   OK      : None
 #   Error   : Error state does not exist.
