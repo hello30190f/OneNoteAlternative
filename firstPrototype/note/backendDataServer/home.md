@@ -57,59 +57,19 @@
 
 
 ### dataserver to frontend
-#### note in the frontend code
-```
-// dataserver -> frontend
-// get an interrupt
-// 
-// {
-//     "componentName"  : "Selector",
-//     "command"        : "update",
-//     "UUID"           : "UUID string",
-//     "data"           : { }
-// }
-```
 #### server interrupt reqest(JSON)
 ```json
 {
-    "componentName"  : "componentName",
-    "interrupt"      : "update",
-    "UUID"           : "UUID string",
-    "data"           : { }
+    "event" : "EventName",
+    "UUID"  : "UUID string",
+    "data"  : { }
 }
 ```
-- componentName  
- React component name
-- interrupt  
- Specify interrupt type
+- event
+ Interrupt event name. Any compornent are allowed to catch the interrupt.
 - UUID  
  Identifier of the interrupt request
 - data  
- Any data
-
-#### frontend response(JSON)
-```json
-{
-    "status"        : "ok",
-    "UUID"          : "UUID string",
-    "interrupt"     : "update",
-    "componentName" : "componentName",
-    "errorMessage"  : "nothing",
-    "data"          : { }    
-}
-```
-
-- status  
- Interrupt error status. 
-- UUID  
- Identifier of the interrupt request
-- interrupt  
- The interrupt name which is received by the frontend 
-- componentName  
- The React component name receive the interrupt
-- errorMessage  
- The error message when the intrrupt request failed
-- data
  Any data
 
 # data server architecture
