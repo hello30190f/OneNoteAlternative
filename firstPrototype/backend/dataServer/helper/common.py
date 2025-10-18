@@ -327,10 +327,9 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
 #   OK      : None
 #   Error   : Error state does not exist.
 async def sendInterrupt(websocket,interrupt:dict):
-#   "componentName"  : "componentName",
-#   "interrupt"      : "update",
-#   "UUID"           : "UUID string",
-#   "data"           : { }
+#   "evnet" : "eventName",
+#   "UUID"  : "UUID string",
+#   "data"  : { }
     
     if(
         "event"         in interrupt.keys() and
