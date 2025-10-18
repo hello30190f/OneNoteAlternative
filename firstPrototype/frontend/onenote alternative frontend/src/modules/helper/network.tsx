@@ -44,6 +44,7 @@ export function send(websocket:WebSocket, request:string, attempt=5){
     websocket.send(request)
     return
   }
+
   setTimeout(() => { send(websocket,request,attempt - 1) },interval * 1000)
 }
 
@@ -111,6 +112,7 @@ export function useDatabaseEffects() {
     const websocket = new WebSocket(serverIP);
     websocket.addEventListener("error",reconnectLoop)
     websocket.addEventListener("open",reconnectLoop)
+    websocket.addEventListener("close",reconnectLoop)
     setWebsocket({ websocket: websocket });
 
     return () => {

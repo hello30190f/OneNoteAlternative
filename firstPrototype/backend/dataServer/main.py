@@ -9,22 +9,47 @@ from helper import loadSettings
 from helper.netwrok import receiveLoop 
 import tasks
 import controller
+import sys
 
 
 async def mainLoop(websocket):
-    await receiveLoop(websocket,controller.controller)    
+    try:
+        await receiveLoop(websocket,controller.controller)    
+    except asyncio.CancelledError:
+        print("The dataserver mainLoop is stopped.")
+    finally:
+        print("The dataserver mainLoop is closed.")
+        await websocket.close()
 
 async def dataserver():
     async with serve(mainLoop, loadSettings.settings["ip"], loadSettings.settings["port"]) as server:
-        await server.serve_forever()
+        try:
+            await server.serve_forever()
+        except asyncio.CancelledError:
+            print("The dataserver is stopped.")
 
 def dataserverThread():
     asyncio.run(dataserver())
 
 def serviceThread():
-    asyncio.run(tasks.taskController(loadSettings.settings["taskInterval"]))
+    try:
+        asyncio.run(tasks.taskController(loadSettings.settings["taskInterval"]))
+    except KeyboardInterrupt:
+        print("The task controller is stopped.")
 
 if __name__ == "__main__":
-    multiprocessing.Process(target=dataserverThread).start()
-    multiprocessing.Process(target=serviceThread).start()
-    
+    print("This dataserver is started.")
+    dataserverProcess = multiprocessing.Process(target=dataserverThread)
+    serviceProcess = multiprocessing.Process(target=serviceThread)
+    dataserverProcess.start()
+    serviceProcess.start()
+
+    try:
+        dataserverProcess.join()
+        serviceProcess.join()
+    except KeyboardInterrupt:
+        print("This server will be stopped.")
+        dataserverProcess.terminate()
+        serviceProcess.terminate()
+        print("All processes are terminated.")
+        sys.exit()

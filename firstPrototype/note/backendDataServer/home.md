@@ -81,7 +81,14 @@
 
 #### frontend response(JSON)
 ```json
-
+{
+    "status"        : "ok",
+    "UUID"          : "UUID string",
+    "interrupt"     : "update",
+    "componentName" : "componentName",
+    "errorMessage"  : "nothing",
+    "data"          : { }    
+}
 ```
 
 
