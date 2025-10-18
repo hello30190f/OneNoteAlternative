@@ -333,8 +333,7 @@ async def sendInterrupt(websocket,interrupt:dict):
 #   "data"           : { }
     
     if(
-        "componentName" in interrupt.keys() and
-        "interrupt"     in interrupt.keys() and
+        "event"         in interrupt.keys() and
         "UUID"          in interrupt.keys() and
         "data"          in interrupt.keys()
         ):
