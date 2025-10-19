@@ -93,6 +93,8 @@ export function AddItem(){
             typeList.push(<option value={AnElem.name} key={AnElem.name}>{AnElem.name}</option>)
         }
     }
+    typeList.push(<option key="aaa" value="aaa">this is test</option>)
+    typeList.push(<option key="bbb" value="bbb">this is test</option>)
 
     function addItemToTheStore(){
         if(selectedType.current == null){
@@ -142,8 +144,8 @@ export function AddItem(){
     }
 
     return <OverlayWindow arg={OverlayWindowArg}>
-        <div className="addItem m-[1rem]">
-            <select onChange={changeType} className="type w-[10rem]" key="AddItemTypeSelector">
+        <div className="addItem m-[1rem] flex flex-col">
+            <select onChange={changeType} id="type" className="type w-[10rem] border-[2px] border-gray-700 solid" key="AddItemTypeSelector">
                 {typeList}
             </select>
             <div className={submitButtonStyle} onClick={addItemToTheStore}>Add Item</div>

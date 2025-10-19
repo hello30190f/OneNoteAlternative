@@ -16,8 +16,8 @@ export function Menu(){
     // 4: Fifth button, typically the Browser Forward button
     useEffect(() => {
         const showAndHide = (event:MouseEvent) => {
-            event.preventDefault()
             if(event.button == 2){
+                event.preventDefault()
                 position.current.x = event.clientX
                 position.current.y = event.clientY
                 setVisible(true)
