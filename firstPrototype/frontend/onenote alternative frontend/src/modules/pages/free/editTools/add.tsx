@@ -88,13 +88,11 @@ export function AddItem(){
     for(let AnElem of elements){
         if(AnElem.name == "text"){
             selectedType.current = "text"
-            typeList.push(<option selected={true} value={AnElem.name} key={AnElem.name}>{AnElem.name}</option>)
+            typeList.push(<option className="bg-gray-700" selected={true} value={AnElem.name} key={AnElem.name}>{AnElem.name}</option>)
         }else{
-            typeList.push(<option value={AnElem.name} key={AnElem.name}>{AnElem.name}</option>)
+            typeList.push(<option className="bg-gray-700" value={AnElem.name} key={AnElem.name}>{AnElem.name}</option>)
         }
     }
-    typeList.push(<option key="aaa" value="aaa">this is test</option>)
-    typeList.push(<option key="bbb" value="bbb">this is test</option>)
 
     function addItemToTheStore(){
         if(selectedType.current == null){
@@ -119,7 +117,7 @@ export function AddItem(){
             })   
             return
         }
-        // deep copy required
+        // deep copy is required
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone
         const defaultData:AnItem = structuredClone(targetElement.defaultData)
         defaultData.ID = genUUID()
