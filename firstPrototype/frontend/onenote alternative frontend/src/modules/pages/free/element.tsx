@@ -40,6 +40,30 @@ export default interface AnItem{
     }
 }
 
+export const defaultItemData:AnItem = { 
+    // need to be overwrite 
+    data    : "",
+    ID      : "",
+    type    : "",
+
+    // optional to overwrite
+    position: {
+        x: 100,
+        y: 100,
+        z: 1
+    },
+    size:{
+        height: 100,
+        width: 100
+    },
+    color:{
+        a: 1,
+        b: 100,
+        g: 100,
+        r: 100
+    },
+}
+
 export type FreePageItems = {
     items:AnItem[],
     init:boolean,
@@ -56,8 +80,12 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
     addItem: (item:AnItem) => {
         const oldItems = get().items
         const newItems = []
+        console.log(oldItems)
+        console.log(item)
         for(const oldItem of oldItems){
-            if(oldItem.ID == item.ID) return
+            if(oldItem.ID == item.ID) {
+                return 
+            }
             newItems.push(oldItem)
         }
         newItems.push(item)

@@ -43,6 +43,7 @@ import { genUUID } from "../../helper/common"
 // manage item viewers. not to manage item itself. ----------------------------
 export type FreePageElement = {
     element: ({ item }:{ item:AnItem }) => JSX.Element,
+    defaultData: AnItem,
     name: string
 }
 
@@ -50,6 +51,7 @@ export type FreePageElements = {
     elements: FreePageElement[],
     addElement: (element:FreePageElement) => void,
     removeElement: (element:FreePageElement) => void,
+    getAnElement: (elementName:string) => FreePageElement | null,
 }
 
 export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
@@ -64,7 +66,17 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
     },
     removeElement: (element:FreePageElement) => {
         // const oldElements = 
-    }
+    },
+    getAnElement: (elementName:string) => {
+        const elements = get().elements
+        for(const AnElem of elements){
+            if(AnElem.name == elementName){
+                return AnElem
+            }
+        }
+
+        return null
+    },
 }))
 // manage item viewers. not to manage item itself. ----------------------------
 // manage item viewers. not to manage item itself. ----------------------------
