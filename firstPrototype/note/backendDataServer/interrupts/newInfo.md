@@ -7,9 +7,20 @@
 {
     "event" : "newInfo",
     "UUID"  : "UUID string",
-    "data"  : { }
+    "data"  : { 
+        "action": "actionName"
+    }
 }
 ```
+
+## data key field
+- action:str
+ Tell the frontend about what kind of update is occurred. The action list is shown below. 
+ 
+    - createNotebook 
+    - deleteNotebook
+    - createPage
+    - deletePage
 
 ## related commands
 - [createNotebook](../basicCommand/createNotebook.md)
