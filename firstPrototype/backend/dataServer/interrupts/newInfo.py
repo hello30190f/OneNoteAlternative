@@ -1,4 +1,5 @@
 from ..helper.common import sendInterrupt
+import uuid, copy, json
 
 # ```json
 # {
@@ -17,7 +18,33 @@ from ..helper.common import sendInterrupt
 #     - createPage
 #     - deletePage
 
-def newInfo(data:dict):
-    
+actionList = [
+    "createNotebook",
+    "deleteNotebook",
+    "createPage",
+    "deletePage",
+]
 
-    pass
+def newInfo(websocket,data:dict):
+    if(not "action" in data.keys()):
+        print("newInfo interrupt ERROR: The mandatory key 'action' does not exist.")
+        return True
+
+    find = False
+    for action in actionList:
+        if(action == data["action"]):
+            find = True
+            break
+
+    if(not find):
+        print("newInfo interrupt ERROR: The action is invalid.")
+        print(data)
+        return True
+
+    response = {
+        "event" : "newInfo",
+        "UUID"  : "UUID string",
+        "data"  : data
+    }
+
+    return sendInterrupt(websocket,response)

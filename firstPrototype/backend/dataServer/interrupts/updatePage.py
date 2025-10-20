@@ -9,7 +9,7 @@ from ..helper.common import sendInterrupt
 # }
 # ```
 
-def updatePage(data:dict):
+def updatePage(websocket,data:dict):
     
     
     pass

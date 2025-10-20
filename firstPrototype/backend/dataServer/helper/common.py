@@ -324,8 +324,8 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
 #   websocket       : the connection to the frontend via websocket
 #   interrupt       : content of the interrupt
 # return value
-#   OK      : None
-#   Error   : Error state does not exist.
+#   OK      : False will be returned. It mean there are no problems
+#   Error   : True will be returned. It mean there are something missing in dict keys of "interrupt" arg
 async def sendInterrupt(websocket,interrupt:dict):
 #   "evnet" : "eventName",
 #   "UUID"  : "UUID string",
@@ -336,12 +336,16 @@ async def sendInterrupt(websocket,interrupt:dict):
         "UUID"          in interrupt.keys() and
         "data"          in interrupt.keys()
         ):
-        await websocket.send(json.dumps(interrupt))
+        responseString = json.dumps(interrupt)
+        print(">>> " + responseString)
+        await websocket.send(responseString)
+        return False
+    
     else:
         print("sendInterrupt helper ERROR: Mandatory keys are missing")
         print("componentName,interrupt,UUID,data")
         print(interrupt)
-
+        return True
 
 
 #TODO: test this

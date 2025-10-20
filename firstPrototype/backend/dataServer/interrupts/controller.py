@@ -6,13 +6,16 @@ intrruptList = {
     "updatePage"    : updatePage,
 }
 
-def callInterrupt(intrruptName:str,data:dict):
+# return 
+#  False -> OK
+#  True  -> Something went worng
+def callInterrupt(websocket,intrruptName:str,data:dict):
     for AnIntrrupt in intrruptList.keys():
         if(AnIntrrupt == intrruptName):
             # call intrrupt
-            intrruptList[AnIntrrupt](data)
-            return False
-        
+            return intrruptList[AnIntrrupt](websocket,data)        
+    
+    print("callInterrupt ERROR: The intrrupt does not exist.")
     return True
 
 
