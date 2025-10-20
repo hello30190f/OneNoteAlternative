@@ -1,5 +1,6 @@
 from helper.common import NotImplementedResponse, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
 from helper import loadSettings 
+from interrupts.controller import callInterrupt
 import json, os.path
 
 # ## args (frontend to dataserver)
@@ -220,3 +221,4 @@ async def deletePage(request,websocket):
     })
     await websocket.send(responseString)
     print(">>> " + responseString)
+    await callInterrupt(websocket,"deletePage",{"action":"deletePage"})

@@ -1,4 +1,5 @@
 from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata, errorResponse, mkdir
+from interrupts.controller import callInterrupt
 from helper import loadSettings 
 import os , os.path , json , subprocess
 from type.pages import controller
@@ -180,3 +181,6 @@ async def createPage(request,websocket):
         })
         await websocket.send(responseString)
         print(">>> " + responseString)
+        
+        await callInterrupt(websocket,"createPage",{"action":"createPage"})
+

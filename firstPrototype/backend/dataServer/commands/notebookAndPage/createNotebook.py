@@ -1,5 +1,6 @@
 from helper.common import NotImplementedResponse, dataKeyChecker, timeString, findNotes, errorResponse
 from helper import loadSettings
+from interrupts.controller import callInterrupt
 from type.pages import controller
 import json, uuid, os
 
@@ -154,3 +155,5 @@ async def createNotebook(request,websocket):
     })
     await websocket.send(responseString)
     print(">>> " + responseString)
+    
+    await callInterrupt(websocket,"createNotebook",{"action":"createNotebook"})

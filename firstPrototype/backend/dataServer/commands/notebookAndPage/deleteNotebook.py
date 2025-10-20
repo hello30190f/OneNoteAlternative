@@ -1,4 +1,5 @@
 from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, errorResponse
+from interrupts.controller import callInterrupt
 from helper import loadSettings 
 import json, os, os.path
 
@@ -72,3 +73,5 @@ async def deleteNotebook(request,websocket):
     })
     await websocket.send(responseString)
     print(">>> " + responseString)
+    
+    await callInterrupt(websocket,"deleteNotebook",{"action":"deleteNotebook"})
