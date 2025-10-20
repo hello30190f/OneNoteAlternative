@@ -1,5 +1,5 @@
 from ..helper.common import sendInterrupt
-
+import uuid
 
 # ```json
 # {
@@ -9,7 +9,9 @@ from ..helper.common import sendInterrupt
 # }
 # ```
 
-def updatePage(websocket,data:dict):
-    
-    
-    pass
+def updatePage(websocket,data:dict):    
+    return sendInterrupt({
+        "event": "updatePage",
+        "UUID": str(uuid.uuid4()),
+        "data": { }
+    })

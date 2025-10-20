@@ -1,5 +1,5 @@
 from ..helper.common import sendInterrupt
-import uuid, copy, json
+import uuid
 
 # ```json
 # {
@@ -43,7 +43,7 @@ def newInfo(websocket,data:dict):
 
     response = {
         "event" : "newInfo",
-        "UUID"  : "UUID string",
+        "UUID"  : str(uuid.uuid4()),
         "data"  : data
     }
 
