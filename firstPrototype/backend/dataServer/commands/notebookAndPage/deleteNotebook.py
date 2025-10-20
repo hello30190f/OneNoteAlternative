@@ -73,5 +73,5 @@ async def deleteNotebook(request,websocket):
     })
     await websocket.send(responseString)
     print(">>> " + responseString)
-    
-    await callInterrupt(websocket,"deleteNotebook",{"action":"deleteNotebook"})
+
+    await callInterrupt(websocket,"newInfo",{"action":"deleteNotebook"})

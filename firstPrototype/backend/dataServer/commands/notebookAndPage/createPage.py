@@ -181,6 +181,6 @@ async def createPage(request,websocket):
         })
         await websocket.send(responseString)
         print(">>> " + responseString)
-        
-        await callInterrupt(websocket,"createPage",{"action":"createPage"})
+
+        await callInterrupt(websocket,"newInfo",{"action":"createPage"})
 

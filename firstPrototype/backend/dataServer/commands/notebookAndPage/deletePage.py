@@ -221,4 +221,4 @@ async def deletePage(request,websocket):
     })
     await websocket.send(responseString)
     print(">>> " + responseString)
-    await callInterrupt(websocket,"deletePage",{"action":"deletePage"})
+    await callInterrupt(websocket,"newInfo",{"action":"deletePage"})

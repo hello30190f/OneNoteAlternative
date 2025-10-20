@@ -155,5 +155,5 @@ async def createNotebook(request,websocket):
     })
     await websocket.send(responseString)
     print(">>> " + responseString)
-    
-    await callInterrupt(websocket,"createNotebook",{"action":"createNotebook"})
+
+    await callInterrupt(websocket,"newInfo",{"action":"createNotebook"})
