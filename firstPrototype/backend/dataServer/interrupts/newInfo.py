@@ -1,4 +1,4 @@
-from ..helper.common import sendInterrupt
+from helper.common import sendInterrupt
 import uuid
 
 # ```json

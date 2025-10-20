@@ -1,5 +1,5 @@
-from newInfo    import newInfo
-from updatePage import updatePage 
+from interrupts.newInfo    import newInfo
+from interrupts.updatePage import updatePage 
 
 intrruptList = {
     "newInfo"       : newInfo,
