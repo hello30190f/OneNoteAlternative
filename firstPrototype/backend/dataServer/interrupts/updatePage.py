@@ -9,8 +9,8 @@ import uuid
 # }
 # ```
 
-def updatePage(websocket,data:dict):    
-    return sendInterrupt({
+async def updatePage(websocket,data:dict):    
+    return await sendInterrupt(websocket,{
         "event": "updatePage",
         "UUID": str(uuid.uuid4()),
         "data": { }

@@ -25,7 +25,7 @@ actionList = [
     "deletePage",
 ]
 
-def newInfo(websocket,data:dict):
+async def newInfo(websocket,data:dict):
     if(not "action" in data.keys()):
         print("newInfo interrupt ERROR: The mandatory key 'action' does not exist.")
         return True
@@ -47,4 +47,4 @@ def newInfo(websocket,data:dict):
         "data"  : data
     }
 
-    return sendInterrupt(websocket,response)
+    return await sendInterrupt(websocket,response)
