@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 import type AnItem from "./element"
 import { useFreePageElementStore } from "./main"
 import TextView from "./elements/textView"
+import { FreePageItemResize } from "./showItem/resize"
 
 // TODO: make mousemove eventhandler not preventing from selection.
 // TODO: do z-index management
@@ -11,7 +12,7 @@ import TextView from "./elements/textView"
 export default function ShowItem({ item }: { item: AnItem }) {
     const elements = useFreePageElementStore((s) => s.elements)
 
-    let className = "AnItem absolute flex bg-gray-900 border-[2px] border-gray-300 "
+    let className = "AnItem absolute flex bg-gray-900 "
 
     let zIndexMin = 200
     let zIndexMax = 1200
@@ -20,6 +21,8 @@ export default function ShowItem({ item }: { item: AnItem }) {
         zIndex = zIndexMax
     }
 
+    // get item view --------------------------
+    // get item view --------------------------
     let ItemView = null
     for (let anElement of elements) {
         if (anElement.name == item.type) {
@@ -30,6 +33,9 @@ export default function ShowItem({ item }: { item: AnItem }) {
     if (ItemView == null) {
         ItemView = TextView
     }
+    // get item view --------------------------
+    // get item view --------------------------
+
 
     let [style, setStyle] = useState({
         top: String(item.position.y) + "px",
@@ -156,25 +162,39 @@ export default function ShowItem({ item }: { item: AnItem }) {
         }
     }
 
-    if (init.current) {
-        // console.log("Overlay window init")
-        addEventListener("touchend", windowHandlers.touchend)
-        addEventListener("mouseup", windowHandlers.mouseup)
+    // if (init.current) {
+    //     // console.log("Overlay window init")
+    //     addEventListener("touchend", windowHandlers.touchend)
+    //     addEventListener("mouseup", windowHandlers.mouseup)
 
-        addEventListener("touchmove", windowHandlers.touchmove)
-        addEventListener("mousemove", windowHandlers.mousemove)
+    //     addEventListener("touchmove", windowHandlers.touchmove)
+    //     addEventListener("mousemove", windowHandlers.mousemove)
 
-        addEventListener("resize", windowHandlers.resize)
+    //     addEventListener("resize", windowHandlers.resize)
 
-        init.current = false
-    }
+    //     init.current = false
+    // }
+
+    const [itemToolsVisible,setItemToolsVisible] = useState(false)
 
     return <div
         className={className}
         style={style}
-        onMouseDown={windowHandlers.mousedown}
-        onTouchStart={windowHandlers.touchstart}
+        onMouseOver={() => {setItemToolsVisible(true)}}
+        onMouseOut={() => {setItemToolsVisible(false)}}
+        onTouchStart={() => {
+            if(itemToolsVisible){
+                setItemToolsVisible(false)
+            }else{
+                setItemToolsVisible(true)
+            }
+        }}
+        // onMouseDown={windowHandlers.mousedown}
+        // onTouchStart={windowHandlers.touchstart}
     >
-        <ItemView item={item}></ItemView>
+        <div className="relative">
+            <FreePageItemResize item={item} visible={itemToolsVisible}></FreePageItemResize>
+            <ItemView item={item}></ItemView>
+        </div>
     </div>
 }
