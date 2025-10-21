@@ -1,8 +1,10 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type AnItem from "./element"
 import { useFreePageElementStore } from "./main"
-import TextView from "./elements/textView"
+import TextView, { TextEdit } from "./elements/textView"
 import { FreePageItemResize } from "./showItem/resize"
+import { FreePageItemMove } from "./showItem/move"
+import { FreePageItemOutline } from "./showItem/showOutline"
 
 // TODO: make mousemove eventhandler not preventing from selection.
 // TODO: do z-index management
@@ -21,20 +23,24 @@ export default function ShowItem({ item }: { item: AnItem }) {
         zIndex = zIndexMax
     }
 
-    // get item view --------------------------
-    // get item view --------------------------
+    // TODO: get editor
+    // get item view and editor --------------------------
+    // get item view and editor --------------------------
     let ItemView = null
+    let ItemEditor = null
     for (let anElement of elements) {
         if (anElement.name == item.type) {
             ItemView = anElement.element
+            ItemEditor = anElement.editElement
             break
         }
     }
-    if (ItemView == null) {
+    if (ItemView == null || ItemEditor == null) {
         ItemView = TextView
+        ItemEditor = TextEdit
     }
-    // get item view --------------------------
-    // get item view --------------------------
+    // get item view and editor --------------------------
+    // get item view and editor --------------------------
 
 
     let [style, setStyle] = useState({
@@ -47,154 +53,153 @@ export default function ShowItem({ item }: { item: AnItem }) {
         zIndex: String(zIndex),
     })
 
-    let windowPos = useRef({
-        x: item.position.x,
-        y: item.position.y
+
+    const [itemToolsVisible,setItemToolsVisible] = useState({
+        "move": false,
+        "resize": false,
+        "outline": false,
+        "edit": false,
+        "view": true,
     })
-    let onMove = useRef(false)
-    let prevPos = useRef({
-        x: 0,
-        y: 0
-    })
-    let init = useRef(true)
+    const maxClickAmount = 3
+    const [clickCounter,setClickCounter] = useState(0)
+    const [touchCounter,setTouchCounter] = useState(0)
+    const cursorInsideItem = useRef(false)
 
-    const windowHandlers = {
-        // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
-        "mousedown": (event: React.MouseEvent) => {
-            if(event.button != 0) return
-            event.preventDefault()
-            onMove.current = true
-            prevPos.current.x = event.screenX
-            prevPos.current.y = event.screenY
-            // console.log("move window start")
-            // console.log(onMove)
-            // console.log(prevPos.current)
-        },
-        "mousemove": (event: MouseEvent) => {
-            // console.log(onMove.current)
-            if (onMove.current) {
-                event.preventDefault()
-                let dx = event.screenX - prevPos.current.x
-                let dy = event.screenY - prevPos.current.y
+    // find cursor insde item or not
+    useEffect(() => {
+        function cursorInsideItemChecker(event:MouseEvent){
+            const top = item.position.y                         // larger
+            const bottom = item.position.y + item.size.height   // smaller
+            const left = item.position.x                        // larger
+            const right = item.position.x + item.size.width     // smaller
+        
+            // console.log("top bottom left right")
+            // console.log(top)
+            // console.log(bottom)
+            // console.log(left)
+            // console.log(right)
+            // console.log("top     < event.pageY") 
+            // console.log(top     < event.pageY) 
+            // console.log("bottom  > event.pageY") 
+            // console.log(bottom  > event.pageY) 
+            // console.log("left    < event.pageX") 
+            // console.log(left    < event.pageX) 
+            // console.log("right   > event.pageX")
+            // console.log(right   > event.pageX)
+            // console.log(event)
+            // console.log(item)
 
-                prevPos.current.x = event.screenX
-                prevPos.current.y = event.screenY
-
-                // console.log("mousemove")
-                // console.log(dx)
-                // console.log(event.screenX)
-                // console.log(windowPos.current.x)
-
-                windowPos.current.x = windowPos.current.x + dx
-                windowPos.current.y = windowPos.current.y + dy
-
-                setStyle({
-                    left: String(windowPos.current.x) + "px",
-                    top: String(windowPos.current.y) + "px",
-                    height: style.height,
-                    width: style.width,
-                    zIndex: style.zIndex
-                })
+            if( 
+                top     < event.pageY &&
+                bottom  > event.pageY &&
+                left    < event.pageX &&
+                right   > event.pageX
+            ){
+                // cursor inside item 
+                cursorInsideItem.current = true
+            }else{
+                cursorInsideItem.current = false
             }
-        },
-        "mouseup": () => {
-            // console.log("move window end")
-            onMove.current = false
-        },
-
-        "touchstart": (event: React.TouchEvent) => {
-            event.preventDefault()
-            onMove.current = true
-            let touch = event.touches.item(0)
-            prevPos.current.x = touch.screenX
-            prevPos.current.y = touch.screenY
-        },
-        "touchmove": (event: TouchEvent) => {
-            if (onMove.current) {
-                event.preventDefault()
-                let touch = event.touches.item(0)
-                if (touch) {
-                    let dx = touch.screenX - prevPos.current.x
-                    let dy = touch.screenY - prevPos.current.y
-
-                    prevPos.current.x = touch.screenX
-                    prevPos.current.y = touch.screenY
-
-                    windowPos.current.x = windowPos.current.x + dx
-                    windowPos.current.y = windowPos.current.y + dy
-
-                    setStyle({
-                        left: String(windowPos.current.x) + "px",
-                        top: String(windowPos.current.y) + "px",
-                        height: style.height,
-                        width: style.width,
-                        zIndex: style.zIndex
-                    })
-                }
-            }
-        },
-        "touchend": () => {
-            // console.log("move window end")
-            onMove.current = false
-        },
-        "resize": () => {
-            // // fixed css style 
-            // const margin = 100
-            // if (window.innerWidth < windowPos.current.x && window.innerWidth > margin) {
-            //     windowPos.current.x = window.innerWidth - margin
-            // } else if (window.innerWidth < windowPos.current.x) {
-            //     windowPos.current.x = 0
-            // }
-
-            // if (window.innerHeight < windowPos.current.y && window.innerHeight > margin) {
-            //     windowPos.current.y = window.innerHeight - margin
-            // } else if (window.innerHeight < windowPos.current.y) {
-            //     windowPos.current.y = 36 // 3rem
-            // }
-
-            // setStyle({
-            //     left: String(windowPos.current.x) + "px",
-            //     top: String(windowPos.current.y) + "px",
-            //     height: style.height,
-            //     width: style.width,
-            //     zIndex: style.zIndex
-            // })
         }
-    }
 
-    // if (init.current) {
-    //     // console.log("Overlay window init")
-    //     addEventListener("touchend", windowHandlers.touchend)
-    //     addEventListener("mouseup", windowHandlers.mouseup)
+        addEventListener("mousemove",cursorInsideItemChecker)
+        return () => {
+            removeEventListener("mousemove",cursorInsideItemChecker)
+        }
+    },[])
 
-    //     addEventListener("touchmove", windowHandlers.touchmove)
-    //     addEventListener("mousemove", windowHandlers.mousemove)
 
-    //     addEventListener("resize", windowHandlers.resize)
+    // deactivate item when mouse click is occurred outside the item
+    useEffect(() => {
+        function deactivateItem(event:MouseEvent){
+            if(event.button != 0) return
 
-    //     init.current = false
-    // }
+            if(!cursorInsideItem.current){
+                setItemToolsVisible({resize:false,move:false,outline:false,edit:false,view:true})
+                setClickCounter(0)
+                setTouchCounter(0)
+            }
+        }
 
-    const [itemToolsVisible,setItemToolsVisible] = useState(false)
+        addEventListener("click",deactivateItem)
 
+        return () => {
+            removeEventListener("click",deactivateItem)            
+        }
+    },[])
+
+
+    // TODO: touch support
     return <div
         className={className}
         style={style}
-        onMouseOver={() => {setItemToolsVisible(true)}}
-        onMouseOut={() => {setItemToolsVisible(false)}}
-        onTouchStart={() => {
-            if(itemToolsVisible){
-                setItemToolsVisible(false)
-            }else{
-                setItemToolsVisible(true)
+        onDoubleClick={() => {
+            console.log(cursorInsideItem.current)
+
+            // cursor outside the item
+            if(!cursorInsideItem.current){ return }
+            // cursor inside the item
+
+            if(clickCounter == 0){
+                // do nothing
+                // setItemToolsVisible({resize:false,move:false,outline:false,edit:false,view:true})                
+            }else if(clickCounter == 1){
+                // reisze mode
+                setItemToolsVisible({resize:true,move:false,outline:false,edit:false,view:true})
+
+                if(clickCounter < maxClickAmount){
+                    setClickCounter(clickCounter + 1)
+                }else{
+                    setClickCounter(0)
+                }
+
+            }else if(clickCounter == 2){
+                // edit mode
+                setItemToolsVisible({resize:false,move:false,outline:true,edit:true,view:false})
+
             }
+        }}
+        onClick={() => {
+            console.log(cursorInsideItem.current)
+
+            // cursor outside the item 
+            if(!cursorInsideItem.current) { return }
+            // cursor inside the item
+
+            if(clickCounter == 0){
+                // move mode
+                setItemToolsVisible({resize:false,move:true,outline:false,edit:false,view:true})     
+                if(clickCounter < maxClickAmount){
+                    setClickCounter(clickCounter + 1)
+                }else{
+                    setClickCounter(0)
+            }           
+            }else if(clickCounter == 1){
+                // do nothing
+                // setItemToolsVisible({resize:true,move:false,outline:false,edit:false,view:true})
+            }else if(clickCounter == 2){
+                // do nothing
+                // setItemToolsVisible({resize:false,move:true,outline:false,edit:false,view:true})
+            }else if(clickCounter == 3){
+                // do nothing
+                // setItemToolsVisible({resize:false,move:false,outline:false,edit:true,view:false})
+            }
+        }}
+
+
+        onTouchStart={() => {
+
         }}
         // onMouseDown={windowHandlers.mousedown}
         // onTouchStart={windowHandlers.touchstart}
     >
         <div className="relative">
-            <FreePageItemResize item={item} visible={itemToolsVisible}></FreePageItemResize>
-            <ItemView item={item}></ItemView>
+            <FreePageItemOutline visible={itemToolsVisible.outline}></FreePageItemOutline>
+            <FreePageItemResize item={item} visible={itemToolsVisible.resize}></FreePageItemResize>
+            <FreePageItemMove style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.move}></FreePageItemMove>
+            <ItemView item={item} visible={itemToolsVisible.view}></ItemView>
+            <ItemEditor item={item} visible={itemToolsVisible.edit}></ItemEditor>
         </div>
     </div>
 }

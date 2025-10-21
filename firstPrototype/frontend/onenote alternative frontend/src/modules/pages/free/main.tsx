@@ -42,7 +42,8 @@ import { genUUID } from "../../helper/common"
 // manage item viewers. not to manage item itself. ----------------------------
 // manage item viewers. not to manage item itself. ----------------------------
 export type FreePageElement = {
-    element: ({ item }:{ item:AnItem }) => JSX.Element,
+    element: ({ item,visible }:{ item:AnItem,visible:boolean }) => JSX.Element | undefined,
+    editElement: ({ item,visible }:{ item:AnItem,visible:boolean }) => JSX.Element | undefined,
     defaultData: AnItem,
     name: string
 }
