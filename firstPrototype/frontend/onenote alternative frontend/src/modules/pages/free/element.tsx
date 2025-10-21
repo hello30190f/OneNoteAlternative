@@ -110,7 +110,6 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
             }
             newItems.push(oldItem)
         }
-        console.log(newItems)
         set({items: newItems})
     },
     cleanItem: () => {

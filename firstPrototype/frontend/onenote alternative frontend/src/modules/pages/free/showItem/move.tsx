@@ -30,11 +30,10 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
         x: 0,
         y: 0
     })
-    let init = useRef(true)
 
     const updateItem = useFreePageItemsStore((s) => s.updateItem)
 
-    const windowHandlers = {
+    const itemMoveHandler = {
         // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
         "mousedown": (event: React.MouseEvent) => {
             console.log("enable")
@@ -66,13 +65,11 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
                 windowPos.current.x = windowPos.current.x + dx
                 windowPos.current.y = windowPos.current.y + dy
 
-                setStyle({
+                setStyle((state) => ({
+                    ...state,
                     left: String(windowPos.current.x) + "px",
                     top: String(windowPos.current.y) + "px",
-                    height: style.height,
-                    width: style.width,
-                    zIndex: style.zIndex
-                })
+                }))
             }
         },
         "mouseup": () => {
@@ -106,13 +103,11 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
                     windowPos.current.x = windowPos.current.x + dx
                     windowPos.current.y = windowPos.current.y + dy
 
-                    setStyle({
+                    setStyle((state) => ({
+                        ...state,
                         left: String(windowPos.current.x) + "px",
                         top: String(windowPos.current.y) + "px",
-                        height: style.height,
-                        width: style.width,
-                        zIndex: style.zIndex
-                    })
+                    }))
                 }
             }
         },
@@ -125,49 +120,27 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
             // console.log("move window end")
             onMove.current = false
         },
-        "resize": () => {
-            // // fixed css style 
-            // const margin = 100
-            // if (window.innerWidth < windowPos.current.x && window.innerWidth > margin) {
-            //     windowPos.current.x = window.innerWidth - margin
-            // } else if (window.innerWidth < windowPos.current.x) {
-            //     windowPos.current.x = 0
-            // }
-
-            // if (window.innerHeight < windowPos.current.y && window.innerHeight > margin) {
-            //     windowPos.current.y = window.innerHeight - margin
-            // } else if (window.innerHeight < windowPos.current.y) {
-            //     windowPos.current.y = 36 // 3rem
-            // }
-
-            // setStyle({
-            //     left: String(windowPos.current.x) + "px",
-            //     top: String(windowPos.current.y) + "px",
-            //     height: style.height,
-            //     width: style.width,
-            //     zIndex: style.zIndex
-            // })
-        }
+        "resize": () => { }
     }
 
     useEffect(() => {
         // console.log("Overlay window init")
-        addEventListener("touchend", windowHandlers.touchend)
-        addEventListener("mouseup", windowHandlers.mouseup)
+        addEventListener("touchend", itemMoveHandler.touchend)
+        addEventListener("mouseup", itemMoveHandler.mouseup)
 
-        addEventListener("touchmove", windowHandlers.touchmove)
-        addEventListener("mousemove", windowHandlers.mousemove)
+        addEventListener("touchmove", itemMoveHandler.touchmove)
+        addEventListener("mousemove", itemMoveHandler.mousemove)
 
-        addEventListener("resize", windowHandlers.resize)
+        addEventListener("resize", itemMoveHandler.resize)
 
         return () => {
-            removeEventListener("touchend", windowHandlers.touchend)
-            removeEventListener("mouseup", windowHandlers.mouseup)
+            removeEventListener("touchend", itemMoveHandler.touchend)
+            removeEventListener("mouseup", itemMoveHandler.mouseup)
 
-            removeEventListener("touchmove", windowHandlers.touchmove)
-            removeEventListener("mousemove", windowHandlers.mousemove)
+            removeEventListener("touchmove", itemMoveHandler.touchmove)
+            removeEventListener("mousemove", itemMoveHandler.mousemove)
 
-            removeEventListener("resize", windowHandlers.resize)
+            removeEventListener("resize", itemMoveHandler.resize)
         }
     },[])
 
@@ -175,8 +148,8 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
     if(visible){
         return <div 
                     className="FreePageItemMove absolute w-full h-full border-dotted border-[2px] border-gray-400"
-                    onMouseDown={windowHandlers.mousedown}
-                    onTouchStart={windowHandlers.touchstart}
+                    onMouseDown={itemMoveHandler.mousedown}
+                    onTouchStart={itemMoveHandler.touchstart}
                 ></div>
     }
 }
