@@ -194,7 +194,7 @@ export default function ShowItem({ item }: { item: AnItem }) {
         // onMouseDown={windowHandlers.mousedown}
         // onTouchStart={windowHandlers.touchstart}
     >
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full overflow-auto">
             <FreePageItemOutline visible={itemToolsVisible.outline}></FreePageItemOutline>
             <FreePageItemResize style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.resize}></FreePageItemResize>
             <FreePageItemMove style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.move}></FreePageItemMove>

@@ -1,0 +1,31 @@
+import type AnItem from "../../../element"
+import { FreePageItemResizeBaseButton } from "../../resize"
+
+
+export function Right({ item, style, setStyle }:{ item:AnItem, 
+    style: {
+    top: string;
+    left: string;
+    width: string;
+    height: string;
+    zIndex: string;
+    },
+    setStyle:React.Dispatch<React.SetStateAction<{
+        top: string;
+        left: string;
+        width: string;
+        height: string;
+        zIndex: string;
+    }>>}){
+
+
+    const y = item.size.height / 2 - 8 // The unit is px. 8 mean 0.5rem
+
+    const buttonStyle={
+        top: String(y) + "px"
+    }
+
+    return <div className="absolute right-0 cursor-e-resize" style={buttonStyle}>
+        <FreePageItemResizeBaseButton></FreePageItemResizeBaseButton>
+    </div>
+}
