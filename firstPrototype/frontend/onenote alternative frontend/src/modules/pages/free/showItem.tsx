@@ -49,6 +49,11 @@ export default function ShowItem({ item }: { item: AnItem }) {
 
         width: String(item.size.width) + "px",
         height: String(item.size.height) + "px",
+        backgroundColor: "rgba(" 
+                            + String(item.color.r) + "," 
+                            + String(item.color.g) + ","
+                            + String(item.color.b) + ","
+                            + String(item.color.a) + ")",
 
         zIndex: String(zIndex),
     })

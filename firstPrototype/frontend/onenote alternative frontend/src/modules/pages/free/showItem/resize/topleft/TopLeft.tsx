@@ -9,17 +9,19 @@ import { FreePageItemResizeBaseButton, FreePageMinItemSize } from "../../resize"
 // TODO: bugfix of unable to update item correctly
 export function TopLeft({ item, style, setStyle }:{ item:AnItem, 
     style: {
-    top: string;
-    left: string;
-    width: string;
-    height: string;
-    zIndex: string;
+        top: string;
+        left: string;
+        width: string;
+        height: string;
+        backgroundColor: string;
+        zIndex: string;
     },
     setStyle:React.Dispatch<React.SetStateAction<{
         top: string;
         left: string;
         width: string;
         height: string;
+        backgroundColor: string;
         zIndex: string;
     }>>}){
 
@@ -126,13 +128,18 @@ export function TopLeft({ item, style, setStyle }:{ item:AnItem,
                     prevPos.current.y = touch.screenY
 
 
-                    windowPos.current.x = windowPos.current.x + dx
                     if(windowSize.current.width + dx > FreePageMinItemSize.width){
                         windowSize.current.width = windowSize.current.width - dx
                     }
-                    windowPos.current.y = windowPos.current.y + dy
+                    if(windowSize.current.width + dx > FreePageMinItemSize.width - 10){
+                        windowPos.current.x = windowPos.current.x + dx
+                    }
+                    
                     if(windowSize.current.height + dy > FreePageMinItemSize.height){
                         windowSize.current.height = windowSize.current.height - dy
+                    }
+                    if(windowSize.current.height + dy > FreePageMinItemSize.height - 10){
+                        windowPos.current.y = windowPos.current.y + dy
                     }
 
                     setStyle((state) => ({

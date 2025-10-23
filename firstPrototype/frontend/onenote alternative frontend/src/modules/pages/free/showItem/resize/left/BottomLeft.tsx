@@ -5,17 +5,19 @@ import { FreePageItemResizeBaseButton } from "../../resize";
 
 export function BottomLeft({ item, style, setStyle }:{ item:AnItem, 
     style: {
-    top: string;
-    left: string;
-    width: string;
-    height: string;
-    zIndex: string;
+        top: string;
+        left: string;
+        width: string;
+        height: string;
+        backgroundColor: string;
+        zIndex: string;
     },
     setStyle:React.Dispatch<React.SetStateAction<{
         top: string;
         left: string;
         width: string;
         height: string;
+        backgroundColor: string;
         zIndex: string;
     }>>}){
 

@@ -26,6 +26,7 @@ export function FreePageItemResize({ item, visible, style, setStyle }:{ item:AnI
     left: string;
     width: string;
     height: string;
+    backgroundColor: string;
     zIndex: string;
     },
     setStyle:React.Dispatch<React.SetStateAction<{
@@ -33,6 +34,7 @@ export function FreePageItemResize({ item, visible, style, setStyle }:{ item:AnI
         left: string;
         width: string;
         height: string;
+        backgroundColor: string;
         zIndex: string;
     }>>
 }){    

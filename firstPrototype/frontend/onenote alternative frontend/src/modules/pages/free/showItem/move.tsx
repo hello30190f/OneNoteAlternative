@@ -9,6 +9,7 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
     left: string;
     width: string;
     height: string;
+    backgroundColor: string;
     zIndex: string;
     },
     setStyle:React.Dispatch<React.SetStateAction<{
@@ -16,6 +17,7 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
         left: string;
         width: string;
         height: string;
+        backgroundColor: string;
         zIndex: string;
     }>>
 }){
