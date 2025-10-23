@@ -149,7 +149,7 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
 
     if(visible){
         return <div 
-                    className="FreePageItemMove cursor-move absolute w-full h-full border-dotted border-[2px] border-gray-400"
+                    className="FreePageItemMove cursor-move absolute w-full h-full border-dotted border-[4px] border-gray-400"
                     onMouseDown={itemMoveHandler.mousedown}
                     onTouchStart={itemMoveHandler.touchstart}
                 ></div>

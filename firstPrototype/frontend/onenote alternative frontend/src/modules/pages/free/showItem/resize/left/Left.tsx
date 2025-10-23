@@ -24,7 +24,7 @@ export function Left({ item, style, setStyle }:{ item:AnItem,
 
 
 
-    const y = item.size.height / 2 - 8 // The unit is px. 8 mean 0.5rem
+    const y = Number(style.height.replace("px","")) / 2 - 8 // The unit is px. 8 mean 0.5rem
 
     const buttonStyle={
         top: String(y) + "px"

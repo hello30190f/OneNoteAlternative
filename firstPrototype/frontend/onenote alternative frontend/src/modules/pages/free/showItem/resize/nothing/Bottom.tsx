@@ -21,7 +21,7 @@ export function Bottom({ item, style, setStyle }:{ item:AnItem,
     }>>}){
 
 
-    const x = item.size.width / 2 - 8 // The unit is px. 8 mean 0.5rem
+    const x = Number(style.width.replace("px","")) / 2 - 8 // The unit is px. 8 mean 0.5rem
 
     const buttonStyle={
         left: String(x) + "px"
