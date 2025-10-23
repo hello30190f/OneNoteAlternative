@@ -1,6 +1,6 @@
 from websockets.exceptions import ConnectionClosedOK
 
-# TODO: write cleanup code for closed connection
+# TODO: write cleanup code for closed connections
 websockets = []
 
 # example of wating message from frontend
