@@ -6,13 +6,14 @@ import multiprocessing
 # from modules.reqestParser import parser
 from websockets.asyncio.server import serve
 from helper import loadSettings
-from helper.netwrok import receiveLoop 
+from helper.netwrok import receiveLoop, websockets
 import tasks
 import controller
 import sys
 
 
 async def mainLoop(websocket):
+    websockets.append(websocket)
     try:
         await receiveLoop(websocket,controller.controller)    
     except asyncio.CancelledError:

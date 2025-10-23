@@ -1,5 +1,7 @@
 from websockets.exceptions import ConnectionClosedOK
 
+websockets = []
+
 # example of wating message from frontend
 async def receiveLoopForClass(websocket,instance,callback):
     # put parser here.

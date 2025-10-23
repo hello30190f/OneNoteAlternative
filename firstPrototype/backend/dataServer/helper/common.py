@@ -1,5 +1,6 @@
 import json, time, os, subprocess, sys, shutil, platform
 from helper import loadSettings 
+from helper.netwrok import websockets
 
 # error response ---------------------------------------
 # error response ---------------------------------------
@@ -330,7 +331,6 @@ async def sendInterrupt(websocket,interrupt:dict):
 #   "evnet" : "eventName",
 #   "UUID"  : "UUID string",
 #   "data"  : { }
-    
     if(
         "event"         in interrupt.keys() and
         "UUID"          in interrupt.keys() and
@@ -338,7 +338,13 @@ async def sendInterrupt(websocket,interrupt:dict):
         ):
         responseString = json.dumps(interrupt)
         print(">>> " + responseString)
-        await websocket.send(responseString)
+        for Awebsocket in websockets:
+            try:
+                await Awebsocket.send(responseString)            
+            except Exception as e:
+                print("sendInterrupt helper ERROR: Ignore the disconnected websocket.")
+                print(e)
+        print(websockets)
         return False
     
     else:
