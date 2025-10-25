@@ -40,14 +40,14 @@ export function FreePageItemResize({ item, visible, style, setStyle }:{ item:AnI
 }){    
     if(visible){
         return <div className="reiszeItem absolute w-full h-full">
-            <Top item={item} style={style} setStyle={setStyle}></Top>
+            {/* <Top item={item} style={style} setStyle={setStyle}></Top>
             <Bottom item={item} style={style} setStyle={setStyle}></Bottom>
             <Left item={item} style={style} setStyle={setStyle}></Left>
             <Right item={item} style={style} setStyle={setStyle}></Right>
 
             <TopLeft item={item} style={style} setStyle={setStyle}></TopLeft>
             <TopRight item={item} style={style} setStyle={setStyle}></TopRight>
-            <BottomLeft item={item} style={style} setStyle={setStyle}></BottomLeft>
+            <BottomLeft item={item} style={style} setStyle={setStyle}></BottomLeft> */}
             <BottomRight item={item} style={style} setStyle={setStyle}></BottomRight>
         </div>    
     }

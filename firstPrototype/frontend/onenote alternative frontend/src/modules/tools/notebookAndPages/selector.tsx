@@ -4,7 +4,7 @@ import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/Over
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { genUUID } from "../../helper/common";
-import { useAppState } from "../../window";
+import { useAppState, useUnsavedBuffersStore } from "../../window";
 
 interface Info {
     status: string;
@@ -28,6 +28,9 @@ export default function Selector() {
 
     const toolbarAddTool = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+
+    // const getBuffers    = useUnsavedBuffersStore((s) => s.getUnsavedPageList)
+    const buffers       = useUnsavedBuffersStore((s) => s.buffers)
 
     const requestUUID = useRef<string>(genUUID())
 
@@ -69,6 +72,19 @@ export default function Selector() {
     },[])
 
 
+    function updatePageInfo(){
+        if(!websocket) return
+
+        requestUUID.current = genUUID()
+
+        const request = JSON.stringify({ 
+            command: "info", 
+            UUID: requestUUID.current,
+            data: null 
+        });
+        send(websocket,request);
+    }
+
     useEffect(() => {
         console.log("selector useEffect")
         if (!websocket) {
@@ -86,6 +102,7 @@ export default function Selector() {
             const result = JSON.parse(String(event.data));
             console.log(result)
 
+            // TODO: rewrite this for new interrupt logic.
             // dataserver -> frontend
             // get an interrupt
             // 
@@ -95,18 +112,18 @@ export default function Selector() {
             //     "UUID"           : "UUID string",
             //     "data"           : { }
             // }
-            if(result.componentName == "Selector" && result.command == "update"){
-                // update index info
-                requestUUID.current = genUUID()
+            // if(result.componentName == "Selector" && result.command == "update"){
+            //     // update index info
+            //     requestUUID.current = genUUID()
 
-                const request = JSON.stringify({ 
-                    command: "info", 
-                    UUID: requestUUID.current,
-                    data: null 
-                });
-                send(websocket,request);
-                return
-            }
+            //     const request = JSON.stringify({ 
+            //         command: "info", 
+            //         UUID: requestUUID.current,
+            //         data: null 
+            //     });
+            //     send(websocket,request);
+            //     return
+            // }
 
             // frontend -> dataserver
             // get response
@@ -126,15 +143,7 @@ export default function Selector() {
         };
 
         const whenOpened = () => {
-            console.log("selector: whenOpened")
-            requestUUID.current = genUUID()
-
-            const request = JSON.stringify({ 
-                command: "info", 
-                UUID: requestUUID.current,
-                data: null 
-            });
-            send(websocket,request);
+            updatePageInfo()
         }
 
         websocket.addEventListener("message", handleMessage);
@@ -147,17 +156,43 @@ export default function Selector() {
         };
     }, [websocket]);
 
-
-
-
+    useEffect(() => {
+        console.log("Selector: buffer update")
+        console.log(buffers)
+        updatePageInfo()
+    },[buffers,currentNotebook,currentPage,currentPlace])
 
     function CreateList({ index }: { index: Info }) {
         if (!index.data) return null;
 
         function AnEntry({ pageID, pageName, notebook, place }: { pageID: string, pageName:string, notebook: string, place: string }){
-            let anEntryStyle = "text-start pl-[50px] hover:bg-gray-500 selection:bg-transparent m-[5px] mt-0 "
-            if(currentPage == pageID && notebook == currentNotebook){
-                anEntryStyle += " bg-gray-600"
+            // const buffers = getBuffers()
+            let unsavedContent = false
+            for(const AnBuffer of buffers){
+                if(pageID == AnBuffer.pageID && AnBuffer.notebookName == notebook){
+                    unsavedContent = true
+                    break
+                }
+            }
+
+            let anEntryStyle = "text-start pl-[50px] selection:bg-transparent m-[5px] mt-0 "
+            if(
+                currentPage == pageID && 
+                currentNotebook == notebook &&
+                !unsavedContent                
+            ){
+                // when the content is saved and selected
+                anEntryStyle += " bg-gray-600 hover:bg-gray-500 "
+            }else if(
+                currentPage == pageID && 
+                currentNotebook == notebook &&
+                unsavedContent        
+            ){
+                // when the content is not saved but selected
+                anEntryStyle += " bg-green-600 hover:bg-green-500 "
+            }else if(unsavedContent){
+                // when the content is not saved and not selected
+                anEntryStyle += " bg-red-800 hover:bg-red-500 "
             }
 
             return <li 
@@ -177,11 +212,28 @@ export default function Selector() {
 
         // for each notebook
         for (const notebookName in index.data) {
+            // find is the notebook has unsaved content or not.
+            let notebookContainUnsavedContent = false
+            for(const AnBuffer of buffers){
+                if(AnBuffer.notebookName == notebookName){
+                    notebookContainUnsavedContent = true
+                    break
+                }
+            }
+
+            
+            // focus:colorName
+            let notebookSelectorItemStyle = ""
+            if(notebookContainUnsavedContent){
+                notebookSelectorItemStyle = " bg-red-900 focus:bg-red-500"
+            }
+
             // notebook selector
             if(currentNotebook != notebookName){
-                notebookSelectorInner.push(<option key={notebookName} value={notebookName}>{notebookName}</option>)
+
+                notebookSelectorInner.push(<option className={notebookSelectorItemStyle} key={notebookName} value={notebookName}>{notebookName}</option>)
             }else{ 
-                notebookSelectorInner.push(<option key={notebookName} value={notebookName} selected={true}>{notebookName}</option>)
+                notebookSelectorInner.push(<option className={notebookSelectorItemStyle} key={notebookName} value={notebookName} selected={true}>{notebookName}</option>)
             }
 
 
@@ -258,10 +310,40 @@ export default function Selector() {
             // TODO: update useAppState to be able to register pageID,notebook and place independently 
             // TODO: check page.tsx integrality to useAppState
             let PlaceAndPageEntry:ReactElement[] = []
+            // const buffers = getBuffers()
+            console.log(buffers)
             for(const aPlace in newPageList){
-                let placeEntryClassName = "text-start pl-[10px] hover:bg-gray-500 selection:bg-transparent m-[5px] "
-                if(aPlace == currentPlace && notebookName == currentNotebook){
-                    placeEntryClassName += " bg-gray-600"
+                let hasUnavedContent = false
+                for(const AnBuffer of buffers){
+                    let pageIDplace = ("/" + AnBuffer.pageID).split("/").slice(0,-1).join("/")
+                    if(pageIDplace == "") pageIDplace = "/"
+
+                    // console.log("selector debug")
+                    // console.log(pageIDplace)
+                    // console.log(aPlace)
+                    // console.log(AnBuffer.notebookName)
+                    // console.log(notebookName)
+                    if(pageIDplace == aPlace && AnBuffer.notebookName == notebookName){
+                        hasUnavedContent = true
+                        break  
+                    }
+                }
+                
+                let placeEntryClassName = "text-start pl-[10px] selection:bg-transparent m-[5px] "
+                if(
+                    aPlace == currentPlace && 
+                    notebookName == currentNotebook &&
+                    !hasUnavedContent
+                ){
+                    placeEntryClassName += " bg-gray-600 hover:bg-gray-500 "
+                }else if(
+                    aPlace == currentPlace && 
+                    notebookName == currentNotebook &&
+                    hasUnavedContent
+                ){
+                    placeEntryClassName += " bg-green-600 hover:bg-green-500 "
+                }else if(hasUnavedContent){
+                    placeEntryClassName += " bg-red-800 hover:bg-red-500 "
                 }
 
                 // show place entry

@@ -12,7 +12,7 @@ import { useStartButtonStore } from "../MainUI/UIparts/ToggleToolsBar/StartButto
 import "highlight.js/styles/vs2015.min.css";
 import hijs from "highlight.js"
 import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../helper/network";
-import { useAppState, type basicMetadata } from "../window";
+import { useAppState, useUnsavedBuffersStore, type AnUnsavedBuffer, type basicMetadata } from "../window";
 
 // export interface PageMetadataAndData {
 //     pageType: string;
@@ -33,11 +33,14 @@ interface updatePage extends baseResponseTypesFromDataserver{
 // https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html
 export default function Markdown(data:PageMetadataAndData){
 
+    // page info
+
     // data
     const [html,setHTML] = useState({__html: ""})
     const [metadata,setMetadata] = useState("")
     const [markdownBuffer,setMarkdownBuffer] = useState("")
     const unsavedMarkdownBuffer = useRef<null | string>(null)
+    const unsavedCommonBuffer = useRef<null | AnUnsavedBuffer>(null)
     // data
 
     const messageBoxUUID = useRef(genUUID())
@@ -48,6 +51,12 @@ export default function Markdown(data:PageMetadataAndData){
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const currentPage     = useAppState((s) => s.currentPage)
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
+
+    const updateBuffer = useUnsavedBuffersStore((s) => s.updateBuffer)
+    const addBuffer    = useUnsavedBuffersStore((s) => s.addBuffer)
+    const removeBuffer = useUnsavedBuffersStore((s) => s.removeBuffer)
+    const getBuffers   = useUnsavedBuffersStore((s) => s.getBuffers)
+    const isSaved      = useRef(true)
 
     const [lineBreak,setLineBreak] = useState({
         view: false,
@@ -138,6 +147,9 @@ export default function Markdown(data:PageMetadataAndData){
         // }
         // ++++
 
+        
+        // parse info ----------------------
+        // parse info ----------------------
         // https://regex101.com/
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll
         let result = data.pageData.split("++++")
@@ -152,16 +164,48 @@ export default function Markdown(data:PageMetadataAndData){
             showMessageBox(message)
             return
         }
-
         const metadata = result[1]
-        setMetadata(metadata)
         const render   = result[2]
-        setMarkdownBuffer(render)
+        setMetadata(metadata)
+        // parse info ----------------------
+        // parse info ----------------------
 
-        // console.log(metadata)
-        // console.log(render)
-
-        setHTML({__html: await marked.parse(render)})
+        // check is there any buffer exist or not
+        if(currentPage != null && currentNotebook != null){
+            const buffers = getBuffers(currentPage,JSON.parse(metadata).UUID,currentNotebook)
+            if(buffers.length != 0){
+                // when buffer exist
+                isSaved.current = false
+                let latestBuffer:AnUnsavedBuffer = buffers[0] 
+                for(const AnBuffer of buffers){
+                    if(latestBuffer.timestamp.getTime() < AnBuffer.timestamp.getTime()){
+                        latestBuffer = AnBuffer
+                    }
+                }
+                setMarkdownBuffer(latestBuffer.bufferContentString)
+                unsavedMarkdownBuffer.current = latestBuffer.bufferContentString
+                unsavedCommonBuffer.current = latestBuffer
+            }else{
+                // when buffer does not exist
+                isSaved.current = true
+                unsavedMarkdownBuffer.current = null
+                unsavedCommonBuffer.current = null
+                setMarkdownBuffer(render)
+                
+                // console.log(metadata)
+                // console.log(render)
+                
+                setHTML({__html: await marked.parse(render)})
+            }
+        
+        } else {
+            showMessageBox({
+                title: "Markdown Page",
+                type : "error",
+                UUID : messageBoxUUID.current,
+                message: "Unable to get buffer info."
+            })
+        }
     }
 
 
@@ -181,7 +225,7 @@ export default function Markdown(data:PageMetadataAndData){
 
 
     useEffect(() => {
-        unsavedMarkdownBuffer.current = markdownBuffer
+        // unsavedMarkdownBuffer.current = markdownBuffer
         async function render(){
             let result = ""
             try{
@@ -193,6 +237,45 @@ export default function Markdown(data:PageMetadataAndData){
         }
         render()
     },[markdownBuffer])
+
+    // TODO: add buffer if there are unsaved contennt
+    // TODO: remove buffer if the unsaved content is saved
+    // TODO: set notebook uuid
+    // useEffect(() => {
+    //     if(!isSaved.current){
+    //         console.log("unsaved content exist")
+
+    //         if(unsavedCommonBuffer.current == null && metadata != ""){
+    //             // create new buffer
+    //             if(
+    //                 unsavedMarkdownBuffer.current == null ||
+    //                 currentNotebook == null || currentNotebook == "" ||
+    //                 currentPage == null || currentPage == ""
+    //             ) return
+
+    //             unsavedCommonBuffer.current = {
+    //                 bufferContentString: unsavedMarkdownBuffer.current,
+    //                 notebookName: currentNotebook,
+    //                 pageID: currentPage,
+    //                 pageUUID: JSON.parse(metadata).UUID,
+    //                 notebookUUID: "",
+    //                 pageType: "markdown",
+    //                 timestamp: new Date(),
+    //                 UUID: genUUID()
+    //             }
+    //             addBuffer(unsavedCommonBuffer.current)
+    //         }else{
+    //             // update existing buffer
+    //             if(
+    //                 unsavedMarkdownBuffer.current == null ||
+    //                 unsavedCommonBuffer.current == null
+    //             ) return
+    //             unsavedCommonBuffer.current.timestamp = new Date()
+    //             unsavedCommonBuffer.current.bufferContentString = unsavedMarkdownBuffer.current
+    //             updateBuffer(unsavedCommonBuffer.current)
+    //         }
+    //     }
+    // },[unsavedMarkdownBuffer.current])
 
 
     // networking ---------------------------------------
@@ -225,10 +308,9 @@ export default function Markdown(data:PageMetadataAndData){
     function netwrokHander(event:MessageEvent){
         const jsondata:updatePage = JSON.parse(event.data)
 
-        
 
         if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
-            if(jsondata.status != "error"){
+            if(jsondata.status == "ok"){
                 // TODO: inform the user the page is successfully saved
                 showMessageBox({
                     message: "Successfully saved.",
@@ -236,6 +318,14 @@ export default function Markdown(data:PageMetadataAndData){
                     type: "ok",
                     UUID: messageBoxUUID.current
                 })
+                
+                isSaved.current = true
+                if(unsavedCommonBuffer.current != null){
+                    console.log("remove buffer")
+                    removeBuffer(unsavedCommonBuffer.current)
+                }
+                unsavedMarkdownBuffer.current = null
+                unsavedCommonBuffer.current = null
             }else{
                 // TODO: inform the user the attempt to save the page is failed
                 showMessageBox({
@@ -336,6 +426,8 @@ export default function Markdown(data:PageMetadataAndData){
                             preview: true,
                             split: false
                         })
+                        if(unsavedMarkdownBuffer.current != null)
+                            setMarkdownBuffer(unsavedMarkdownBuffer.current)
                     }}
                     >Preveiw</div>
                 <div 
@@ -348,6 +440,8 @@ export default function Markdown(data:PageMetadataAndData){
                             preview: false,
                             split: false
                         })
+                        if(unsavedMarkdownBuffer.current != null)
+                            setMarkdownBuffer(unsavedMarkdownBuffer.current)
                     }}
                     >Editor</div>
                 <div 
@@ -360,6 +454,8 @@ export default function Markdown(data:PageMetadataAndData){
                             preview: false,
                             split: true
                         })
+                        if(unsavedMarkdownBuffer.current != null)
+                            setMarkdownBuffer(unsavedMarkdownBuffer.current)
                     }}
                     >Split</div>
             </div>
@@ -444,6 +540,13 @@ export default function Markdown(data:PageMetadataAndData){
                             setMarkdownBuffer(unsavedMarkdownBuffer.current)
                             //TODO: execute updatePage command of the dataserver here.
                             saveCurrentContent()
+                        }else if(isSaved.current){
+                            showMessageBox({
+                                title: "Markdown Page",
+                                message: "The content has already been saved.",
+                                type: "info",
+                                UUID: messageBoxUUID.current
+                            })
                         }
                     }}
                     >Save (Ctrl + S)</div>
@@ -483,7 +586,38 @@ export default function Markdown(data:PageMetadataAndData){
         return <pre 
                 className={preStyle}
                 onInput={(event:ChangeEvent<HTMLPreElement>) => {
+                    isSaved.current = false
                     unsavedMarkdownBuffer.current = event.target.textContent
+
+                    if(unsavedCommonBuffer.current == null && metadata != ""){
+                        // create new buffer
+                        if(
+                            unsavedMarkdownBuffer.current == null ||
+                            currentNotebook == null || currentNotebook == "" ||
+                            currentPage == null || currentPage == ""
+                        ) return
+
+                        unsavedCommonBuffer.current = {
+                            bufferContentString: event.target.textContent,
+                            notebookName: currentNotebook,
+                            pageID: currentPage,
+                            pageUUID: JSON.parse(metadata).UUID,
+                            notebookUUID: "",
+                            pageType: "markdown",
+                            timestamp: new Date(),
+                            UUID: genUUID()
+                        }
+                        addBuffer(unsavedCommonBuffer.current)
+                    }else{
+                        // update existing buffer
+                        if(
+                            unsavedMarkdownBuffer.current == null ||
+                            unsavedCommonBuffer.current == null
+                        ) return
+                        unsavedCommonBuffer.current.timestamp = new Date()
+                        unsavedCommonBuffer.current.bufferContentString = event.target.textContent
+                        updateBuffer(unsavedCommonBuffer.current)
+                    }
                 }}
                 onKeyDown={(event:KeyboardEvent) => {
                     if(event.ctrlKey && event.key == "u"){

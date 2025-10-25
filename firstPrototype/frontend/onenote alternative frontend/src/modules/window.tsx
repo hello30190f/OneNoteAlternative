@@ -35,8 +35,8 @@ export type unsavedBuffers = {
     addBuffer           : (unsavedBuffer:AnUnsavedBuffer) => void,
     removeBuffer        : (unsavedBuffer:AnUnsavedBuffer) => void,
     updateBuffer        : (unsavedBuffer:AnUnsavedBuffer) => void,      // not to create buffer, to update exist buffer
-    getBuffers          : (pageID:string) => AnUnsavedBuffer[],
-    getUnsavedPageList  : () => string[],                               // for selector compornent.
+    getBuffers          : (pageID:string,pageUUID:string,notebookName:string) => AnUnsavedBuffer[],
+    getUnsavedPageList  : () => AnUnsavedBuffer[],                               // for selector compornent.
 }
 
 export const useUnsavedBuffersStore = create<unsavedBuffers>((set,get) => ({
@@ -56,17 +56,20 @@ export const useUnsavedBuffersStore = create<unsavedBuffers>((set,get) => ({
         const oldBuffer = get().buffers
         const newBuffer = []
         for(const aBuffer of oldBuffer){
-            if(aBuffer.UUID == unsavedBuffer.UUID) continue
+            if(aBuffer.pageUUID == unsavedBuffer.pageUUID) continue
             newBuffer.push(aBuffer) 
         }
-        newBuffer.push(unsavedBuffer)
         set({buffers:newBuffer}) 
     },
-    getBuffers: (pageID:string) => {
+    getBuffers: (pageID:string,pageUUID:string,notebookName:string) => {
         const allBuffer = get().buffers
         const buffers = []
         for(const aBuffer of allBuffer){
-            if(aBuffer.pageID == pageID) 
+            if(
+                aBuffer.pageID == pageID && 
+                aBuffer.pageUUID == pageUUID &&
+                aBuffer.notebookName == notebookName 
+            ) 
                 buffers.push(aBuffer) 
         }
         return buffers
@@ -84,26 +87,25 @@ export const useUnsavedBuffersStore = create<unsavedBuffers>((set,get) => ({
             }
             newBuffer.push(aBuffer) 
         }
-        newBuffer.push(unsavedBuffer)
         set({buffers:newBuffer})    
     },
     getUnsavedPageList: () => {
         const buffers = get().buffers
-        const pageIDlist:string[] = []
+        const bufferList:AnUnsavedBuffer[] = []
 
         for(const aBuffer of buffers){
             let find = false
-            for(const pageIDname of pageIDlist){
-                if(pageIDname == aBuffer.pageID){
+            for(const AnBuffer of bufferList){
+                if(AnBuffer.pageID == aBuffer.pageID){
                     find = true
                     break
                 }
             }
             if(find) continue
-            pageIDlist.push(aBuffer.pageID)
+            bufferList.push(aBuffer)
         }
         
-        return pageIDlist
+        return bufferList
     }
 })) 
 

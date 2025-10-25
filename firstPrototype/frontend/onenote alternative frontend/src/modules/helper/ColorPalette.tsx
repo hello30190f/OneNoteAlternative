@@ -245,5 +245,17 @@ export function ColorPalette(){
             <div className="hover:bg-orange-950/80"></div>
             <div className="hover:bg-orange-950/90"></div>
             <div className="hover:bg-orange-950/100"></div>
+
+            <div className="bg-red-800"></div>
+            <div className="bg-red-900"></div>
+            <div className="bg-gray-600"></div>
+            <div className="bg-green-600"></div>
+            
+            <div className="hover:bg-gray-500"></div>
+            <div className="hover:bg-red-500"></div>
+            <div className="hover:bg-green-500"></div>
+
+            <div className="focus:bg-red-500"></div>
+            
     </div>
 }
