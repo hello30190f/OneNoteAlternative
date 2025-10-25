@@ -107,23 +107,24 @@ export default function Selector() {
             // get an interrupt
             // 
             // {
-            //     "componentName"  : "Selector",
-            //     "interrupt"      : "update",
-            //     "UUID"           : "UUID string",
-            //     "data"           : { }
+            //     "event" : "newInfo",
+            //     "UUID"  : "UUID string",
+            //     "data"  : { 
+            //         "action": "actionName"
+            //     }
             // }
-            // if(result.componentName == "Selector" && result.command == "update"){
-            //     // update index info
-            //     requestUUID.current = genUUID()
+            if(result.event == "newInfo"){
+                // update index info
+                requestUUID.current = genUUID()
 
-            //     const request = JSON.stringify({ 
-            //         command: "info", 
-            //         UUID: requestUUID.current,
-            //         data: null 
-            //     });
-            //     send(websocket,request);
-            //     return
-            // }
+                const request = JSON.stringify({ 
+                    command: "info", 
+                    UUID: requestUUID.current,
+                    data: null 
+                });
+                send(websocket,request);
+                return
+            }
 
             // frontend -> dataserver
             // get response
