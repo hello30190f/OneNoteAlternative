@@ -300,3 +300,32 @@
     1. Root directory is specified
     2. Relative path is specified
     3. Try to delete outside of the notebook stores.
+
+
+
+## sendInterrupt func
+### role
+ Send an interrupt to the all connected frontends. Check the interrupt content include mandatory keys.
+
+### args
+- websocket:websockets.asyncio.server.ServerConnection   
+ The websocket connection to the frontend which is the origin of the command to issue the interrupt. Currently, this is reserved for future use. 
+- interrupt:dict  
+ The content of an interrupt. The example is shown below.
+```json
+{
+    "responseType"  : "interrupt",
+    "event"         : "newInfo",
+    "UUID"          : str(uuid.uuid4()),
+    "data"          : data
+}
+``` 
+
+### return 
+- False:bool  
+ There are no problems.
+
+### return on error
+#### 
+- True:bool  
+ There are something missing in dict keys of "interrupt" arg.
