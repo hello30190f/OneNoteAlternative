@@ -40,3 +40,14 @@ export function genUUID(){
     (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
   );
 }
+
+export function createDateString(){
+  // yyyy/mm/dd
+  const currentDate = new Date()
+  let dateString = ""
+  dateString += String(currentDate.getFullYear()) + "/"
+  dateString += String(currentDate.getMonth() + 1) + "/"
+  dateString += String(currentDate.getDate())
+
+  return dateString
+}

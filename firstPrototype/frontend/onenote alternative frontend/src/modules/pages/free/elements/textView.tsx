@@ -8,7 +8,7 @@ const defaultItemDataForTextView:AnItem = defaultItemData
 defaultItemDataForTextView.data = "Blank text item"
 defaultItemDataForTextView.type = "text"
 
-const element:FreePageElement = {
+export const TextView_FreePageElement:FreePageElement = {
     name        : "text",
     element     : TextView,
     editElement : TextEdit,
@@ -16,9 +16,6 @@ const element:FreePageElement = {
 }
 
 export default function TextView({ item,visible }:{ item:AnItem,visible:boolean }){
-    const addElement = useFreePageElementStore((s) => s.addElement)
-    addElement(element)
-
     if(visible){
         return <div className="whitespace-pre overflow-hidden hover:overflow-auto h-full" >{item.data}</div>
     }

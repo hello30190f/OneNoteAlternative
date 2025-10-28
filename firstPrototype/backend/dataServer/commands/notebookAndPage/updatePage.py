@@ -55,6 +55,25 @@ async def updatePage(request,websocket):
     pagePath            = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pageID 
     # gather infomation
 
+    # TODO: write the document about this error.
+    # check the extention
+    if(pageType == "markdown" and not "md" in pageID):
+        await errorResponse(
+            websocket,
+            request,
+            "The page type mismatch.",
+            [notebookName,pageID,pageType,pagePath]
+            )
+        return
+    elif(not pageType == "markdown" and not "json" in pageID):
+        await errorResponse(
+            websocket,
+            request,
+            "The page type mismatch.",
+            [notebookName,pageID,pageType,pagePath]
+            )
+        return
+
 
     # check the page exist or not
     if(not os.path.exists(pagePath)):
@@ -180,7 +199,52 @@ async def updatePage(request,websocket):
             )
         return
 
-
+    # TODO: write the document about this error.
+    # check the page UUID is match to the new data
+    try:
+        with open(pagePath,"rt",encoding="utf-8") as oldData:
+            if(pageType == "markdown"):
+                datastring = oldData.read()
+                splitResult1 = datastring.split("++++")
+                if(len(splitResult1) < 3):
+                    await errorResponse(
+                        websocket,
+                        request,
+                        "The old data string is malformed. Unable to find the metadata.",
+                        [notebookName,pageID,pageType,pagePath,splitResult1,updateDataString]
+                        )
+                    return
+                OLDpageMetadataJSON = json.loads(splitResult1[1])
+                if(OLDpageMetadataJSON["UUID"] != pageMetadataJSON["UUID"]):
+                    await errorResponse(
+                        websocket,
+                        request,
+                        "The page UUID does not match to the old one.",
+                        [notebookName,pageID,pageType,pagePath,pageMetadataJSON,OLDpageMetadataJSON],
+                        error
+                        )
+                    return
+            else:
+                oldData = json.loads(oldData.read())
+                if(oldData["UUID"] != pageMetadataJSON["UUID"]):
+                    await errorResponse(
+                        websocket,
+                        request,
+                        "The page UUID does not match to the old one.",
+                        [notebookName,pageID,pageType,pagePath,pageMetadataJSON,oldData],
+                        error
+                        )
+                    return
+    except Exception as error:
+        await errorResponse(
+            websocket,
+            request,
+            "Failed to compare page UUID string.",
+            [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString],
+            error
+            )
+        return
+    
     # prepare the update string to the page
     try:
         saveString = ""

@@ -321,7 +321,6 @@ export default function Markdown(data:PageMetadataAndData){
                 
                 isSaved.current = true
                 if(unsavedCommonBuffer.current != null){
-                    console.log("remove buffer")
                     removeBuffer(unsavedCommonBuffer.current)
                 }
                 unsavedMarkdownBuffer.current = null
@@ -331,7 +330,7 @@ export default function Markdown(data:PageMetadataAndData){
                 showMessageBox({
                     message: "Failed to save.",
                     title: "Markdown",
-                    type: "ok",
+                    type: "error",
                     UUID: messageBoxUUID.current
                 })
             }

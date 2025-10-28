@@ -7,8 +7,11 @@ import { Menu } from "./showMenu"
 import { AddItem } from "./editTools/add"
 import { DeleteItem } from "./editTools/del"
 import { useFreePageItemsStore } from "./element"
-import { useDatabaseStore } from "../../helper/network"
-import { genUUID } from "../../helper/common"
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../helper/network"
+import { createDateString, genUUID } from "../../helper/common"
+import { TextView_FreePageElement } from "./elements/textView"
+import { useAppState } from "../../window"
+import { useMessageBoxStore } from "../../MainUI/UIparts/messageBox"
 
 
 //TODO: when right click is detected, show menu
@@ -52,6 +55,7 @@ export type FreePageElements = {
     elements: FreePageElement[],
     addElement: (element:FreePageElement) => void,
     removeElement: (element:FreePageElement) => void,
+    cleanElement: () => void,
     getAnElement: (elementName:string) => FreePageElement | null,
 }
 
@@ -67,6 +71,9 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
     },
     removeElement: (element:FreePageElement) => {
         // const oldElements = 
+    },
+    cleanElement: () => {
+        set({elements:[]})
     },
     getAnElement: (elementName:string) => {
         const elements = get().elements
@@ -105,18 +112,6 @@ export const useFreePageElementStore = create<FreePageElements>((set,get) => ({
 // @ JSON.parse(data.pageData).pageData
 // This is actual pageData for free page. This include "items" key which contain list of "AnItem"s.
 
-// TODO: automatic update on change
-// NOTE: any modification immediately saved. So no buffer is needed for this page type.
-export default function Free(data:PageMetadataAndData){
-    const [jsondata,setJSONdata]    = useState<AnItem[]>(JSON.parse(data.pageData).pageData.items)
-    const addItem   = useFreePageItemsStore((s) => s.addItem)
-    const getItem   = useFreePageItemsStore((s) => s.getItem)
-    const cleanItem = useFreePageItemsStore((s) => s.cleanItem)
-
-    const items         = useFreePageItemsStore((s) => s.items)
-    const init          = useFreePageItemsStore((s) => s.init)
-    const websocket     = useDatabaseStore((s) => s.websocket)
-    const requestUUID   = useRef(genUUID())
 
     // NOTE: metadata list
     // "pageType": "free",
@@ -127,24 +122,99 @@ export default function Free(data:PageMetadataAndData){
     // "UUID": "950b0810-702c-4489-bbce-bc9fdd9f0b22",
     // "pageData":{
 
+type pageData = {
+    "pageType": string,
+    "tags": string[],
+    "files": string[],
+    "createDate": string,
+    "updateDate": string,
+    "UUID": string,
+    "pageData": {
+        "items": AnItem[]
+    }
+}
+
+interface updatePage extends baseResponseTypesFromDataserver{
+    data: { }
+}
+
+// TODO: automatic update on change
+// NOTE: any modification immediately saved. So no buffer is needed for this page type.
+export default function Free(data:PageMetadataAndData){
+    const [jsondata,setJSONdata]    = useState<pageData>(JSON.parse(data.pageData))
+    const addItem   = useFreePageItemsStore((s) => s.addItem)
+    const getItem   = useFreePageItemsStore((s) => s.getItem)
+    const cleanItem = useFreePageItemsStore((s) => s.cleanItem)
+
+    const items         = useFreePageItemsStore((s) => s.items)
+    const init          = useFreePageItemsStore((s) => s.init)
+    const websocket     = useDatabaseStore((s) => s.websocket)
+    const requestUUID   = useRef(genUUID())
+    const messageBoxUUID = useRef(genUUID())
+
+    console.log("Free page UUID list")
+    console.log(requestUUID)
+    console.log(messageBoxUUID)
+
+    const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
+
+    const currentNotebook = useAppState((s) => s.currentNotebook)
+    const currentPage     = useAppState((s) => s.currentPage)
+
+    const closed          = useRef(false)
+    const initComplete    = useRef(false)
+    
+    // register elements ----------------------
+    // register elements ----------------------
+    // NOTE: When create an new element type. The element has to be registered here  to the useFreePageElementStore. 
+    const addElement = useFreePageElementStore((s) => s.addElement)
+    const cleanElement = useFreePageElementStore((s) => s.cleanElement)
+    useEffect(() => {
+        addElement(TextView_FreePageElement)
+
+        return () => {
+            cleanElement()
+        }
+    },[])
+    // register elements ----------------------
+    // register elements ----------------------
+
+
+
     // init and cleanup ------------------------
     // init and cleanup ------------------------
     useEffect(() => {
-        for(const item of jsondata){
+        for(const item of jsondata.pageData.items){
             addItem(item)
         }
+        initComplete.current = true
+        closed.current = false
 
         return () => {
+            initComplete.current = false
+            closed.current = true
             cleanItem()
         }
     },[])
     // init and cleanup ------------------------
     // init and cleanup ------------------------
 
-
+    // TODO: use buffer to avoid losing the data when network request is failed.
     useEffect(() => {
-        if(init) return // avoid the blank data overwrite the original data.
-        
+        console.log(closed)
+        console.log(initComplete)
+        if(init || websocket == null) return // avoid the blank data overwrite the original data.
+        if(currentPage?.includes("md")) return
+        if(closed.current || !initComplete.current) return
+
+        setJSONdata((state) => ({
+            ...state,
+            pageData:{
+                items: items
+            },
+            updateDate: createDateString()
+        }))
+
         // do network things
         // update page when item is added, deleted or modified 
 
@@ -153,6 +223,43 @@ export default function Free(data:PageMetadataAndData){
         // do not send request directory from websocket.send. 
         // use send function in network.tsx
 
+        // ## args (frontend to dataserver)
+        // ```json
+        // {
+        //     "command": "updatePage",
+        //     "UUID": "UUID string",
+        //     "data": {
+        //         "noteboook" : "notebookName",
+        //         "pageID"    : "Path/to/newPageName",
+        //         "pageType"  : "typeOfPage",
+        //         "update"    : "entire page data string to save. the frontend responsible for the integrality",
+        //     }
+        // }
+        // ```
+
+        // ## response (dataserver to frontend)
+        // ```json
+        // {
+        //     "status": "ok",
+        //     "errorMessage": "nothing",
+        //     "UUID":"UUID string",
+        //     "command": "updatePage",
+        //     "data":{ }
+        // }
+        // ```
+        const commandRequest = {
+            "command": "updatePage",
+            "UUID": requestUUID.current,
+            "data": {
+                "notebook"  : currentNotebook,
+                "pageID"    : currentPage,
+                "pageType"  : "free",
+                "update"    : JSON.stringify(jsondata),
+            }
+        }
+        const jsonstring = JSON.stringify(commandRequest)
+        console.log(commandRequest)
+        send(websocket,jsonstring)
     },[items])
 
 
@@ -183,9 +290,26 @@ export default function Free(data:PageMetadataAndData){
             //     "data":{ }
             // }
             // ```
-
-
-
+            const jsondata:updatePage = JSON.parse(event.data)
+            if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
+                if(jsondata.status == "ok"){
+                   
+                    // isSaved.current = true
+                    // if(unsavedCommonBuffer.current != null){
+                    //     removeBuffer(unsavedCommonBuffer.current)
+                    // }
+                    // unsavedMarkdownBuffer.current = null
+                    // unsavedCommonBuffer.current = null
+                }else{
+                    // TODO: inform the user the attempt to save the page is failed
+                    showMessageBox({
+                        message: "Failed to save.",
+                        title: "Free",
+                        type: "error",
+                        UUID: messageBoxUUID.current
+                    })
+                }
+            }
         }
 
         websocket.addEventListener("message",getResponse)
