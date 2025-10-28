@@ -194,7 +194,6 @@ def checkTheAbsolutePath(absolutePath:str):
 
 
 
-# TODO: show all exception the error message from python or other module -> Exception as error -> print(error)
 # NOTE: This function will delete all contents of a folder. There are no notify. Be careful. 
 # arg:
 #   absoluteDataPath    : file or folder path
@@ -284,8 +283,7 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
     return False
 
 
-# TODO: use this command for all commands error responses.
-# TODO: error message variable name fix
+# NOTE: use this command for all commands error responses.
 # arg:
 #   websocket       : the connection to the frontend via websocket
 #   request         : the frontend reqiuest entire JSON data
@@ -323,8 +321,6 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
     print(">>> " + responseString)
 
 
-# TODO: test and use this
-# TODO: write the document
 # arg:
 #   websocket       : the connection to the frontend via websocket
 #   interrupt       : content of the interrupt
@@ -360,7 +356,7 @@ async def sendInterrupt(websocket,interrupt:dict):
 
 
 #TODO: test this
-#TODO: use this for creating folder
+#NOTE: use this for creating folder
 # arg:
 #   absoluteFolderPath : full folder path to create
 # return value
