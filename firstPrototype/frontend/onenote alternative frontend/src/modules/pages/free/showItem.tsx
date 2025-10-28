@@ -161,7 +161,7 @@ export default function ShowItem({ item }: { item: AnItem }) {
 
             }else if(clickCounter == 2){
                 // edit mode
-                setItemToolsVisible({resize:false,move:false,outline:true,edit:true,view:false})
+                setItemToolsVisible({resize:false,move:false,outline:false,edit:true,view:false})
 
             }
         }}

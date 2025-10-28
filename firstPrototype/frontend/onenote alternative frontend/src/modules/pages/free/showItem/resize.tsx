@@ -16,7 +16,7 @@ export const FreePageMinItemSize = {
 }
 
 export function FreePageItemResizeBaseButton(){
-    return <div className="itemResizeButton w-[1rem] h-[1rem] bg-white border-[2px] border-gray-700 border-solid opacity-30"></div>
+    return <div className="itemResizeButton w-[2rem] h-[2rem] bg-white border-[2px] border-gray-700 border-solid"></div>
 }
 
 // TODO: implement each buttons

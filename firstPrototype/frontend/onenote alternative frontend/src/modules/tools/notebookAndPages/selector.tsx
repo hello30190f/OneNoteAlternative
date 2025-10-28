@@ -194,6 +194,8 @@ export default function Selector() {
             }else if(unsavedContent){
                 // when the content is not saved and not selected
                 anEntryStyle += " bg-red-800 hover:bg-red-500 "
+            }else{
+                anEntryStyle += " hover:bg-gray-500 "
             }
 
             return <li 
