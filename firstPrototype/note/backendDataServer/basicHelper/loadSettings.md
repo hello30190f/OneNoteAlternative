@@ -1,50 +1,25 @@
-# [helperName] helper
+# loadSettings helper
 ## role 
- 
+ Load the dataserver settings. The settings is explained [here](../settings.md). Currently there are no functions but there are variables.
 
-## [function1] func
+## settings var
 ### role
+ The dataserver settings.
 
-### args
-- argName:type  
- // comment about the role
-- argName:type  
- // comment about the role
-- argName:type  
- // comment about the role
+### type
+ dict
 
-
-### return 
-- returnValName:type  
- // comment about the role
-- returnValName:type  
- // comment about the role
-- returnValName:type  
- // comment about the role
-
-## [function2] func
-### role
-
-### args
-- argName:type  
- // comment about the role
-- argName:type  
- // comment about the role
-- argName:type  
- // comment about the role
-
-
-### return 
-- returnValName:type  
- // comment about the role
-- returnValName:type  
- // comment about the role
-- returnValName:type  
- // comment about the role
-
-
-
-
-## error cases
+### conetent example
+- settings.json
+```json
+{
+    "ip":"localhost",
+    "port": 50097,
+    "taskInterval": 10,
+    "isStandalone": true,
+    "NotebookRootFolder":["./notebookData"],
+    "deletedPagesKeepInterval": "0000/00/10"
+}
+```
 
 

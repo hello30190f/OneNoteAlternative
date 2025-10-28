@@ -79,3 +79,18 @@
  // comment about the role
 
 
+
+
+
+## [variableName] var
+### role
+
+### type
+ TypeOfTheVariable
+
+### conetent example
+```
+// The example data content has to be here.
+```
+
+
