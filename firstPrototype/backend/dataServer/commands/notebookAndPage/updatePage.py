@@ -217,6 +217,7 @@ async def updatePage(request,websocket):
 
     # when the update page is finished successfully.
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "ok",
         "UUID"          : request["UUID"],
         "command"       : "updatePage",

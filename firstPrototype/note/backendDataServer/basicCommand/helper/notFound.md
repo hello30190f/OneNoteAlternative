@@ -16,6 +16,7 @@
 ## response (dataserver to frontend)
 ```json
 {
+    "responseType"  : "commandResponse",
     "status"        : "error",
     "UUID"          : "UUID string",
     "command"       : request["command"],

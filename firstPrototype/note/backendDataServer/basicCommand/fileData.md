@@ -31,6 +31,7 @@
 ### under 100MB
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "ok",
     "UUID":"UUID string",
     "command": "fileData",
@@ -45,6 +46,7 @@
 ### above 100MB
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "ok",
     "UUID":"UUID string",
     "command": "fileData",
@@ -61,6 +63,7 @@
 ### mandatory key error
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "error",
     "errorMessage": "Mandatory data keys are missing or malformed.",
     "UUID":"UUID string",

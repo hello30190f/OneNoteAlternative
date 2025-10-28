@@ -42,9 +42,10 @@ async def newInfo(websocket,data:dict):
         return True
 
     response = {
-        "event" : "newInfo",
-        "UUID"  : str(uuid.uuid4()),
-        "data"  : data
+        "responseType"  : "interrupt",
+        "event"         : "newInfo",
+        "UUID"          : str(uuid.uuid4()),
+        "data"          : data
     }
 
     return await sendInterrupt(websocket,response)

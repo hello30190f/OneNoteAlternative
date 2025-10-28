@@ -5,6 +5,7 @@
 ## interrupt data 
 ```json
 {
+    "responseType"  : "interrupt",
     "event" : "eventName(interruptName)",
     "UUID"  : "UUID string",
     "data"  : { 

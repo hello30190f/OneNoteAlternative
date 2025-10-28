@@ -173,6 +173,7 @@ async def createPage(request,websocket):
         )
     else:
         responseString = json.dumps({
+            "responseType"  : "commandResponse",
             "status"        : "ok",
             "UUID"          : request["UUID"],
             "command"       : "createPage",

@@ -6,6 +6,7 @@ from helper.netwrok import websockets
 # error response ---------------------------------------
 async def NotImplementedResponse(request,websocket):
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "NotImplemented",
         "UUID"          : request["UUID"],
         "command"       : request["command"],
@@ -17,6 +18,7 @@ async def NotImplementedResponse(request,websocket):
 
 async def malformedRequestResponse(request,websocket):
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "error",
         "UUID"          : None,
         "command"       : None,
@@ -28,6 +30,7 @@ async def malformedRequestResponse(request,websocket):
 
 async def notFound(request,websocket):
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "error",
         "UUID"          : request["UUID"],
         "command"       : request["command"],
@@ -309,6 +312,7 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
     print("{} ERROR: exception message end --------------------------".format(request["command"]))
 
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "error",
         "errorMessage"  : errorMessage,
         "UUID"          : request["UUID"],
@@ -334,7 +338,8 @@ async def sendInterrupt(websocket,interrupt:dict):
     if(
         "event"         in interrupt.keys() and
         "UUID"          in interrupt.keys() and
-        "data"          in interrupt.keys()
+        "data"          in interrupt.keys() and
+        "responseType"  in interrupt.keys()
         ):
         responseString = json.dumps(interrupt)
         print(">>> " + responseString)

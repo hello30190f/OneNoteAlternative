@@ -213,6 +213,7 @@ async def deletePage(request,websocket):
 
 
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "ok",
         "UUID"          : request["UUID"],
         "command"       : "deletePage",

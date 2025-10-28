@@ -19,6 +19,7 @@ async def info(request,websocket):
     if(notebookJSONinfo == None):
         print("info command ERROR: Unable to prepare the response. There might be no notebooks or unable to access it?")
         responseString = json.dumps({
+            "responseType"  : "commandResponse",
             "status"        : "error",
             "UUID"          : request["UUID"],
             "command"       : "info",
@@ -30,6 +31,7 @@ async def info(request,websocket):
         return
 
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "ok",
         "UUID"          : request["UUID"],
         "command"       : "info",

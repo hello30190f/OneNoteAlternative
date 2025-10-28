@@ -19,6 +19,7 @@
 ## response (dataserver to frontend)
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "ok",
     "errorMessage": "nothing",
     "UUID":"UUID string",
@@ -31,6 +32,7 @@
 ### mandatory key error
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "error",
     "errorMessage": "Mandatory data keys are missing or malformed.",
     "UUID":"UUID string",

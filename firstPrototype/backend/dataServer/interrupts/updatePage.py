@@ -11,7 +11,8 @@ import uuid
 
 async def updatePage(websocket,data:dict):    
     return await sendInterrupt(websocket,{
-        "event": "updatePage",
-        "UUID": str(uuid.uuid4()),
-        "data": { }
+        "responseType"  : "interrupt",
+        "event"         : "updatePage",
+        "UUID"          : str(uuid.uuid4()),
+        "data"          : { }
     })

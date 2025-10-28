@@ -44,6 +44,7 @@ async def pageInfo(request,websocket):
                 # find files
                 files = jsondata["files"]
             responseString = json.dumps({
+                "responseType"  : "commandResponse",
                 "status"        : "ok",
                 "UUID"          : request["UUID"],
                 "command"       : "pageInfo",

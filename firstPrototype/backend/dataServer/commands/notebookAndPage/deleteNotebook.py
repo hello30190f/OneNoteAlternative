@@ -65,6 +65,7 @@ async def deleteNotebook(request,websocket):
 
     # no error state
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "ok",
         "UUID"          : request["UUID"],
         "command"       : "deleteNotebook",

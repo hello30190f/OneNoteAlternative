@@ -30,6 +30,7 @@
 ## response (dataserver to frontend)
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "ok",
     "UUID":"UUID string",
     "command": "createPage",
@@ -42,6 +43,7 @@
 ### mandatory key error
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "error",
     "errorMessage": "Mandatory data keys are missing or malformed.",
     "UUID":"UUID string",
@@ -58,6 +60,7 @@
  A new page won't be created.
 ```json
 {
+    "responseType"  : "commandResponse",
     "status": "error",
     "UUID":"UUID string",
     "command": "createPage",
@@ -70,6 +73,7 @@
  A new page won't be created.
 ```json
 {
+    "responseType"  : "commandResponse",
     "status"        : "error",
     "UUID"          : "UUID string",
     "command"       : "createPage",
@@ -82,6 +86,7 @@
  A new page won't be created. ```result.returncode``` mean the result code(int) of ```mkdir -p [filepath]```.
 ```json
 {
+    "responseType"  : "commandResponse",
     "status"        : "error",
     "UUID"          : "UUID string",
     "command"       : "createPage",

@@ -46,6 +46,7 @@ TODO: write this document
 ### under 100 MB
 ```json
 {
+    "responseType"  : "commandResponse",
     "status"        : "ok",
     "errorMessage"  : "nothing",
     "UUID"          : "UUID string",
@@ -61,6 +62,7 @@ TODO: write this document
 ### above 100 MB
 ```json
 {
+    "responseType"  : "commandResponse",
     "status"        : "ok",
     "errorMessage"  : "nothing",
     "UUID"          : "UUID string",
@@ -82,6 +84,7 @@ TODO: write this document
 ### mandatory key error
 ```json
 {
+    "responseType"  : "commandResponse",
     "status"        : "error",
     "errorMessage"  : "Mandatory data keys are missing or malformed.",
     "UUID"          : "UUID string",
