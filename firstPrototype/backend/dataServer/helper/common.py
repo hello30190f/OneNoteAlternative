@@ -347,7 +347,7 @@ async def sendInterrupt(websocket,interrupt:dict):
             try:
                 await Awebsocket.send(responseString)            
             except Exception as e:
-                print("sendInterrupt helper ERROR: Ignore the disconnected websocket.")
+                print("sendInterrupt helper INFO: Ignore the disconnected websocket.")
                 print(e)
         print(websockets)
         return False
