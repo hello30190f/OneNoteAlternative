@@ -12,6 +12,7 @@ import { createDateString, genUUID } from "../../helper/common"
 import { TextView_FreePageElement } from "./elements/textView"
 import { useAppState } from "../../window"
 import { useMessageBoxStore } from "../../MainUI/UIparts/messageBox"
+import { EditItemProperties } from "./editTools/properties"
 
 
 //TODO: when right click is detected, show menu
@@ -335,6 +336,7 @@ export default function Free(data:PageMetadataAndData){
             <Menu></Menu>
             <AddItem></AddItem>
             <DeleteItem></DeleteItem>
+            <EditItemProperties></EditItemProperties>
         </div>
     )
 }

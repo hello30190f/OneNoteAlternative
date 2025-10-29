@@ -66,16 +66,22 @@ export const defaultItemData:AnItem = {
 
 export type FreePageItems = {
     items:AnItem[],
+    ActiveItems: AnItem[],
     init:boolean,
     addItem: (item:AnItem) => void,
     removeItem: (item:AnItem) => void,
     cleanItem: () => void,
     updateItem: (item:AnItem) => void,
-    getItem: () => AnItem[]
+    getItem: () => AnItem[],
+
+    addActiveItems: (items:AnItem[]) => void,
+    removeActiveItem: (targetItem:AnItem) => void,
+    CleanActiveItems: () => void,
 }
 
 export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
     items: [],
+    ActiveItems: [],
     init: true,
     addItem: (item:AnItem) => {
         const oldItems = get().items
@@ -118,7 +124,31 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
     },
     getItem: () => {
         return get().items
-    }
+    },
+
+    addActiveItems: (items:AnItem[]) => {
+        const oldItems = get().ActiveItems
+        const newItems = []
+        for(const item of oldItems){
+            newItems.push(item)
+        }
+        for(const item of items){
+            newItems.push(item)
+        }
+        set({ActiveItems:newItems})  
+    },
+    removeActiveItem: (targetItem:AnItem) => {
+        const oldItems = get().ActiveItems
+        const newItems = []
+        for(const item of oldItems){
+            if(item.ID == targetItem.ID) continue
+            newItems.push(item)
+        }
+        set({ActiveItems:newItems})    
+    },
+    CleanActiveItems: () => {
+        set({ActiveItems:[]})
+    },
 }))
 
 

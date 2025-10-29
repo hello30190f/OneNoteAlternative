@@ -5,6 +5,7 @@ import TextView, { TextEdit } from "./elements/textView"
 import { FreePageItemResize } from "./showItem/resize"
 import { FreePageItemMove } from "./showItem/move"
 import { FreePageItemOutline } from "./showItem/showOutline"
+import { useFreePageItemsStore } from "./element"
 
 // TODO: make mousemove eventhandler not preventing from selection.
 // TODO: do z-index management
@@ -13,6 +14,8 @@ import { FreePageItemOutline } from "./showItem/showOutline"
 //           when the item inactive, the border need to be hide or transparent.
 export default function ShowItem({ item }: { item: AnItem }) {
     const elements = useFreePageElementStore((s) => s.elements)
+    const addActiveItems = useFreePageItemsStore((s) => s.addActiveItems)
+    const removeActiveItem = useFreePageItemsStore((s) => s.removeActiveItem)
 
     let className = "AnItem absolute flex bg-gray-900 "
 
@@ -124,6 +127,7 @@ export default function ShowItem({ item }: { item: AnItem }) {
                 setItemToolsVisible({resize:false,move:false,outline:false,edit:false,view:true})
                 setClickCounter(0)
                 setTouchCounter(0)
+                removeActiveItem(item)
             }
         }
 
@@ -173,6 +177,8 @@ export default function ShowItem({ item }: { item: AnItem }) {
             // cursor inside the item
 
             if(clickCounter == 0){
+                addActiveItems([item])
+                
                 // move mode
                 setItemToolsVisible({resize:false,move:true,outline:false,edit:false,view:true})     
                 if(clickCounter < maxClickAmount){
