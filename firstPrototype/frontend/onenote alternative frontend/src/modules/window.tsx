@@ -10,6 +10,7 @@ import { StartButtonMenu } from "./MainUI/UIparts/ToggleToolsBar/StartButton";
 import { ColorPalette } from "./helper/ColorPalette";
 import { PageInfo } from "./tools/metadata/metadataInfo";
 import { MessageBoxContainer } from "./MainUI/UIparts/messageBox";
+import { useDatabaseEffects, useDatabaseStore } from "./helper/network";
 
 
 
@@ -179,7 +180,18 @@ export const useAppState = create<AppState>((set,get) => ({
 
 
 // show selector of notebooks, pages and files
-export default function Window(){      
+export default function Window(){    
+    // const websocket = useDatabaseStore((s) => s.websocket)
+    // let style = {
+    //     background: ""
+    // }
+    // if(websocket == null){
+    //     style.background = "rgba(255,0,0,0.2)"
+    // }else if(websocket.readyState != websocket.OPEN){
+    //     style.background = "rgba(255,0,0,0.2)"
+    // }
+    // console.log(websocket)
+
     return(
             <div className="window flex flex-row z-2 w-full h-full">
                 <ColorPalette></ColorPalette>
