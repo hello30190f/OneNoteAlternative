@@ -121,16 +121,20 @@
 - [info](./basicCommand/info.md)
 - [pageInfo](./basicCommand/pageInfo.md)
 ### File 
-- [fileInfo](./basicCommand/fileInfo.md)
-- [fileData](./basicCommand/fileData.md)
-- [fileAdd](./basicCommand/fileAdd.md)
-- [fileDelete](./basicCommand/fileDelete.md)
+- [fileInfo](./basicCommand/file/fileInfo.md)
+- [fileData](./basicCommand/file/fileData.md)
+- [fileAdd](./basicCommand/file/fileAdd.md)
+- [fileDelete](./basicCommand/file/fileDelete.md)
 ### create
 - [createNotebook](./basicCommand/createNotebook.md)
 - [createPage](./basicCommand/createPage.md)
 ### update
 - [updatePage](./basicCommand/updatePage.md)
-
+### tag
+- [addTag](./basicCommand/tag/addTag.md)
+- [deleteTag](./basicCommand/tag/deleteTag.md)
+- [removeTag](./basicCommand/tag/removeTag.md)
+- [queryTag](./basicCommand/tag/queryTag.md)
 
 ## helper
 ### template

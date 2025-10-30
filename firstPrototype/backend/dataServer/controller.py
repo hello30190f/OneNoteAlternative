@@ -16,6 +16,12 @@ from commands.notebookAndPage.getPageType       import getPageType
 from commands.notebookAndPage.updatePage        import updatePage
 from commands.notebookAndPage.deletePage        import deletePage
 
+from commands.tag.addTag                        import addTag
+from commands.tag.deleteTag                     import deleteTag
+from commands.tag.removeTag                     import removeTag
+from commands.tag.queryTag                      import queryTag
+from commands.tag.getTagList                    import getTagList
+
 # https://websockets.readthedocs.io/en/stable/reference/asyncio/server.html#websockets.asyncio.server.ServerConnection
 # extension should register their command to this dictionary.
 #   func(request,websocket) -> None
@@ -26,16 +32,23 @@ commands = {
     "info"          : info,
     "notFound"      : notFound,
     "pageInfo"      : pageInfo,
-    "fileInfo"      : fileInfo,
-    "fileData"      : fileData,
     "createPage"    : createPage,
     "updatePage"    : updatePage,
     "getPageType"   : getPageType,
     "createNotebook": createNotebook,
     "deleteNotebook": deleteNotebook,
     "deletePage"    : deletePage,
+
+    "fileInfo"      : fileInfo,
+    "fileData"      : fileData,
     "fileAdd"       : fileAdd,
     "fileDelete"    : fileDelete,
+
+    "addTag"        : addTag,
+    "deleteTag"     : deleteTag,
+    "removeTag"     : removeTag,
+    "queryTag"      : queryTag,
+    "getTagList"    : getTagList,
 }
 
 # call command
