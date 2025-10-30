@@ -12,7 +12,7 @@ import { useFreePageItemsStore } from "./element"
 // TODO: do active and inactive style management
 // TODO: make the background transparent, keep border and itemitself visible,
 //           when the item inactive, the border need to be hide or transparent.
-export default function ShowItem({ item }: { item: AnItem }) {
+export default function ShowItem({ item,modified,setModified }: { item: AnItem,modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }) {
     const elements = useFreePageElementStore((s) => s.elements)
     const addActiveItems = useFreePageItemsStore((s) => s.addActiveItems)
     const removeActiveItem = useFreePageItemsStore((s) => s.removeActiveItem)
@@ -207,10 +207,10 @@ export default function ShowItem({ item }: { item: AnItem }) {
     >
         <div className="relative w-full h-full overflow-auto">
             <FreePageItemOutline visible={itemToolsVisible.outline}></FreePageItemOutline>
-            <FreePageItemResize style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.resize}></FreePageItemResize>
-            <FreePageItemMove style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.move}></FreePageItemMove>
+            <FreePageItemResize style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.resize} modified={modified} setModified={setModified}></FreePageItemResize>
+            <FreePageItemMove style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.move} modified={modified} setModified={setModified}></FreePageItemMove>
             <ItemView item={item} visible={itemToolsVisible.view}></ItemView>
-            <ItemEditor item={item} visible={itemToolsVisible.edit}></ItemEditor>
+            <ItemEditor item={item} visible={itemToolsVisible.edit} modified={modified} setModified={setModified}></ItemEditor>
         </div>
     </div>
 }

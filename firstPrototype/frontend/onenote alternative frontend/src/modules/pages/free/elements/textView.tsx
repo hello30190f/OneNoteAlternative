@@ -21,7 +21,7 @@ export default function TextView({ item,visible }:{ item:AnItem,visible:boolean 
     }
 }
 
-export function TextEdit({ item,visible }:{ item:AnItem,visible:boolean }){
+export function TextEdit({ item,visible ,modified, setModified  }:{ item:AnItem,visible:boolean,modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }){
     const updateItem = useFreePageItemsStore((s) => s.updateItem)
     const buffer = useRef<null | string>(null)
 

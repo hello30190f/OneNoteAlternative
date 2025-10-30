@@ -96,7 +96,7 @@ export function AnItemForAproperty({ name,settingElementWithCallbackForSave }:{ 
 
 
 
-export function EditItemProperties(){
+export function EditItemProperties({ modified,setModified }:{ modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }){
     const [visible,setVisible] = useState(false)
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
@@ -106,6 +106,7 @@ export function EditItemProperties(){
     const getProperties = useFreePagePropertiesStore((s) => s.getProperties)
     const activeItems = useFreePageItemsStore((s) => s.ActiveItems)
 
+    modified
 
     const toggleable:toggleable = {
         name: "Properties",

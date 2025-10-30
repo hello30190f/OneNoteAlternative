@@ -93,6 +93,8 @@ export default function Page() {
     function ShowPageContents({ pageInfo }: { pageInfo: PageInfo }) {
         const data = pageInfo.data;
 
+        const currentPage = useAppState((s) => s.currentPage)
+
         if (!data) return <ShowError message="There is no data." />;
 
         // clean up edit tab for a new page.
@@ -106,6 +108,7 @@ export default function Page() {
         return (
             <div className="w-full h-full">
                 <PageCompornet
+                    key={currentPage}
                     tags={data.tags}
                     files={data.files}
                     pageData={data.pageData}

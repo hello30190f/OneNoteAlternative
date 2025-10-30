@@ -186,9 +186,9 @@ export default function Window(){
     //     background: ""
     // }
     // if(websocket == null){
-    //     style.background = "rgba(255,0,0,0.2)"
+    //     style.background = "rgba(255,0,0,1)"
     // }else if(websocket.readyState != websocket.OPEN){
-    //     style.background = "rgba(255,0,0,0.2)"
+    //     style.background = "rgba(255,0,0,1)"
     // }
     // console.log(websocket)
 

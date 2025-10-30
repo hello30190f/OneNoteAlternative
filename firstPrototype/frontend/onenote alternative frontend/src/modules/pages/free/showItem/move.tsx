@@ -3,7 +3,7 @@ import type AnItem from "../element";
 import { useFreePageItemsStore } from "../element";
 
 
-export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnItem, visible:boolean, 
+export function FreePageItemMove({ item, visible, style, setStyle ,modified, setModified }:{ item:AnItem, visible:boolean, 
     style: {
     top: string;
     left: string;
@@ -19,7 +19,8 @@ export function FreePageItemMove({ item, visible, style, setStyle }:{ item:AnIte
         height: string;
         backgroundColor: string;
         zIndex: string;
-    }>>
+    }>>,
+    modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>>
 }){
     
 

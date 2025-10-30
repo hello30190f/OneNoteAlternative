@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react"
 
 
-export function Menu(){
+export function Menu({ modified,setModified }:{ modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }){
     const [visible,setVisible] = useState(false)
     const position = useRef({
         x: 0,
         y: 0
     })
+
+    modified
 
     // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
     // 0: Main button, usually the left button or the un-initialized state

@@ -47,7 +47,7 @@ import { EditItemProperties } from "./editTools/properties"
 // manage item viewers. not to manage item itself. ----------------------------
 export type FreePageElement = {
     element: ({ item,visible }:{ item:AnItem,visible:boolean }) => JSX.Element | undefined,
-    editElement: ({ item,visible }:{ item:AnItem,visible:boolean }) => JSX.Element | undefined,
+    editElement: ({ item,visible }:{ item:AnItem,visible:boolean,modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }) => JSX.Element | undefined,
     defaultData: AnItem,
     name: string
 }
@@ -164,6 +164,10 @@ export default function Free(data:PageMetadataAndData){
 
     const closed          = useRef(false)
     const initComplete    = useRef(false)
+
+    const [modified,setModified] = useState(false)
+
+
     
     // register elements ----------------------
     // register elements ----------------------
@@ -201,12 +205,14 @@ export default function Free(data:PageMetadataAndData){
     // init and cleanup ------------------------
 
     // TODO: use buffer to avoid losing the data when network request is failed.
-    useEffect(() => {
+
+    function saveContent(){
         console.log(closed)
         console.log(initComplete)
         if(init || websocket == null) return // avoid the blank data overwrite the original data.
         if(currentPage?.includes("md")) return
         if(closed.current || !initComplete.current) return
+        // if(!modified) return 
 
         setJSONdata((state) => ({
             ...state,
@@ -261,6 +267,10 @@ export default function Free(data:PageMetadataAndData){
         const jsonstring = JSON.stringify(commandRequest)
         console.log(commandRequest)
         send(websocket,jsonstring)
+    }
+
+    useEffect(() => {
+        saveContent()
     },[items])
 
 
@@ -294,13 +304,13 @@ export default function Free(data:PageMetadataAndData){
             const jsondata:updatePage = JSON.parse(event.data)
             if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
                 if(jsondata.status == "ok"){
-                   
                     // isSaved.current = true
                     // if(unsavedCommonBuffer.current != null){
                     //     removeBuffer(unsavedCommonBuffer.current)
                     // }
                     // unsavedMarkdownBuffer.current = null
                     // unsavedCommonBuffer.current = null
+                    setModified(false)
                 }else{
                     // TODO: inform the user the attempt to save the page is failed
                     showMessageBox({
@@ -316,7 +326,7 @@ export default function Free(data:PageMetadataAndData){
         websocket.addEventListener("message",getResponse)
 
         return () => {
-            websocket.addEventListener("message",getResponse)
+            websocket.removeEventListener("message",getResponse)
         }
     },[websocket])
 
@@ -332,11 +342,11 @@ export default function Free(data:PageMetadataAndData){
     return(
         <div 
             className="freeContainer absolute top-0 left-0 w-full h-full">
-            {getItem().map((value,index) => <ShowItem item={value} key={index}></ShowItem>)}
-            <Menu></Menu>
-            <AddItem></AddItem>
-            <DeleteItem></DeleteItem>
-            <EditItemProperties></EditItemProperties>
+            {getItem().map((value,index) => <ShowItem item={value} key={index} modified={modified} setModified={setModified}></ShowItem>)}
+            <Menu modified={modified} setModified={setModified}></Menu>
+            <AddItem modified={modified} setModified={setModified}></AddItem>
+            <DeleteItem modified={modified} setModified={setModified}></DeleteItem>
+            <EditItemProperties modified={modified} setModified={setModified}></EditItemProperties>
         </div>
     )
 }

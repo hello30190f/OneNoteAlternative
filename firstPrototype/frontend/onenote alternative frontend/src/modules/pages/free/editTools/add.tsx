@@ -36,7 +36,7 @@ import type AnItem from "../element";
 // }
 
 // TODO: use "useFreePageItemsStore" to add an item
-export function AddItem(){
+export function AddItem({ modified,setModified }:{ modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent w-full mt-[1.1rem] p-[0.5rem] "
 
     const [visible,setVisible] = useState(false)
@@ -58,6 +58,7 @@ export function AddItem(){
     const selectedType = useRef<string | null>(null) 
     const messageBoxUUID = useRef(genUUID())
 
+    modified
 
     const toggleable:toggleable = {
         name: "Add",

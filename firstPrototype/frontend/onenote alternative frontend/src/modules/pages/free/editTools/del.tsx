@@ -5,13 +5,18 @@ import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/Star
 import { useFreePageItemsStore } from "../element";
 
 // TODO: use "useFreePageItemsStore" to add an item
-export function DeleteItem(){
+// use ActiveItems in useFreePageItemsStore
+export function DeleteItem({ modified,setModified }:{ modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }){
     const [visible,setVisible] = useState(false)
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
 
+    const activeItems = useFreePageItemsStore((s) => s.ActiveItems)
+
     const deleteItem = useFreePageItemsStore((s) => s.removeItem)
+
+    modified
 
     const toggleable:toggleable = {
         name: "Delete",

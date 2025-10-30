@@ -20,7 +20,7 @@ export function FreePageItemResizeBaseButton(){
 }
 
 // TODO: implement each buttons
-export function FreePageItemResize({ item, visible, style, setStyle }:{ item:AnItem, visible:boolean, 
+export function FreePageItemResize({ item, visible, style, setStyle ,modified, setModified }:{ item:AnItem, visible:boolean, 
     style: {
     top: string;
     left: string;
@@ -36,7 +36,8 @@ export function FreePageItemResize({ item, visible, style, setStyle }:{ item:AnI
         height: string;
         backgroundColor: string;
         zIndex: string;
-    }>>
+    }>>,
+    modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>>
 }){    
     if(visible){
         return <div className="reiszeItem absolute w-full h-full">
