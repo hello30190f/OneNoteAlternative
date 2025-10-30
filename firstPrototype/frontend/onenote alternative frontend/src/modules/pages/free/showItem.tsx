@@ -129,6 +129,7 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
                 setTouchCounter(0)
                 removeActiveItem(item)
             }
+            setModified(true)
         }
 
         addEventListener("click",deactivateItem)

@@ -58,7 +58,6 @@ export function AddItem({ modified,setModified }:{ modified:boolean,setModified:
     const selectedType = useRef<string | null>(null) 
     const messageBoxUUID = useRef(genUUID())
 
-    modified
 
     const toggleable:toggleable = {
         name: "Add",
@@ -96,6 +95,16 @@ export function AddItem({ modified,setModified }:{ modified:boolean,setModified:
     }
 
     function addItemToTheStore(){
+        if(modified){
+            showMessageBox({
+                title: "Add Item",
+                message: "There is a unsaved modification.",
+                UUID: messageBoxUUID.current,
+                type: "error"
+            })
+            return
+        }
+
         if(selectedType.current == null){
             showMessageBox({
                 title: "Add Item",
@@ -125,6 +134,7 @@ export function AddItem({ modified,setModified }:{ modified:boolean,setModified:
         console.log(defaultData)
 
         // append the new item to the item store
+        setModified(true)
         addItem(defaultData)
 
         const window = getWindow(OverlayWindowArg)

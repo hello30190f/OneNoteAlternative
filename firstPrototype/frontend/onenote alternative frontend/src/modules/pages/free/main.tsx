@@ -212,7 +212,7 @@ export default function Free(data:PageMetadataAndData){
         if(init || websocket == null) return // avoid the blank data overwrite the original data.
         if(currentPage?.includes("md")) return
         if(closed.current || !initComplete.current) return
-        // if(!modified) return 
+        if(!modified) return 
 
         setJSONdata((state) => ({
             ...state,
@@ -271,7 +271,7 @@ export default function Free(data:PageMetadataAndData){
 
     useEffect(() => {
         saveContent()
-    },[items])
+    },[modified])
 
 
     useEffect(() => {

@@ -2,9 +2,11 @@ import { useEffect, useRef } from "react";
 import type AnItem from "../../../element";
 import { useFreePageItemsStore } from "../../../element";
 import { FreePageItemResizeBaseButton, FreePageMinItemSize } from "../../resize";
+import { useMessageBoxStore } from "../../../../../MainUI/UIparts/messageBox";
+import { genUUID } from "../../../../../helper/common";
 
 // change nothing for position
-export function BottomRight({ item, style, setStyle }:{ item:AnItem, 
+export function BottomRight({ item, style, setStyle ,modified, setModified }:{ item:AnItem, 
     style: {
         top: string;
         left: string;
@@ -20,7 +22,9 @@ export function BottomRight({ item, style, setStyle }:{ item:AnItem,
         height: string;
         backgroundColor: string;
         zIndex: string;
-    }>>}){
+    }>>,
+    modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>>
+}){
 
     let windowSize = useRef({
         width: item.size.width,
@@ -33,6 +37,8 @@ export function BottomRight({ item, style, setStyle }:{ item:AnItem,
     })
 
     const updateItem = useFreePageItemsStore((s) => s.updateItem)
+    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
+    const messageBoxUUID = useRef(genUUID())
 
     const itemMoveHandler = {
         // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button

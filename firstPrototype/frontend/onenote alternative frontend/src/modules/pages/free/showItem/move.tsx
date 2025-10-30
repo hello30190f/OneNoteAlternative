@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import type AnItem from "../element";
 import { useFreePageItemsStore } from "../element";
+import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
+import { genUUID } from "../../../helper/common";
 
 
 export function FreePageItemMove({ item, visible, style, setStyle ,modified, setModified }:{ item:AnItem, visible:boolean, 
@@ -35,6 +37,8 @@ export function FreePageItemMove({ item, visible, style, setStyle ,modified, set
     })
 
     const updateItem = useFreePageItemsStore((s) => s.updateItem)
+    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
+    const messageBoxUUID = useRef(genUUID())
 
     const itemMoveHandler = {
         // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
@@ -76,6 +80,7 @@ export function FreePageItemMove({ item, visible, style, setStyle ,modified, set
             }
         },
         "mouseup": () => {
+
             // update item data
             item.position.x = windowPos.current.x
             item.position.y = windowPos.current.y
@@ -115,6 +120,7 @@ export function FreePageItemMove({ item, visible, style, setStyle ,modified, set
             }
         },
         "touchend": () => {
+
             // update item data
             item.position.x = windowPos.current.x
             item.position.y = windowPos.current.y

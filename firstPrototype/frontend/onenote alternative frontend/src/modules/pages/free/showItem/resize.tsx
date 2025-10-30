@@ -49,7 +49,7 @@ export function FreePageItemResize({ item, visible, style, setStyle ,modified, s
             <TopLeft item={item} style={style} setStyle={setStyle}></TopLeft>
             <TopRight item={item} style={style} setStyle={setStyle}></TopRight>
             <BottomLeft item={item} style={style} setStyle={setStyle}></BottomLeft> */}
-            <BottomRight item={item} style={style} setStyle={setStyle}></BottomRight>
+            <BottomRight item={item} style={style} setStyle={setStyle} modified={modified} setModified={setModified}></BottomRight>
         </div>    
     }
 }
