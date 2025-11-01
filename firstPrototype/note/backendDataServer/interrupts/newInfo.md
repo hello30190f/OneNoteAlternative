@@ -1,6 +1,6 @@
 # newInfo
 ## Role
- Notifiy the frontend notebooks or pages are created or deleted.
+ Notify the frontend notebooks or pages are created or deleted.
  
 ## interrupt data 
 ```json

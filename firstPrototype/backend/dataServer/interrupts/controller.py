@@ -1,9 +1,11 @@
 from interrupts.newInfo    import newInfo
 from interrupts.updatePage import updatePage 
+from interrupts.updateTag  import updateTag
 
 intrruptList = {
     "newInfo"       : newInfo,
     "updatePage"    : updatePage,
+    "updateTag"     : updateTag,
 }
 
 # return 
