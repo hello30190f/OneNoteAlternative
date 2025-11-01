@@ -60,6 +60,8 @@ def callInterrupt(websocket,intrruptName:str,data:dict):
 ### Notebooks and pages
 - [newInfo](./newInfo.md)
 - [updatePage](./updatePage.md)
+### tag
+- [updateTag](./updateTag.md)
 
 
 

@@ -35,7 +35,7 @@
     "UUID"          : "UUID string",
     "command"       : "addTag",
     "data": {
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["pageID","tagName"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

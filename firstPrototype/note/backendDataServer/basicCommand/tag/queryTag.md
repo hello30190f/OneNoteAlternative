@@ -7,7 +7,9 @@
 {
     "command"   : "queryTag",
     "UUID"      : "UUID string",
-    "data"      : { }
+    "data"      : {
+        "tagName": "tagName"
+    }
 }
 ```
 
@@ -19,7 +21,14 @@
     "errorMessage"  : "nothing",
     "UUID"          : "UUID string",
     "command"       : "queryTag",
-    "data"          : { }
+    "data"          : {
+        "pages": [
+            "pages",
+            "which",
+            "are",
+            "related to the specific tag."
+        ]
+    }
 }
 ```
 
@@ -32,7 +41,7 @@
     "UUID"          : "UUID string",
     "command"       : "queryTag",
     "data": {
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["tagName"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

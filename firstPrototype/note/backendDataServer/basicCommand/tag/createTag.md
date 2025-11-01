@@ -7,7 +7,9 @@
 {
     "command"   : "createTag",
     "UUID"      : "UUID string",
-    "data"      : { }
+    "data"      : {
+        "tagName": "tagName"
+    }
 }
 ```
 
@@ -32,7 +34,7 @@
     "UUID"          : "UUID string",
     "command"       : "createTag",
     "data": {
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["tagName"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

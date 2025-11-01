@@ -7,7 +7,10 @@
 {
     "command"   : "removeTag",
     "UUID"      : "UUID string",
-    "data"      : { }
+    "data"      : {
+        "pageID": "/path/to/the/page.md",
+        "tagName": "tagName"
+    }
 }
 ```
 
@@ -32,7 +35,7 @@
     "UUID"          : "UUID string",
     "command"       : "removeTag",
     "data": {
-        "mandatoryKeys": ["all","mandatory","keys","list"],
+        "mandatoryKeys": ["pageID","tagName"],
         "missing": ["missingOrMalformed","key","names"]
     }
 }

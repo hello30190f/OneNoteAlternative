@@ -135,6 +135,8 @@
 - [deleteTag](./basicCommand/tag/deleteTag.md)
 - [removeTag](./basicCommand/tag/removeTag.md)
 - [queryTag](./basicCommand/tag/queryTag.md)
+- [getTagList](./basicCommand/tag/getTagList.md)
+- [createTag](./basicCommand/tag/createTag.md)
 
 ## helper
 ### template

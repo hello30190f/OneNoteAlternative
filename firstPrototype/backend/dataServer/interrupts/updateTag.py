@@ -10,7 +10,6 @@ actionList = [
     "removeTag",
 ]
 
-# TODO: write document
 async def updateTag(websocket,data:dict):  
     # check action key existance in the data variable.  
     if(not "action" in data.keys()):
