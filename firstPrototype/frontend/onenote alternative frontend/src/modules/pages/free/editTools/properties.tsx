@@ -137,13 +137,13 @@ export function EditItemProperties({ modified,setModified }:{ modified:boolean,s
     for(const item of activeItems){
         let find = false
         for(const AnItemType of itemTypes){
-            if(item.type == AnItemType){
+            if(item.item.type == AnItemType){
                 find = true
                 break
             }
         }
         if(find) continue
-        itemTypes.push(item.type)
+        itemTypes.push(item.item.type)
     }
 
     let properties:aProperty[] = []

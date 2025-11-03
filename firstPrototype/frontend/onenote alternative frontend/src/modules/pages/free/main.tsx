@@ -189,35 +189,76 @@ export default function Free(data:PageMetadataAndData){
     // init and cleanup ------------------------
     // init and cleanup ------------------------
     useEffect(() => {
-        for(const item of jsondata.pageData.items){
-            addItem(item)
-        }
-        initComplete.current = true
-        closed.current = false
+        // if(currentPage == null){
+        //     showMessageBox({
+        //         title: "Free Page",
+        //         message: "Unable to find the opened page.",
+        //         UUID: messageBoxUUID.current,
+        //         type: "error"
+        //     })
+        //     return
+        // }
+        // console.log("Free page init")
+
+        // for(const item of jsondata.pageData.items){
+        //     addItem(item,structuredClone(currentPage.uuid))
+        // }
+        // initComplete.current = true
+        // closed.current = false
 
         return () => {
+            console.log("Free page end")
             initComplete.current = false
             closed.current = true
             cleanItem()
         }
     },[])
+
+    if(!initComplete.current){
+        if(currentPage == null){
+            showMessageBox({
+                title: "Free Page",
+                message: "Unable to find the opened page.",
+                UUID: messageBoxUUID.current,
+                type: "error"
+            })
+            return
+        }
+        console.log("Free page init")
+
+        for(const item of jsondata.pageData.items){
+            addItem(item,structuredClone(currentPage.uuid))
+        }
+        initComplete.current = true
+        closed.current = false
+    }
     // init and cleanup ------------------------
     // init and cleanup ------------------------
 
     // TODO: use buffer to avoid losing the data when network request is failed.
 
     function saveContent(){
+        if(currentPage == null){
+            showMessageBox({
+                title: "Save",
+                message: "Unable to find the opened page.",
+                UUID: messageBoxUUID.current,
+                type: "error"
+            })
+            return
+        }
+
         console.log(closed)
         console.log(initComplete)
         if(init || websocket == null) return // avoid the blank data overwrite the original data.
-        if(currentPage?.includes("md")) return
+        if(currentPage.name.includes("md")) return
         if(closed.current || !initComplete.current) return
         if(!modified) return 
 
         setJSONdata((state) => ({
             ...state,
             pageData:{
-                items: items
+                items: getItem(structuredClone(currentPage.uuid))
             },
             updateDate: createDateString()
         }))
@@ -259,7 +300,7 @@ export default function Free(data:PageMetadataAndData){
             "UUID": requestUUID.current,
             "data": {
                 "notebook"  : currentNotebook,
-                "pageID"    : currentPage,
+                "pageID"    : currentPage.name,
                 "pageType"  : "free",
                 "update"    : JSON.stringify(jsondata),
             }
@@ -338,11 +379,23 @@ export default function Free(data:PageMetadataAndData){
     // console.log(data.tags)
     // console.log(data.pageType)
     // console.log(JSON.parse(data.pageData).pageData.items)
+    if(currentPage == null){
+        showMessageBox({
+            title: "Save",
+            message: "Unable to find the opened page.",
+            UUID: messageBoxUUID.current,
+            type: "error"
+        })
+        return
+    }
 
+    console.log("Free page -----------------")
+    console.log(currentPage.name)
+    console.log(currentPage.uuid)
     return(
         <div 
             className="freeContainer absolute top-0 left-0 w-full h-full">
-            {getItem().map((value,index) => <ShowItem item={value} key={index} modified={modified} setModified={setModified}></ShowItem>)}
+            {getItem(currentPage.uuid).map((value,index) => <ShowItem item={value} key={index} modified={modified} setModified={setModified}></ShowItem>)}
             <Menu modified={modified} setModified={setModified}></Menu>
             <AddItem modified={modified} setModified={setModified}></AddItem>
             <DeleteItem modified={modified} setModified={setModified}></DeleteItem>

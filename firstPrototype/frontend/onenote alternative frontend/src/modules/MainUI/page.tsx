@@ -49,13 +49,15 @@ export default function Page() {
         if (!websocket) return;
 
         const handleMessage = (event: MessageEvent) => {           
-            const result = JSON.parse(String(event.data));
+            const result:baseResponseTypesFromDataserver = JSON.parse(String(event.data));
+            // console.log(result)
 
             if(result.UUID == requestUUID.current && "pageInfo" == result.command){
                 if (!result.status.includes("error")) {
                     setPageInfo(result);
                 } else {
                     setPageInfo({
+                        responseType:   result.responseType,
                         status:         result.status,
                         errorMessage:   result.errorMessage,
                         UUID:           result.UUID,
@@ -82,7 +84,7 @@ export default function Page() {
             command: "pageInfo", 
             UUID: requestUUID.current,
             data: { 
-                pageID: currentPage, 
+                pageID: currentPage.name, 
                 notebook:currentNotebook 
             }
         });
@@ -108,7 +110,7 @@ export default function Page() {
         return (
             <div className="w-full h-full">
                 <PageCompornet
-                    key={currentPage}
+                    key={currentPage?.name}
                     tags={data.tags}
                     files={data.files}
                     pageData={data.pageData}

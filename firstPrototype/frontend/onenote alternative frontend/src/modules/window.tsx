@@ -122,11 +122,11 @@ export type basicMetadata = {
 }
 
 export type AppState = {
-    currentPage:string | null,
+    currentPage:{name:string,uuid:string} | null,
     currentNotebook:string | null,
     currentPlace: string | null,
     metadata    : basicMetadata | null
-    changeOpenedPage: (notebook: string | null, pageID: string | null, place: string | null) => void,
+    changeOpenedPage: (notebook: string | null, pageID: {name:string,uuid:string} | null, place: string | null) => void,
     oepnBlankPage:() => void,
     findCurrentPlace: () => void,
     setMetadata :(metadata:basicMetadata | null) => void,
@@ -137,7 +137,7 @@ export const useAppState = create<AppState>((set,get) => ({
     currentNotebook: null,
     currentPlace: null,
     metadata: null,
-    changeOpenedPage: (notebook: string | null, pageID: string | null, place: string | null) => {
+    changeOpenedPage: (notebook: string | null, pageID: {name:string,uuid:string} | null, place: string | null) => {
         if(notebook != null && pageID != null && place != null){
             set({ currentPage: pageID, currentNotebook: notebook, currentPlace: place })
         }else if(notebook != null && pageID == null && place != null){
@@ -159,7 +159,7 @@ export const useAppState = create<AppState>((set,get) => ({
         let currentPage = get().currentPage
         let newPlace = null
         if(currentPage != null){
-            let result = currentPage.split("/")
+            let result = currentPage.name.split("/")
             if(result.length > 1){
                 newPlace = "/" + result.slice(0,-1).join("/")
             }else{

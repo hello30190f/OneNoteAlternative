@@ -7,6 +7,7 @@ import { useFreePageElementStore, type FreePageElement } from "../main";
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
 import { genUUID } from "../../../helper/common";
 import type AnItem from "../element";
+import { useAppState } from "../../../window";
 
 
 
@@ -57,6 +58,8 @@ export function AddItem({ modified,setModified }:{ modified:boolean,setModified:
 
     const selectedType = useRef<string | null>(null) 
     const messageBoxUUID = useRef(genUUID())
+
+    const currentPage = useAppState((s) => s.currentPage)
 
 
     const toggleable:toggleable = {
@@ -115,6 +118,16 @@ export function AddItem({ modified,setModified }:{ modified:boolean,setModified:
             return
         }
 
+        if(currentPage == null){
+            showMessageBox({
+                title: "Add Item",
+                message: "Unable to find the opened page.",
+                UUID: messageBoxUUID.current,
+                type: "error"
+            })
+            return
+        }
+
         // create an new item
         const targetElement = getElement(selectedType.current)       
 
@@ -135,7 +148,7 @@ export function AddItem({ modified,setModified }:{ modified:boolean,setModified:
 
         // append the new item to the item store
         setModified(true)
-        addItem(defaultData)
+        addItem(defaultData,structuredClone(currentPage.uuid))
 
         const window = getWindow(OverlayWindowArg)
         if(window) closeWindow(window)

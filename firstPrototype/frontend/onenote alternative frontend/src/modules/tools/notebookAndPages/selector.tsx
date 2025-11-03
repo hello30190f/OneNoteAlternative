@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement, type ReactNode } from "react";
-import { send, useDatabaseStore } from "../../helper/network";
+import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../helper/network";
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { genUUID } from "../../helper/common";
 import { useAppState, useUnsavedBuffersStore } from "../../window";
+import { useMessageBoxStore } from "../../MainUI/UIparts/messageBox";
 
 interface Info {
     status: string;
@@ -33,6 +34,9 @@ export default function Selector() {
     const buffers       = useUnsavedBuffersStore((s) => s.buffers)
 
     const requestUUID = useRef<string>(genUUID())
+    const messageBoxUUID = useRef<string>(genUUID())
+
+    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
 
     const currentPage       = useAppState((s) => s.currentPage)
     const currentNotebook   = useAppState((s) => s.currentNotebook)
@@ -100,7 +104,7 @@ export default function Selector() {
 
         const handleMessage = (event: MessageEvent) => {
             const result = JSON.parse(String(event.data));
-            console.log(result)
+            // console.log(result)
 
             // TODO: rewrite this for new interrupt logic.
             // dataserver -> frontend
@@ -178,14 +182,14 @@ export default function Selector() {
 
             let anEntryStyle = "text-start pl-[50px] selection:bg-transparent m-[5px] mt-0 "
             if(
-                currentPage == pageID && 
+                currentPage?.name == pageID && 
                 currentNotebook == notebook &&
                 !unsavedContent                
             ){
                 // when the content is saved and selected
                 anEntryStyle += " bg-gray-600 hover:bg-gray-500 "
             }else if(
-                currentPage == pageID && 
+                currentPage?.name == pageID && 
                 currentNotebook == notebook &&
                 unsavedContent        
             ){
@@ -198,10 +202,98 @@ export default function Selector() {
                 anEntryStyle += " hover:bg-gray-500 "
             }
 
+
             return <li 
                     className={anEntryStyle}
                     onClick={() => {
-                        changeCurrentPage(notebook,pageID,place)
+                        // resolve the uuid from the pageID and then set current page
+                        // {
+                        //     "command": "pageInfo",
+                        //     "UUID": "UUID string",
+                        //     "data": {
+                        //         "notebook": "notebookName",
+                        //         "pageID": "id/of/page.md"
+                        //     }
+                        // }
+                        if(websocket == null){
+                            showMessageBox({
+                                title:"Selector",
+                                message: "Unable to resolve UUID due to the network issue.",
+                                type: "error",
+                                UUID: messageBoxUUID.current
+                            })
+                            return
+                        }
+
+                        const commandRequestUUID = genUUID()
+                        const commandRequest = {
+                            "command": "pageInfo",
+                            "UUID": commandRequestUUID,
+                            "data": {
+                                "notebook": notebook,
+                                "pageID": pageID
+                            }
+                        }
+
+                        const messageHandle = (event:MessageEvent) => {
+                            const jsondata:baseResponseTypesFromDataserver = JSON.parse(event.data)
+                            
+                            console.log("Selector receive data: -------------------------")
+                            console.log(jsondata)
+
+                            if(
+                                jsondata.responseType == "commandResponse" &&
+                                jsondata.UUID == commandRequestUUID && 
+                                jsondata.command == "pageInfo" &&
+                                jsondata.status == "ok"
+                            ){
+                                let pageJSONdata = null
+                                let pageUUID = null
+                                try{
+                                    if(pageID.includes(".md")){
+                                        const splitResult = jsondata.data.pageData.split("++++")
+                                        pageJSONdata = JSON.parse(splitResult[1])
+                                        pageUUID = pageJSONdata.UUID
+                                    }else{
+                                        pageJSONdata = JSON.parse(jsondata.data.pageData)
+                                        pageUUID = pageJSONdata.UUID
+                                    }
+                                }catch (e) {
+                                    showMessageBox({
+                                        title: "Selector",
+                                        message: "Unable to resolve the page UUID.",
+                                        type: "error",
+                                        UUID: messageBoxUUID.current
+                                    })
+                                    return
+                                }
+
+                                if(typeof pageUUID != "string"){
+                                    showMessageBox({
+                                        title:"Selector",
+                                        message: "Unable to resolve UUID due to the network issue.",
+                                        type: "error",
+                                        UUID: messageBoxUUID.current
+                                    })
+                                    return
+                                }                                
+
+                                changeCurrentPage(notebook,{name:pageID,uuid:pageUUID},place)
+                                websocket.removeEventListener("message",messageHandle)
+                            }else{
+                                showMessageBox({
+                                    title:"Selector",
+                                    message: "Unable to resolve UUID due to the dataserver issue.",
+                                    type: "error",
+                                    UUID: messageBoxUUID.current
+                                })
+                                return
+                            }
+                        }
+                        websocket.addEventListener("message",messageHandle)
+                        send(websocket,JSON.stringify(commandRequest))      
+                        console.log("Selector: send request") 
+                        console.log(commandRequest)               
                     }}>
                     {pageName}
                 </li>
@@ -314,7 +406,7 @@ export default function Selector() {
             // TODO: check page.tsx integrality to useAppState
             let PlaceAndPageEntry:ReactElement[] = []
             // const buffers = getBuffers()
-            console.log(buffers)
+            // console.log(buffers)
             for(const aPlace in newPageList){
                 let hasUnavedContent = false
                 for(const AnBuffer of buffers){

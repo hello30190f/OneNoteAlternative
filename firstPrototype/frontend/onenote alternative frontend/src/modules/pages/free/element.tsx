@@ -65,16 +65,16 @@ export const defaultItemData:AnItem = {
 }
 
 export type FreePageItems = {
-    items:AnItem[],
-    ActiveItems: AnItem[],
+    items:{item:AnItem,pageUUID:string}[],
+    ActiveItems: {item:AnItem,pageUUID:string}[],
     init:boolean,
-    addItem: (item:AnItem) => void,
+    addItem: (item:AnItem,pageUUID:string) => void,
     removeItem: (item:AnItem) => void,
     cleanItem: () => void,
     updateItem: (item:AnItem) => void,
-    getItem: () => AnItem[],
+    getItem: (pageUUID:string) => AnItem[],
 
-    addActiveItems: (items:AnItem[]) => void,
+    addActiveItems: (items:AnItem[],pageUUID:string) => void,
     removeActiveItem: (targetItem:AnItem) => void,
     CleanActiveItems: () => void,
 }
@@ -83,35 +83,37 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
     items: [],
     ActiveItems: [],
     init: true,
-    addItem: (item:AnItem) => {
+    addItem: (item:AnItem,pageUUID:string) => {
         const oldItems = get().items
-        const newItems = []
+        const newItems:{item:AnItem,pageUUID:string}[] = []
         console.log(oldItems)
         console.log(item)
         for(const oldItem of oldItems){
-            if(oldItem.ID == item.ID) {
-                return 
-            }
+            // overwrite the old item to new item when there are same id item exist. (update item)
+            if(oldItem.item.ID == item.ID) continue
             newItems.push(oldItem)
         }
-        newItems.push(item)
+        newItems.push({item:item,pageUUID:pageUUID})
         set({items: newItems,init:false})
     },
     removeItem: (item:AnItem) => {
+        console.log("remove item")
+        console.log(item)
         const oldItems = get().items
         const newItems = []
         for(const oldItem of oldItems){
-            if(item.ID == oldItem.ID) continue
+            if(item.ID == oldItem.item.ID) continue
             newItems.push(oldItem)
         }
+        console.log(newItems)
         set({items: newItems})
     },
     updateItem: (item:AnItem) => {
         const oldItems = get().items
         const newItems = []
         for(const oldItem of oldItems){
-            if(item.ID == oldItem.ID){
-                newItems.push(item)
+            if(item.ID == oldItem.item.ID){
+                newItems.push({item:item,pageUUID:oldItem.pageUUID})
                 continue 
             }
             newItems.push(oldItem)
@@ -120,20 +122,25 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
         set({items: newItems})
     },
     cleanItem: () => {
-        set({items:[],init:true})
+        set({items:[],ActiveItems:[],init:true})
     },
-    getItem: () => {
-        return get().items
+    getItem: (pageUUID:string) => {
+        const result = []
+        for(const item of get().items){
+            if(item.pageUUID == pageUUID) 
+                result.push(item.item)
+        }
+        return result 
     },
 
-    addActiveItems: (items:AnItem[]) => {
+    addActiveItems: (items:AnItem[],pageUUID:string) => {
         const oldItems = get().ActiveItems
-        const newItems = []
+        const newItems:{item:AnItem,pageUUID:string}[] = []
         for(const item of oldItems){
             newItems.push(item)
         }
         for(const item of items){
-            newItems.push(item)
+            newItems.push({item:item,pageUUID:pageUUID})
         }
         set({ActiveItems:newItems})  
     },
@@ -141,7 +148,7 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
         const oldItems = get().ActiveItems
         const newItems = []
         for(const item of oldItems){
-            if(item.ID == targetItem.ID) continue
+            if(item.item.ID == targetItem.ID) continue
             newItems.push(item)
         }
         set({ActiveItems:newItems})    

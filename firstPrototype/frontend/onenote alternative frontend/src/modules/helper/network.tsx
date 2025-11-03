@@ -4,10 +4,12 @@ import { create } from "zustand";
 
 
 export interface baseResponseTypesFromDataserver{
+  responseType: string,
   status: string;
   errorMessage: string;
   UUID: string | null;
   command: string | null;
+  data: any
 }
 
 export interface baseRequestTypesFromFromtend{
@@ -16,15 +18,18 @@ export interface baseRequestTypesFromFromtend{
 }
 
 // {
-//     "componentName"  : "Selector",
-//     "command"        : "update",
-//     "UUID"           : "UUID string",
-//     "data"           : { }
+//     "responseType"  : "interrupt",
+//     "event" : "newInfo",
+//     "UUID"  : "UUID string",
+//     "data"  : { 
+//         "action": "actionName"
+//     }
 // }
 export interface baseInterruptRequestFromDataserver{
-  componentName: string,
-  command: string,
-  UUID: string
+  responseType: string,
+  event: string,
+  UUID: string,
+  data: any
 }
 
 export const interval = 2 // sec
@@ -35,12 +40,13 @@ export function send(websocket:WebSocket, request:string, attempt=5){
     console.log(request)
     return
   }
-  console.log(websocket.readyState)
+  // console.log(websocket.readyState)
   if(
     websocket.readyState != WebSocket.CONNECTING  && 
     websocket.readyState != WebSocket.CLOSED      &&
     websocket.readyState != WebSocket.CLOSING
   ){
+    console.log(request)
     websocket.send(request)
     return
   }
@@ -82,10 +88,27 @@ export function useDatabaseEffects() {
   // const init = useRef(true)
 
   useEffect(() => {
+    const websocket = getWebsocket()
+    const showMessage = (event:MessageEvent) => {
+      console.log(event.data)
+      try{
+        console.log(JSON.parse(event.data))
+      }catch(e) {
+        console.log("This is not json data.")
+      }
+    }
+    websocket?.addEventListener("message",showMessage)
+
+    return () => {
+      websocket?.removeEventListener("message",showMessage)
+    }
+  },[serverIP,setWebsocket])
+
+  useEffect(() => {
     if (!serverIP) return;
 
     const reconnectLoop = () => { 
-      console.log("reconnect observer")
+      // console.log("reconnect observer")
       const websocket = getWebsocket()
       if(websocket != null){
         // when there is no problem

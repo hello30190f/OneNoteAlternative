@@ -6,6 +6,7 @@ import { FreePageItemResize } from "./showItem/resize"
 import { FreePageItemMove } from "./showItem/move"
 import { FreePageItemOutline } from "./showItem/showOutline"
 import { useFreePageItemsStore } from "./element"
+import { useAppState } from "../../window"
 
 // TODO: make mousemove eventhandler not preventing from selection.
 // TODO: do z-index management
@@ -16,6 +17,8 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
     const elements = useFreePageElementStore((s) => s.elements)
     const addActiveItems = useFreePageItemsStore((s) => s.addActiveItems)
     const removeActiveItem = useFreePageItemsStore((s) => s.removeActiveItem)
+
+    const currentPage = useAppState((s) => s.currentPage)
 
     let className = "AnItem absolute flex bg-gray-900 "
 
@@ -119,6 +122,13 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
 
 
     // deactivate item when mouse click is occurred outside the item
+    function saveItem(event:React.MouseEvent){
+        if(event.button != 0) return
+        if(!cursorInsideItem.current){
+        
+        }
+        setModified(true)
+    }
     useEffect(() => {
         function deactivateItem(event:MouseEvent){
             if(event.button != 0) return
@@ -129,11 +139,8 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
                 setTouchCounter(0)
                 removeActiveItem(item)
             }
-            setModified(true)
         }
-
         addEventListener("click",deactivateItem)
-
         return () => {
             removeEventListener("click",deactivateItem)            
         }
@@ -178,7 +185,8 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
             // cursor inside the item
 
             if(clickCounter == 0){
-                addActiveItems([item])
+                if(currentPage != null)
+                    addActiveItems([item],currentPage.uuid)
                 
                 // move mode
                 setItemToolsVisible({resize:false,move:true,outline:false,edit:false,view:true})     
@@ -206,7 +214,7 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
         // onMouseDown={windowHandlers.mousedown}
         // onTouchStart={windowHandlers.touchstart}
     >
-        <div className="relative w-full h-full overflow-auto">
+        <div className="relative w-full h-full overflow-auto" onMouseUp={saveItem}>
             <FreePageItemOutline visible={itemToolsVisible.outline}></FreePageItemOutline>
             <FreePageItemResize style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.resize} modified={modified} setModified={setModified}></FreePageItemResize>
             <FreePageItemMove style={style} setStyle={setStyle} item={item} visible={itemToolsVisible.move} modified={modified} setModified={setModified}></FreePageItemMove>

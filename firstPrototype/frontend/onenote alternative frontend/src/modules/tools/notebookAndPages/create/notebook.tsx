@@ -62,7 +62,7 @@ export function CreateNotebook(){
 
         websocket.onmessage = (event:MessageEvent) => {
             const result = JSON.parse(String(event.data));
-            console.log(result)
+            // console.log(result)
 
             if(result.UUID == requestUUID.current && "createNotebook" == result.command){
                 if (!result.status.includes("error")) {

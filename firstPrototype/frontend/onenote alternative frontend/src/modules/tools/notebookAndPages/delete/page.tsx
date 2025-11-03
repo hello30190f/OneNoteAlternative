@@ -94,7 +94,7 @@ export function DeletePage(){
         // when there is no selected notebook, ignore the user request.
         if(currentNotebook == null || currentNotebook == "") return
         // when there is no selected page, ignore the user request.
-        if(currentPage == null || currentPage == "") return 
+        if(currentPage == null || currentPage.name == "") return 
 
         // when there is no dataserver connection, let use informed about it via messagebox and then ignore the user request.
         if(websocket == null){
@@ -166,7 +166,7 @@ export function DeletePage(){
     if(notebookName == null){
         notebookName = "No notebook is selected."
     }
-    let pageName = currentPage
+    let pageName = currentPage?.name
     if(pageName == null || pageName == ""){
         pageName = "No page is selected."
     }

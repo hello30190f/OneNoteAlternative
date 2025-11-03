@@ -127,7 +127,7 @@ export function DeleteNotebook(){
                 "notebook": currentNotebook,
             }
         })
-        console.log(requestString)
+        // console.log(requestString)
         send(websocket,requestString)
     }
 
@@ -171,7 +171,7 @@ export function DeleteNotebook(){
 
 
     let notebookName = currentNotebook
-    console.log(currentNotebook)
+    // console.log(currentNotebook)
     if(currentNotebook == null){
         notebookName = "No notebook is selected."
     }

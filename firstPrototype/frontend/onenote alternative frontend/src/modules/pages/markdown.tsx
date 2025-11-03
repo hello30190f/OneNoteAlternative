@@ -172,7 +172,7 @@ export default function Markdown(data:PageMetadataAndData){
 
         // check is there any buffer exist or not
         if(currentPage != null && currentNotebook != null){
-            const buffers = getBuffers(currentPage,JSON.parse(metadata).UUID,currentNotebook)
+            const buffers = getBuffers(currentPage.name,JSON.parse(metadata).UUID,currentNotebook)
             if(buffers.length != 0){
                 // when buffer exist
                 isSaved.current = false
@@ -355,7 +355,7 @@ export default function Markdown(data:PageMetadataAndData){
 
         if(
             currentNotebook != null && currentNotebook != "" &&
-            currentPage != null && currentPage != "" &&
+            currentPage != null && currentPage.name != "" &&
             websocket != null
         ){  
             console.log("saveCurrentContent: send the save data")
@@ -372,7 +372,7 @@ export default function Markdown(data:PageMetadataAndData){
                 "UUID": requestUUID.current,
                 "data": {
                     "notebook" : currentNotebook,
-                    "pageID"    : currentPage,
+                    "pageID"    : currentPage.name,
                     "pageType"  : "markdown",
                     "update"    : pagedataString,
                 }
@@ -593,13 +593,13 @@ export default function Markdown(data:PageMetadataAndData){
                         if(
                             unsavedMarkdownBuffer.current == null ||
                             currentNotebook == null || currentNotebook == "" ||
-                            currentPage == null || currentPage == ""
+                            currentPage == null || currentPage.name == ""
                         ) return
 
                         unsavedCommonBuffer.current = {
                             bufferContentString: event.target.textContent,
                             notebookName: currentNotebook,
-                            pageID: currentPage,
+                            pageID: structuredClone(currentPage.name),
                             pageUUID: JSON.parse(metadata).UUID,
                             notebookUUID: "",
                             pageType: "markdown",

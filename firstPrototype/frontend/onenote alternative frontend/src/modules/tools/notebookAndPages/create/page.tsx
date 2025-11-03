@@ -137,7 +137,7 @@ export function CreatePage(){
             requestJSON.data.newPageID = newPageInfo.pagename
         }
         const requestString = JSON.stringify(requestJSON)
-        console.log(requestString)
+        // console.log(requestString)
         send(websocket,requestString)
     }
 
@@ -172,8 +172,8 @@ export function CreatePage(){
 
 
         const handleMessage = (event:MessageEvent) => {
-            const result = JSON.parse(String(event.data));
-            console.log(result)
+            const result:pageType = JSON.parse(String(event.data));
+            // console.log(result)
 
             // dataserver -> frontend
 
@@ -213,6 +213,7 @@ export function CreatePage(){
                         errorMessage: result.errorMessage,
                         UUID: result.UUID,
                         command: result.command,
+                        responseType: result.responseType,
                         data: null,
                     });
 
