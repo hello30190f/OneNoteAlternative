@@ -113,7 +113,7 @@ export function DeletePage(){
             "UUID": requestUUID.current,
             "data": { 
                 "notebook": currentNotebook,
-                "PageID": currentPage
+                "PageID": currentPage.name
             }
         })
         console.log(requsetString)
