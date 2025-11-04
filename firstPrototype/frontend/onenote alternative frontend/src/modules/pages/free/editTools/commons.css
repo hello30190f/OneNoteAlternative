@@ -1,8 +1,18 @@
 .aSetting{
     display: flex;
     margin: 0.5rem;
+    padding-left: 5px;
+    border-left: solid 5px rgb(68, 68, 68);
 }
 
 .label{
     margin-right: auto;
+}
+
+.column{
+    flex-direction: column;
+}
+
+.detail{
+    margin-left: 1rem;
 }

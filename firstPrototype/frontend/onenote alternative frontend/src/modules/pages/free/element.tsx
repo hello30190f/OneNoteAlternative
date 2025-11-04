@@ -111,6 +111,9 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
     updateItem: (item:AnItem) => {
         const oldItems = get().items
         const newItems = []
+
+        const oldActiveItem = get().ActiveItems
+        const newActiveItem = []
         for(const oldItem of oldItems){
             if(item.ID == oldItem.item.ID){
                 newItems.push({item:item,pageUUID:oldItem.pageUUID})
@@ -118,8 +121,15 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
             }
             newItems.push(oldItem)
         }
-        console.log(newItems)
-        set({items: newItems})
+
+        for(const activeItem of oldActiveItem){
+            if(activeItem.item.ID == item.ID){
+                newActiveItem.push({item:item,pageUUID:activeItem.pageUUID})
+                continue
+            }
+            newActiveItem.push(activeItem)
+        }
+        set({items: newItems,ActiveItems:newActiveItem})
     },
     cleanItem: () => {
         set({items:[],ActiveItems:[],init:true})
