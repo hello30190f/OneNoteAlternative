@@ -129,6 +129,7 @@ export function Commons({ modified,setModified }:{ modified:boolean,setModified:
                                 <div className="label">Color: </div>
                                 <input className="w-[5rem] h-[5rem]" type="color" id="colorSelectorForFreePage" 
                                 value={
+                                    // TODO: fix color wont show up correctly
                                     "#" + 
                                     activeItems[0].item.color.r.toString(16) + 
                                     activeItems[0].item.color.g.toString(16) + 
