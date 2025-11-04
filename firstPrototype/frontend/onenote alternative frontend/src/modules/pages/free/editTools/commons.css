@@ -1,0 +1,8 @@
+.aSetting{
+    display: flex;
+    margin: 0.5rem;
+}
+
+.label{
+    margin-right: auto;
+}

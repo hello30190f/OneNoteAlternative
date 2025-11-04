@@ -13,6 +13,7 @@ import { TextView_FreePageElement } from "./elements/textView"
 import { useAppState } from "../../window"
 import { useMessageBoxStore } from "../../MainUI/UIparts/messageBox"
 import { EditItemProperties } from "./editTools/properties"
+import { Commons } from "./editTools/commons"
 
 
 //TODO: when right click is detected, show menu
@@ -402,6 +403,7 @@ export default function Free(data:PageMetadataAndData){
             <AddItem modified={modified} setModified={setModified}></AddItem>
             <DeleteItem modified={modified} setModified={setModified}></DeleteItem>
             <EditItemProperties modified={modified} setModified={setModified}></EditItemProperties>
+            <Commons modified={modified} setModified={setModified}></Commons>
         </div>
     )
 }
