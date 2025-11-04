@@ -215,6 +215,8 @@ export default function Free(data:PageMetadataAndData){
     },[])
 
     if(!initComplete.current){
+        cleanItem()
+
         if(currentPage == null){
             showMessageBox({
                 title: "Free Page",

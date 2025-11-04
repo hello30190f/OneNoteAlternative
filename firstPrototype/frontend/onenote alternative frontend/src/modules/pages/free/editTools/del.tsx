@@ -69,8 +69,8 @@ export function DeleteItem({ modified,setModified }:{ modified:boolean,setModifi
         }
 
         for(const targetItem of activeItems){
-            setModified(true)
             deleteItem(targetItem.item)
+            setModified(true)
         }
     }
 

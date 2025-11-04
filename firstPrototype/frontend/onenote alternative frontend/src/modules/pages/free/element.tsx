@@ -106,7 +106,7 @@ export const useFreePageItemsStore = create<FreePageItems>((set,get) => ({
             newItems.push(oldItem)
         }
         console.log(newItems)
-        set({items: newItems})
+        set({items: newItems,ActiveItems:[]})
     },
     updateItem: (item:AnItem) => {
         const oldItems = get().items
