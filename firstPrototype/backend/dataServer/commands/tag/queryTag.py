@@ -2,10 +2,25 @@ from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse
 from helper import loadSettings 
 import json
 
+# {
+#     "responseType"  : "commandResponse",
+#     "status"        : "ok",
+#     "errorMessage"  : "nothing",
+#     "UUID"          : "UUID string",
+#     "command"       : "queryTag",
+#     "data"          : {
+#         "pages": [
+#             "pages",
+#             "which",
+#             "are",
+#             "related to the specific tag."
+#         ]
+#     }
+# }
+
 # TODO: send an interrupt to the all forntends if there are any updates to the notebook.
 async def queryTag(request,websocket): 
-    # If there are no mandatory keys for the command, this checker code can be omitted.
-    mandatoryKeys   = ["mandatory","keys","list"] # TODO: add mandatory key of the command
+    mandatoryKeys   = ["tagName"] 
     missing         = dataKeyChecker(request["data"],mandatoryKeys)
     if(missing != None):
         await errorResponse(
