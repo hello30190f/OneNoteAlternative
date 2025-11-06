@@ -7,6 +7,7 @@ import { FreePageItemMove } from "./showItem/move"
 import { FreePageItemOutline } from "./showItem/showOutline"
 import { useFreePageItemsStore } from "./element"
 import { useAppState } from "../../window"
+import { useCommonsState } from "./editTools/commons"
 
 // TODO: make mousemove eventhandler not preventing from selection.
 // TODO: do z-index management
@@ -63,6 +64,7 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
 
         zIndex: String(zIndex),
     })
+    // console.log(style)
 
 
     const [itemToolsVisible,setItemToolsVisible] = useState({
@@ -120,12 +122,13 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
         }
     },[])
 
+    const getCommonsState = useCommonsState.getState
 
     // deactivate item when mouse click is occurred outside the item
     function saveItem(event:React.MouseEvent){
         if(event.button != 0) return
         if(!cursorInsideItem.current){
-        
+
         }
         setModified(true)
     }
@@ -137,8 +140,10 @@ export default function ShowItem({ item,modified,setModified }: { item: AnItem,m
                 setItemToolsVisible({resize:false,move:false,outline:false,edit:false,view:true})
                 setClickCounter(0)
                 setTouchCounter(0)
-                removeActiveItem(item)
                 setModified(true)
+
+                if(getCommonsState().visible && getCommonsState().cursorInside) return
+                removeActiveItem(item)
             }
         }
         addEventListener("click",deactivateItem)

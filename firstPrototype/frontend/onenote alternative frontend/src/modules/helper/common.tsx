@@ -51,3 +51,53 @@ export function createDateString(){
 
   return dateString
 }
+
+
+// const top = item.position.y                         // larger
+// const bottom = item.position.y + item.size.height   // smaller
+// const left = item.position.x                        // larger
+// const right = item.position.x + item.size.width     // smaller
+
+// console.log("top bottom left right")
+// console.log(top)
+// console.log(bottom)
+// console.log(left)
+// console.log(right)
+// console.log("top     < event.pageY") 
+// console.log(top     < event.pageY) 
+// console.log("bottom  > event.pageY") 
+// console.log(bottom  > event.pageY) 
+// console.log("left    < event.pageX") 
+// console.log(left    < event.pageX) 
+// console.log("right   > event.pageX")
+// console.log(right   > event.pageX)
+// console.log(event)
+// console.log(item)
+
+export function checkCursorInsideElementOrNot(event:React.MouseEvent,elementRef:React.RefObject<HTMLDivElement | null>){
+  if(elementRef.current == null) return null
+  const style = window.getComputedStyle(elementRef.current)
+
+  console.log(event.pageX)
+  console.log(event.pageY)
+  console.log(parseInt(style.top.replaceAll("px",""))     < event.pageY)
+  console.log(parseInt(style.bottom.replaceAll("px",""))  > event.pageY)
+  console.log(parseInt(style.left.replaceAll("px",""))    < event.pageX)
+  console.log(parseInt(style.right.replaceAll("px",""))   > event.pageX)
+  console.log(parseInt(style.top.replaceAll("px",""))   )
+  console.log(parseInt(style.bottom.replaceAll("px","")))
+  console.log(parseInt(style.left.replaceAll("px",""))  )
+  console.log(parseInt(style.right.replaceAll("px","")) )
+  console.log(style)
+
+  if( 
+      parseInt(style.top.replaceAll("px",""))     < event.pageY &&
+      parseInt(style.bottom.replaceAll("px",""))  > event.pageY &&
+      parseInt(style.left.replaceAll("px",""))    < event.pageX &&
+      parseInt(style.right.replaceAll("px",""))   > event.pageX
+  ){
+      // cursor inside item 
+      return true
+  }
+  return false
+}

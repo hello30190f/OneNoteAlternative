@@ -62,7 +62,7 @@ export function PageInfo(){
         }
     },[])
 
-    if(metadata == null) return <OverlayWindow arg={args}>
+    if(metadata == null || page == null) return <OverlayWindow arg={args}>
         <div className="p-[1rem]">No metadata info</div>
     </OverlayWindow>
 
@@ -75,7 +75,7 @@ export function PageInfo(){
                 </div>
                 <div className="page flex m-[0.5rem]">
                     <div className="mr-auto">Page:</div>
-                    <div>/{page}</div>
+                    <div>/{page.name}</div>
                 </div>
                 <div className="timestamp flex m-[0.5rem]">
                     <div className="Create flex flex-1 w-[50%] mr-[3rem]">

@@ -392,9 +392,13 @@ export default function Free(data:PageMetadataAndData){
         return
     }
 
+
     console.log("Free page -----------------")
     console.log(currentPage.name)
     console.log(currentPage.uuid)
+
+    console.log(getItem(currentPage.uuid))
+
     return(
         <div 
             className="freeContainer absolute top-0 left-0 w-full h-full">
@@ -406,4 +410,5 @@ export default function Free(data:PageMetadataAndData){
             <Commons modified={modified} setModified={setModified}></Commons>
         </div>
     )
+
 }

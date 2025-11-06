@@ -1,10 +1,22 @@
-import { useEffect, useState ,type JSX, type ReactNode} from "react"
+import { useEffect, useRef, useState ,type JSX, type ReactNode} from "react"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import type { toggleable } from "../../../MainUI/ToggleToolsBar"
-import { OverlayWindow, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
+import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
 import "./commons.css"
 import { useFreePageItemsStore } from "../element"
 import { useFreePagePropertiesStore } from "./properties"
+import { create } from "zustand"
+import { checkCursorInsideElementOrNot } from "../../../helper/common"
+
+export type CommonsState = {
+    cursorInside: boolean,
+    visible:boolean
+}
+
+export const useCommonsState = create<CommonsState>((set,get) => ({
+    cursorInside: false,
+    visible: false
+}))
 
 //TODO: fix unable to update problem
 export function Commons({ modified,setModified }:{ modified:boolean,setModified:React.Dispatch<React.SetStateAction<boolean>> }){
@@ -15,8 +27,7 @@ export function Commons({ modified,setModified }:{ modified:boolean,setModified:
     const activeItems = useFreePageItemsStore((s) => s.ActiveItems)
 
     const updateItem = useFreePageItemsStore((s) => s.updateItem)
-
-    modified
+    const setCommonsState = useCommonsState.setState
 
     const toggleable:toggleable = {
         name: "Commons",
@@ -42,6 +53,9 @@ export function Commons({ modified,setModified }:{ modified:boolean,setModified:
         }
     },[])
 
+    useEffect(() => {
+        setCommonsState({visible:visible})
+    },[visible])
 
     function changeColor(event:React.ChangeEvent<HTMLInputElement>){
         const colorHexString = event.target.value.replace("#","")
@@ -110,6 +124,7 @@ export function Commons({ modified,setModified }:{ modified:boolean,setModified:
         setModified(true)
     }
 
+
     if(activeItems.length == 1){
         // single item selected
         // z-index setting
@@ -117,7 +132,14 @@ export function Commons({ modified,setModified }:{ modified:boolean,setModified:
         //  make bottom
         //  user define
         return <OverlayWindow arg={OverlayWindowArg}>
-            <div className="FreePageItemCommonsContaier min-w-[15rem] m-[0.5rem]">
+            <div className="FreePageItemCommonsContaier min-w-[15rem] m-[0.5rem]" 
+            onMouseOver={() => {
+                setCommonsState({cursorInside:true})
+            }}
+            onMouseLeave={() => {
+                setCommonsState({cursorInside:false})
+            }}
+            >
                 <div className="activeItemStatus">
                     <div className="amount m-[0.5rem]">Active Item Amount: {activeItems.length}</div>
                 </div>
@@ -131,9 +153,9 @@ export function Commons({ modified,setModified }:{ modified:boolean,setModified:
                                 value={
                                     // TODO: fix color wont show up correctly
                                     "#" + 
-                                    activeItems[0].item.color.r.toString(16) + 
-                                    activeItems[0].item.color.g.toString(16) + 
-                                    activeItems[0].item.color.b.toString(16)}
+                                    activeItems[0].item.color.r.toString(16).padStart(2,"0") + 
+                                    activeItems[0].item.color.g.toString(16).padStart(2,"0") + 
+                                    activeItems[0].item.color.b.toString(16).padStart(2,"0")}
                                 onChange={changeColor}
                                     ></input>
                             </div>

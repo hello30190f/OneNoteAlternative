@@ -86,23 +86,15 @@ export function useDatabaseEffects() {
   const setWebsocket = useDatabaseStore.setState;
   const getWebsocket = useDatabaseStore((s) => s.getWebsocket)
   // const init = useRef(true)
-
-  useEffect(() => {
-    const websocket = getWebsocket()
-    const showMessage = (event:MessageEvent) => {
-      console.log(event.data)
-      try{
-        console.log(JSON.parse(event.data))
-      }catch(e) {
-        console.log("This is not json data.")
-      }
+  
+  const showMessage = (event:MessageEvent) => {
+    console.log(event.data)
+    try{
+      console.log(JSON.parse(event.data))
+    }catch(e) {
+      console.log("This is not json data.")
     }
-    websocket?.addEventListener("message",showMessage)
-
-    return () => {
-      websocket?.removeEventListener("message",showMessage)
-    }
-  },[serverIP,setWebsocket])
+  }
 
   useEffect(() => {
     if (!serverIP) return;
@@ -124,6 +116,8 @@ export function useDatabaseEffects() {
       // when try to reconnect the dataserver 
       setTimeout(() => { 
         const websocket = new WebSocket(serverIP);
+
+        websocket.addEventListener("message",showMessage)
         // websocket.addEventListener("error",reconnectLoop)
         // websocket.addEventListener("open",reconnectLoop)
         setWebsocket({ websocket: websocket });
@@ -136,6 +130,7 @@ export function useDatabaseEffects() {
     websocket.addEventListener("error",reconnectLoop)
     websocket.addEventListener("open",reconnectLoop)
     websocket.addEventListener("close",reconnectLoop)
+    websocket.addEventListener("message",showMessage)
     setWebsocket({ websocket: websocket });
 
     return () => {
