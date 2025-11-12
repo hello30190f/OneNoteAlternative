@@ -47,7 +47,10 @@ export default function Markdown(data:PageMetadataAndData){
     const requestUUID = useRef(genUUID())
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeAllToggleables = useStartButtonStore((s) => s.removeAllToggleables)
+    
     const websocket = useDatabaseStore((s) => s.websocket)
+    const send      = useDatabaseStore((s) => s.send)
+
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const currentPage     = useAppState((s) => s.currentPage)
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
@@ -383,7 +386,7 @@ export default function Markdown(data:PageMetadataAndData){
             console.log(pagedataString)
             // send the request
             // TODO: enable this by uncommenting the line below.
-            send(websocket,jsonstring)
+            send(jsonstring,null)
         }
     }
     // networking ---------------------------------------

@@ -2,9 +2,10 @@
 ## basic interrupt data
 ```json
 {
-    "event" : "EventName",
-    "UUID"  : "UUID string",
-    "data"  : { }
+    "responseType"  : "interrupt",
+    "event"         : "EventName",
+    "UUID"          : "UUID string",
+    "data"          : { }
 }
 ```
 

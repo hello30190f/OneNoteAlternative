@@ -1,8 +1,14 @@
 import { useEffect, useRef } from "react"
 import { create } from "zustand";
+import { genUUID } from "./common";
 
+// TODO: let send function decide which websocket to use
+// TODO: rename useDatabaseEffects into useNetworkEffects
+// TODO: use send function inside of useNetworkStore
+// TODO: rename useDatabaseStore into useNetworkStore
 
-
+// types ---------------
+// types ---------------
 export interface baseResponseTypesFromDataserver{
   responseType: string,
   status: string;
@@ -31,10 +37,34 @@ export interface baseInterruptRequestFromDataserver{
   UUID: string,
   data: any
 }
+// types ---------------
+// types ---------------
+
+// networking request manage ------------
+// networking request manage ------------
+// to find a command request which is on the timedout state 
+type Arequest = {
+  UUID              : string,
+  requestJSONstring : string,
+  requestTimestamp  : Date
+}
+
 
 export const interval = 2 // sec
+const timeoutInterval = 1 // sec
 
 export function send(websocket:WebSocket, request:string, attempt=5){
+  // const addHistory      = useNetworkRequestManager((s) => s.addRequest)
+  // const isHistoryExists = useNetworkRequestManager((s) => s.isRequestExist)
+  // const setWebsoketState = useDatabaseStore.setState
+  const CurrentHistory:Arequest = {
+    requestJSONstring: request,
+    UUID: JSON.parse(request).UUID,
+    requestTimestamp: new Date
+  }
+  // addHistory(history)
+  requestHistory.push(CurrentHistory)
+  
   if(attempt == 0){
     console.log("on websocket send data, all attempts are failed. stop")
     console.log(request)
@@ -48,23 +78,40 @@ export function send(websocket:WebSocket, request:string, attempt=5){
   ){
     console.log(request)
     websocket.send(request)
+    
+    // check the request on the timeout state
+    setTimeout(() => {
+      for(const history of requestHistory){
+        if(history.UUID == CurrentHistory.UUID){
+          // when failed request
+
+          break
+        }
+      }
+    },timeoutInterval * 1000)
     return
   }
 
   setTimeout(() => { send(websocket,request,attempt - 1) },interval * 1000)
 }
+// networking request manage ------------
+// networking request manage ------------
 
-type DatabaseState = {
+type Networks = {
   websocket: WebSocket | null;
   serverIP: string | null;
+  isDisconnect: boolean;
   changeServer: (ip: string) => void;
   closeConnection: () => void;
   getWebsocket: () => WebSocket | null;
+  send: (request:string, attempt:number | null) => void;
 };
 
-export const useDatabaseStore = create<DatabaseState>((set, get) => ({
+let requestHistory:Arequest[] = []
+export const useDatabaseStore = create<Networks>((set, get) => ({
   websocket: null,
   serverIP: "ws://localhost:50097",
+  isDisconnect: true,
 
   changeServer: (ip: string) => {
     set({ serverIP: ip });
@@ -73,18 +120,76 @@ export const useDatabaseStore = create<DatabaseState>((set, get) => ({
   closeConnection: () => {
     const ws = get().websocket;
     ws?.close();
-    set({ websocket: null });
+    set({ websocket: null, isDisconnect: true });
   },
+
   getWebsocket: () => get().websocket,
+
+  send: (request:string, attempt) => {
+    if(attempt == null) attempt = 5
+
+    const websocket = get().websocket 
+    if(websocket == null){
+      // retry
+      setTimeout(() => { get().send(request,attempt - 1) },interval * 1000)
+      return
+    }
+
+    const CurrentHistory:Arequest = {
+      requestJSONstring: request,
+      UUID: JSON.parse(request).UUID,
+      requestTimestamp: new Date
+    }
+    requestHistory.push(CurrentHistory)
+    
+    if(attempt == 0){
+      console.log("on websocket send data, all attempts are failed. stop")
+      console.log(request)
+      return
+    }
+    if(
+      websocket.readyState != WebSocket.CONNECTING  && 
+      websocket.readyState != WebSocket.CLOSED      &&
+      websocket.readyState != WebSocket.CLOSING
+    ){
+      console.log(request)
+      websocket.send(request)
+      
+      // check the request on the timeout state
+      setTimeout(() => {
+        console.log(requestHistory)
+        for(const history of requestHistory){
+          if(history.UUID == CurrentHistory.UUID){
+            // when failed request
+            set({ isDisconnect:true })
+            
+            // retry
+            setTimeout(() => { get().send(request,attempt - 1) },interval * 1000)
+            break
+          }
+        }
+      },timeoutInterval * 1000)
+      return
+    }
+
+    // retry
+    setTimeout(() => { get().send(request,attempt - 1) },interval * 1000)
+  },
 }));
+
+
+
+
 
 
 // TODO: Fix fllikering
 // TODO: Reconnection Loop singleton, there are bug Reconnection Loop are appear mutiple times.
-export function useDatabaseEffects() {
+export function useNetworkEffects() {
   const serverIP = useDatabaseStore((s) => s.serverIP);
   const setWebsocket = useDatabaseStore.setState;
   const getWebsocket = useDatabaseStore((s) => s.getWebsocket)
+  const isDisconnect = useDatabaseStore((s) => s.isDisconnect)
+  const websocket    = useDatabaseStore((s) => s.websocket)
   // const init = useRef(true)
   
   const showMessage = (event:MessageEvent) => {
@@ -96,19 +201,16 @@ export function useDatabaseEffects() {
     }
   }
 
-  useEffect(() => {
-    if (!serverIP) return;
-
     const reconnectLoop = () => { 
+      setWebsocket({isDisconnect:true})
+
+      if(!serverIP) return
+
       // console.log("reconnect observer")
       const websocket = getWebsocket()
       if(websocket != null){
         // when there is no problem
         if(websocket.readyState == WebSocket.OPEN){
-          // observe the connection
-          setTimeout(() => { 
-            reconnectLoop()
-          },interval * 1000)
           return
         }
       }
@@ -118,23 +220,60 @@ export function useDatabaseEffects() {
         const websocket = new WebSocket(serverIP);
 
         websocket.addEventListener("message",showMessage)
-        // websocket.addEventListener("error",reconnectLoop)
-        // websocket.addEventListener("open",reconnectLoop)
+        websocket.addEventListener("error",reconnectLoop)
+        websocket.addEventListener("open",() => {
+          setWebsocket({ isDisconnect: false })
+        })
+        websocket.addEventListener("close",reconnectLoop)
         setWebsocket({ websocket: websocket });
       },interval / 2 * 1000)
-      setTimeout(() => { 
-        reconnectLoop()
-      },interval * 1000)
     } 
+
+  useEffect(() => {
+    if (!serverIP) return;
+
     const websocket = new WebSocket(serverIP);
     websocket.addEventListener("error",reconnectLoop)
-    websocket.addEventListener("open",reconnectLoop)
+    websocket.addEventListener("open",() => {
+      setWebsocket({ isDisconnect: false })
+    })
     websocket.addEventListener("close",reconnectLoop)
     websocket.addEventListener("message",showMessage)
     setWebsocket({ websocket: websocket });
 
     return () => {
       websocket.close();
+      setWebsocket({ isDisconnect: true })
     };
-  }, [serverIP, setWebsocket]);
+  }, [serverIP]);
+
+  const removeReceivedRequest = (event:MessageEvent) => {
+    try{
+      const jsondata = JSON.parse(event.data)
+      if(jsondata.responseType != "commandResponse") return
+      const newHistory = []
+      for(const oldHistory of requestHistory){
+        if(oldHistory.UUID == jsondata.UUID) continue
+        newHistory.push(oldHistory)
+      }
+      requestHistory = newHistory
+    }catch (error){
+      console.log("Unable to remove a request.")
+      console.log(error)
+      console.log(event.data)
+      console.log(event)
+    }
+  }
+
+  useEffect(() => {
+    if(websocket == null) return
+    websocket.addEventListener("message",(event) => {removeReceivedRequest(event)})
+  },[websocket])
+
+  useEffect(() => {
+    if(isDisconnect){
+      reconnectLoop()
+    }
+  },[isDisconnect])
+
 }
