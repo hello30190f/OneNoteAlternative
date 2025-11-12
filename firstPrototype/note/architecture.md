@@ -99,4 +99,4 @@
 
 ## security
 - SSL/TLS  
- At prototype phase, i will not implement this. This may be security issue when use this system with network outside of localhost.
+ At prototype phase, i will not implement this. This may be security issue when use this system with the network outside of localhost.

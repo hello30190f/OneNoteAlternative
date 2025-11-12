@@ -1,7 +1,16 @@
 ++++
-{"files": [], "createDate": "2025/10/6", "updateDate": "2025/10/26", "tags": ["Idea", "Research", "AI-Model"], "UUID": "f5423db7-948a-4509-8078-e1e8c175dd06"}
+{
+    "files": [],
+    "createDate": "2025/10/6",
+    "updateDate": "2025/11/12",
+    "tags": [
+        "Idea",
+        "Research",
+        "AI-Model"
+    ],
+    "UUID": "f5423db7-948a-4509-8078-e1e8c175dd06"
+}
 ++++
-
 
 
 # AIモデルを利用した画像（サムネ）による、動画の自動識別、分類、タグ付けシステム

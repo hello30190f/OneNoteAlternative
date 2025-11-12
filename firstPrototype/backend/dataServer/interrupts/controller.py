@@ -11,13 +11,13 @@ intrruptList = {
 # return 
 #  False -> OK
 #  True  -> Something went worng
-async def callInterrupt(websocket,intrruptName:str,data:dict):
-    for AnIntrrupt in intrruptList.keys():
-        if(AnIntrrupt == intrruptName):
+async def callInterrupt(websocket,interruptName:str,data:dict):
+    for AnInterrupt in intrruptList.keys():
+        if(AnInterrupt == interruptName):
             # call interrupt
-            return await intrruptList[AnIntrrupt](websocket,data)        
+            return await intrruptList[AnInterrupt](websocket,data)        
     
-    print("callInterrupt ERROR: The intrrupt does not exist.")
+    print("callInterrupt ERROR: The interrupt does not exist.")
     return True
 
 

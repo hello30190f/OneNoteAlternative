@@ -94,7 +94,7 @@ async def createNotebook(request,websocket):
     # create metadata.json
     try:
         with open(metadataPath,"wt",encoding="utf-8") as metadata:
-            metadata.write(json.dumps(newNotebookMetadata))
+            metadata.write(json.dumps(newNotebookMetadata,indent=4))
     except Exception as error:
         await errorResponse(
             websocket,
@@ -110,11 +110,11 @@ async def createNotebook(request,websocket):
     try:
         #  tags.json
         with open(tagIndexPath,"wt",encoding="utf-8") as tagIndex:
-            tagIndex.write(json.dumps({}))
+            tagIndex.write(json.dumps({},indent=4))
 
         #  files.json
         with open(filesIndexPath,"wt",encoding="utf-8") as fileIndex:
-            fileIndex.write(json.dumps({}))
+            fileIndex.write(json.dumps({},indent=4))
     except Exception as error:
         await errorResponse(
             websocket,

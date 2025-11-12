@@ -13,6 +13,6 @@ def markdown(data):
         "createDate": timeString(),
         "updateDate": timeString(),
         "UUID": str(uuid.uuid4())
-    }) + "\n++++\n\n" + blank
+    },indent=4) + "\n++++\n\n" + blank
 
 

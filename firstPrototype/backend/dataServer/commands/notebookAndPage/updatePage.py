@@ -250,11 +250,11 @@ async def updatePage(request,websocket):
         saveString = ""
         if(pageType == "markdown"):
             saveString = "++++\n{}\n++++\n{}".format(
-                json.dumps(pageMetadataJSON),
+                json.dumps(pageMetadataJSON,indent=4),
                 pageContent
             )
         else:
-            saveString = json.dumps(pageMetadataJSON)
+            saveString = json.dumps(pageMetadataJSON,indent=4)
     except Exception as error:
         await errorResponse(
             websocket,

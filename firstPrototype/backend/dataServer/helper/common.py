@@ -274,7 +274,7 @@ def updateNotebookMatadata(notebookName:str,notebookMatadata:dict):
         shutil.copyfile(notebookMetadataPath,notebookMetadataPath + ".backup")
         
         with open(notebookMetadataPath,"wt",encoding="utf-8") as metadata:
-            metadata.write(json.dumps(notebookMatadata))
+            metadata.write(json.dumps(notebookMatadata,indent=4))
             pass
     except:
         print("updateNotebookMatadata ERROR: Unable to create metadata backupfile or to update metadata.json of the notebook.")
@@ -321,6 +321,7 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
     print(">>> " + responseString)
 
 
+# TODO: remove closed websocket
 # arg:
 #   websocket       : the connection to the frontend via websocket
 #   interrupt       : content of the interrupt
