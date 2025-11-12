@@ -158,7 +158,8 @@ export default function Free(data:PageMetadataAndData){
     console.log(requestUUID)
     console.log(messageBoxUUID)
 
-    const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
+    const showMessageBox        = useMessageBoxStore((s) => s.showMessageBox)
+    const setMetadataToAppState = useAppState((s) => s.setMetadata)
 
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const currentPage     = useAppState((s) => s.currentPage)
@@ -168,6 +169,7 @@ export default function Free(data:PageMetadataAndData){
 
     const [modified,setModified] = useState(false)
 
+    
 
     
     // register elements ----------------------
@@ -374,7 +376,19 @@ export default function Free(data:PageMetadataAndData){
         }
     },[websocket])
 
+    useEffect(() => {
+        setMetadataToAppState({
+            createDate:jsondata.createDate,
+            files:jsondata.files,
+            tags:jsondata.tags,
+            updateDate:jsondata.updateDate,
+            UUID:jsondata.UUID
+        })
 
+        return () => {
+            setMetadataToAppState(null)
+        }
+    },[jsondata])
     
     // console.log(jsondata)
     // console.log(data)
