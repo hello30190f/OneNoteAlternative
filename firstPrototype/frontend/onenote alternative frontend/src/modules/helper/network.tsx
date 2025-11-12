@@ -49,7 +49,6 @@ type Arequest = {
   requestTimestamp  : Date
 }
 
-
 export const interval = 2 // sec
 const timeoutInterval = 1 // sec
 
