@@ -6,22 +6,51 @@ import type { toggleable } from "../../MainUI/ToggleToolsBar"
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow"
 import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useAppState } from "../../window"
+import { useMessageBoxStore, type aMessageBox } from "../../MainUI/UIparts/messageBox"
+import { genUUID } from "../../helper/common"
 
-function addTag(){
 
-}
 
-function openPageListOfTheTag(){
+    // callbacks -----------------------------
+    // callbacks -----------------------------
+    function addTag(showMessageBox: (message: aMessageBox) => void){
+        showMessageBox({
+            title: "add tag",
+            message: "Not Implemented yet...",
+            type: "info",
+            UUID: genUUID()
+        })
+    }
 
-}
+    function openPageListOfTheTag(showMessageBox: (message: aMessageBox) => void){
+        showMessageBox({
+            title: "open page list of the tag",
+            message: "Not Implemented yet...",
+            type: "info",
+            UUID: genUUID()
+        })
+    }
 
-function removeTag(){
+    function removeTag(showMessageBox: (message: aMessageBox) => void){
+        showMessageBox({
+            title: "remove tag",
+            message: "Not Implemented yet...",
+            type: "info",
+            UUID: genUUID()
+        })
+    }
 
-}
+    function openFile(showMessageBox: (message: aMessageBox) => void){
+        showMessageBox({
+            title: "open file",
+            message: "Not Implemented yet...",
+            type: "info",
+            UUID: genUUID()
+        })
+    }
+    // callbacks -----------------------------
+    // callbacks -----------------------------
 
-function openFile(){
-
-}
 
 // notebook name
 // current page
@@ -38,6 +67,8 @@ export function PageInfo(){
     const [visible,setVisible] = useState(false)
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
+    const showMessageBox = useMessageBoxStore((s) => (s.showMessageBox))
+
 
     const toggleable:toggleable = {
         name: "Page Info",
@@ -66,6 +97,10 @@ export function PageInfo(){
         <div className="p-[1rem]">No metadata info</div>
     </OverlayWindow>
 
+
+
+
+
     return <OverlayWindow arg={args}>
         <div className="metadataList flex flex-col p-[0.5rem] m-[0.5rem] bg-gray-950 min-w-[30rem] max-w-[100rem] shrink-0">
             <div className="currentInfo flex flex-col">
@@ -91,18 +126,18 @@ export function PageInfo(){
             <div className="filesList flex m-[0.5rem]">
                 <div className="p-[0.5rem] ml-[0.5rem]">Files:</div>
                 <div className="flex">
-                    {metadata.files.map((value,index) => <div className="p-[0.5rem] ml-[0.5rem] bg-gray-700 text-center hover:bg-gray-600" onClick={openFile} key={index}>{value}</div>)}            
+                    {metadata.files.map((value,index) => <div className="p-[0.5rem] ml-[0.5rem] bg-gray-700 text-center hover:bg-gray-600" onClick={() => {openFile(showMessageBox)}} key={index}>{value}</div>)}            
                 </div>
             </div>
             <div className="tagsList flex m-[0.5rem]">
                 <div className="p-[0.5rem] ml-[0.5rem]">Tags:</div>
                 <div className="flex">
                     {metadata.tags.map((value,index) => <div className="p-0 h-[2.5rem] pl-[0.5rem] ml-[0.5rem] bg-gray-700 hover:bg-gray-600 flex" key={index}>
-                        <div className="text-center py-[0.5rem]" onClick={openPageListOfTheTag}>{value}</div>
-                        <div className="p-[0.5rem] w-[2rem] ml-[0.5rem] bg-gray-900 hover:bg-gray-800" onClick={removeTag}>-</div>
+                        <div className="text-center py-[0.5rem]" onClick={() => {openPageListOfTheTag(showMessageBox)}}>{value}</div>
+                        <div className="p-[0.5rem] w-[2rem] ml-[0.5rem] bg-gray-900 hover:bg-gray-800" onClick={() => {removeTag(showMessageBox)}}>-</div>
                     </div>)}            
                 </div>
-                <div className="ml-[0.5rem] p-[0.5rem] hover:bg-gray-800" onClick={addTag}>+</div>
+                <div className="ml-[0.5rem] p-[0.5rem] hover:bg-gray-800" onClick={() => {addTag(showMessageBox)}}>+</div>
             </div>
         </div>
     </OverlayWindow>

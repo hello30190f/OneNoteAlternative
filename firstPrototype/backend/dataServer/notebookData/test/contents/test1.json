@@ -4,7 +4,7 @@
     "files": [],
     "UUID": "870b1d90-6096-41b2-bb0f-754bebaf62ec",
     "createDate": "2025/11/12",
-    "updateDate": "2025/11/13",
+    "updateDate": "2025/11/18",
     "pageData": {
         "items": [
             {
@@ -32,8 +32,8 @@
                 "ID": "30629856-71f9-4c89-b019-7e3a2ac11192",
                 "type": "text",
                 "position": {
-                    "x": 98,
-                    "y": 534,
+                    "x": 422,
+                    "y": 86,
                     "z": 1
                 },
                 "size": {
@@ -52,8 +52,8 @@
                 "ID": "fea6cdb1-2fa8-4b6f-9413-f616652c2487",
                 "type": "text",
                 "position": {
-                    "x": 380,
-                    "y": 339,
+                    "x": 473,
+                    "y": 300,
                     "z": 1
                 },
                 "size": {
