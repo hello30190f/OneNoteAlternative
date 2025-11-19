@@ -10,7 +10,7 @@ import { StartButtonMenu } from "./MainUI/UIparts/ToggleToolsBar/StartButton";
 import { ColorPalette } from "./helper/ColorPalette";
 import { PageInfo } from "./tools/metadata/metadataInfo";
 import { MessageBoxContainer } from "./MainUI/UIparts/messageBox";
-import { useDatabaseStore } from "./helper/network";
+import { useNetworkStore } from "./helper/network";
 
 
 
@@ -181,7 +181,7 @@ export const useAppState = create<AppState>((set,get) => ({
 
 // show selector of notebooks, pages and files
 export default function Window(){    
-    const isDisconnect = useDatabaseStore((s) => s.isDisconnect)
+    const isDisconnect = useNetworkStore((s) => s.isDisconnect)
     let style = {
         background: ""
     }

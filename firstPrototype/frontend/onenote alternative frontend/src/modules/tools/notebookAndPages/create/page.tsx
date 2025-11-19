@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement } from "react";
 import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
 import { useAppState } from "../../../window";
 import { genUUID } from "../../../helper/common";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
@@ -16,7 +16,7 @@ interface pageType extends baseResponseTypesFromDataserver{
 // TODO: create place function
 export function CreatePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
-    const websocket = useDatabaseStore((s) => s.websocket)
+    const websocket = useNetworkStore((s) => s.websocket)
     const [disabled,setDisabled] = useState(false)
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){

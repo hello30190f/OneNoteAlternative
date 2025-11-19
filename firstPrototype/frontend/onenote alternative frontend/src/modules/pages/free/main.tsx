@@ -7,7 +7,7 @@ import { Menu } from "./showMenu"
 import { AddItem } from "./editTools/add"
 import { DeleteItem } from "./editTools/del"
 import { useFreePageItemsStore } from "./element"
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../helper/network"
+import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network"
 import { createDateString, genUUID } from "../../helper/common"
 import { TextView_FreePageElement } from "./elements/textView"
 import { useAppState } from "../../window"
@@ -150,7 +150,7 @@ export default function Free(data:PageMetadataAndData){
 
     const items         = useFreePageItemsStore((s) => s.items)
     const init          = useFreePageItemsStore((s) => s.init)
-    const websocket     = useDatabaseStore((s) => s.websocket)
+    const websocket     = useNetworkStore((s) => s.websocket)
     const requestUUID   = useRef(genUUID())
     const messageBoxUUID = useRef(genUUID())
 

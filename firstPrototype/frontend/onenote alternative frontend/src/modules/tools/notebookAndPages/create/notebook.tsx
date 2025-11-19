@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ChangeEventHandler, type ReactNode } from "react"
 import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
-import { send, useDatabaseStore } from "../../../helper/network"
+import { send, useNetworkStore } from "../../../helper/network"
 import { genUUID } from "../../../helper/common"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
@@ -19,7 +19,7 @@ export function CreateNotebook(){
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
-    const websocket = useDatabaseStore((s) => s.websocket)
+    const websocket = useNetworkStore((s) => s.websocket)
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
     const messageBoxUUID = useRef(genUUID())
 

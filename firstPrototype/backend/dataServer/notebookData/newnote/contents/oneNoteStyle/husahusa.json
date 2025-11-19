@@ -1,1 +1,32 @@
-{"pageType": "free", "tags": [], "files": [], "UUID": "66a28adf-2c73-4411-b1a7-2ebec6fef139", "createDate": "2025/11/4", "updateDate": "2025/11/6", "pageData": {"items": [{"data": "Blank text item\n\n\n\u4f55\u3067\u3044\u3064\u3082\u3075\u3055\u3075\u3055\u3057\u3066\u3044\u308b\u3093\u3067\u3059\u304b\uff1f\n\n", "ID": "d4dcae0d-446a-47e6-8cdf-e9a0c5d3bbaa", "type": "text", "position": {"x": 69, "y": 362, "z": 1}, "size": {"height": 368, "width": 345}, "color": {"a": 1, "b": 93, "g": 93, "r": 177}}]}}
+{
+    "pageType": "free",
+    "tags": [],
+    "files": [],
+    "UUID": "66a28adf-2c73-4411-b1a7-2ebec6fef139",
+    "createDate": "2025/11/4",
+    "updateDate": "2025/11/19",
+    "pageData": {
+        "items": [
+            {
+                "data": "Blank text item\n\n\n\u4f55\u3067\u3044\u3064\u3082\u3075\u3055\u3075\u3055\u3057\u3066\u3044\u308b\u3093\u3067\u3059\u304b\uff1f\n\n",
+                "ID": "d4dcae0d-446a-47e6-8cdf-e9a0c5d3bbaa",
+                "type": "text",
+                "position": {
+                    "x": 69,
+                    "y": 362,
+                    "z": 1
+                },
+                "size": {
+                    "height": 368,
+                    "width": 345
+                },
+                "color": {
+                    "a": 1,
+                    "b": 93,
+                    "g": 93,
+                    "r": 177
+                }
+            }
+        ]
+    }
+}

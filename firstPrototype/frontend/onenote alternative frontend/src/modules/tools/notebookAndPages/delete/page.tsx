@@ -4,7 +4,7 @@ import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useAppState } from "../../../window"
 import { genUUID } from "../../../helper/common"
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
+import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
 
 interface deletePage extends baseResponseTypesFromDataserver{
@@ -16,7 +16,7 @@ export function DeletePage(){
     const [disabled,setDisabled] = useState(false)
     const requestUUID = useRef(genUUID())
     const messageBoxUUID = useRef(genUUID())
-    const websocket = useDatabaseStore((s) => s.websocket)
+    const websocket = useNetworkStore((s) => s.websocket)
     
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)

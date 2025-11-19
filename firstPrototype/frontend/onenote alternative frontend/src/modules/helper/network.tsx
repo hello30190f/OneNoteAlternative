@@ -5,7 +5,7 @@ import { genUUID } from "./common";
 // TODO: let send function decide which websocket to use
 // TODO: rename useDatabaseEffects into useNetworkEffects
 // TODO: use send function inside of useNetworkStore
-// TODO: rename useDatabaseStore into useNetworkStore
+// TODO: rename useNetworkStore into useNetworkStore
 
 // types ---------------
 // types ---------------
@@ -55,7 +55,7 @@ const timeoutInterval = 1 // sec
 export function send(websocket:WebSocket, request:string, attempt=5){
   // const addHistory      = useNetworkRequestManager((s) => s.addRequest)
   // const isHistoryExists = useNetworkRequestManager((s) => s.isRequestExist)
-  // const setWebsoketState = useDatabaseStore.setState
+  // const setWebsoketState = useNetworkStore.setState
   const CurrentHistory:Arequest = {
     requestJSONstring: request,
     UUID: JSON.parse(request).UUID,
@@ -107,7 +107,7 @@ type Networks = {
 };
 
 let requestHistory:Arequest[] = []
-export const useDatabaseStore = create<Networks>((set, get) => ({
+export const useNetworkStore = create<Networks>((set, get) => ({
   websocket: null,
   serverIP: "ws://localhost:50097",
   isDisconnect: true,
@@ -184,11 +184,11 @@ export const useDatabaseStore = create<Networks>((set, get) => ({
 // TODO: Fix fllikering
 // TODO: Reconnection Loop singleton, there are bug Reconnection Loop are appear mutiple times.
 export function useNetworkEffects() {
-  const serverIP = useDatabaseStore((s) => s.serverIP);
-  const setWebsocket = useDatabaseStore.setState;
-  const getWebsocket = useDatabaseStore((s) => s.getWebsocket)
-  const isDisconnect = useDatabaseStore((s) => s.isDisconnect)
-  const websocket    = useDatabaseStore((s) => s.websocket)
+  const serverIP = useNetworkStore((s) => s.serverIP);
+  const setWebsocket = useNetworkStore.setState;
+  const getWebsocket = useNetworkStore((s) => s.getWebsocket)
+  const isDisconnect = useNetworkStore((s) => s.isDisconnect)
+  const websocket    = useNetworkStore((s) => s.websocket)
   // const init = useRef(true)
   
   const showMessage = (event:MessageEvent) => {

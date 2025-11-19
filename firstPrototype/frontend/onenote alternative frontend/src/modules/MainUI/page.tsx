@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../helper/network";
+import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../helper/network";
 import Free from "../pages/free/main";
 import Blank from "../pages/blank";
 import Markdown from "../pages/markdown";
@@ -34,7 +34,7 @@ export const PageCompornetList = {
 // TODO: create editor view for each pages
 // TODO: clean up edit toggleables for edit tab
 export default function Page() {
-    const websocket = useDatabaseStore((s) => s.websocket);
+    const websocket = useNetworkStore((s) => s.websocket);
     const removeAllToggleables = useStartButtonStore((s) => s.removeAllToggleables)
 
     const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement, type ReactNode } from "react";
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../../helper/network";
+import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network";
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
@@ -26,7 +26,7 @@ export interface Notebook {
 //TODO: show place independently
 //TODO: show pages without page path but the hierarchy kept by margin.
 export default function Selector() {
-    const websocket = useDatabaseStore((s) => s.websocket);
+    const websocket = useNetworkStore((s) => s.websocket);
     const [visible,setVisible] = useState(false)
 
     const buffers       = useUnsavedBuffersStore((s) => s.buffers)

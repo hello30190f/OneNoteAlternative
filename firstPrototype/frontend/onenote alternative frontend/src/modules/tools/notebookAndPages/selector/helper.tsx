@@ -1,5 +1,5 @@
 import { genUUID } from "../../../helper/common";
-import { send, useDatabaseStore } from "../../../helper/network";
+import { send, useNetworkStore } from "../../../helper/network";
 
 
 export function updatePageInfoForSelector(requestUUID:React.RefObject<string>,websocket:WebSocket | null){

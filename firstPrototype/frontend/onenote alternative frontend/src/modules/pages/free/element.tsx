@@ -11,7 +11,7 @@
 
 import { useEffect, useRef } from "react"
 import { create } from "zustand"
-import { useDatabaseStore } from "../../helper/network"
+import { useNetworkStore } from "../../helper/network"
 import { genUUID } from "../../helper/common"
 
 // TODO: add the color property with rgba

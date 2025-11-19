@@ -11,7 +11,7 @@ import { useStartButtonStore } from "../MainUI/UIparts/ToggleToolsBar/StartButto
 // https://blog.robbie.digital/posts/highlight-js
 import "highlight.js/styles/vs2015.min.css";
 import hijs from "highlight.js"
-import { send, useDatabaseStore, type baseResponseTypesFromDataserver } from "../helper/network";
+import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../helper/network";
 import { useAppState, useUnsavedBuffersStore, type AnUnsavedBuffer, type basicMetadata } from "../window";
 
 // export interface PageMetadataAndData {
@@ -48,8 +48,8 @@ export default function Markdown(data:PageMetadataAndData){
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeAllToggleables = useStartButtonStore((s) => s.removeAllToggleables)
     
-    const websocket = useDatabaseStore((s) => s.websocket)
-    const send      = useDatabaseStore((s) => s.send)
+    const websocket = useNetworkStore((s) => s.websocket)
+    const send      = useNetworkStore((s) => s.send)
 
     const currentNotebook = useAppState((s) => s.currentNotebook)
     const currentPage     = useAppState((s) => s.currentPage)
