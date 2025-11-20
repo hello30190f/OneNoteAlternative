@@ -1,5 +1,5 @@
 import { genUUID } from "../../../helper/common"
-import { send, type baseResponseTypesFromDataserver } from "../../../helper/network"
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
 import { useAppState, type AnUnsavedBuffer } from "../../../window";
 
@@ -27,7 +27,7 @@ export function AnEntry({
 
     const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
     const changeCurrentPage = useAppState((s) => s.changeOpenedPage)
-
+    const send           = useNetworkStore((s) => s.send)
     // const buffers = getBuffers()
     let unsavedContent = false
     for (const AnBuffer of buffers) {
@@ -148,7 +148,7 @@ export function AnEntry({
                 }
             }
             websocket.addEventListener("message", messageHandle)
-            send(websocket, JSON.stringify(commandRequest))
+            send(JSON.stringify(commandRequest),null)
             console.log("Selector: send request")
             console.log(commandRequest)
         }}>

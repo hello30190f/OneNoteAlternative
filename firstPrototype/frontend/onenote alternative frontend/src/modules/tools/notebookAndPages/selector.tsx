@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement, type ReactNode } from "react";
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network";
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network";
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
@@ -27,6 +27,7 @@ export interface Notebook {
 //TODO: show pages without page path but the hierarchy kept by margin.
 export default function Selector() {
     const websocket = useNetworkStore((s) => s.websocket);
+    const send      = useNetworkStore((s) => s.send)
     const [visible,setVisible] = useState(false)
 
     const buffers       = useUnsavedBuffersStore((s) => s.buffers)
@@ -74,6 +75,7 @@ export default function Selector() {
         buffers,
         setIndex,
         toggleable,
+        send
     )
 
     function ShowError({ message }: { message: string }) {

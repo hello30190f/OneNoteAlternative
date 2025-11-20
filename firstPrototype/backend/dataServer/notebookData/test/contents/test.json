@@ -9,7 +9,7 @@
         "testfile.txt"
     ],
     "createDate": "2025/10/6",
-    "updateDate": "2025/11/18",
+    "updateDate": "2025/11/20",
     "UUID": "950b0810-702c-4489-bbce-bc9fdd9f0b22",
     "pageData": {
         "items": [
@@ -38,8 +38,8 @@
                 "type": "text",
                 "data": "This is test text. Yukkuri reimu said '\u3086\u3063\u304f\u308a\u3057\u3066\u3044\u3063\u3066\u306d'.\n\n\uff46\uff44\uff53\uff46\uff44\uff46\uff53\uff46\uff44\uff53\uff46\n\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\uff46\uff44\uff53\uff46\uff53\uff4a\uff44\uff4b\uff46\uff4b\uff53\uff44\uff4b\uff53\n\n\n\u30c6\u30b9\u30c8\u30c6\u30b9\u30c8\u30c6\u30b9\u30c8\n\n\n\u3042\u3042\u3042\n\n\n\n\n",
                 "position": {
-                    "x": 271,
-                    "y": 235,
+                    "x": 219,
+                    "y": 288,
                     "z": 0
                 },
                 "color": {
@@ -58,8 +58,8 @@
                 "type": "text",
                 "data": "This is test text. Yukkuri marisa abuse Yukkuri reimu.\n\n\nkonnnitiha \u4eca\u65e5\u3082\u3044\u3044\u5929\u6c17\u3067\u3059\u304b\uff1f\n\nYukkuri marisa sneers yukkuri reimu desires. \n",
                 "position": {
-                    "x": 513,
-                    "y": 528,
+                    "x": 486,
+                    "y": 83,
                     "z": 1
                 },
                 "color": {
@@ -78,8 +78,8 @@
                 "ID": "149bc28f-88e0-448f-9a64-4d66e2326b84",
                 "type": "text",
                 "position": {
-                    "x": 423,
-                    "y": 86,
+                    "x": 162,
+                    "y": 584,
                     "z": 1
                 },
                 "size": {

@@ -2,7 +2,7 @@
 {
     "files": [],
     "createDate": "2025/10/6",
-    "updateDate": "2025/11/12",
+    "updateDate": "2025/11/20",
     "tags": [
         "Idea",
         "Research",

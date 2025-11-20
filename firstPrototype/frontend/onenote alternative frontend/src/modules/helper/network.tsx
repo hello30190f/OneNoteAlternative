@@ -52,6 +52,7 @@ type Arequest = {
 export const interval = 2 // sec
 const timeoutInterval = 1 // sec
 
+// @ deprecate state
 export function send(websocket:WebSocket, request:string, attempt=5){
   // const addHistory      = useNetworkRequestManager((s) => s.addRequest)
   // const isHistoryExists = useNetworkRequestManager((s) => s.isRequestExist)
