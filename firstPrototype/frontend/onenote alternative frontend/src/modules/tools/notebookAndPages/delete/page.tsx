@@ -4,7 +4,7 @@ import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useAppState } from "../../../window"
 import { genUUID } from "../../../helper/common"
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
 
 interface deletePage extends baseResponseTypesFromDataserver{
@@ -16,8 +16,10 @@ export function DeletePage(){
     const [disabled,setDisabled] = useState(false)
     const requestUUID = useRef(genUUID())
     const messageBoxUUID = useRef(genUUID())
+
     const websocket = useNetworkStore((s) => s.websocket)
-    
+    const send      = useNetworkStore((s) => s.send)
+
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
 
@@ -110,14 +112,14 @@ export function DeletePage(){
 
         const requsetString = JSON.stringify({
             "command": "deletePage",
-            "UUID": requestUUID.current,
+            "UUID": structuredClone(requestUUID.current),
             "data": { 
                 "notebook": currentNotebook,
                 "PageID": currentPage.name
             }
         })
         console.log(requsetString)
-        send(websocket,requsetString)
+        send(requsetString,null)
     }
 
     function netwrokHander(event:MessageEvent){
