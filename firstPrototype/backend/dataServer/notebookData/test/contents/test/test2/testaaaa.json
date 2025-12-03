@@ -3,7 +3,7 @@
     "tags": [],
     "files": [],
     "createDate": "2025/10/6",
-    "updateDate": "2025/11/19",
+    "updateDate": "2025/11/20",
     "UUID": "08f1d237-eb6d-4272-9033-6cccb40b2bde",
     "pageData": {
         "items": [
@@ -32,8 +32,8 @@
                 "ID": "7db7affa-a3ed-4c97-a575-a02ff653a91f",
                 "type": "text",
                 "position": {
-                    "x": 541,
-                    "y": 126,
+                    "x": 365,
+                    "y": 571,
                     "z": 1
                 },
                 "size": {

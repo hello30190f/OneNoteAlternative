@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ReactElement } from "react";
 import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../../MainUI/ToggleToolsBar";
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
 import { useAppState } from "../../../window";
 import { genUUID } from "../../../helper/common";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
@@ -16,7 +16,10 @@ interface pageType extends baseResponseTypesFromDataserver{
 // TODO: create place function
 export function CreatePage(){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent mt-[1rem] p-[0.5rem] "
+
     const websocket = useNetworkStore((s) => s.websocket)
+    const send      = useNetworkStore((s) => s.send)
+    
     const [disabled,setDisabled] = useState(false)
     let submitButtonStyle = submitButtonBaseStyle
     if(disabled){
@@ -126,7 +129,7 @@ export function CreatePage(){
 
         const requestJSON = {
             "command": "createPage",
-            "UUID": requestUUID.current,
+            "UUID": structuredClone(requestUUID.current),
             "data": {
                 "notebook": newPageInfo.notebook,
                 "newPageID": newPageInfo.place + "/" + newPageInfo.pagename,
@@ -138,7 +141,7 @@ export function CreatePage(){
         }
         const requestString = JSON.stringify(requestJSON)
         // console.log(requestString)
-        send(websocket,requestString)
+        send(requestString,null)
     }
 
     // @ pageType command request
@@ -154,10 +157,10 @@ export function CreatePage(){
 
         const request = JSON.stringify({
             command: "getPageType",
-            UUID: requestUUID.current,
+            UUID: structuredClone(requestUUID.current),
             data: null
         })
-        send(websocket,request)
+        send(request,null)
         return
     },[visible])
 

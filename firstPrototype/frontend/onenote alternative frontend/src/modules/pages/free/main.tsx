@@ -7,7 +7,7 @@ import { Menu } from "./showMenu"
 import { AddItem } from "./editTools/add"
 import { DeleteItem } from "./editTools/del"
 import { useFreePageItemsStore } from "./element"
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network"
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network"
 import { createDateString, genUUID } from "../../helper/common"
 import { TextView_FreePageElement } from "./elements/textView"
 import { useAppState } from "../../window"
@@ -150,7 +150,10 @@ export default function Free(data:PageMetadataAndData){
 
     const items         = useFreePageItemsStore((s) => s.items)
     const init          = useFreePageItemsStore((s) => s.init)
+
     const websocket     = useNetworkStore((s) => s.websocket)
+    const send          = useNetworkStore((s) => s.send)
+    
     const requestUUID   = useRef(genUUID())
     const messageBoxUUID = useRef(genUUID())
 
@@ -312,7 +315,7 @@ export default function Free(data:PageMetadataAndData){
         }
         const jsonstring = JSON.stringify(commandRequest)
         console.log(commandRequest)
-        send(websocket,jsonstring)
+        send(jsonstring,null)
     }
 
     useEffect(() => {

@@ -2,14 +2,11 @@
 {
     "files": [],
     "tags": [],
-    "createDate": "2025/10/6",
+    "createDate": "2025/11/20",
     "updateDate": "2025/11/20",
-    "UUID": "0d465869-c528-4fe0-9680-e0fd171c03ec"
+    "UUID": "f369e67f-6ad4-40f5-8bbf-25a53f6117e6"
 }
 ++++
-
-
-もさもさ ふさふさ
 
 # Blank Page
 This is a blank page.

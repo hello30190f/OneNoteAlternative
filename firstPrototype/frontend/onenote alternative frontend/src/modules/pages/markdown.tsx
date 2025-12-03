@@ -11,7 +11,7 @@ import { useStartButtonStore } from "../MainUI/UIparts/ToggleToolsBar/StartButto
 // https://blog.robbie.digital/posts/highlight-js
 import "highlight.js/styles/vs2015.min.css";
 import hijs from "highlight.js"
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../helper/network";
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../helper/network";
 import { useAppState, useUnsavedBuffersStore, type AnUnsavedBuffer, type basicMetadata } from "../window";
 
 // export interface PageMetadataAndData {

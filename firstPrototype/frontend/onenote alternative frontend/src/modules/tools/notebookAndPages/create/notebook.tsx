@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ChangeEventHandler, type ReactNode } from "react"
 import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
-import { send, useNetworkStore } from "../../../helper/network"
+import { useNetworkStore } from "../../../helper/network"
 import { genUUID } from "../../../helper/common"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
@@ -19,7 +19,10 @@ export function CreateNotebook(){
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
+
     const websocket = useNetworkStore((s) => s.websocket)
+    const send      = useNetworkStore((s) => s.send)
+
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
     const messageBoxUUID = useRef(genUUID())
 
@@ -173,7 +176,7 @@ export function CreateNotebook(){
 
                 const jsondata = {
                     "command": "createNotebook",
-                    "UUID": requestUUID.current,
+                    "UUID": structuredClone(requestUUID.current),
                     "data": {
                         "notebookName": notebookName.current
                     }
@@ -181,7 +184,7 @@ export function CreateNotebook(){
                 const jsonstring = JSON.stringify(jsondata)
                 console.log(jsonstring)
                 console.log(jsondata)
-                send(websocket,jsonstring)
+                send(jsonstring,null)
                 // websocket.send(jsonstring)
             }}
             >Create New Notebook</div>

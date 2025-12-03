@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { create } from "zustand";
-import { genUUID } from "./common";
 
 // TODO: let send function decide which websocket to use
 // TODO: rename useDatabaseEffects into useNetworkEffects
@@ -52,6 +51,7 @@ type Arequest = {
 export const interval = 2 // sec
 const timeoutInterval = 1 // sec
 
+// @ deprecate state
 export function send(websocket:WebSocket, request:string, attempt=5){
   // const addHistory      = useNetworkRequestManager((s) => s.addRequest)
   // const isHistoryExists = useNetworkRequestManager((s) => s.isRequestExist)
@@ -134,13 +134,25 @@ export const useNetworkStore = create<Networks>((set, get) => ({
       return
     }
 
+
+    const requestUUID = JSON.parse(request).UUID
+    let findRequestHistory = false
+    for(const history of requestHistory){
+      if(history.UUID == requestUUID){
+        findRequestHistory = true
+        break
+      }
+    }
     const CurrentHistory:Arequest = {
       requestJSONstring: request,
-      UUID: JSON.parse(request).UUID,
+      UUID: requestUUID,
       requestTimestamp: new Date
     }
-    requestHistory.push(CurrentHistory)
+    if(!findRequestHistory){
+      requestHistory.push(CurrentHistory)
+    }
     
+
     if(attempt == 0){
       console.log("on websocket send data, all attempts are failed. stop")
       console.log(request)
@@ -247,6 +259,7 @@ export function useNetworkEffects() {
   }, [serverIP]);
 
   const removeReceivedRequest = (event:MessageEvent) => {
+    console.log("removeReceivedRequest is working")
     try{
       const jsondata = JSON.parse(event.data)
       if(jsondata.responseType != "commandResponse") return
@@ -256,6 +269,8 @@ export function useNetworkEffects() {
         newHistory.push(oldHistory)
       }
       requestHistory = newHistory
+      console.log(jsondata.UUID)
+      console.log(newHistory)
     }catch (error){
       console.log("Unable to remove a request.")
       console.log(error)
@@ -266,6 +281,7 @@ export function useNetworkEffects() {
 
   useEffect(() => {
     if(websocket == null) return
+    console.log("resigter removeReceivedRequest to the websocket")
     websocket.addEventListener("message",(event) => {removeReceivedRequest(event)})
   },[websocket])
 

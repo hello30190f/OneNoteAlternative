@@ -16,7 +16,8 @@ export function useSelectorInit(
     websocket: WebSocket | null,
     buffers: AnUnsavedBuffer[],
     setIndex:React.Dispatch<React.SetStateAction<Info>>,
-    toggleable:toggleable
+    toggleable:toggleable,
+    send: (request: string, attempt: number | null) => void,
 ){
     useEffect(() => {
         console.log("selector useEffect")
@@ -47,7 +48,7 @@ export function useSelectorInit(
             // }
             if(result.event == "newInfo"){
                 // update index info
-                updatePageInfoForSelector(requestUUID,websocket)
+                updatePageInfoForSelector(requestUUID,send)
                 return
             }
 
@@ -69,7 +70,7 @@ export function useSelectorInit(
         };
 
         const whenOpened = () => {
-            updatePageInfoForSelector(requestUUID,websocket)
+            updatePageInfoForSelector(requestUUID,send)
         }
 
         websocket.addEventListener("message", handleMessage);
@@ -85,7 +86,7 @@ export function useSelectorInit(
     useEffect(() => {
         console.log("Selector: buffer update")
         console.log(buffers)
-        updatePageInfoForSelector(requestUUID,websocket)
+        updatePageInfoForSelector(requestUUID,send)
     },[buffers,currentNotebook,currentPage,currentPlace])
 
     const toolbarAddTool = useStartButtonStore((s) => s.addToggleable)

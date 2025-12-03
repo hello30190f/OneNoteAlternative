@@ -4,7 +4,7 @@ import { type toggleable } from "../../../MainUI/ToggleToolsBar";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { useAppState } from "../../../window";
 import { genUUID } from "../../../helper/common";
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network";
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
 
     // @ response
@@ -30,8 +30,10 @@ export function DeleteNotebook(){
     const [disabled,setDisabled] = useState(false)
     const requestUUID = useRef(genUUID())
     const messageBoxUUID = useRef(genUUID())
+
     const websocket = useNetworkStore((s) => s.websocket)
-    
+    const send      = useNetworkStore((s) => s.send)
+
     const closeWindow = useOverlayWindowStore((s) => s.closeAwindow)
     const getWindow = useOverlayWindowStore((s) => s.getWindowByArg)
 
@@ -122,13 +124,13 @@ export function DeleteNotebook(){
 
         const requestString = JSON.stringify({
             "command": "deleteNotebook",
-            "UUID": requestUUID.current,
+            "UUID": structuredClone(requestUUID.current),
             "data": { 
                 "notebook": currentNotebook,
             }
         })
         // console.log(requestString)
-        send(websocket,requestString)
+        send(requestString,null)
     }
 
     function networkHandler(event:MessageEvent){
