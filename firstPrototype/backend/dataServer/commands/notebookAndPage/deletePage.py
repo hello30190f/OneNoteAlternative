@@ -1,4 +1,4 @@
-from helper.common import readMetadataFormMarkdownPage, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
+from helper.common import mkdir, readMetadataFormMarkdownPage, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
 from helper import loadSettings 
 from interrupts.controller import callInterrupt
 import json, os.path, shutil
@@ -181,7 +181,14 @@ async def deletePage(request,websocket):
 
     # check deleted folder exists or not. The folder shuold exist inside of each notebook folder.
     if(not os.path.exists(deletedFolderPath)):
-        os.mkdir(deletedFolderPath)
+        if(mkdir(deletedFolderPath)):
+            await errorResponse(
+                websocket,
+                request,
+                "Failed to create a new folder for the deleted pages.",
+                [notebookName,pagePath,pagePathFromContentFolder,deletedFolderPath]
+            )
+            return
 
     # check deleted.json exists or not.
     if(not os.path.exists(deleted)):

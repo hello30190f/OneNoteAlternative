@@ -1,1 +1,17 @@
-{"test": [{"pageID": "test/newpage.md", "date": "2025/10/5"}, {"pageID": "aaaaa.md", "date": "2025/10/9"}]}
+{
+    "test": [
+        {
+            "pageID": "test/newpage.md",
+            "date": "2025/10/5"
+        },
+        {
+            "pageID": "aaaaa.md",
+            "date": "2025/10/9"
+        },
+        {
+            "UUID": "ce922a69-ddd5-4cba-8337-065265889a73",
+            "pageID": "aaaaaaaa.md",
+            "date": "2025/12/3"
+        }
+    ]
+}

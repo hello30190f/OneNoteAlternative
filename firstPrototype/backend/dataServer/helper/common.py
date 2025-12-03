@@ -398,7 +398,6 @@ def mkdir(absoluteFolderPath:str):
 def readMetadataFormMarkdownPage(contentString:str) -> dict:
     splitResult = contentString.split("++++")
 
-    print(splitResult.__len__())
     if(splitResult.__len__() < 3):
         print("readMetadataFormMarkdownPage helper: The markdown page string does not contain any metadata.")
         return None
