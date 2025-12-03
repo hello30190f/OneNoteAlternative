@@ -387,3 +387,26 @@ def mkdir(absoluteFolderPath:str):
         return True
 
     return False
+
+
+# TODO: write document for this function
+# arg:
+#   contentString : entire string of the target page.
+# return value
+#   OK      : the dict like metadata
+#   Error   : None will be returned when failed to read the metadata.
+def readMetadataFormMarkdownPage(contentString:str) -> dict:
+    splitResult = contentString.split("++++")
+
+    print(splitResult.__len__())
+    if(splitResult.__len__() < 3):
+        print("readMetadataFormMarkdownPage helper: The markdown page string does not contain any metadata.")
+        return None
+
+    try:
+        metadataString = splitResult[1]
+        return json.loads(metadataString)
+    except Exception as error:
+        print("readMetadataFormMarkdownPage helper: Failed to read the matadata as a JSON data. The markdown page may be malformed.")
+        print(error)
+        return None
