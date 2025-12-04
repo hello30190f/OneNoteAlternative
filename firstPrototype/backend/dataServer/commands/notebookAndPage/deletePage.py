@@ -225,10 +225,11 @@ async def deletePage(request,websocket):
         await UnableToUpdateNotebookDeletedResponse()
         return
     
+    # NOTE: UUID is added to as identifier
     # Check the page has already been deleted or not.
     find = False
     for aPageInfo in targetDeletedInfo:
-        if(aPageInfo["pageID"] == pagePathFromContentFolder):
+        if(aPageInfo["UUID"] == PageUUID):
             find = True
             break
     if(find):
