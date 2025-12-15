@@ -148,7 +148,7 @@ export function AnEntry({
                 }
             }
             websocket.addEventListener("message", messageHandle)
-            send(JSON.stringify(commandRequest),null)
+            send(JSON.stringify(commandRequest),null,0.2)// sec
             console.log("Selector: send request")
             console.log(commandRequest)
         }}>

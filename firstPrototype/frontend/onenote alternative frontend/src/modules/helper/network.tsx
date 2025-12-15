@@ -45,7 +45,8 @@ export interface baseInterruptRequestFromDataserver{
 type Arequest = {
   UUID              : string,
   requestJSONstring : string,
-  requestTimestamp  : Date
+  requestTimestamp  : Date,
+  timeout           : number | null // sec
 }
 
 export const interval = 2 // sec
@@ -59,7 +60,8 @@ export function send(websocket:WebSocket, request:string, attempt=5){
   const CurrentHistory:Arequest = {
     requestJSONstring: request,
     UUID: JSON.parse(request).UUID,
-    requestTimestamp: new Date
+    requestTimestamp: new Date,
+    timeout: null
   }
   // addHistory(history)
   requestHistory.push(CurrentHistory)
@@ -103,7 +105,7 @@ type Networks = {
   changeServer: (ip: string) => void;
   closeConnection: () => void;
   getWebsocket: () => WebSocket | null;
-  send: (request:string, attempt:number | null) => void;
+  send: (request:string, attempt:number | null, timeout:number | null) => void;
 };
 
 let requestHistory:Arequest[] = []
@@ -124,13 +126,13 @@ export const useNetworkStore = create<Networks>((set, get) => ({
 
   getWebsocket: () => get().websocket,
 
-  send: (request:string, attempt) => {
+  send: (request:string, attempt, timeout = null) => {
     if(attempt == null) attempt = 5
 
     const websocket = get().websocket 
     if(websocket == null){
       // retry
-      setTimeout(() => { get().send(request,attempt - 1) },interval * 1000)
+      setTimeout(() => { get().send(request,attempt - 1,timeout) },interval * 1000)
       return
     }
 
@@ -146,7 +148,8 @@ export const useNetworkStore = create<Networks>((set, get) => ({
     const CurrentHistory:Arequest = {
       requestJSONstring: request,
       UUID: requestUUID,
-      requestTimestamp: new Date
+      requestTimestamp: new Date,
+      timeout: timeout
     }
     if(!findRequestHistory){
       requestHistory.push(CurrentHistory)
@@ -175,7 +178,7 @@ export const useNetworkStore = create<Networks>((set, get) => ({
             set({ isDisconnect:true })
             
             // retry
-            setTimeout(() => { get().send(request,attempt - 1) },interval * 1000)
+            setTimeout(() => { get().send(request,attempt - 1,timeout) },interval * 1000)
             break
           }
         }
@@ -184,7 +187,7 @@ export const useNetworkStore = create<Networks>((set, get) => ({
     }
 
     // retry
-    setTimeout(() => { get().send(request,attempt - 1) },interval * 1000)
+    setTimeout(() => { get().send(request,attempt - 1,timeout) },interval * 1000)
   },
 }));
 
@@ -259,6 +262,27 @@ export function useNetworkEffects() {
   }, [serverIP]);
 
   const removeReceivedRequest = (event:MessageEvent) => {
+
+    // remove history depend on the timeout
+    try{
+      const newHistory = []
+      for(const oldHistory of requestHistory){
+        const requestTime = oldHistory.requestTimestamp.getTime() / 1000.0 // sec
+        const currentTime = new Date().getTime() / 1000.0 // sec
+        const timeout     = oldHistory.timeout
+        if(timeout == null) continue
+        if(currentTime - requestTime > timeout) continue
+        newHistory.push(oldHistory)
+      }
+      requestHistory = newHistory
+    }catch(error){
+      console.log("Unable to remove a request. (depend on timeout)")
+      console.log(error)
+      console.log(event.data)
+      console.log(event)
+    }
+
+    // remove history depend on the received data from the dataserver
     console.log("removeReceivedRequest is working")
     try{
       const jsondata = JSON.parse(event.data)
@@ -272,7 +296,7 @@ export function useNetworkEffects() {
       console.log(jsondata.UUID)
       console.log(newHistory)
     }catch (error){
-      console.log("Unable to remove a request.")
+      console.log("Unable to remove a request. (depend on received data)")
       console.log(error)
       console.log(event.data)
       console.log(event)

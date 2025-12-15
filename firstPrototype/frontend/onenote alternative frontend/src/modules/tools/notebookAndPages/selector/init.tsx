@@ -17,7 +17,7 @@ export function useSelectorInit(
     buffers: AnUnsavedBuffer[],
     setIndex:React.Dispatch<React.SetStateAction<Info>>,
     toggleable:toggleable,
-    send: (request: string, attempt: number | null) => void,
+    send: (request: string, attempt: number | null, timeout: number | null) => void,
 ){
     useEffect(() => {
         console.log("selector useEffect")

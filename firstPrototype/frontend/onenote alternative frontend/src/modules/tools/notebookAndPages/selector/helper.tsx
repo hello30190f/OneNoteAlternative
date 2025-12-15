@@ -4,7 +4,7 @@ import { send, useNetworkStore } from "../../../helper/network";
 
 export function updatePageInfoForSelector(
     requestUUID:React.RefObject<string>,
-    send: (request: string, attempt: number | null) => void
+    send: (request: string, attempt: number | null, timeout: number | null) => void
 ){
     // if(!websocket) return
 
@@ -15,5 +15,5 @@ export function updatePageInfoForSelector(
         UUID: requestUUID.current,
         data: null 
     });
-    send(request,null);
+    send(request,null,null);
 }
