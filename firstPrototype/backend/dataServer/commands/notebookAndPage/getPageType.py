@@ -7,6 +7,7 @@ import json
 
 async def getPageType(request,websocket):
     responseString = json.dumps({
+        "responseType"  : "commandResponse",
         "status"        : "ok",
         "errorMessage"  : "nothing",
         "UUID"          : request["UUID"],
