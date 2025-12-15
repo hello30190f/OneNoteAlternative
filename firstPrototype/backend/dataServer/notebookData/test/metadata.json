@@ -1,24 +1,11 @@
 {
     "name": "test",
-    "createDate": "2025/09/13",
-    "updateDate": "2025/12/3",
-    "id": "bb6f7d1c-c722-495c-923b-ab9e9574ef5b",
+    "createDate": "2025/12/15",
+    "updateDate": "2025/12/15",
+    "id": "ae7a5760-8a48-4721-9489-63379333f16e",
     "pages": [
-        "test.md",
-        "test.json",
-        "test/anArticle.md",
-        "test/anArticle1.md",
-        "test/test2/anArticle.md",
-        "test/test2/newpage.md",
-        "newpage.md",
-        "test/test2/testaaaa.json",
-        "dddd/dddd/dddd/aaaaaa.md",
-        "test/test.md",
-        "sfdsfjkldsfjdfklslk.md",
-        "ssssssssssfffff.md",
-        "test1.json"
+        "default.md",
+        "test.json"
     ],
-    "files": [
-        "testfile.txt"
-    ]
+    "files": []
 }

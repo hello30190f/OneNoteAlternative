@@ -161,6 +161,10 @@ def findNotes():
         elif(loadSettings.settings["isStandalone"] and "-cache" in aFolderOrFile):
             print("findNotes helper: cache function is not Implemented for now.")
     
+    if(os.listdir(root).__len__() == 0):
+        print("findNotes helper: There is no notebooks. This may not be critical.")
+        return {}
+
     return notebookJSONinfo
 
 

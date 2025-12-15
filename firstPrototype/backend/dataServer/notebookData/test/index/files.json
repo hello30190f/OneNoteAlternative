@@ -1,12 +1,1 @@
-{
-    "fileName1":{
-        "original"  : "/path/to/originalFileResourcesWhereAdded.md",
-        "refs"      : ["/path/to/ThisFileResourceBeingUsed","/path/to/ThisFileResourceBeingUsed1"],
-        "filePath"  : "/path/to/originalFileSavedWithFileNameAndExtention"
-    },
-    "fileName2":{
-        "original"  : "/path/to/originalFileResourcesWhereAdded.md",
-        "refs"      : ["/path/to/ThisFileResourceBeingUsed","/path/to/ThisFileResourceBeingUsed1"],
-        "filePath"  : "/path/to/originalFileSavedWithFileNameAndExtention"
-    }
-}
+{}
