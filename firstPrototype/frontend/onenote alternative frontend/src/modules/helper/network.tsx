@@ -301,6 +301,10 @@ export function useNetworkEffects() {
       console.log(event.data)
       console.log(event)
     }
+
+    // when a message is received from the dataserver, change network status
+    if(isDisconnect)
+      setWebsocket({isDisconnect:false})
   }
 
   useEffect(() => {

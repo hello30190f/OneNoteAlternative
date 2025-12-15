@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState, type ChangeEvent, type ReactElement, type ReactNode } from "react";
-import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../helper/network";
+import { useRef, useState, type ReactNode } from "react";
+import { useNetworkStore } from "../../helper/network";
 import { OverlayWindow, type OverlayWindowArgs } from "../../MainUI/UIparts/OverlayWindow";
 import { type toggleable } from "../../MainUI/ToggleToolsBar";
-import { useStartButtonStore } from "../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import { genUUID } from "../../helper/common";
 import { useAppState, useUnsavedBuffersStore } from "../../window";
 import { useMessageBoxStore } from "../../MainUI/UIparts/messageBox";
-import { updatePageInfoForSelector } from "./selector/helper";
 import { useSelectorInit } from "./selector/init";
 import { CreateList } from "./selector/CreateList";
 
@@ -35,12 +33,12 @@ export default function Selector() {
     const requestUUID = useRef<string>(genUUID())
     const messageBoxUUID = useRef<string>(genUUID())
 
-    const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
+    // const showMessageBox = useMessageBoxStore((s) => s.showMessageBox)
 
     const currentPage       = useAppState((s) => s.currentPage)
     const currentNotebook   = useAppState((s) => s.currentNotebook)
     const currentPlace      = useAppState((s) => s.currentPlace)
-    const changeCurrentPage = useAppState((s) => s.changeOpenedPage)
+    // const changeCurrentPage = useAppState((s) => s.changeOpenedPage)
 
     const [index, setIndex] = useState<Info>({
         status: "init",

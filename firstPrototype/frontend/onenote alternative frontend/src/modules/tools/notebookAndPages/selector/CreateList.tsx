@@ -1,5 +1,4 @@
 import type { ChangeEvent, ReactElement } from "react";
-import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox";
 import { useAppState, type AnUnsavedBuffer } from "../../../window";
 import type { Info } from "../selector";
 import { AnEntry } from "./AnEntry";

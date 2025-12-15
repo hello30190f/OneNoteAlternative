@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { type AnUnsavedBuffer } from "../../../window";
-import { send } from "../../../helper/network";
 import { updatePageInfoForSelector } from "./helper";
-import { genUUID } from "../../../helper/common";
 import type { Info } from "../selector";
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton";
 import type { toggleable } from "../../../MainUI/ToggleToolsBar";
@@ -34,7 +32,6 @@ export function useSelectorInit(
 
         const handleMessage = (event: MessageEvent) => {
             const result = JSON.parse(String(event.data));
-            // console.log(result)
 
             // dataserver -> frontend
             // get an interrupt

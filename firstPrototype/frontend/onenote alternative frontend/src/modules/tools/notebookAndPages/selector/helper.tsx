@@ -1,6 +1,4 @@
 import { genUUID } from "../../../helper/common";
-import { send, useNetworkStore } from "../../../helper/network";
-
 
 export function updatePageInfoForSelector(
     requestUUID:React.RefObject<string>,
