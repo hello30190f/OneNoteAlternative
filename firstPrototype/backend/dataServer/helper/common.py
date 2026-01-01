@@ -419,7 +419,7 @@ def readMetadataFormMarkdownPage(contentString:str) -> dict:
     
 
 # TODO: write document for this function
-# NOTE: reveived JSONstring, all command and interrupt JSONstring have to be shown by this function 
+# NOTE: received JSONstring, all command and interrupt JSONstring have to be shown by this function 
 # arg:
 #   JSONstring  : JSON string got received from the connected frontend or will be sent to the frontend.
 #   receive     : To show received JSON message, make this arg True otherwise the JSONstring will be shown as a sent JSONstring to the frontend.
