@@ -103,8 +103,11 @@ def dataKeyChecker(data:dict,keylist:list):
 #   Error   : None
 def timeString():
     currentTime     = time.localtime()
-    return str(currentTime.tm_year) + "/" + str(currentTime.tm_mon) + "/" + str(currentTime.tm_mday)
-
+    return "{:04d}/{:02d}/{:02d}".format(
+        currentTime.tm_year,
+        currentTime.tm_mon,
+        currentTime.tm_mday
+    )
 
 
 # arg:
