@@ -1,6 +1,6 @@
 import websockets
 from helper.netwrok import receiveLoopForClass
-from helper.common import NotImplementedResponse, malformedRequestChecker, malformedRequestResponse, findNotes
+from helper.common import showJSONMessage, malformedRequestChecker, malformedRequestResponse, findNotes
 import json
 from helper import loadSettings 
 import os
@@ -39,4 +39,4 @@ async def info(request,websocket):
         "data"          : notebookJSONinfo
     })
     await websocket.send(responseString)
-    print(">>> " + responseString)
+    showJSONMessage(responseString)

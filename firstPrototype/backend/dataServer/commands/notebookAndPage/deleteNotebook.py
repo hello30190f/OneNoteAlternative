@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, deleteDataSafely, errorResponse
+from helper.common import showJSONMessage, dataKeyChecker, deleteDataSafely, errorResponse
 from interrupts.controller import callInterrupt
 from helper import loadSettings 
 import json, os, os.path
@@ -73,6 +73,6 @@ async def deleteNotebook(request,websocket):
         "data"          : { }
     })
     await websocket.send(responseString)
-    print(">>> " + responseString)
+    showJSONMessage(responseString)
 
     await callInterrupt(websocket,"newInfo",{"action":"deleteNotebook"})

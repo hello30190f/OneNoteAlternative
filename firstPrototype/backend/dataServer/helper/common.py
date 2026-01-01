@@ -13,7 +13,7 @@ async def NotImplementedResponse(request,websocket):
         "errorMessage"  : "nothing",
         "data"          : { }
     })
-    print(">>>" + responseString)
+    showJSONMessage(responseString)
     await websocket.send(responseString)
 
 async def malformedRequestResponse(request,websocket):
@@ -25,7 +25,7 @@ async def malformedRequestResponse(request,websocket):
         "errorMessage"  : "Non JSON string or corrupted JSON string",
         "data"          : { }
     })
-    print(">>>" + responseString)
+    showJSONMessage(responseString)
     await websocket.send(responseString)
 
 async def notFound(request,websocket):
@@ -37,7 +37,7 @@ async def notFound(request,websocket):
         "errorMessage"  : "command does not exist",
         "data"          : { }
     })
-    print(">>>" + responseString)
+    showJSONMessage(responseString)
     await websocket.send(responseString)
 # error response ---------------------------------------
 # error response ---------------------------------------
@@ -322,7 +322,7 @@ async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:li
         "data"          : variableState
     })
     await websocket.send(responseString)
-    print(">>> " + responseString)
+    showJSONMessage(responseString)
 
 
 # TODO: remove closed websocket
@@ -343,7 +343,7 @@ async def sendInterrupt(websocket,interrupt:dict):
         "responseType"  in interrupt.keys()
         ):
         responseString = json.dumps(interrupt)
-        print(">>> " + responseString)
+        showJSONMessage(responseString)
         for Awebsocket in websockets:
             try:
                 await Awebsocket.send(responseString)            
@@ -413,3 +413,18 @@ def readMetadataFormMarkdownPage(contentString:str) -> dict:
         print("readMetadataFormMarkdownPage helper: Failed to read the matadata as a JSON data. The markdown page may be malformed.")
         print(error)
         return None
+    
+
+# TODO: write document for this function
+# NOTE: reveived JSONstring, all command and interrupt JSONstring have to be shown by this function 
+# arg:
+#   JSONstring  : JSON string got received from the connected frontend or will be sent to the frontend.
+#   receive     : To show received JSON message, make this arg True otherwise the JSONstring will be shown as a sent JSONstring to the frontend.
+# return value
+#   Nothing
+def showJSONMessage(JSONstring:str,receive:bool=False):
+    jsondata = json.loads(JSONstring)
+    if(receive):
+        print("<<<\n" + json.dumps(jsondata,indent=4))
+    else:
+        print(">>>\n" + json.dumps(jsondata,indent=4))

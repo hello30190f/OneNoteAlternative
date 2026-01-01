@@ -1,4 +1,4 @@
-from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse
+from helper.common import showJSONMessage, dataKeyChecker, errorResponse
 from helper import loadSettings 
 import json
 
@@ -57,7 +57,7 @@ async def pageInfo(request,websocket):
                 }
             })
             await websocket.send(responseString)
-            print(">>> " + responseString)
+            showJSONMessage(responseString)
 
 
     except Exception as error:

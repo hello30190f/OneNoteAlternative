@@ -2,7 +2,7 @@
 # Currently to keep things simple, just rewite entire page string into new one.
 # No partial update function exist.
 
-from helper.common import NotImplementedResponse, dataKeyChecker, errorResponse, findNotes, timeString, updateNotebookMatadata
+from helper.common import showJSONMessage, dataKeyChecker, errorResponse, findNotes, timeString, updateNotebookMatadata
 from interrupts.controller import callInterrupt
 from helper import loadSettings 
 import json, os.path
@@ -289,6 +289,6 @@ async def updatePage(request,websocket):
         "data"          : { }
     })
     await websocket.send(responseString)
-    print(">>> " + responseString)
+    showJSONMessage(responseString)
 
     await callInterrupt(websocket,"updatePage",None)

@@ -1,4 +1,4 @@
-from helper.common import mkdir, readMetadataFormMarkdownPage, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
+from helper.common import showJSONMessage ,mkdir, readMetadataFormMarkdownPage, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
 from helper import loadSettings 
 from interrupts.controller import callInterrupt
 import json, os.path, shutil
@@ -307,5 +307,5 @@ async def deletePage(request,websocket):
         "data"          : { }
     })
     await websocket.send(responseString)
-    print(">>> " + responseString)
+    showJSONMessage(responseString)
     await callInterrupt(websocket,"newInfo",{"action":"deletePage"})

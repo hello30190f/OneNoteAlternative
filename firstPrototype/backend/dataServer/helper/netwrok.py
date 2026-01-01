@@ -3,6 +3,9 @@ from websockets.exceptions import ConnectionClosedOK
 # TODO: write cleanup code for closed connections
 websockets = []
 
+# import showJSONMessage func after "websockets" variable get initialized to avoid circuler import within helper module.
+from helper.common import showJSONMessage
+
 # example of wating message from frontend
 async def receiveLoopForClass(websocket,instance,callback):
     # put parser here.
@@ -22,7 +25,7 @@ async def receiveLoop(websocket,callback):
         try: 
             message = await websocket.recv()
             print("\n\n----------------------")
-            print("<<<" + message)
+            showJSONMessage(message,receive=True)
             # callback have to show sent messages.
             await callback(message,websocket)
         except ConnectionClosedOK:

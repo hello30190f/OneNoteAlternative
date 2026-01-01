@@ -1,6 +1,6 @@
 # list pageType
 
-from helper.common import NotImplementedResponse, dataKeyChecker
+from helper.common import showJSONMessage, dataKeyChecker
 import type.pages.controller as controller
 from helper import loadSettings 
 import json
@@ -16,4 +16,4 @@ async def getPageType(request,websocket):
     })
     
     await websocket.send(responseString)
-    print(">>> " + responseString)
+    showJSONMessage(responseString)
