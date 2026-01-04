@@ -25,9 +25,9 @@ import { useAppState, useUnsavedBuffersStore, type AnUnsavedBuffer, type basicMe
 // {"files": [], "tags": [], "UUID": "ef126209-2763-40b5-b9fd-b2d208da9360"}
 // ++++
 
-interface updatePage extends baseResponseTypesFromDataserver{
-    data: { }
-}
+// interface updatePage extends baseResponseTypesFromDataserver{
+//     data: { }
+// }
 
 // TODO: make this ediable -> add edit UI which separated from view UI. 
 // https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html
@@ -309,7 +309,7 @@ export default function Markdown(data:PageMetadataAndData){
     // ```
 
     function netwrokHander(event:MessageEvent){
-        const jsondata:updatePage = JSON.parse(event.data)
+        const jsondata:baseResponseTypesFromDataserver = JSON.parse(event.data)
 
 
         if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
@@ -382,8 +382,8 @@ export default function Markdown(data:PageMetadataAndData){
             }
             const jsonstring = JSON.stringify(jsondata)
 
-            console.log(jsondata)
-            console.log(pagedataString)
+            // console.log(jsondata)
+            // console.log(pagedataString)
             // send the request
             // TODO: enable this by uncommenting the line below.
             send(jsonstring,null,null)

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type ChangeEventHandler, type ReactNode } from "react"
 import { type toggleable } from "../../../MainUI/ToggleToolsBar"
 import { OverlayWindow, useOverlayWindowStore, type OverlayWindowArgs } from "../../../MainUI/UIparts/OverlayWindow"
-import { useNetworkStore } from "../../../helper/network"
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../../../helper/network"
 import { genUUID } from "../../../helper/common"
 import { useStartButtonStore } from "../../../MainUI/UIparts/ToggleToolsBar/StartButton"
 import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
@@ -64,7 +64,7 @@ export function CreateNotebook(){
         setDisabled(false)
 
         websocket.onmessage = (event:MessageEvent) => {
-            const result = JSON.parse(String(event.data));
+            const result:baseResponseTypesFromDataserver = JSON.parse(String(event.data));
             // console.log(result)
 
             if(result.UUID == requestUUID.current && "createNotebook" == result.command){

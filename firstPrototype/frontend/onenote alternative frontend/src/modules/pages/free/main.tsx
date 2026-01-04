@@ -136,9 +136,9 @@ type pageData = {
     }
 }
 
-interface updatePage extends baseResponseTypesFromDataserver{
-    data: { }
-}
+// interface updatePage extends baseResponseTypesFromDataserver{
+//     data: { }
+// }
 
 // TODO: automatic update on change
 // NOTE: any modification immediately saved. So no buffer is needed for this page type.
@@ -350,7 +350,7 @@ export default function Free(data:PageMetadataAndData){
             //     "data":{ }
             // }
             // ```
-            const jsondata:updatePage = JSON.parse(event.data)
+            const jsondata:baseResponseTypesFromDataserver = JSON.parse(event.data)
             if(jsondata.UUID == requestUUID.current && jsondata.command == "updatePage"){
                 if(jsondata.status == "ok"){
                     // isSaved.current = true
