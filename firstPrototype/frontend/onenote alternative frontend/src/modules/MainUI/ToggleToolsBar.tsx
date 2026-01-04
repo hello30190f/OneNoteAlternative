@@ -54,30 +54,27 @@ export default function ToolsBar(){
         </div>
     }
 
+
     if(selected == null){
         ToolsBarOutlineStyleClassName += " bg-blue-900 "
-        return <ToolsBarOutlineStyle>
-            <StartButton></StartButton>
-            <div>No tools selected</div>
-            <CloseAllButton></CloseAllButton>
-        </ToolsBarOutlineStyle>
-
     }else if(selected.toggleables.length != 0){
         ToolsBarOutlineStyleClassName += selected.toggleableColor
-        return <ToolsBarOutlineStyle>
-            <StartButton></StartButton>
-            {selected.toggleables.map((value,index) => (
-                <AtoggleableButton Atoggleable={value} key={index}></AtoggleableButton>
-            ))}
-            <CloseAllButton></CloseAllButton>
-        </ToolsBarOutlineStyle>
-
     }else{
         ToolsBarOutlineStyleClassName += selected.toggleableColor
-        return <ToolsBarOutlineStyle>
-            <StartButton></StartButton>
-            <div>No tools exist</div>
-            <CloseAllButton></CloseAllButton>
-        </ToolsBarOutlineStyle>
     }
+
+    let view;
+    if(selected == null){
+        view = <div>No tools selected</div>
+    }else if(selected.toggleables.length != 0){
+        view = selected.toggleables.map((value,index) => (<AtoggleableButton Atoggleable={value} key={index}></AtoggleableButton>))
+    }else{
+        view = <div>No tools exist</div>
+    }
+
+    return <ToolsBarOutlineStyle>
+        <StartButton></StartButton>
+            {view}
+        <CloseAllButton></CloseAllButton>
+    </ToolsBarOutlineStyle>
 }
