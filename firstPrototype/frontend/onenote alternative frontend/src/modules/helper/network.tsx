@@ -128,13 +128,12 @@ export const useNetworkStore = create<Networks>((set, get) => ({
 
   send: (request:string, attempt, timeout = null) => {
     if(attempt == null) attempt = 5
-
-    const websocket = get().websocket 
-    if(websocket == null){
-      // retry
-      setTimeout(() => { get().send(request,attempt - 1,timeout) },interval * 1000)
+    else if(attempt == 0){
+      console.log("on websocket send data, all attempts are failed. stop")
+      console.log(request)
       return
     }
+
 
 
     const requestUUID = JSON.parse(request).UUID
@@ -154,13 +153,17 @@ export const useNetworkStore = create<Networks>((set, get) => ({
     if(!findRequestHistory){
       requestHistory.push(CurrentHistory)
     }
-    
 
-    if(attempt == 0){
-      console.log("on websocket send data, all attempts are failed. stop")
-      console.log(request)
+
+
+
+    const websocket = get().websocket 
+    if(websocket == null){
+      // retry
+      setTimeout(() => { get().send(request,attempt - 1,timeout) },interval * 1000)
       return
     }
+    
     if(
       websocket.readyState != WebSocket.CONNECTING  && 
       websocket.readyState != WebSocket.CLOSED      &&
