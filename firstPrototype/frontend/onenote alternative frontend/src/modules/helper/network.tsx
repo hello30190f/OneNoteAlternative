@@ -8,9 +8,11 @@ import { create } from "zustand";
 
 // types ---------------
 // types ---------------
+export type dataserverResponseType = "commandResponse" | "interrupt"
+
 export interface baseResponseTypesFromDataserver{
   responseType: string,
-  status: string;
+  status: "NotImplemented" | "ok" | "error" | "NotFound";
   errorMessage: string;
   UUID: string | null;
   command: string | null;

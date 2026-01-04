@@ -31,7 +31,7 @@ async def malformedRequestResponse(request,websocket):
 async def notFound(request,websocket):
     responseString = json.dumps({
         "responseType"  : "commandResponse",
-        "status"        : "error",
+        "status"        : "NotFound",
         "UUID"          : request["UUID"],
         "command"       : request["command"],
         "errorMessage"  : "command does not exist",

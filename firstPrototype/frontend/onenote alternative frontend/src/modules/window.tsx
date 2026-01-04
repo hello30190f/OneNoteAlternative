@@ -11,6 +11,7 @@ import { ColorPalette } from "./helper/ColorPalette";
 import { PageInfo } from "./tools/metadata/metadataInfo";
 import { MessageBoxContainer } from "./MainUI/UIparts/messageBox";
 import { useNetworkStore } from "./helper/network";
+import { DebugCommand } from "./tools/DevTools/debugCommand";
 
 
 
@@ -200,6 +201,8 @@ export default function Window(){
                 <DeletePage></DeletePage>
 
                 <PageInfo></PageInfo>
+
+                <DebugCommand></DebugCommand>
 
                 <StartButtonMenu></StartButtonMenu>                
                 <MessageBoxContainer></MessageBoxContainer>

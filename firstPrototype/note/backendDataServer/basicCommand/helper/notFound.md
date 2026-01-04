@@ -17,7 +17,7 @@
 ```json
 {
     "responseType"  : "commandResponse",
-    "status"        : "error",
+    "status"        : "NotFound",
     "UUID"          : "UUID string",
     "command"       : request["command"],
     "errorMessage"  : "command does not exist",

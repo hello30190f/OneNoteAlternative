@@ -227,6 +227,14 @@ export const basicButton = {
         imageBase64: null,
         toggleables: []
     },
+    "dev": {
+        name: "dev",
+        displayName: "DevTools",
+        toggleableColor: "bg-purple-950",   
+        selected: false,
+        imageBase64: null,
+        toggleables: []
+    },
 }
 
 
