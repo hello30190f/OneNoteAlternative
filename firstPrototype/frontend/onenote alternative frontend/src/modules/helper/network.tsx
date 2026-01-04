@@ -20,6 +20,7 @@ export interface baseResponseTypesFromDataserver{
 export interface baseRequestTypesFromFromtend{
   command: string,
   UUID: string,
+  data: any
 }
 
 // {
@@ -53,50 +54,49 @@ export const interval = 2 // sec
 const timeoutInterval = 1 // sec
 
 // @ deprecate state
-export function send(websocket:WebSocket, request:string, attempt=5){
-  // const addHistory      = useNetworkRequestManager((s) => s.addRequest)
-  // const isHistoryExists = useNetworkRequestManager((s) => s.isRequestExist)
-  // const setWebsoketState = useNetworkStore.setState
-  const CurrentHistory:Arequest = {
-    requestJSONstring: request,
-    UUID: JSON.parse(request).UUID,
-    requestTimestamp: new Date,
-    timeout: null
-  }
-  // addHistory(history)
-  requestHistory.push(CurrentHistory)
+// export function send(websocket:WebSocket, request:string, attempt=5){
+//   // const addHistory      = useNetworkRequestManager((s) => s.addRequest)
+//   // const isHistoryExists = useNetworkRequestManager((s) => s.isRequestExist)
+//   // const setWebsoketState = useNetworkStore.setState
+//   const CurrentHistory:Arequest = {
+//     requestJSONstring: request,
+//     UUID: JSON.parse(request).UUID,
+//     requestTimestamp: new Date,
+//     timeout: null
+//   }
+//   // addHistory(history)
+//   requestHistory.push(CurrentHistory)
   
-  if(attempt == 0){
-    console.log("on websocket send data, all attempts are failed. stop")
-    console.log(request)
-    return
-  }
-  // console.log(websocket.readyState)
-  if(
-    websocket.readyState != WebSocket.CONNECTING  && 
-    websocket.readyState != WebSocket.CLOSED      &&
-    websocket.readyState != WebSocket.CLOSING
-  ){
-    console.log(request)
-    websocket.send(request)
+//   if(attempt == 0){
+//     console.log("on websocket send data, all attempts are failed. stop")
+//     console.log(request)
+//     return
+//   }
+//   // console.log(websocket.readyState)
+//   if(
+//     websocket.readyState != WebSocket.CONNECTING  && 
+//     websocket.readyState != WebSocket.CLOSED      &&
+//     websocket.readyState != WebSocket.CLOSING
+//   ){
+//     console.log(request)
+//     websocket.send(request)
     
-    // check the request on the timeout state
-    setTimeout(() => {
-      for(const history of requestHistory){
-        if(history.UUID == CurrentHistory.UUID){
-          // when failed request
+//     // check the request on the timeout state
+//     setTimeout(() => {
+//       for(const history of requestHistory){
+//         if(history.UUID == CurrentHistory.UUID){
+//           // when failed request
 
-          break
-        }
-      }
-    },timeoutInterval * 1000)
-    return
-  }
+//           break
+//         }
+//       }
+//     },timeoutInterval * 1000)
+//     return
+//   }
 
-  setTimeout(() => { send(websocket,request,attempt - 1) },interval * 1000)
-}
-// networking request manage ------------
-// networking request manage ------------
+//   setTimeout(() => { send(websocket,request,attempt - 1) },interval * 1000)
+// }
+
 
 type Networks = {
   websocket: WebSocket | null;
@@ -320,3 +320,5 @@ export function useNetworkEffects() {
   },[isDisconnect])
 
 }
+// networking request manage ------------
+// networking request manage ------------

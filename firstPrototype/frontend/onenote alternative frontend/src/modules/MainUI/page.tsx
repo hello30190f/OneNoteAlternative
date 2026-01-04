@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { send, useNetworkStore, type baseResponseTypesFromDataserver } from "../helper/network";
+import { useNetworkStore, type baseResponseTypesFromDataserver } from "../helper/network";
 import Free from "../pages/free/main";
 import Blank from "../pages/blank";
 import Markdown from "../pages/markdown";
@@ -41,6 +41,8 @@ export default function Page() {
 
     const currentPage       = useAppState((s) => s.currentPage)
     const currentNotebook   = useAppState((s) => s.currentNotebook)
+
+    const send      = useNetworkStore((s) => s.send)
 
     const requestUUID = useRef<string>(genUUID())
 
@@ -88,7 +90,7 @@ export default function Page() {
                 notebook:currentNotebook 
             }
         });
-        send(websocket,request);
+        send(request,null,null);
     }, [websocket, currentPage, currentNotebook]);
 
     // render
