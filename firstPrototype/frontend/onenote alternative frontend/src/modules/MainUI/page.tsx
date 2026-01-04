@@ -141,23 +141,18 @@ export default function Page() {
         return <div className="text-5xl font-medium">{message}</div>
     }
 
+    let view;
     if (!websocket) {
-        return <PageOutlineAndContainer>
-            <ShowError message="WebSocket error. No connection to the data server." />;
-        </PageOutlineAndContainer>
-    }
-    if (!currentPage || !currentNotebook) {
-        return<PageOutlineAndContainer>
-            <ShowError message="No page is selected." />
-        </PageOutlineAndContainer> 
-    }
-    if (!pageInfo) {
-        return <PageOutlineAndContainer>
-            <ShowError message="Loading page..." />
-        </PageOutlineAndContainer>
+        view = <ShowError message="WebSocket error. No connection to the data server." />;
+    } else if (!currentPage || !currentNotebook) {
+        view = <ShowError message="No page is selected." />
+    } else if (!pageInfo) {
+        view = <ShowError message="Loading page..." />
+    } else {
+        view = <ShowPageContents pageInfo={pageInfo} />
     }
 
     return <PageOutlineAndContainer>
-            <ShowPageContents pageInfo={pageInfo} />
-        </PageOutlineAndContainer>
+        {view}
+    </PageOutlineAndContainer>
 }
