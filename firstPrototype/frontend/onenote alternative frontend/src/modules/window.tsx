@@ -12,6 +12,7 @@ import { PageInfo } from "./tools/metadata/metadataInfo";
 import { MessageBoxContainer } from "./MainUI/UIparts/messageBox";
 import { useNetworkStore } from "./helper/network";
 import { DebugCommand } from "./tools/DevTools/debugCommand";
+import { DebugInterrupt } from "./tools/DevTools/debugInterrupt";
 
 
 
@@ -203,6 +204,7 @@ export default function Window(){
                 <PageInfo></PageInfo>
 
                 <DebugCommand></DebugCommand>
+                <DebugInterrupt></DebugInterrupt>
 
                 <StartButtonMenu></StartButtonMenu>                
                 <MessageBoxContainer></MessageBoxContainer>

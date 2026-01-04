@@ -37,7 +37,7 @@ export function ViewCommand({
 
             }else{
                 // unknown state
-                
+
             }
         }
     }
