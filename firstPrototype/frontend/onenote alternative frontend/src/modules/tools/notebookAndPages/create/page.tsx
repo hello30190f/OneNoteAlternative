@@ -141,7 +141,7 @@ export function CreatePage(){
         }
         const requestString = JSON.stringify(requestJSON)
         // console.log(requestString)
-        send(requestString,null)
+        send(requestString,null,null)
     }
 
     // @ pageType command request
@@ -160,7 +160,7 @@ export function CreatePage(){
             UUID: structuredClone(requestUUID.current),
             data: null
         })
-        send(request,null)
+        send(request,null,null)
         return
     },[visible])
 

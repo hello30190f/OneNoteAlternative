@@ -182,9 +182,9 @@ export function CreateNotebook(){
                     }
                 }
                 const jsonstring = JSON.stringify(jsondata)
-                console.log(jsonstring)
-                console.log(jsondata)
-                send(jsonstring,null)
+                // console.log(jsonstring)
+                // console.log(jsondata)
+                send(jsonstring,null,null)
                 // websocket.send(jsonstring)
             }}
             >Create New Notebook</div>

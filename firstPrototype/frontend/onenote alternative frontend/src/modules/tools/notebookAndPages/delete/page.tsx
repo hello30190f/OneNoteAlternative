@@ -119,7 +119,7 @@ export function DeletePage(){
             }
         })
         console.log(requsetString)
-        send(requsetString,null)
+        send(requsetString,null,null)
     }
 
     function netwrokHander(event:MessageEvent){

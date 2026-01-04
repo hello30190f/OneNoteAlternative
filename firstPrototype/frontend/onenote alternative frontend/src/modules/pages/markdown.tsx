@@ -386,7 +386,7 @@ export default function Markdown(data:PageMetadataAndData){
             console.log(pagedataString)
             // send the request
             // TODO: enable this by uncommenting the line below.
-            send(jsonstring,null)
+            send(jsonstring,null,null)
         }
     }
     // networking ---------------------------------------

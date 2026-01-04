@@ -130,7 +130,7 @@ export function DeleteNotebook(){
             }
         })
         // console.log(requestString)
-        send(requestString,null)
+        send(requestString,null,null)
     }
 
     function networkHandler(event:MessageEvent){

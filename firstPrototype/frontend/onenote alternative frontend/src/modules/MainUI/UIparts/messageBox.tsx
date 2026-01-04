@@ -12,7 +12,7 @@ import warning  from "../../../assets/imgs/messageBoxIcons/warning.png"
 export interface aMessageBox{
     title   : string,
     message : string,
-    type    : string,
+    type    : "error" | "ok" | "warning" | "info",
     UUID    : string
 }
 

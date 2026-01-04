@@ -315,7 +315,7 @@ export default function Free(data:PageMetadataAndData){
         }
         const jsonstring = JSON.stringify(commandRequest)
         console.log(commandRequest)
-        send(jsonstring,null)
+        send(jsonstring,null,null)
     }
 
     useEffect(() => {
