@@ -183,12 +183,8 @@ export const useAppState = create<AppState>((set,get) => ({
 export default function Window(){    
     const isDisconnect = useNetworkStore((s) => s.isDisconnect)
     let style = {
-        background: ""
+        background: isDisconnect ? "rgba(255,0,0,0.2)" : ""
     }
-    if(isDisconnect){
-        style.background = "rgba(255,0,0,0.2)"
-    }
-    console.log(isDisconnect)
 
     return(
             <div className="window flex flex-row z-2 w-full h-full" style={style}>
