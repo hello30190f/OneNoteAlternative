@@ -7,7 +7,7 @@ import { genUUID } from "../../helper/common"
 import type { toggleable } from "../../MainUI/ToggleToolsBar"
 
 
-
+// record button, clear history button, listing, overflow scroll
 export function DebugInterrupt(){
 
     const [visible,setVisible] = useState(false)
