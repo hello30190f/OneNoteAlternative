@@ -17,7 +17,7 @@ export function ViewCommand({
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
     const messageBoxUUID = useRef(genUUID())
     
-    const [JSONrawText,setJSONrawText] = useState<null | "">(null)
+    const [JSONrawText,setJSONrawText] = useState<null | string>(null)
     const [parsedJSON,setParsedJSON] = useState<null | baseResponseTypesFromDataserver>(null)
 
     function messageHandler(message:MessageEvent){
@@ -26,6 +26,7 @@ export function ViewCommand({
         try{
             jsondata = JSON.parse(message.data)
             setParsedJSON(jsondata)
+            setJSONrawText(JSON.stringify(jsondata,null,4))
         }catch{
             setParsedJSON(null)
             showMessageBox({
@@ -105,12 +106,12 @@ export function ViewCommand({
     // }
 
 
-    return <div className="viewCommand flex flex-col p-4">
+    return <div className="viewCommand flex p-4">
         <div className="rawResponseText flex flex-col m-1 p-2 bg-gray-900">
             <div className="text-start">Raw JSON string:</div>
-            <textarea className="h-[7rem] w-[25rem] ml-4 border-solid border-2 border-gray-800" value={JSONrawText ? JSONrawText : "No response text."}></textarea>
+            <textarea className="h-full w-[25rem] ml-4 border-solid border-2 border-gray-800" value={JSONrawText ? JSONrawText : "No response text."}></textarea>
         </div>
-        <div className="parsedInfomation flex flex-col mt-2 m-1 p-2 bg-gray-900">
+        <div className="parsedInfomation flex w-[30rem] flex-col h-full m-1 p-2 bg-gray-900">
             <div className="text-start">Parsed Infomation:</div>
             <div className="infoList ml-4 flex flex-col">
                 <div className="command flex">
@@ -134,11 +135,11 @@ export function ViewCommand({
                 </div>
                 <div className="errorMessage flex flex-col mt-2">
                     <div className="text-start">Error message:</div>
-                    <textarea className="ml-4 border-solid border-2 border-gray-800">{parsedJSON ? parsedJSON.errorMessage : "No message."}</textarea>
+                    <textarea className="ml-4 border-solid border-2 border-gray-800" value={parsedJSON ? parsedJSON.errorMessage : "No message."}></textarea>
                 </div>
                 <div className="data flex flex-col mt-2">
                     <div className="text-start">Data:</div>
-                    <textarea className="ml-4 border-solid border-2 border-gray-800">{parsedJSON ? JSON.stringify(parsedJSON.data,null,4) : "No data."}</textarea>
+                    <textarea className="ml-4 h-[7rem] border-solid border-2 border-gray-800" value={parsedJSON ? JSON.stringify(parsedJSON.data,null,4) : "No data."}></textarea>
                 </div>
             </div>
         </div>
