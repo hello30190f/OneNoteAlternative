@@ -14,11 +14,13 @@ import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
 export function SendCommand({
     requestUUID,
     commandInfo,
-    setCommand
+    setCommand,
+    receiveLocker
 } : {
     requestUUID:React.RefObject<string>,
     commandInfo: baseRequestTypesFromFromtend,
-    setCommand: React.Dispatch<React.SetStateAction<baseRequestTypesFromFromtend>>
+    setCommand: React.Dispatch<React.SetStateAction<baseRequestTypesFromFromtend>>,
+    receiveLocker:React.RefObject<boolean>
 }){
     const submitButtonBaseStyle = "submitbutton selection:bg-transparent w-full mt-[1.1rem] p-[0.5rem] "
 
@@ -65,6 +67,7 @@ export function SendCommand({
             type    : "ok",
             UUID    : messageBoxUUID.current
         })
+        receiveLocker.current = false
     }
 
     function generateUUID(){

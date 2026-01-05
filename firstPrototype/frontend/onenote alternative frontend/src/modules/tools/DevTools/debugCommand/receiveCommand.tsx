@@ -7,11 +7,12 @@ import { genUUID } from "../../../helper/common"
 
 export function ViewCommand({
     requestUUID,
-    command
-
+    command,
+    receiveLocker
 } : {
     requestUUID:React.RefObject<string>
-    command: baseRequestTypesFromFromtend | null
+    command: baseRequestTypesFromFromtend | null,
+    receiveLocker:React.RefObject<boolean>
 }){
     const websocket = useNetworkStore.getState().websocket
     const showMessageBox  = useMessageBoxStore((s) => s.showMessageBox)
@@ -21,6 +22,8 @@ export function ViewCommand({
     const [parsedJSON,setParsedJSON] = useState<null | baseResponseTypesFromDataserver>(null)
 
     function messageHandler(message:MessageEvent){
+        if(receiveLocker.current) return
+        else receiveLocker.current = true
         setJSONrawText(message.data)
         let jsondata:baseResponseTypesFromDataserver;
         try{

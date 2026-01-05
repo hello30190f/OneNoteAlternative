@@ -14,6 +14,7 @@ export function DebugCommand(){
 
     const [visible,setVisible] = useState(false)
     const [disabled,setDisabled] = useState(false)
+    const receiveLocker = useRef(true)
 
     const addToggleable = useStartButtonStore((s) => s.addToggleable)
     const removeToggleable = useStartButtonStore((s) => s.removeToggleable)
@@ -68,12 +69,14 @@ export function DebugCommand(){
                 commandInfo={command}
                 requestUUID={requestUUID}
                 setCommand={setCommand}
+                receiveLocker={receiveLocker}
             ></SendCommand>
         </OverlayWindow>
         <OverlayWindow arg={args}>
             <ViewCommand
                 command={command}
                 requestUUID={requestUUID}
+                receiveLocker={receiveLocker}
             ></ViewCommand>
         </OverlayWindow>
     </div>
