@@ -62,18 +62,19 @@ export function DebugCommand(){
     },[])
 
 
-
-    return <OverlayWindow arg={args}>
-        <div className="flex">
+    return <div className="">
+        <OverlayWindow arg={args}>
             <SendCommand
                 commandInfo={command}
                 requestUUID={requestUUID}
                 setCommand={setCommand}
             ></SendCommand>
+        </OverlayWindow>
+        <OverlayWindow arg={args}>
             <ViewCommand
                 command={command}
                 requestUUID={requestUUID}
             ></ViewCommand>
-        </div>
-    </OverlayWindow>
+        </OverlayWindow>
+    </div>
 }
