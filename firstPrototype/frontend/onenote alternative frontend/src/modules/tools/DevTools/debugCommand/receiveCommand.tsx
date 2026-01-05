@@ -4,7 +4,8 @@ import { useMessageBoxStore } from "../../../MainUI/UIparts/messageBox"
 import { genUUID } from "../../../helper/common"
 
 
-
+// TODO: create receive locker disable button
+// TODO: make sure that commandResponse only kept here
 export function ViewCommand({
     requestUUID,
     command,
