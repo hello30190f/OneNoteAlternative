@@ -113,6 +113,7 @@ export function SendCommand({
             <textarea 
                 className="w-[30rem] h-[6rem] border-solid border-2 border-gray-800"
                 value={dataJSONrawStr}
+                placeholder="JSON data string inside '{}'"
                 onChange={(event:React.ChangeEvent<HTMLTextAreaElement>) => {
                     setDataJSONrawStr(event.target.value)
                     try{
