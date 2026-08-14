@@ -1,0 +1,3 @@
+[submodule "secondPrototype/exampleExtension/FilesystemFrontend"]
+	path = secondPrototype/exampleExtension/FilesystemFrontend
+	url = git@github.com:hello30190f/FilesystemFrontend.git
