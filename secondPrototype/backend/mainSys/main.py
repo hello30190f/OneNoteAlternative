@@ -7,14 +7,14 @@ from controller.task        import init as task
 from hosting.fileTransfar   import init as fileTransfar
 from hosting.frontendServe  import init as frontendServe
 
-# This is "fixed". Not intended to be exntend by the extensions.
+# This array is "fixed". Not intended to be exntend by the extensions.
 controllers = [
     command,
     interrupt,
     task
 ]
 
-# This is "fixed". Not intended to be exntend by the extensions.
+# This array is "fixed". Not intended to be exntend by the extensions.
 hosting = [
     fileTransfar,
     frontendServe
