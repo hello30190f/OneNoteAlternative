@@ -1,5 +1,14 @@
 # TODO: serach for sharing data each process and thread on mutiprocessing and threading library.
 
+
+# Join the extensions code here BEGIN --------
+# Join the extensions code here BEGIN --------
+
+# Join the extensions code here END --------
+# Join the extensions code here END --------
+
+
+
 from controller.command     import init as command
 from controller.interrupt   import init as interrupt
 from controller.task        import init as task

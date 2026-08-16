@@ -1,9 +1,9 @@
+from common import aExtension
 
-# place content 
 
-# build by npm
 
-def init(extenstionInstance):
+
+def init(extenstionInstance:aExtension):
     pass
 
 def build(): 

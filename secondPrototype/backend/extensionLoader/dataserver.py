@@ -1,6 +1,6 @@
+from common import aExtension
 
-
-def init(extenstionInstance):
+def init(extenstionInstance:aExtension):
     pass
 
 def build(): 
