@@ -1,21 +1,36 @@
 from dataserver     import init as dataserver
 from frontend       import init as frontend
 
-
-
+extensionInstances = []
 # unzip each extensions and place it into extensionLoader/ext/[extName].
-# if extension has already been "unziped", 
+# if the extension has already been "unziped", 
 #   let it as is, when there is no update.              (Clac checksum of ext zip)
 #   remove and unzip again, when there is any updates.  (Clac checksum of ext zip)
+# create a exetnsion instance to manage for each extensions. The instance will handle the extension manifest.
 
 
 
-# init dataserver runtime
-# create import list (python), create array that hold all imported module. Then join the code into mainSys controllers
-# for runtime code, create "runtime" folder to store any "dynamic" code. (mainSys/controller/runtime mainSys/controller/hosting)
-dataserver()
 
-# init frontend runtime
-# create import list (TypeScript), create array that hold all imported module. Then join the code into the base frontend code.
-# for runtime code, create "runtime" folder to store any "dynamic" code. (frontend/runtime)
-frontend()
+
+# prepare for "runtime" template that can be appended to.
+# create folder extensionLoader/build to store templates to be built. 
+
+
+
+
+
+for extenstionInstance in extensionInstances:
+    # init dataserver runtime
+    # append import list (python), append array that hold all imported module. 
+    dataserver(extenstionInstance)
+
+    # init frontend runtime
+    # append import list (TypeScript), append array that hold all imported module. 
+    frontend(extenstionInstance)
+
+
+# for runtime code, create "runtime.tsx" script to store any "dynamic" code. (frontend/runtime.tsx)
+# for runtime code, create "runtime.py" script to store any "dynamic" code. (mainSys/controller/runtime.py mainSys/controller/hosting/runtime.py)
+
+# Then join the template code into mainSys controllers
+# Then join the template code into the base frontend code.

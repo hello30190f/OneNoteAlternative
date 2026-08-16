@@ -1,6 +1,6 @@
 
 
-def init():
+def init(extenstionInstance):
     pass
 
 def build(): 

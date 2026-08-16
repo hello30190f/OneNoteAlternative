@@ -3,7 +3,7 @@
 
 # build by npm
 
-def init():
+def init(extenstionInstance):
     pass
 
 def build(): 
