@@ -1,6 +1,7 @@
 from common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop
 from websockets import serve
 import asyncio
+
 # Join the extensions code here BEGIN --------
 # Join the extensions code here BEGIN --------
 extensionMoludes = {} # This is placeholder for dev
@@ -9,9 +10,10 @@ extensionMoludes = {} # This is placeholder for dev
 
 # serve websocket connection
 # call command modules from extensions by reading extensionMoludes array
-
 # Command controller only concentrate on command. Not collecting websockets for interrupt.
 # interrupt controller need new websocket connection.
+# frontend need to connect for both command and interrupt websocket connection.
+
 
 def init():
     asyncio.run(startCommandController())
