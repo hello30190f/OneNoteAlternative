@@ -4,3 +4,16 @@
 
 ## Intention 
  Refactor first prototype from scratch. Make extension based software. This mean the prototype will not work without extensions and have no meaning as a tool without extensions.
+
+
+
+
+
+
+# Note
+## Controllers
+### Command
+
+### Interrupt
+
+### Task

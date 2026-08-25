@@ -3,7 +3,8 @@
 # improt [dataserver/extension/entryPointModuleName] as moduleName-UUID
 
 # Module List
-extensionMoludes = [
-    
-]
+# moduleFunc : moduleFuncName
+extensionMoludes = {
+
+}
 

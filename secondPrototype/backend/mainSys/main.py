@@ -1,12 +1,5 @@
 # TODO: serach for sharing data each process and thread on mutiprocessing and threading library.
 
-
-# Join the extensions code here BEGIN --------
-# Join the extensions code here BEGIN --------
-
-# Join the extensions code here END --------
-# Join the extensions code here END --------
-
 import multiprocessing
 import sys
 
