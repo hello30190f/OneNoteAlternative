@@ -1,0 +1,18 @@
+{
+    "name": "CoreExtension",
+    "UUID": "589fe65d-639c-42a3-b395-fca2143afd75",
+    "frontend":{
+        "modules": []
+    },
+    "DataServer":{
+        "CommandModules":[
+            "backend/main.py"
+        ],
+        "InterruptModules":[
+
+        ],
+        "TaskModules":[
+            
+        ]
+    }
+}

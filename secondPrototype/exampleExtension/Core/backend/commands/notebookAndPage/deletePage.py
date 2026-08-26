@@ -1,0 +1,311 @@
+from helper.common import showJSONMessage ,mkdir, readMetadataFormMarkdownPage, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
+from helper import loadSettings 
+from interrupts.controller import callInterrupt
+import json, os.path, shutil
+
+# ## args (frontend to dataserver)
+# ```json
+# {
+#     "command": "deletePage",
+#     "UUID": "UUID string",
+#     "data": { 
+#         "notebook": "notebookName",
+#         "PageID": "Path/to/targetPageName.md"
+#     }
+# }
+# ```
+
+# ## response (dataserver to frontend)
+# ```json
+# {
+#     "status": "ok",
+#     "errorMessage": "nothing",
+#     "UUID":"UUID string",
+#     "command": "deletePage",
+#     "data":{ }
+# }
+# ```
+
+# TODO: send an interrupt to the all forntends to notify this update.
+
+async def deletePage(request,websocket):
+    # If there are no mandatory keys for the command, this checker code can be omitted.
+    mandatoryKeys   = ["notebook","PageID"]
+    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    if(missing != None):
+        await errorResponse(
+            websocket,
+            request,
+            "Mandatory keys are missing for this command.",
+            [mandatoryKeys,missing]
+        )
+        return
+    
+    # gather infomation 
+    notebookName                = request["data"]["notebook"]
+    pagePathFromContentFolder   = request["data"]["PageID"]
+
+    if(pagePathFromContentFolder[0] == "/"):
+        pagePathFromContentFolder = pagePathFromContentFolder[1:]
+
+    pagePath            = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
+    deletedFolderPath   = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/deleted"
+    pagePath            = pagePath.replace("//","/")
+    filename            = pagePath.split("/")[-1]
+    deleted             = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/deleted.json"
+    folder              = pagePath.replace(filename,"") 
+    PageUUID            = None
+    # gather infomation 
+
+    # check the page existance
+    if(not os.path.exists(pagePath)):
+        await errorResponse(
+            websocket,
+            request,
+            "The page has already been deleted or not exist.",
+            [notebookName,pagePath]
+        )
+        return
+    
+    # get the page UUID
+    try:
+        with open(pagePath,"rt") as pageContent:
+            if(".md" in filename):
+                pageJSONdata = readMetadataFormMarkdownPage(pageContent.read())
+                PageUUID = pageJSONdata["UUID"]
+            elif(".json" in filename):
+                pageJSONdata = json.loads(pageContent.read())
+                PageUUID = pageJSONdata["UUID"]
+            else:
+                await errorResponse(
+                    websocket,
+                    request,
+                    "Unknown page extension detected.",
+                    [notebookName,pagePath,filename]
+                )
+                return
+    except Exception as error:
+        await errorResponse(
+            websocket,
+            request,
+            "Failed to get the page UUID. The page may be broken.",
+            [notebookName,pagePath,filename,PageUUID,pageJSONdata],
+            error
+        )
+        return
+    
+    print(PageUUID)
+
+    # get notebooks metadata
+    notebookJSONinfo = findNotes()
+    if(notebookJSONinfo == None):
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to get the notebook metadata infomation.",
+            [notebookName,pagePath]
+        )
+        return       
+
+    # get the target notebook metadata
+    targetNotebookInfo = None
+    for aNotebook in notebookJSONinfo.keys():
+        if(aNotebook == notebookName):
+            targetNotebookInfo = notebookJSONinfo[aNotebook]
+            break
+    if(targetNotebookInfo == None):
+        await errorResponse(
+            websocket,
+            request,
+            "The specified notebook does not exist.",
+            [notebookName,pagePath]
+        )
+        return       
+
+    async def UnableUpdateNotebookMetadataResponse():
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to update the notebook metadata",
+            [notebookName,pagePath,pagePathFromContentFolder]
+        )
+
+    # update the notebook metadata if the ref still exist
+    notebookJSONinfo = findNotes()
+    if(notebookJSONinfo == None):
+        await UnableUpdateNotebookMetadataResponse()
+        return
+
+    targetNotebook = None
+    for aNotebook in notebookJSONinfo.keys():
+        if(aNotebook == notebookName):
+            targetNotebook = notebookJSONinfo[aNotebook]
+    if(targetNotebook == None):
+        await UnableUpdateNotebookMetadataResponse()
+        return
+    
+    # check the page still exists or not.
+    find = False
+    files = []
+    for aPage in targetNotebook["pages"]:
+        if(pagePathFromContentFolder == aPage):
+            find = True
+        else:
+            files.append(aPage)
+    targetNotebook["pages"] = files
+    
+    # when the page seems to be deleted.
+    if(not find):
+        await errorResponse(
+            websocket,
+            request,
+            "The page has already been deleted.",
+            [notebookName,pagePath,pagePathFromContentFolder]
+        )
+        return
+
+    if(updateNotebookMatadata(notebookName,targetNotebook)):
+        await UnableUpdateNotebookMetadataResponse()
+        return
+
+
+
+    async def UnableToUpdateNotebookDeletedResponse(error = None):
+        await errorResponse(
+            websocket,
+            request,
+            "Unable to update the notebook deleted.json",
+            [notebookName,pagePath,pagePathFromContentFolder,deleted],
+            error
+        )
+
+    # check deleted folder exists or not. The folder shuold exist inside of each notebook folder.
+    if(not os.path.exists(deletedFolderPath)):
+        if(mkdir(deletedFolderPath)):
+            await errorResponse(
+                websocket,
+                request,
+                "Failed to create a new folder for the deleted pages.",
+                [notebookName,pagePath,pagePathFromContentFolder,deletedFolderPath]
+            )
+            return
+
+    # check deleted.json exists or not.
+    if(not os.path.exists(deleted)):
+        # create new one
+        with open(deleted,"wt",encoding="utf-8") as deletedJSONstring:
+            deletedJSONstring.write(json.dumps({
+                notebookName: []
+            },indent=4))
+
+    # and then write deleted pages info and the date
+    deletedJSONinfo = None
+    try:
+        with open(deleted,"rt",encoding="utf-8") as deletedJSONstring:
+            deletedJSONinfo = json.loads(deletedJSONstring.read())
+    except Exception as error:
+        await UnableToUpdateNotebookDeletedResponse(error)
+        return
+    
+    # info -> notebokname pageid date
+    # {
+    #     "notebookName":[{
+    #         "pageID": "",
+    #         "date": "YYYY/MM/DD"
+    #     },{
+    #         "pageID": "",
+    #         "date": "YYYY/MM/DD"
+    #     }]
+    # }
+    targetDeletedInfo = None
+    for aNotebook in deletedJSONinfo.keys():
+        if(aNotebook == notebookName):
+            targetDeletedInfo = deletedJSONinfo[aNotebook]
+    if(targetDeletedInfo == None):
+        await UnableToUpdateNotebookDeletedResponse()
+        return
+    
+    # NOTE: UUID is added to as identifier
+    # Check the page has already been deleted or not.
+    find = False
+    for aPageInfo in targetDeletedInfo:
+        if(aPageInfo["UUID"] == PageUUID):
+            find = True
+            break
+    if(find):
+        await errorResponse(
+            websocket,
+            request,
+            "The page has already been deleted even the notebook metadata still has the ref to the page. The integrality may be corrupted.",
+            [notebookName,pagePath,pagePathFromContentFolder,deleted]
+        )
+        return
+
+    # add page UUID to identify which page is deleted correctly.
+    targetDeletedInfo.append({
+        "UUID"  : PageUUID,
+        "pageID": pagePathFromContentFolder,
+        "date"  : timeString()
+    })
+    deletedJSONinfo[notebookName] = targetDeletedInfo
+
+    try:
+        with open(deleted,"wt",encoding="utf-8") as deletedJSONstring:
+            deletedJSONstring.write(json.dumps(deletedJSONinfo,indent=4))
+    except Exception as error:
+        await UnableToUpdateNotebookDeletedResponse(error)
+        return
+
+
+
+    # move the deleted pages into the deleted folder inside the notebook folder
+    # rename page into it's own UUID to avoid conflicting to the others and place directly into deleted folder
+    # to recover the page, deleted.json shuold have infomation enough.
+    deletedPagePath = None
+    if(".md" in filename):
+        deletedPagePath = deletedFolderPath + "/" + PageUUID + ".md"
+    elif(".json" in filename):
+        deletedPagePath = deletedFolderPath + "/" + PageUUID + ".json"
+    else:
+        await errorResponse(
+            websocket,
+            request,
+            "Unknown page extension detected.",
+            [notebookName,pagePath,filename]
+        )
+        return
+
+    try:
+        if(os.path.exists(deletedPagePath)):
+            await errorResponse(
+                websocket,
+                request,
+                "The page has already been deleted. If the page is not deleted, the notebook integrity may be broken.",
+                [notebookName,pagePath,filename,deleted,deletedFolderPath,PageUUID]
+            )
+            return
+        shutil.move(pagePath,deletedPagePath)
+    except Exception as error:
+        await errorResponse(
+            websocket,
+            request,
+            "Failed to move the deleted page. The page may be still exists in contents folder. This could cause a bug when create a new page as the duplicate page error.",
+            [notebookName,pagePath,pagePathFromContentFolder,deleted,deletedFolderPath],
+            error
+        )
+        return
+    
+
+
+
+    responseString = json.dumps({
+        "responseType"  : "commandResponse",
+        "status"        : "ok",
+        "UUID"          : request["UUID"],
+        "command"       : "deletePage",
+        "errorMessage"  : "nothing",
+        "data"          : { }
+    })
+    await websocket.send(responseString)
+    showJSONMessage(responseString)
+    await callInterrupt(websocket,"newInfo",{"action":"deletePage"})
