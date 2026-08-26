@@ -13,7 +13,7 @@
 # Note
 ## Controllers
 ### Command
-
+- frontend need to connect `localhost:50097`
 ### Interrupt
-
+- frontend need to connect `localhost:50098`
 ### Task

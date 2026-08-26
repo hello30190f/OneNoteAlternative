@@ -19,7 +19,7 @@ def init():
     asyncio.run(startCommandController())
 
 async def startCommandController():
-    async with serve(handler=mainLoop,host="localhost",port=50097,) as server:
+    async with serve(handler=mainLoop,host="localhost",port=50097) as server:
         try:
             await server.serve_forever()
         except:

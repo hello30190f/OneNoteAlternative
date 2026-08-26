@@ -17,7 +17,7 @@ async def controller(interval:int):
             print("taskController: Please make it longer.")
             interval = 1
 
-        for aJob in extensionMoludes:
-            aJob()
+        for jobName in extensionMoludes.keys():
+            extensionMoludes[jobName]()
 
         await asyncio.sleep(interval)
