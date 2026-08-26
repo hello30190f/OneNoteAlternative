@@ -6,13 +6,39 @@
     },
     "DataServer":{
         "CommandModules":[
-            "backend/main.py"
+            "backend/commands/info.py",
+
+            "backend/commands/notebookAndPage/createNotebook.py",
+            "backend/commands/notebookAndPage/deleteNotebook.py",
+            "backend/commands/notebookAndPage/getPageType.py",
+            "backend/commands/notebookAndPage/pageInfo.py",
+            "backend/commands/notebookAndPage/updatePage.py",
+            "backend/commands/notebookAndPage/copyPage.py",
+            "backend/commands/notebookAndPage/createPage.py",
+            "backend/commands/notebookAndPage/deletePage.py",
+            "backend/commands/notebookAndPage/movePage.py",
+            "backend/commands/notebookAndPage/renamePage.py",
+
+            "backend/commands/notebookAndPage/addTag.py",
+            "backend/commands/notebookAndPage/createTag.py",
+            "backend/commands/notebookAndPage/deleteTag.py",
+            "backend/commands/notebookAndPage/getTagList.py",
+            "backend/commands/notebookAndPage/queryTag.py",
+            "backend/commands/notebookAndPage/removeTag.py",
+
+            "backend/commands/notebookAndPage/fileAdd.py",
+            "backend/commands/notebookAndPage/fileData.py",
+            "backend/commands/notebookAndPage/fileDelete.py",
+            "backend/commands/notebookAndPage/fileInfo.py"
         ],
         "InterruptModules":[
-
+            "backend/interrupts/newInfo.py",
+            "backend/interrupts/updatePage.py",
+            "backend/interrupts/updateTag.py"
         ],
         "TaskModules":[
-            
+            "backend/tasks/pageCleaner.py",
+            "backend/tasks/showPingMessage.py"
         ]
     }
 }
