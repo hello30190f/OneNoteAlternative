@@ -13,6 +13,7 @@ from hosting.frontendServe  import init as frontendServe
 # This array is "fixed". Not intended to be exntend by the extensions.
 hosting = [
     command,
+    interrupt,
     task,
     fileTransfar,
     frontendServe
