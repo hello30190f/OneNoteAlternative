@@ -1,5 +1,5 @@
 {
-    "name": "CoreExtension",
+    "name": "Core",
     "UUID": "589fe65d-639c-42a3-b395-fca2143afd75",
     "frontend":{
         "modules": []
@@ -40,5 +40,8 @@
             "backend/tasks/pageCleaner.py",
             "backend/tasks/showPingMessage.py"
         ]
-    }
+    },
+    "extensionDependencies":[
+
+    ]
 }
