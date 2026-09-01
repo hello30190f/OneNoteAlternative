@@ -1,8 +1,8 @@
 # This is object for each extensions. A instance corresponded to a extension.
 # manage manifest and resolve paths.
+import os.path,json,subprocess
 from zipfile        import ZipFile
-import os.path,json
-import subprocess
+
 
 class aExtension:
     def __init__(self,extensionPath:str,backendBasePath:str,runtimePath:str):

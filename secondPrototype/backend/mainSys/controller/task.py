@@ -1,10 +1,7 @@
 import asyncio
 
-# Join the extensions code here BEGIN --------
-# Join the extensions code here BEGIN --------
-extensionMoludes = {} # This is placeholder for dev
-# Join the extensions code here END --------
-# Join the extensions code here END --------
+from runtime import taskExtensionMoludes
+
 
 def init():
     asyncio.run(controller(2))
@@ -17,7 +14,7 @@ async def controller(interval:int):
             print("taskController: Please make it longer.")
             interval = 1
 
-        for jobName in extensionMoludes.keys():
-            extensionMoludes[jobName]()
+        for jobName in taskExtensionMoludes.keys():
+            taskExtensionMoludes[jobName]()
 
         await asyncio.sleep(interval)

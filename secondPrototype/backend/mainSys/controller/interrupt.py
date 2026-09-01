@@ -2,11 +2,7 @@ from common import receiveLoop
 from websockets import serve
 import asyncio
 
-# Join the extensions code here BEGIN --------
-# Join the extensions code here BEGIN --------
-extensionMoludes = {} # This is placeholder for dev
-# Join the extensions code here END --------
-# Join the extensions code here END --------
+from runtime import interruptExtensionMoludes
 
 # serve websocket connection as command controller do.
 websocketConnections = []
@@ -29,10 +25,10 @@ async def mainLoop(websocket):
 #  False -> OK
 #  True  -> Something went worng
 async def callInterrupt(websocket,interruptName:str,data:dict):
-    for AnInterrupt in extensionMoludes.keys():
+    for AnInterrupt in interruptExtensionMoludes.keys():
         if(AnInterrupt == interruptName):
             # call interrupt
-            return await extensionMoludes[AnInterrupt](websocket,data)        
+            return await interruptExtensionMoludes[AnInterrupt](websocket,data)        
     
     print("callInterrupt ERROR: The interrupt does not exist.")
     return True

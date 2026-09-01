@@ -3,13 +3,10 @@
 # This is entry point entire extension loader system. loadExtension function must be called when this dataserver started.
 # This is entry point entire extension loader system. loadExtension function must be called when this dataserver started.
 
-
-from dataserver     import init as dataserver
 from frontend       import init as frontend
+from common         import aExtension
 
 import os
-
-from common         import aExtension
 
 
 def loadExtension(Settings:dict):
@@ -19,20 +16,11 @@ def loadExtension(Settings:dict):
     #   let it as is, when there is no update.              (Clac checksum of ext zip)
     #   remove and unzip again, when there is any updates.  (Clac checksum of ext zip)
     # create a exetnsion instance to manage for each extensions. The instance will handle the extension manifest.
-    basePath = Settings["backendBaseFolderPath"]
-    extensionFolder = basePath + "/extensions/"
-    runtimePath = extensionFolder + "runtime/"
-    mainSysPath = basePath + "/mainSys/"
-    mainSysControllerPath = {
-        "command"   : mainSysPath + "controller/command.py",
-        "interrupt" : mainSysPath + "controller/interrupt.py",
-        "task"      : mainSysPath + "controller/task.py",
-    }
-    templatePath = {
-        "command"   : basePath + "/extensionLoader/template/command.py",
-        "interrupt" : basePath + "/extensionLoader/template/interrupt.py",
-        "task"      : basePath + "/extensionLoader/template/task.py"
-    }
+    basePath                        = Settings["backendBaseFolderPath"]
+    extensionFolder                 = basePath + "/extensions/"
+    runtimePath                     = extensionFolder + "runtime/"
+    mainSysPath                     = basePath + "/mainSys/"
+    dataServerMainSysRuntimePath    = mainSysPath + "controller/runtime.py"
 
     if(not os.path.exists(runtimePath)):
         os.mkdir(runtimePath)
@@ -56,9 +44,9 @@ def loadExtension(Settings:dict):
     dataServerInterruptImportString = ""
     dataServerTaskImportString      = ""
 
-    dataServerCommandModuleArrayString   = "[\n"
-    dataServerInterruptModuleArrayString = "[\n"
-    dataServerTaskModuleArrayString      = "[\n"
+    dataServerCommandModuleArrayString   = "commandExtensionMoludes = {\n"
+    dataServerInterruptModuleArrayString = "interruptExtensionMoludes = {\n"
+    dataServerTaskModuleArrayString      = "taskExtensionMoludes = {\n"
     for extensionInstance in extensionInstances:
         extensionInstance:aExtension
         extensionInstance.loadManifest()
@@ -79,39 +67,47 @@ def loadExtension(Settings:dict):
         # append import list (python), append array that hold all imported module. 
         imports = extensionInstance.getImportString()
         for Amodule in imports["CommandModules"]:
+            moduleName = Amodule.split(" ")[-1]
             dataServerCommandImportString += "{}\n".format(Amodule)
-            dataServerCommandModuleArrayString += "{},\n".format(Amodule.split(" ")[-1])
+            dataServerCommandModuleArrayString += "'{}':{},\n".format(moduleName,moduleName)
 
         for Amodule in imports["InterruptModules"]:
+            moduleName = Amodule.split(" ")[-1]
             dataServerInterruptImportString += "{}\n".format(Amodule)
-            dataServerInterruptModuleArrayString += "{},\n".format(Amodule.split(" ")[-1])
+            dataServerInterruptModuleArrayString += "'{}':{},\n".format(moduleName,moduleName)
 
         for Amodule in imports["TaskModules"]:
+            moduleName = Amodule.split(" ")[-1]
             dataServerTaskImportString += "{}\n".format(Amodule)
-            dataServerTaskModuleArrayString += "{},\n".format(Amodule.split(" ")[-1])
+            dataServerTaskModuleArrayString += "'{}':{},\n".format(moduleName,moduleName)
 
         # init frontend runtime
         # append import list (TypeScript), append array that hold all imported module. 
         frontend(extensionInstance)
 
-    dataServerCommandModuleArrayString   += "\n]\n"
-    dataServerInterruptModuleArrayString += "\n]\n"
-    dataServerTaskModuleArrayString      += "\n]\n"
+    dataServerCommandModuleArrayString   += "\n}\n"
+    dataServerInterruptModuleArrayString += "\n}\n"
+    dataServerTaskModuleArrayString      += "\n}\n"
 
     # compose import and array string
-    dataServerCommandHead = dataServerCommandImportString       + "\n" + dataServerCommandModuleArrayString     + "\n"
-    dataServerInterruptHead = dataServerInterruptImportString   + "\n" + dataServerInterruptModuleArrayString   + "\n"
-    dataServerTaskModuleHead = dataServerTaskImportString       + "\n" + dataServerTaskModuleArrayString        + "\n"
+    dataServerCommandHead = "# Command\n"       + dataServerCommandImportString         + "\n" + dataServerCommandModuleArrayString     + "\n"
+    dataServerInterruptHead = "# Interrupt\n"   + dataServerInterruptImportString       + "\n" + dataServerInterruptModuleArrayString   + "\n"
+    dataServerTaskModuleHead = "# Task\n"       + dataServerTaskImportString            + "\n" + dataServerTaskModuleArrayString        + "\n"
+
+    finalStringForDataServerRuntime = "{}\n{}\n{}\n".format(
+        dataServerCommandHead,
+        dataServerInterruptHead,
+        dataServerTaskModuleHead
+    )
 
     # TODO: implement this
-    # load template and place composed script to mainSys/controller
-
-
+    # for runtime code, create "runtime.tsx" script to store any "dynamic" code. (frontend/runtime.tsx)
+    # for runtime code, create "runtime.py" script to store any "dynamic" code. (mainSys/controller/runtime.py mainSys/controller/hosting/runtime.py)
+    with open(dataServerMainSysRuntimePath,"w") as dataServerRuntimeFile:
+        dataServerRuntimeFile.write(finalStringForDataServerRuntime)
     # compose extension to mainSys -------------------      
     # compose extension to mainSys -------------------
 
-    # for runtime code, create "runtime.tsx" script to store any "dynamic" code. (frontend/runtime.tsx)
-    # for runtime code, create "runtime.py" script to store any "dynamic" code. (mainSys/controller/runtime.py mainSys/controller/hosting/runtime.py)
 
     # Then join the template code into mainSys controllers
     # Then join the template code into the base frontend code and the build by npm.

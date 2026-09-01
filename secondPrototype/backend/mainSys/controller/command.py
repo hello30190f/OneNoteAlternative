@@ -2,11 +2,7 @@ from common import malformedRequestChecker, malformedRequestResponse, notFound, 
 from websockets import serve
 import asyncio
 
-# Join the extensions code here BEGIN --------
-# Join the extensions code here BEGIN --------
-extensionMoludes = {} # This is placeholder for dev
-# Join the extensions code here END --------
-# Join the extensions code here END --------
+from runtime import commandExtensionMoludes
 
 # serve websocket connection
 # call command modules from extensions by reading extensionMoludes array
@@ -46,9 +42,9 @@ async def controller(message,websocket):
 
     commandFound = False
     # try to call the requested command if it does exist.
-    for aCommand in extensionMoludes.keys():
+    for aCommand in commandExtensionMoludes.keys():
         if(aCommand == requestedCommand):
-            await extensionMoludes[requestedCommand](request,websocket)
+            await commandExtensionMoludes[requestedCommand](request,websocket)
             commandFound = True
             break
 
