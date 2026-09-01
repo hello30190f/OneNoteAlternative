@@ -18,7 +18,7 @@ class aExtension:
 
         self.unzip()
 
-        self.manifest = None
+        self.manifest:dict | None = None
 
     # init -----------------------------
     # init -----------------------------
@@ -49,12 +49,14 @@ class aExtension:
     def getExtName(self) -> str:
         return self.name
 
-    def getExtManifest(self):
+    # if false is returned, that mean manifest is not loaded yet.
+    def getExtManifest(self) -> dict | bool:
+        if(self.manifest == None): return False
         return self.manifest
     # getter -----------------------------
     # getter -----------------------------
         
-    def isExtension(self):
+    def isExtension(self) -> bool:
         # check manifest.json and requirements.txt existance  
         if(
             os.path.exists(self.manifestPath) and
@@ -68,7 +70,7 @@ class aExtension:
             self.manifest = json.loads(manifestFile.read())
 
     # True mean there is error, false is no error.
-    def checkManifest(self):
+    def checkManifest(self) -> bool:
         # currently not implemented yet...
         return False
 
@@ -76,7 +78,7 @@ class aExtension:
 
     # automatic pip dependency install
     # True mean there is error, false is no error.
-    def installPythonRequirement(self):
+    def installPythonRequirement(self) -> bool:
         # TODO: check pip command exit code.
         subprocess.run(["pip install -r {}".format(self.pythonDependency),],shell=True)
         return False
@@ -98,8 +100,10 @@ class aExtension:
     def getImportString(self):
         self.pathAdjust = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
 
-        def createImportString(modulePath:str):
-            return "from {} import {}".format(self.pathAdjust + modulePath.replace(".py",""),modulePath.split("/")[-1].replace(".py",""))
+        def createImportString(modulePath:str) -> str:
+            path = self.pathAdjust + modulePath.replace(".py","").replace("/",".")
+            name = modulePath.split("/")[-1].replace(".py","")
+            return "from {} import {}".format(path,name)
 
         commandModulePathList:list = self.manifest["DataServer"]["CommandModules"]
         commandModuleImportList = list(map(createImportString,commandModulePathList))

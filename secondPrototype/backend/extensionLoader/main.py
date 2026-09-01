@@ -22,6 +22,14 @@ def loadExtension(Settings:dict):
     mainSysPath                     = basePath + "/mainSys/"
     dataServerMainSysRuntimePath    = mainSysPath + "controller/runtime.py"
 
+    print("\n\nLoading extensions is begun ---------------")
+    print("Loading extensions is begun ---------------")
+    print("\t" + basePath)
+    print("\t" + extensionFolder)
+    print("\t" + runtimePath)
+    print("\t" + mainSysPath)
+    print("\t" + dataServerMainSysRuntimePath + "\n\n")
+
     if(not os.path.exists(runtimePath)):
         os.mkdir(runtimePath)
 
@@ -34,12 +42,12 @@ def loadExtension(Settings:dict):
             else:
                 print("{} is ignored. This is not extension.".format(absolutePath))
 
+
+
+    # compose extension to mainSys -------------------
+    # compose extension to mainSys -------------------
     # prepare for "runtime" template that can be appended to.
-    # create folder extensionLoader/build to store templates to be built. 
-
-
-    # compose extension to mainSys -------------------
-    # compose extension to mainSys -------------------
+    # create folder extensionLoader/build to store templates to be built for the frontend. 
     dataServerCommandImportString   = ""
     dataServerInterruptImportString = ""
     dataServerTaskImportString      = ""
@@ -100,7 +108,6 @@ def loadExtension(Settings:dict):
         dataServerTaskModuleHead
     )
 
-    # TODO: implement this
     # for runtime code, create "runtime.tsx" script to store any "dynamic" code. (frontend/runtime.tsx)
     # for runtime code, create "runtime.py" script to store any "dynamic" code. (mainSys/controller/runtime.py mainSys/controller/hosting/runtime.py)
     with open(dataServerMainSysRuntimePath,"w") as dataServerRuntimeFile:
