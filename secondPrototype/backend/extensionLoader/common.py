@@ -53,6 +53,9 @@ class aExtension:
     def getExtManifest(self) -> dict | bool:
         if(self.manifest == None): return False
         return self.manifest
+
+    def getUUID(self):
+        return self.UUID
     # getter -----------------------------
     # getter -----------------------------
         
@@ -95,7 +98,6 @@ class aExtension:
     # extensionLoader/template/controller/task.py
 
     # extensions/runtime/[extName]-[UUID]/
-
     # base path as "mainSys"
     def getImportString(self):
         self.pathAdjust = "..extensions.runtime.{}.".format(self.zipFileName[:-4])

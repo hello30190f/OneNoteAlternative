@@ -43,7 +43,7 @@ def loadExtension(Settings:dict):
                 print("{} is ignored. This is not extension.".format(absolutePath))
 
 
-
+    # TODO: make module name as "extensionName-UUIDの一部/moduleFuncName"
     # compose extension to mainSys -------------------
     # compose extension to mainSys -------------------
     # prepare for "runtime" template that can be appended to.
@@ -75,19 +75,22 @@ def loadExtension(Settings:dict):
         # append import list (python), append array that hold all imported module. 
         imports = extensionInstance.getImportString()
         for Amodule in imports["CommandModules"]:
-            moduleName = Amodule.split(" ")[-1]
-            dataServerCommandImportString += "{}\n".format(Amodule)
-            dataServerCommandModuleArrayString += "'{}':{},\n".format(moduleName,moduleName)
+            moduleName                              = Amodule.split(" ")[-1]
+            keyName                                 = "{}-{}/{}".format(extensionInstance.getExtName(),extensionInstance.getUUID(),Amodule.split(" ")[-1])
+            dataServerCommandImportString           += "{}\n".format(Amodule)
+            dataServerCommandModuleArrayString      += "'{}':{},\n".format(keyName,moduleName)
 
         for Amodule in imports["InterruptModules"]:
-            moduleName = Amodule.split(" ")[-1]
-            dataServerInterruptImportString += "{}\n".format(Amodule)
-            dataServerInterruptModuleArrayString += "'{}':{},\n".format(moduleName,moduleName)
+            moduleName                              = Amodule.split(" ")[-1]
+            keyName                                 = "{}-{}/{}".format(extensionInstance.getExtName(),extensionInstance.getUUID(),Amodule.split(" ")[-1])
+            dataServerInterruptImportString         += "{}\n".format(Amodule)
+            dataServerInterruptModuleArrayString    += "'{}':{},\n".format(keyName,moduleName)
 
         for Amodule in imports["TaskModules"]:
-            moduleName = Amodule.split(" ")[-1]
-            dataServerTaskImportString += "{}\n".format(Amodule)
-            dataServerTaskModuleArrayString += "'{}':{},\n".format(moduleName,moduleName)
+            moduleName                              = Amodule.split(" ")[-1]
+            keyName                                 = "{}-{}/{}".format(extensionInstance.getExtName(),extensionInstance.getUUID(),Amodule.split(" ")[-1])
+            dataServerTaskImportString              += "{}\n".format(Amodule)
+            dataServerTaskModuleArrayString         += "'{}':{},\n".format(keyName,moduleName)
 
         # init frontend runtime
         # append import list (TypeScript), append array that hold all imported module. 
