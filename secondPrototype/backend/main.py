@@ -8,6 +8,12 @@ import argparse
 import os.path
 from extensionLoader.main import loadExtension
 
+
+# TODO: separate extension load phase and mainSys start phase
+# python -u main.py --load-extension
+# python -u main.py --start-server
+
+
 # create python venv
 
 # activate python venv
