@@ -30,8 +30,8 @@ def loadExtension(Settings:dict):
     print("\t" + mainSysPath)
     print("\t" + dataServerMainSysRuntimePath + "\n\n")
 
-    if(not os.path.exists(runtimePath)):
-        os.mkdir(runtimePath)
+    # if(not os.path.exists(runtimePath)):
+    #     os.mkdir(runtimePath)
 
     for extension in os.listdir(extensionFolder):
         if(extension[-4:] == ".zip"):
