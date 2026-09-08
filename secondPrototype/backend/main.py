@@ -5,7 +5,7 @@
 
 import json, sys, os.path, pexpect, argparse
 from extensionLoader.main import loadExtension
-from helper.common import initVenv
+from helper.common import initVenv, pexpectExecuteCommand
 
 
 
@@ -17,14 +17,17 @@ def loadExtensionOption(Settings:dict):
     loadExtension(Settings,session)
 
 def startMainSystemOption(Settings:dict):
-    # execute mainSys/main.py by using subprocess lib.
-    pass
-
-
-
-
-
-
+    # write down runtime temporary settings
+    runtimeSettingsPath = Settings["backendBaseFolderPath"] + "/mainSys/runtime.json"
+    settingString       = json.dumps(Settings,indent=4)
+    with open(runtimeSettingsPath,"w") as runtime:
+        runtime.write(settingString)
+    
+    # execute mainSys/main.py 
+    # session:pexpect.spawn   = initVenv(Settings)
+    # mainSysFolder           = Settings["backendBaseFolderPath"] + "/mainSys"
+    # pexpectExecuteCommand(session,"cd {}".format(mainSysFolder))
+    # pexpectExecuteCommand(session,"python -u main.py")
 
 
 # Load parmanent server settings ------------------
