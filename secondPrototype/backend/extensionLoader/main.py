@@ -3,8 +3,8 @@
 # This is entry point entire extension loader system. loadExtension function must be called when this dataserver started.
 # This is entry point entire extension loader system. loadExtension function must be called when this dataserver started.
 
-from frontend       import init as frontend
-from common         import aExtension
+from extensionLoader.frontend       import init as frontend
+from extensionLoader.common         import aExtension
 
 import os
 

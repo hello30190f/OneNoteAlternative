@@ -5,7 +5,6 @@
 
 import json, sys, os.path, pexpect, argparse
 from extensionLoader.main import loadExtension
-
 from helper.common import initVenv
 
 
@@ -14,14 +13,17 @@ from helper.common import initVenv
 def loadExtensionOption(Settings:dict):
     # Start python venv session
     session:pexpect.spawn = initVenv(Settings)
-
     # start extension loader
     loadExtension(Settings)
-
 
 def startMainSystemOption(Settings:dict):
     # execute mainSys/main.py by using subprocess lib.
     pass
+
+
+
+
+
 
 
 
@@ -49,8 +51,8 @@ with open("./settings.json") as settingFile:
 # python -u main.py --startServer
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--loadExtension")
-parser.add_argument("--startServer")
+parser.add_argument("--loadExtension",action='store_true')
+parser.add_argument("--startServer",action='store_true')
 
 args = parser.parse_args()
 if args.loadExtension and args.startServer:
@@ -61,8 +63,8 @@ if not args.loadExtension and not args.startServer:
     print("--loadExtension or --startServer isn't specified.")
     sys.exit(1)
 
-if args.loadExtension: 
-    loadExtensionOption(Settings)
+# if args.loadExtension: 
+#     loadExtensionOption(Settings)
 
-if args.startServer:
-    startMainSystemOption(Settings)
+# if args.startServer:
+#     startMainSystemOption(Settings)

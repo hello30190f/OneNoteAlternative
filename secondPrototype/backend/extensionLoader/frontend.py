@@ -1,4 +1,4 @@
-from common import aExtension
+from extensionLoader.common import aExtension
 
 
 
