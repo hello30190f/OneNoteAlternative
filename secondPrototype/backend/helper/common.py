@@ -13,7 +13,7 @@ def executeCommand(command:str):
 
 def initVenv(Settings:dict) -> pexpect.spawn:
     VenvPath = Settings["backendBaseFolderPath"] + "/dataServerVenv"
-    SourcePath = VenvPath + "/bin/python"
+    SourcePath = VenvPath + "/bin/activate"
 
     # create python venv if it does not exist
     if(not os.path.exists(VenvPath)):
@@ -22,7 +22,7 @@ def initVenv(Settings:dict) -> pexpect.spawn:
         executeCommand(command)
 
     # activate python venv (create terminal session)
-    dataServerSession = pexpect.spawn("/bin/bash")
+    dataServerSession = pexpect.spawn("/bin/bash", timeout=5, encoding='utf-8')
     dataServerSession.logfile = sys.stdout
     # Give the terminal time to start
     time.sleep(1)

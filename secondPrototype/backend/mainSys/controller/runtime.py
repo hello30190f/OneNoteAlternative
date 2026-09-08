@@ -1,6 +1,21 @@
-# imports
+# Command
 
-# modules
-commandExtensionMoludes = {}
-interruptExtensionMoludes = {}
-taskExtensionMoludes = {}
+commandExtensionMoludes = {
+
+}
+
+
+# Interrupt
+
+interruptExtensionMoludes = {
+
+}
+
+
+# Task
+
+taskExtensionMoludes = {
+
+}
+
+
