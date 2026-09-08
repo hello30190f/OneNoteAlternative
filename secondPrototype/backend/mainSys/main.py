@@ -1,7 +1,6 @@
 # TODO: serach for sharing data each process and thread on mutiprocessing and threading library.
 
-import multiprocessing
-import sys
+import multiprocessing, sys, os.path, json 
 
 from controller.command     import init as command
 from controller.interrupt   import init as interrupt
@@ -21,10 +20,27 @@ hosting = [
 
 # start each controllers and hosting service as a thread(or a process if it can be.)
 if __name__ == "__main__":
-    print("DataSrever is started")
+    print("DataSrever is started --------------------------")
+    print("DataSrever is started --------------------------")
+
+    print("Load Runtime Settings --------------------------")
+    print("Load Runtime Settings --------------------------")
+
+    if(not os.path.exists("./runtime.json")):
+        print("\tThre is no runtime setting file. DataServer will abort to start.")
+        sys.exit(1)
+
+    Settings = None
+    with open("./runtime.json","r") as settings:
+        Settings = json.loads(settings.read())
+
+    if(not isinstance(Settings,dict) or Settings == None):
+        print("\tThre is invalid runtime setting file. DataServer will abort to start.")
+        sys.exit(1)
+
     processes = []
     for host in hosting:
-        process = multiprocessing.Process(target=host)
+        process = multiprocessing.Process(target=host,args=(Settings,))
         process.start()
         processes.append(process)
 

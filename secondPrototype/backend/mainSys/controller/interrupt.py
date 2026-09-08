@@ -6,7 +6,10 @@ from runtime import interruptExtensionMoludes
 
 # serve websocket connection as command controller do.
 websocketConnections = []
-def init():
+Settings = None
+def init(RuntimeSettings:dict):
+    global Settings
+    Settings = RuntimeSettings
     asyncio.run(startInterruptController())
 
 async def startInterruptController():

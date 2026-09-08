@@ -3,7 +3,10 @@ import asyncio
 from runtime import taskExtensionMoludes
 
 
-def init():
+Settings = None
+def init(RuntimeSettings:dict):
+    global Settings
+    Settings = RuntimeSettings
     asyncio.run(controller(2))
     pass
 

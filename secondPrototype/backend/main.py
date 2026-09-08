@@ -24,10 +24,12 @@ def startMainSystemOption(Settings:dict):
         runtime.write(settingString)
     
     # execute mainSys/main.py 
-    # session:pexpect.spawn   = initVenv(Settings)
-    # mainSysFolder           = Settings["backendBaseFolderPath"] + "/mainSys"
-    # pexpectExecuteCommand(session,"cd {}".format(mainSysFolder))
-    # pexpectExecuteCommand(session,"python -u main.py")
+    session:pexpect.spawn   = initVenv(Settings)
+    mainSysFolder           = Settings["backendBaseFolderPath"] + "/mainSys"
+    pexpectExecuteCommand(session,"cd {}".format(mainSysFolder))
+    pexpectExecuteCommand(session,"python -u main.py")
+
+
 
 
 # Load parmanent server settings ------------------
@@ -67,6 +69,8 @@ if(Settings["useDefaultNotebookPath"]):
 print("Current settings -------------------------")
 print(Settings)
 print(type(Settings))
+
+
 
 
 #NOTE: How to use this script

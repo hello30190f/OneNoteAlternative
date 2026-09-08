@@ -10,8 +10,10 @@ from runtime import commandExtensionMoludes
 # interrupt controller need new websocket connection.
 # frontend need to connect for both command and interrupt websocket connection.
 
-
-def init():
+Settings = None
+def init(RuntimeSettings:dict):
+    global Settings
+    Settings = RuntimeSettings
     asyncio.run(startCommandController())
 
 async def startCommandController():

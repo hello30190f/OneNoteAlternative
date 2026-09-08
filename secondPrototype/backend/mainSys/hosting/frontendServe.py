@@ -7,7 +7,8 @@
 
 
 
-
-def init():
-
+Settings = None
+def init(RuntimeSettings:dict):
+    global Settings
+    Settings = RuntimeSettings
     pass
