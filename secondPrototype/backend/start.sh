@@ -1,2 +1,4 @@
 #!/bin/bash
-python -u main.py
+pip install -r requirements.txt
+python -u main.py --loadExtension
+python -u main.py --startServer
