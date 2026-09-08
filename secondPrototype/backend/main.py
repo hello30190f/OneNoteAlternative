@@ -63,8 +63,8 @@ if not args.loadExtension and not args.startServer:
     print("--loadExtension or --startServer isn't specified.")
     sys.exit(1)
 
-# if args.loadExtension: 
-#     loadExtensionOption(Settings)
+if args.loadExtension: 
+    loadExtensionOption(Settings)
 
-# if args.startServer:
-#     startMainSystemOption(Settings)
+if args.startServer:
+    startMainSystemOption(Settings)
