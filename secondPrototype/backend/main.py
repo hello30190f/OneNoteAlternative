@@ -30,6 +30,8 @@ def startMainSystemOption(Settings:dict):
 # Load parmanent server settings ------------------
 # Load parmanent server settings ------------------
 # Check setting existance. When setting is not exist, DataServer will stop.
+print("Loading settings ---------------------------------------")
+print("Loading settings ---------------------------------------")
 Settings = None
 if(not os.path.exists("./settings.json")):
     print("Setting File does not exist.")
@@ -39,12 +41,20 @@ if(not os.path.exists("./settings.json")):
 with open("./settings.json") as settingFile:
     Settings = json.loads(settingFile.read())
 
-
 if(Settings["findBackendPath"]):
     backendPath = os.getcwd()
-    print("FindBackendPath has been enabled. Please check the path is correct.")
-    print(backendPath)
+    print("\tfindBackendPath has been enabled. Please check the path is correct.")
+    print("\t{}".format(backendPath))
     Settings["backendBaseFolderPath"] = backendPath
+
+if(Settings["useDefaultNotebookPath"]):
+    notebookPath = Settings["backendBaseFolderPath"] + "/notebookData"
+    print("\n\tuseDefaultNotebookPath has been enabled. Please check the path is correct.")
+    print("\t{}".format(notebookPath))
+    Settings["notebookPath"] = notebookPath
+    if(not os.path.exists(Settings["notebookPath"])):
+        print("\tThe notebook folder does not exist. This dataServer will create the folder.")
+        os.mkdir(Settings["notebookPath"])
 # Load parmanent server settings ------------------
 # Load parmanent server settings ------------------
 

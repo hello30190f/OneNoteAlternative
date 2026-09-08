@@ -1,4 +1,6 @@
 {
     "backendBaseFolderPath": "",
-    "findBackendPath": true
+    "findBackendPath": true,
+    "notebookPath": "",
+    "useDefaultNotebookPath": true
 }
