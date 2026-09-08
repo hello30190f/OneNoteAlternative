@@ -44,6 +44,9 @@ with open("./settings.json") as settingFile:
 
 
 
+print("Current settings -------------------------")
+print(Settings)
+print(type(Settings))
 
 
 #NOTE: How to use this script
