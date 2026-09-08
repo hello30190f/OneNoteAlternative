@@ -43,6 +43,9 @@ def loadExtension(Settings:dict):
                 print("{} is ignored. This is not extension.".format(absolutePath))
 
 
+    print("{} extensions are found.".format(extensionInstances.__len__()))
+
+
     # TODO: make module name as "extensionName-UUIDの一部/moduleFuncName"
     # compose extension to mainSys -------------------
     # compose extension to mainSys -------------------
