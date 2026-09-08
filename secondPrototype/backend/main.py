@@ -38,6 +38,13 @@ if(not os.path.exists("./settings.json")):
 # Load Server Settings
 with open("./settings.json") as settingFile:
     Settings = json.loads(settingFile.read())
+
+
+if(Settings["findBackendPath"]):
+    backendPath = os.getcwd()
+    print("FindBackendPath has been enabled. Please check the path is correct.")
+    print(backendPath)
+    Settings["backendBaseFolderPath"] = backendPath
 # Load parmanent server settings ------------------
 # Load parmanent server settings ------------------
 
