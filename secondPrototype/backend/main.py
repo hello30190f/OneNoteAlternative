@@ -14,7 +14,7 @@ def loadExtensionOption(Settings:dict):
     # Start python venv session
     session:pexpect.spawn = initVenv(Settings)
     # start extension loader
-    loadExtension(Settings)
+    loadExtension(Settings,session)
 
 def startMainSystemOption(Settings:dict):
     # execute mainSys/main.py by using subprocess lib.

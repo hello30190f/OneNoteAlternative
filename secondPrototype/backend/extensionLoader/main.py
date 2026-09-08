@@ -6,10 +6,10 @@
 from extensionLoader.frontend       import init as frontend
 from extensionLoader.common         import aExtension
 
-import os
+import os, pexpect
 
 
-def loadExtension(Settings:dict):
+def loadExtension(Settings:dict,session:pexpect.spawn):
     extensionInstances = []
     # unzip each extensions and place it into extensions/runtime/[extName-UUID].
     # if the extension has already been "unziped", 
@@ -36,7 +36,7 @@ def loadExtension(Settings:dict):
     for extension in os.listdir(extensionFolder):
         if(extension[-4:] == ".zip"):
             absolutePath = extensionFolder + extension
-            instance = aExtension(absolutePath,basePath,runtimePath)
+            instance = aExtension(absolutePath,basePath,runtimePath,session)
             if(instance.isExtension()):
                 extensionInstances.append(instance)
             else:

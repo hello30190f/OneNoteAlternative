@@ -1,13 +1,14 @@
 # This is object for each extensions. A instance corresponded to a extension.
 # manage manifest and resolve paths.
-import os.path,json,subprocess
+import os.path,json,subprocess,pexpect
 from zipfile        import ZipFile
+from helper.common  import pexpectExecuteCommand
 
 
 class aExtension:
-    def __init__(self,extensionPath:str,backendBasePath:str,runtimePath:str):
+    def __init__(self,extensionPath:str,backendBasePath:str,runtimePath:str,session:pexpect.spawn):
         self.zipPath        = extensionPath
-
+        self.terminal       = session
         self.runtimePath    = runtimePath
         self.findExtFileNameFromPath()
         self.findUUIDfromFileName()
@@ -82,8 +83,9 @@ class aExtension:
     # automatic pip dependency install
     # True mean there is error, false is no error.
     def installPythonRequirement(self) -> bool:
-        # TODO: check pip command exit code.
-        subprocess.run(["pip install -r {}".format(self.pythonDependency),],shell=True)
+        # subprocess.run(["pip install -r {}".format(self.pythonDependency),],shell=True)
+        command = "pip install -r {}".format(self.pythonDependency)
+        pexpectExecuteCommand(self.terminal,command)
         return False
     
 
@@ -107,17 +109,17 @@ class aExtension:
             name = modulePath.split("/")[-1].replace(".py","")
             return "from {} import {}".format(path,name)
 
-        commandModulePathList:list = self.manifest["DataServer"]["CommandModules"]
-        commandModuleImportList = list(map(createImportString,commandModulePathList))
+        commandModulePathList:list      = self.manifest["DataServer"]["CommandModules"]
+        commandModuleImportList         = list(map(createImportString,commandModulePathList))
 
-        interruptModulePathList:list = self.manifest["DataServer"]["InterruptModules"]
-        interruptModuleImportList = list(map(createImportString,interruptModulePathList))
+        interruptModulePathList:list    = self.manifest["DataServer"]["InterruptModules"]
+        interruptModuleImportList       = list(map(createImportString,interruptModulePathList))
 
-        taskModulePathList:list = self.manifest["DataServer"]["TaskModules"]
-        taskModuleImportList = list(map(createImportString,taskModulePathList))
+        taskModulePathList:list         = self.manifest["DataServer"]["TaskModules"]
+        taskModuleImportList            = list(map(createImportString,taskModulePathList))
         
         return {
-            "CommandModules": commandModuleImportList,
-            "InterruptModules": interruptModuleImportList,
-            "TaskModules": taskModuleImportList
+            "CommandModules"    : commandModuleImportList,
+            "InterruptModules"  : interruptModuleImportList,
+            "TaskModules"       : taskModuleImportList
         }
