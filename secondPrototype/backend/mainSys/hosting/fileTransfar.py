@@ -10,7 +10,6 @@
 
 
 Settings = None
-def init(RuntimeSettings:dict):
+def init(RuntimeSettings:dict) -> None:
     global Settings
     Settings = RuntimeSettings
-    pass

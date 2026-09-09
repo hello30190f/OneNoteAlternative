@@ -4,14 +4,13 @@ from controller.runtime import taskExtensionMoludes
 
 
 Settings = None
-def init(RuntimeSettings:dict):
+def init(RuntimeSettings:dict) -> None:
     print("Task controller init")
     global Settings
     Settings = RuntimeSettings
     asyncio.run(controller(2))
-    pass
 
-async def controller(interval:int):   
+async def controller(interval:int) -> None:   
     while(True):
         if(interval == 0 or interval < 1):
             print("taskController: The interval setting is too short.: {} sec".format(interval))    

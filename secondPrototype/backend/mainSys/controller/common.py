@@ -1,5 +1,6 @@
 import json, time, os, subprocess, sys, shutil, platform
 from websockets.exceptions import ConnectionClosedOK
+from websockets.asyncio.server import ServerConnection
 
 
 # arg:
@@ -7,7 +8,7 @@ from websockets.exceptions import ConnectionClosedOK
 #   receive     : To show received JSON message, make this arg True otherwise the JSONstring will be shown as a sent JSONstring to the frontend.
 # return value
 #   Nothing
-def showJSONMessage(JSONstring:str,receive:bool=False):
+def showJSONMessage(JSONstring:str,receive:bool=False) -> None:
     jsondata = json.loads(JSONstring)
     if(receive):
         print("<<<\n" + json.dumps(jsondata,indent=4))
@@ -16,7 +17,7 @@ def showJSONMessage(JSONstring:str,receive:bool=False):
 
 # error response ---------------------------------------
 # error response ---------------------------------------
-async def NotImplementedResponse(request,websocket):
+async def NotImplementedResponse(request:dict,websocket:ServerConnection) -> None:
     responseString = json.dumps({
         "responseType"  : "commandResponse",
         "status"        : "NotImplemented",
@@ -28,7 +29,7 @@ async def NotImplementedResponse(request,websocket):
     showJSONMessage(responseString)
     await websocket.send(responseString)
 
-async def malformedRequestResponse(websocket):
+async def malformedRequestResponse(websocket:ServerConnection) -> None:
     responseString = json.dumps({
         "responseType"  : "commandResponse",
         "status"        : "error",
@@ -40,7 +41,19 @@ async def malformedRequestResponse(websocket):
     showJSONMessage(responseString)
     await websocket.send(responseString)
 
-async def notFound(request,websocket):
+async def internalServerErrorResponse(request:dict,websocket:ServerConnection,errorMessage:str) -> None:
+    responseString = json.dumps({
+        "responseType"  : "commandResponse",
+        "status"        : "internalServerError",
+        "UUID"          : request["UUID"],
+        "command"       : request["command"],
+        "errorMessage"  : errorMessage,
+        "data"          : { }
+    })
+    showJSONMessage(responseString)
+    await websocket.send(responseString)
+
+async def notFound(request:dict,websocket:ServerConnection) -> None:
     responseString = json.dumps({
         "responseType"  : "commandResponse",
         "status"        : "NotFound",
@@ -59,7 +72,7 @@ async def notFound(request,websocket):
 # return value
 #   OK      : return parsed JSON data
 #   Error   : None
-def malformedRequestChecker(message):
+def malformedRequestChecker(message:str) -> dict | None:
     # check the message is valid JSON string or not
     request = None
     try:
@@ -83,13 +96,34 @@ def malformedRequestChecker(message):
         return None
 
 
-async def receiveLoop(websocket,callback):
+async def receiveLoop(websocket:ServerConnection,callback) -> None:
     while True:
         try: 
             message = await websocket.recv()
+            if(not isinstance(message,str)):
+                message = "This is not string. Nothing to show."
             print("\n\n----------------------")
             showJSONMessage(message,receive=True)
             # callback have to show sent messages.
             await callback(message,websocket)
         except ConnectionClosedOK:
             break
+
+
+
+class moduleArgs: 
+    def __init__(self,request:dict,websocket:ServerConnection,Settings:dict) -> None:
+        self.request    = request
+        self.websocket  = websocket
+        self.settings   = Settings
+        self.funcs      = {
+            "showJSONMessage": showJSONMessage 
+        }
+
+    def getArgs(self) -> dict:
+        return {
+            "request"   : self.request,
+            "websocket" : self.websocket,
+            "funcs"     : self.funcs,
+            "Settings"  : self.settings
+        }

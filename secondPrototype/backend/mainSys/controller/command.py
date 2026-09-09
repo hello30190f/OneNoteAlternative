@@ -1,5 +1,6 @@
-from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop
+from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, moduleArgs
 from websockets import serve
+from websockets.asyncio.server import ServerConnection
 import asyncio
 
 from controller.runtime import commandExtensionMoludes
@@ -11,20 +12,20 @@ from controller.runtime import commandExtensionMoludes
 # frontend need to connect for both command and interrupt websocket connection.
 
 Settings = None
-def init(RuntimeSettings:dict):
+def init(RuntimeSettings:dict) -> None:
     print("Command controller init")
     global Settings
     Settings = RuntimeSettings
     asyncio.run(startCommandController())
 
-async def startCommandController():
+async def startCommandController() -> None:
     async with serve(handler=mainLoop,host="localhost",port=50097) as server:
         try:
             await server.serve_forever()
         except:
             print("DataServer Command controller hosting stopped.")
 
-async def mainLoop(websocket):
+async def mainLoop(websocket:ServerConnection) -> None:
     try:
         await receiveLoop(websocket,controller)    
     except asyncio.CancelledError:
@@ -35,11 +36,15 @@ async def mainLoop(websocket):
 
 # call command
 # when command is not valid, notFound command will be executed.
-async def controller(message,websocket):
+async def controller(message:str,websocket:ServerConnection) -> None:
     request = malformedRequestChecker(message)
     if(request == None):
         await malformedRequestResponse(websocket)  
         return 
+
+    if(Settings == None):
+        await internalServerErrorResponse(request,websocket,"Command controller get no settings to generate responses.")
+        return
 
     requestedCommand = request["command"]
 
@@ -47,7 +52,7 @@ async def controller(message,websocket):
     # try to call the requested command if it does exist.
     for aCommand in commandExtensionMoludes.keys():
         if(aCommand == requestedCommand):
-            await commandExtensionMoludes[requestedCommand](request,websocket)
+            await commandExtensionMoludes[requestedCommand](moduleArgs(request,websocket,Settings))
             commandFound = True
             break
 

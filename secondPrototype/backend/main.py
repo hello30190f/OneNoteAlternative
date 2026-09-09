@@ -10,13 +10,13 @@ from helper.common import initVenv, pexpectExecuteCommand
 
 
 
-def loadExtensionOption(Settings:dict):
+def loadExtensionOption(Settings:dict) -> None:
     # Start python venv session
     session:pexpect.spawn = initVenv(Settings)
     # start extension loader
     loadExtension(Settings,session)
 
-def startMainSystemOption(Settings:dict):
+def startMainSystemOption(Settings:dict) -> None:
     # write down runtime temporary settings
     runtimeSettingsPath = Settings["backendBaseFolderPath"] + "/mainSys/runtime.json"
     settingString       = json.dumps(Settings,indent=4)
@@ -32,9 +32,16 @@ def startMainSystemOption(Settings:dict):
     print("Serve forever state.")
     waitForever()
 
-def waitForever():
-    while True:
-        time.sleep(100) # For single loop, wait 100 sec 
+def waitForever() -> None:
+    try:
+        while True:
+            time.sleep(100) # For single loop, wait 100 sec 
+    except KeyboardInterrupt:
+        print("The dataServer will shutdown.")
+        sys.exit(0)
+
+
+
 
 
 # Load parmanent server settings ------------------
