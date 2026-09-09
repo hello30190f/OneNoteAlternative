@@ -1,4 +1,4 @@
-from controller.common import receiveLoop
+# from controller.common import receiveLoop
 from websockets import serve
 import asyncio
 from websockets.asyncio.server import ServerConnection
@@ -6,27 +6,33 @@ from websockets.asyncio.server import ServerConnection
 from controller.runtime import interruptExtensionMoludes
 
 # serve websocket connection as command controller do.
-websocketConnections = []
-Settings = None
-def init(RuntimeSettings:dict) -> None:
-    print("Interrupt controller init")
-    global Settings
-    Settings = RuntimeSettings
-    asyncio.run(startInterruptController())
+# websocketConnections = []
+# Settings = None
+# def init(RuntimeSettings:dict) -> None:
+#     print("Interrupt controller init")
+#     global Settings
+#     Settings = RuntimeSettings
+#     asyncio.run(startInterruptController())
 
-async def startInterruptController() -> None:
-    async with serve(handler=mainLoop,host="localhost",port=50098) as server:
-        try:
-            await server.serve_forever()
-        except:
-            print("DataServer Command controller hosting stopped.")
+# async def startInterruptController() -> None:
+#     async with serve(handler=mainLoop,host="localhost",port=50098) as server:
+#         try:
+#             await server.serve_forever()
+#         except:
+#             print("DataServer Command controller hosting stopped.")
 
-#TODO: implement close websocket func
-async def mainLoop(websocket:ServerConnection) -> None:
-    websocketConnections.append(websocket)
+# #TODO: implement close websocket func
+# async def mainLoop(websocket:ServerConnection) -> None:
+#     websocketConnections.append(websocket)
 
 
-# TODO: Use IPC of multiprocessing lib to call this interrupt controller.
+
+
+
+
+
+
+
 # This function shuold be called from command or task service.
 # return 
 #  False -> OK

@@ -1,6 +1,6 @@
 # This is object for each extensions. A instance corresponded to a extension.
 # manage manifest and resolve paths.
-import os.path,json,subprocess,pexpect
+import os.path,json,subprocess,pexpect,sys
 from zipfile        import ZipFile
 from helper.common  import pexpectExecuteCommand
 
@@ -101,25 +101,34 @@ class aExtension:
 
     # extensions/runtime/[extName]-[UUID]/
     # base path as "mainSys"
-    def getImportString(self):
-        self.pathAdjust = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
+    def getImportString(self) -> dict | None:
+        self.pathAdjust:str = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
 
         def createImportString(modulePath:str) -> str:
             path = self.pathAdjust + modulePath.replace(".py","").replace("/",".")
             name = modulePath.split("/")[-1].replace(".py","")
             return "from {} import {}".format(path,name)
 
+        if(self.manifest == None or not isinstance(self.manifest,dict)):
+            print("{}-{} : Unable to get extension manifest infomation for DataServer module list.".format(self.name,self.UUID))
+            return None 
+
         commandModulePathList:list      = self.manifest["DataServer"]["CommandModules"]
-        commandModuleImportList         = list(map(createImportString,commandModulePathList))
+        commandModuleImportList:list    = list(map(createImportString,commandModulePathList))
 
         interruptModulePathList:list    = self.manifest["DataServer"]["InterruptModules"]
-        interruptModuleImportList       = list(map(createImportString,interruptModulePathList))
+        interruptModuleImportList:list  = list(map(createImportString,interruptModulePathList))
 
         taskModulePathList:list         = self.manifest["DataServer"]["TaskModules"]
-        taskModuleImportList            = list(map(createImportString,taskModulePathList))
-        
+        taskModuleImportList:list       = list(map(createImportString,taskModulePathList))
+
+        pageModulePathList:list         = self.manifest["DataServer"]["PageModules"]
+        pageModuleImportList:list       = list(map(createImportString,pageModulePathList))
+
+                
         return {
             "CommandModules"    : commandModuleImportList,
             "InterruptModules"  : interruptModuleImportList,
-            "TaskModules"       : taskModuleImportList
+            "TaskModules"       : taskModuleImportList,
+            "PageModules"       : pageModuleImportList
         }

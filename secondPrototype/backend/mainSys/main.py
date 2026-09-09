@@ -3,20 +3,21 @@
 import multiprocessing, sys, os.path, json 
 
 from controller.command     import init as command
-from controller.interrupt   import init as interrupt
 from controller.task        import init as task
 
 from hosting.fileTransfar   import init as fileTransfar
 from hosting.frontendServe  import init as frontendServe
 
 # This array is "fixed". Not intended to be exntend by the extensions.
+# interrupt and page controller is passive controller that called via other controllers on demand. Those will be called via modules.
 hosting = [
     command,
-    interrupt,
     task,
     fileTransfar,
     frontendServe
 ]
+
+
 
 # start each controllers and hosting service as a thread(or a process if it can be.)
 if __name__ == "__main__":

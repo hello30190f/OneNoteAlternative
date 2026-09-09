@@ -54,10 +54,12 @@ def loadExtension(Settings:dict,session:pexpect.spawn):
     dataServerCommandImportString   = ""
     dataServerInterruptImportString = ""
     dataServerTaskImportString      = ""
+    dataServerPageImportString      = ""
 
     dataServerCommandModuleArrayString   = "commandExtensionMoludes = {\n"
     dataServerInterruptModuleArrayString = "interruptExtensionMoludes = {\n"
     dataServerTaskModuleArrayString      = "taskExtensionMoludes = {\n"
+    dataServerPageModuleArrayString      = "pageExtensionMoludes = {\n"
     for extensionInstance in extensionInstances:
         extensionInstance:aExtension
         extensionInstance.loadManifest()
@@ -77,6 +79,11 @@ def loadExtension(Settings:dict,session:pexpect.spawn):
         # init dataserver runtime
         # append import list (python), append array that hold all imported module. 
         imports = extensionInstance.getImportString()
+
+        if(imports == None):
+            print("Unable to load the extension: {}-{}".format(extensionInstance.getExtName(),extensionInstance.getUUID()))
+            continue
+
         for Amodule in imports["CommandModules"]:
             moduleName                              = Amodule.split(" ")[-1]
             keyName                                 = "{}-{}/{}".format(extensionInstance.getExtName(),extensionInstance.getUUID(),Amodule.split(" ")[-1])
@@ -95,6 +102,12 @@ def loadExtension(Settings:dict,session:pexpect.spawn):
             dataServerTaskImportString              += "{}\n".format(Amodule)
             dataServerTaskModuleArrayString         += "'{}':{},\n".format(keyName,moduleName)
 
+        for Amodule in imports["PageModules"]:
+            moduleName                              = Amodule.split(" ")[-1]
+            keyName                                 = "{}-{}/{}".format(extensionInstance.getExtName(),extensionInstance.getUUID(),Amodule.split(" ")[-1])
+            dataServerTaskImportString              += "{}\n".format(Amodule)
+            dataServerTaskModuleArrayString         += "'{}':{},\n".format(keyName,moduleName)
+
         # init frontend runtime
         # append import list (TypeScript), append array that hold all imported module. 
         frontend(extensionInstance)
@@ -102,16 +115,19 @@ def loadExtension(Settings:dict,session:pexpect.spawn):
     dataServerCommandModuleArrayString   += "\n}\n"
     dataServerInterruptModuleArrayString += "\n}\n"
     dataServerTaskModuleArrayString      += "\n}\n"
+    dataServerPageModuleArrayString      += "\n}\n"
 
     # compose import and array string
     dataServerCommandHead = "# Command\n"       + dataServerCommandImportString         + "\n" + dataServerCommandModuleArrayString     + "\n"
     dataServerInterruptHead = "# Interrupt\n"   + dataServerInterruptImportString       + "\n" + dataServerInterruptModuleArrayString   + "\n"
     dataServerTaskModuleHead = "# Task\n"       + dataServerTaskImportString            + "\n" + dataServerTaskModuleArrayString        + "\n"
+    dataServerPageModuleHead = "# Page\n"       + dataServerPageImportString            + "\n" + dataServerPageModuleArrayString
 
-    finalStringForDataServerRuntime = "{}\n{}\n{}\n".format(
+    finalStringForDataServerRuntime = "{}\n{}\n{}\n{}\n".format(
         dataServerCommandHead,
         dataServerInterruptHead,
-        dataServerTaskModuleHead
+        dataServerTaskModuleHead,
+        dataServerPageModuleHead
     )
 
     # for runtime code, create "runtime.tsx" script to store any "dynamic" code. (frontend/runtime.tsx)

@@ -1,6 +1,8 @@
 import json, time, os, subprocess, sys, shutil, platform
 from websockets.exceptions import ConnectionClosedOK
 from websockets.asyncio.server import ServerConnection
+from controller.interrupt import callInterrupt
+from controller.pages import getPageTemplate
 
 
 # arg:
@@ -117,7 +119,9 @@ class moduleArgs:
         self.websocket  = websocket
         self.settings   = Settings
         self.funcs      = {
-            "showJSONMessage": showJSONMessage 
+            "showJSONMessage": showJSONMessage,
+            "callInterrupt": callInterrupt,
+            "getPageTemplate": getPageTemplate
         }
 
     def getArgs(self) -> dict:

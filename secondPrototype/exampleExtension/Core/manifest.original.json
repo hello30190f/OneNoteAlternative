@@ -40,6 +40,10 @@
         "TaskModules":[
             "backend/tasks/pageCleaner.py",
             "backend/tasks/showPingMessage.py"
+        ],
+        "PagesModules":[
+            "backend/pages/free.py",
+            "backend/pages/markdown.py"
         ]
     },
     "extensionDependencies":[

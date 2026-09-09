@@ -12,8 +12,15 @@
 
 # Note
 ## Controllers
-### Command
-- frontend need to connect `localhost:50097`
-### Interrupt
-- frontend need to connect `localhost:50098`
-### Task
+ Frontend need to connect `localhost:50097`
+### Passive controllers
+#### Interrupt
+ Generate a interrupt signal to the frontend to make sure all frontends that connect to the same DataServer synced
+#### Page
+ Generate a blank page on demand. 
+
+### Active controllers
+#### Command
+ Wait for command request from connected frontends or other DataServer.
+#### Task
+ Execute tasks that registered repeatedly at certain amount of interval.

@@ -1,6 +1,6 @@
 from helper.common import showJSONMessage, dataKeyChecker, timeString, findNotes, errorResponse
 from helper import loadSettings
-from interrupts.controller import callInterrupt
+# from interrupts.controller import callInterrupt
 from type.pages import controller
 import json, uuid, os
 
@@ -157,4 +157,4 @@ async def createNotebook(request,websocket):
     await websocket.send(responseString)
     showJSONMessage(responseString)
 
-    await callInterrupt(websocket,"newInfo",{"action":"createNotebook"})
+    # await callInterrupt(websocket,"newInfo",{"action":"createNotebook"})
