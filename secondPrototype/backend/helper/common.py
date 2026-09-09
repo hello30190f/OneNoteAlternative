@@ -1,15 +1,17 @@
 import os.path, subprocess, pexpect, sys, time
 
-def generateDefaultSetting(Settings:dict):
+def generateDefaultSetting(Settings:dict) -> None:
     # copy settings.deafult.json as settings.json
     pass
 
 
 
-def executeCommand(command:str):
+def executeCommand(command:str) -> None:
     response = subprocess.run([command,],shell=True,capture_output=True)
     print(response.stdout.decode())
     print("Exit: {}".format(response.returncode))
+
+
 
 def initVenv(Settings:dict) -> pexpect.spawn:
     VenvPath = Settings["backendBaseFolderPath"] + "/dataServerVenv"
@@ -20,8 +22,6 @@ def initVenv(Settings:dict) -> pexpect.spawn:
         print("Prepare for python venv environment")
         command = "cd {}; python -m venv dataServerVenv".format(Settings["backendBaseFolderPath"])
         executeCommand(command)
-
-    
 
     # activate python venv (create terminal session)
     dataServerSession = pexpect.spawn("/bin/bash", timeout=5, encoding='utf-8')
@@ -34,7 +34,7 @@ def initVenv(Settings:dict) -> pexpect.spawn:
     pexpectExecuteCommand(dataServerSession,"pip install -r requirements.txt")
     return dataServerSession
 
-def pexpectExecuteCommand(session:pexpect.spawn,command:str):
+def pexpectExecuteCommand(session:pexpect.spawn,command:str) -> None:
     session.sendline(command)
     # Give the command time to get executed
     time.sleep(1)
