@@ -21,12 +21,17 @@ def initVenv(Settings:dict) -> pexpect.spawn:
         command = "cd {}; python -m venv dataServerVenv".format(Settings["backendBaseFolderPath"])
         executeCommand(command)
 
+    
+
     # activate python venv (create terminal session)
     dataServerSession = pexpect.spawn("/bin/bash", timeout=5, encoding='utf-8')
     dataServerSession.logfile = sys.stdout
     # Give the terminal time to start
     time.sleep(1)
     pexpectExecuteCommand(dataServerSession,"source {}".format(SourcePath))
+    # install dependency
+    pexpectExecuteCommand(dataServerSession,"cd {}".format(Settings["backendBaseFolderPath"]))
+    pexpectExecuteCommand(dataServerSession,"pip install -r requirements.txt")
     return dataServerSession
 
 def pexpectExecuteCommand(session:pexpect.spawn,command:str):

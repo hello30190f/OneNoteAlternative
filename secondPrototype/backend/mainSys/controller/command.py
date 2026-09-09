@@ -1,8 +1,8 @@
-from common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop
+from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop
 from websockets import serve
 import asyncio
 
-from runtime import commandExtensionMoludes
+from controller.runtime import commandExtensionMoludes
 
 # serve websocket connection
 # call command modules from extensions by reading extensionMoludes array
@@ -12,6 +12,7 @@ from runtime import commandExtensionMoludes
 
 Settings = None
 def init(RuntimeSettings:dict):
+    print("Command controller init")
     global Settings
     Settings = RuntimeSettings
     asyncio.run(startCommandController())

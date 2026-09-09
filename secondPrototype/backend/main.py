@@ -3,7 +3,7 @@
 # This is the entry point for dataserver. Dataserver should be started with this script.
 # This is the entry point for dataserver. Dataserver should be started with this script.
 
-import json, sys, os.path, pexpect, argparse
+import json, sys, os.path, pexpect, argparse, time
 from extensionLoader.main import loadExtension
 from helper.common import initVenv, pexpectExecuteCommand
 
@@ -29,7 +29,12 @@ def startMainSystemOption(Settings:dict):
     pexpectExecuteCommand(session,"cd {}".format(mainSysFolder))
     pexpectExecuteCommand(session,"python -u main.py")
 
+    print("Serve forever state.")
+    waitForever()
 
+def waitForever():
+    while True:
+        time.sleep(100) # For single loop, wait 100 sec 
 
 
 # Load parmanent server settings ------------------

@@ -38,11 +38,15 @@ if __name__ == "__main__":
         print("\tThre is invalid runtime setting file. DataServer will abort to start.")
         sys.exit(1)
 
+    print(Settings)
+
     processes = []
     for host in hosting:
         process = multiprocessing.Process(target=host,args=(Settings,))
         process.start()
         processes.append(process)
+
+    print(processes)
 
     try:
         for process in processes:
