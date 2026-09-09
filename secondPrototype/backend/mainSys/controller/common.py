@@ -6,6 +6,27 @@ from controller.pages import getPageTemplate
 
 
 # arg:
+#   data    : the dict data of "data" key inside the request from the forntend.
+#   keylist : the key list that the command require to work.
+# return value
+#   OK      : None
+#   Error   : ["missing","keys","list"]
+def dataKeyChecker(data:dict,keylist:list):
+    missing = []
+
+    for aCompareKey in keylist:
+        find = False
+        for aDataKey in data.keys():
+            if(aDataKey == aCompareKey):
+                find = True
+                break
+        if(not find):
+            missing.append(aCompareKey)
+
+    if(len(missing) == 0):  return None
+    else:                   return missing 
+
+# arg:
 #   JSONstring  : JSON string got received from the connected frontend or will be sent to the frontend.
 #   receive     : To show received JSON message, make this arg True otherwise the JSONstring will be shown as a sent JSONstring to the frontend.
 # return value
@@ -119,9 +140,10 @@ class moduleArgs:
         self.websocket  = websocket
         self.settings   = Settings
         self.funcs      = {
-            "showJSONMessage": showJSONMessage,
-            "callInterrupt": callInterrupt,
-            "getPageTemplate": getPageTemplate
+            "showJSONMessage"   : showJSONMessage,
+            "callInterrupt"     : callInterrupt,
+            "getPageTemplate"   : getPageTemplate,
+            "dataKeyChecker"    : dataKeyChecker
         }
 
     def getArgs(self) -> dict:

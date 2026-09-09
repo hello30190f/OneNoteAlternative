@@ -1,7 +1,7 @@
 from helper.common import timeString
 import json, uuid
 
-def free(data):
+def free(data) -> str:
     return json.dumps({
         "pageType": "free",
         "tags": [],

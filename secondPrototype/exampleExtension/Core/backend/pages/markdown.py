@@ -6,7 +6,7 @@ This is a blank page.
 """
 
 # https://www.w3schools.com/python/ref_string_format.asp
-def markdown(data):
+def markdown(data) -> str:
     return "++++\n" + json.dumps({
         "files": [],
         "tags": [],

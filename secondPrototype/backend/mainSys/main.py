@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("Load Runtime Settings --------------------------")
 
     if(not os.path.exists("./runtime.json")):
-        print("\tThre is no runtime setting file. DataServer will abort to start.")
+        print("\tThere is no runtime setting file. DataServer will abort to start.")
         sys.exit(1)
 
     Settings = None
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         Settings = json.loads(settings.read())
 
     if(not isinstance(Settings,dict) or Settings == None):
-        print("\tThre is invalid runtime setting file. DataServer will abort to start.")
+        print("\tThere is invalid runtime setting file. DataServer will abort to start.")
         sys.exit(1)
 
     print(Settings)

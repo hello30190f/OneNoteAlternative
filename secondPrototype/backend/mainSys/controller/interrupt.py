@@ -21,7 +21,6 @@ from controller.runtime import interruptExtensionMoludes
 #         except:
 #             print("DataServer Command controller hosting stopped.")
 
-# #TODO: implement close websocket func
 # async def mainLoop(websocket:ServerConnection) -> None:
 #     websocketConnections.append(websocket)
 
