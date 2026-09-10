@@ -14,12 +14,14 @@
 ## Controllers
  Frontend need to connect `localhost:50097`(Command) and `localhost:50098`(Interrupt)
 ### Passive controllers
+ Passive controllers are called internally on the DataServer.
 #### Interrupt
  Generate a interrupt signal to the frontend to make sure all frontends that connect to the same DataServer synced
 #### Page
  Generate a blank page on demand. 
 
 ### Active controllers
+ Active controllers are called externally from the frontend or other DataServer.
 #### Command
  Wait for command request from connected frontends or other DataServer.
 #### Task
