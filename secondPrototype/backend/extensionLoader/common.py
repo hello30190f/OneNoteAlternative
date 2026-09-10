@@ -6,7 +6,7 @@ from helper.common  import pexpectExecuteCommand
 
 
 class aExtension:
-    def __init__(self,extensionPath:str,backendBasePath:str,runtimePath:str,session:pexpect.spawn):
+    def __init__(self,extensionPath:str,backendBasePath:str,runtimePath:str,session:pexpect.spawn) -> None:
         self.zipPath        = extensionPath
         self.terminal       = session
         self.runtimePath    = runtimePath
@@ -23,20 +23,20 @@ class aExtension:
 
     # init -----------------------------
     # init -----------------------------
-    def findExtFileNameFromPath(self):
+    def findExtFileNameFromPath(self) -> None:
         self.zipFileName = self.zipPath.split("/")[-1]
 
-    def findUUIDfromFileName(self):
+    def findUUIDfromFileName(self) -> None:
         # -4 -> length of ".zip", 
         # -36 -> length of UUIDv4
         self.UUID = self.zipFileName[-36-4:-4]
 
-    def findExtName(self):
+    def findExtName(self) -> None:
         # -4 -> length of ".zip", 
         # -36 -> length of UUIDv4
         self.name = self.zipFileName[:-36-4]
 
-    def unzip(self):
+    def unzip(self) -> None:
         with ZipFile(self.zipPath,"r") as extension:
             extension.extractall(self.runtimePath)
     # init -----------------------------
@@ -55,7 +55,7 @@ class aExtension:
         if(self.manifest == None): return False
         return self.manifest
 
-    def getUUID(self):
+    def getUUID(self) -> str:
         return self.UUID
     # getter -----------------------------
     # getter -----------------------------

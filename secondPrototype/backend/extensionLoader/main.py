@@ -9,7 +9,7 @@ from extensionLoader.common         import aExtension
 import os, pexpect
 
 
-def loadExtension(Settings:dict,session:pexpect.spawn):
+def loadExtension(Settings:dict,session:pexpect.spawn) -> None:
     extensionInstances = []
     # unzip each extensions and place it into extensions/runtime/[extName-UUID].
     # if the extension has already been "unziped", 
@@ -72,9 +72,10 @@ def loadExtension(Settings:dict,session:pexpect.spawn):
             print("'{}' has error on python dependency. This extension will not be loaded".format(extensionInstance.getExtensionAbsolutePath()))
 
         # return {
-        #     "CommandModules": commandModuleImportList,
-        #     "InterruptModules": interruptModuleImportList,
-        #     "TaskModules": taskModuleImportList
+        #     "CommandModules"    : commandModuleImportList,
+        #     "InterruptModules"  : interruptModuleImportList,
+        #     "TaskModules"       : taskModuleImportList,
+        #     "PageModules"       : pageModuleImportList
         # }
         # init dataserver runtime
         # append import list (python), append array that hold all imported module. 

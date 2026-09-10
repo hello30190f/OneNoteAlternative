@@ -21,7 +21,7 @@
  Generate a blank page on demand. 
 
 ### Active controllers
- Active controllers are called externally from the frontend or other DataServer.
+ Active controllers are called externally from the frontend or other DataServers.
 #### Command
  Wait for command request from connected frontends or other DataServer.
 #### Task
