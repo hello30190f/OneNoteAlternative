@@ -12,7 +12,7 @@
 
 # Note
 ## Controllers
- Frontend need to connect `localhost:50097`
+ Frontend need to connect `localhost:50097`(Command) and `localhost:50098`(Interrupt)
 ### Passive controllers
 #### Interrupt
  Generate a interrupt signal to the frontend to make sure all frontends that connect to the same DataServer synced
