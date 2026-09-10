@@ -3,7 +3,7 @@ import asyncio
 from controller.runtime import taskExtensionMoludes
 
 
-Settings = None
+Settings: dict | None = None
 def init(RuntimeSettings:dict) -> None:
     print("Task controller init")
     global Settings

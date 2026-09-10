@@ -133,8 +133,44 @@ async def receiveLoop(websocket:ServerConnection,callback) -> None:
             break
 
 
+# TODO: remove closed websocket
+# arg:
+#   websocket       : the connection to the frontend via websocket
+#   interrupt       : content of the interrupt
+# return value
+#   OK      : False will be returned. It mean there are no problems
+#   Error   : True will be returned. It mean there are something missing in dict keys of "interrupt" arg
+async def sendInterrupt(allWebSocketConnections:list[ServerConnection],interrupt:dict) -> bool:
+#   "evnet" : "eventName",
+#   "UUID"  : "UUID string",
+#   "data"  : { }
+    if(
+        "event"         in interrupt.keys() and
+        "UUID"          in interrupt.keys() and
+        "data"          in interrupt.keys() and
+        "responseType"  in interrupt.keys()
+        ):
+        responseString = json.dumps(interrupt)
+        showJSONMessage(responseString)
+        for Awebsocket in allWebSocketConnections:
+            try:
+                await Awebsocket.send(responseString)            
+            except Exception as e:
+                # print("sendInterrupt helper INFO: Ignore the disconnected websocket.")
+                # print(e)
+                pass
+        # print(websockets)
+        return False
+    
+    else:
+        print("sendInterrupt helper ERROR: Mandatory keys are missing")
+        print("componentName,interrupt,UUID,data")
+        print(interrupt)
+        return True
 
-class moduleArgs: 
+
+
+class commandModuleArgs: 
     def __init__(self,request:dict,websocket:ServerConnection,Settings:dict) -> None:
         self.request    = request
         self.websocket  = websocket
@@ -152,4 +188,21 @@ class moduleArgs:
             "websocket" : self.websocket,
             "funcs"     : self.funcs,
             "Settings"  : self.settings
+        }
+
+class interruptModuleArgs:
+    def __init__(self,data:dict,websocket:ServerConnection,allWebSocketConnections:list[ServerConnection]) -> None:
+        self.data           = data
+        self.mainConnection = websocket
+        self.allConnection  = allWebSocketConnections
+        self.funcs          = {
+            "sendInterrupt" : sendInterrupt
+        }
+
+    def getArgs(self) -> dict:
+        return {
+            "data"          : self.data,
+            "mainConnection": self.mainConnection,
+            "allConnection" : self.allConnection,
+            "funcs"         : self.funcs
         }

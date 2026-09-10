@@ -1,4 +1,4 @@
-from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, moduleArgs
+from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, commandModuleArgs
 from websockets import serve
 from websockets.asyncio.server import ServerConnection
 import asyncio
@@ -11,7 +11,7 @@ from controller.runtime import commandExtensionMoludes
 # interrupt controller need new websocket connection.
 # frontend need to connect for both command and interrupt websocket connection.
 
-Settings = None
+Settings: dict | None = None
 def init(RuntimeSettings:dict) -> None:
     print("Command controller init")
     global Settings
@@ -52,7 +52,7 @@ async def controller(message:str,websocket:ServerConnection) -> None:
     # try to call the requested command if it does exist.
     for aCommand in commandExtensionMoludes.keys():
         if(aCommand == requestedCommand):
-            await commandExtensionMoludes[requestedCommand](moduleArgs(request,websocket,Settings))
+            await commandExtensionMoludes[requestedCommand](commandModuleArgs(request,websocket,Settings))
             commandFound = True
             break
 

@@ -4,6 +4,7 @@ import multiprocessing, sys, os.path, json
 
 from controller.command     import init as command
 from controller.task        import init as task
+from controller.interrupt   import init as interrupt
 
 from hosting.fileTransfar   import init as fileTransfar
 from hosting.frontendServe  import init as frontendServe
@@ -13,6 +14,7 @@ from hosting.frontendServe  import init as frontendServe
 hosting = [
     command,
     task,
+    interrupt,
     fileTransfar,
     frontendServe
 ]
