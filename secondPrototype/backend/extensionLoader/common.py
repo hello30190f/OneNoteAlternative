@@ -57,6 +57,9 @@ class aExtension:
 
     def getUUID(self) -> str:
         return self.UUID
+
+    def getExtensionWorkingPath(self) -> str:
+        return self.workingDirPath
     # getter -----------------------------
     # getter -----------------------------
         
@@ -89,7 +92,7 @@ class aExtension:
         return False
     
 
-
+        
     # Path List
     # mainSys/controller/command.py
     # mainSys/controller/interrupt.py
@@ -102,7 +105,8 @@ class aExtension:
     # extensions/runtime/[extName]-[UUID]/
     # base path as "mainSys"
     def getImportString(self) -> dict | None:
-        self.pathAdjust:str = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
+        # self.pathAdjust:str = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
+        self.pathAdjust:str = "{}.".format(self.zipFileName[:-4])
 
         def createImportString(modulePath:str) -> str:
             path = self.pathAdjust + modulePath.replace(".py","").replace("/",".")

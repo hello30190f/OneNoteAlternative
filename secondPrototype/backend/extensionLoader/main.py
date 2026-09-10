@@ -10,17 +10,17 @@ import os, pexpect
 
 
 def loadExtension(Settings:dict,session:pexpect.spawn) -> None:
-    extensionInstances = []
+    extensionInstances:list[aExtension] = []
     # unzip each extensions and place it into extensions/runtime/[extName-UUID].
     # if the extension has already been "unziped", 
     #   let it as is, when there is no update.              (Clac checksum of ext zip)
     #   remove and unzip again, when there is any updates.  (Clac checksum of ext zip)
     # create a exetnsion instance to manage for each extensions. The instance will handle the extension manifest.
-    basePath                        = Settings["backendBaseFolderPath"]
-    extensionFolder                 = basePath + "/extensions/"
-    runtimePath                     = extensionFolder + "runtime/"
-    mainSysPath                     = basePath + "/mainSys/"
-    dataServerMainSysRuntimePath    = mainSysPath + "controller/runtime.py"
+    basePath                        :str    = Settings["backendBaseFolderPath"]
+    extensionFolder                 :str    = basePath          + "/extensions/"
+    runtimePath                     :str    = extensionFolder   + "runtime/"
+    mainSysPath                     :str    = basePath          + "/mainSys/"
+    dataServerMainSysRuntimePath    :str    = mainSysPath       + "controller/runtime.py"
 
     print("\n\nLoading extensions is begun ---------------")
     print("Loading extensions is begun ---------------")
@@ -30,8 +30,6 @@ def loadExtension(Settings:dict,session:pexpect.spawn) -> None:
     print("\t" + mainSysPath)
     print("\t" + dataServerMainSysRuntimePath + "\n\n")
 
-    # if(not os.path.exists(runtimePath)):
-    #     os.mkdir(runtimePath)
 
     for extension in os.listdir(extensionFolder):
         if(extension[-4:] == ".zip"):
@@ -50,7 +48,15 @@ def loadExtension(Settings:dict,session:pexpect.spawn) -> None:
     # compose extension to mainSys -------------------
     # compose extension to mainSys -------------------
     # prepare for "runtime" template that can be appended to.
-    # create folder extensionLoader/build to store templates to be built for the frontend. 
+    # create runtime.py
+    # register system path
+    dataServerRegisterExtensionRuntimePath = """
+# Register runtimePath
+if(not '{}' in sys.path):
+    import sys
+    sys.path.append('{}')\n\n
+""".format(runtimePath,runtimePath)
+
     dataServerCommandImportString   = ""
     dataServerInterruptImportString = ""
     dataServerTaskImportString      = ""
@@ -124,7 +130,8 @@ def loadExtension(Settings:dict,session:pexpect.spawn) -> None:
     dataServerTaskModuleHead = "# Task\n"       + dataServerTaskImportString            + "\n" + dataServerTaskModuleArrayString        + "\n"
     dataServerPageModuleHead = "# Page\n"       + dataServerPageImportString            + "\n" + dataServerPageModuleArrayString
 
-    finalStringForDataServerRuntime = "{}\n{}\n{}\n{}\n".format(
+    finalStringForDataServerRuntime = "{}\n{}\n{}\n{}\n{}\n".format(
+        dataServerRegisterExtensionRuntimePath,
         dataServerCommandHead,
         dataServerInterruptHead,
         dataServerTaskModuleHead,
