@@ -488,3 +488,25 @@ class interruptModuleArgs:
             "allConnection" : self.allConnection,
             "funcs"         : self.funcs
         }
+
+class pageModuleArgs:
+    def __init__(self,data:dict) -> None:
+        self.data   = data
+        self.funcs  = {
+            # common lib
+            "showJSONMessage"               : showJSONMessage,
+            "dataKeyChecker"                : dataKeyChecker,
+            "timeString"                    : timeString,
+            "findNotes"                     : findNotes,
+            "checkTheAbsolutePath"          : checkTheAbsolutePath,
+            "deleteDataSafely"              : deleteDataSafely,
+            "updateNotebookMatadata"        : updateNotebookMatadata,
+            "readMetadataFormMarkdownPage"  : readMetadataFormMarkdownPage,
+            "mkdir"                         : mkdir,
+        }
+
+    def getArgs(self) -> dict:
+        return { 
+            "data"  : self.data,
+            "funcs" : self.funcs
+        }
