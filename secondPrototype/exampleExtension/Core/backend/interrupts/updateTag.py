@@ -1,7 +1,7 @@
 # from helper.common import sendInterrupt
 import uuid
 
-from extensionBase import interruptModuleArgs
+# from extensionBase import interruptModuleArgs
 
 actionList = [
     "addTag",

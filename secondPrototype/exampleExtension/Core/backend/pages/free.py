@@ -1,14 +1,18 @@
-from helper.common import timeString
+# from helper.common import timeString
+
 import json, uuid
 
-def free(data) -> str:
+# from extensionBase import pageModuleArgs
+
+def free(moduleArgs:pageModuleArgs) -> str:
+    time = moduleArgs.funcs["timeString"]()
     return json.dumps({
         "pageType": "free",
         "tags": [],
         "files": [],
         "UUID": str(uuid.uuid4()),
-        "createDate": timeString(),
-        "updateDate": timeString(),
+        "createDate": time,
+        "updateDate": time,
         "pageData":{
             "items":[]
         }
