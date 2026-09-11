@@ -1,7 +1,7 @@
 import asyncio
 
 from controller.runtime import taskExtensionMoludes
-
+from controller.common import taskModuleArgs
 
 Settings: dict | None = None
 def init(RuntimeSettings:dict) -> None:
@@ -17,7 +17,11 @@ async def controller(interval:int) -> None:
             print("taskController: Please make it longer.")
             interval = 1
 
+        if(Settings == None):
+            print("taskController: Task controller get no settings to execute tasks.")
+            continue
+
         for jobName in taskExtensionMoludes.keys():
-            taskExtensionMoludes[jobName]()
+            taskExtensionMoludes[jobName](taskModuleArgs(Settings))
 
         await asyncio.sleep(interval)

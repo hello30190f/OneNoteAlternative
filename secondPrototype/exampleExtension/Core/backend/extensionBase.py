@@ -6,6 +6,7 @@ from websockets.asyncio.server import ServerConnection
 def placeHolderFunc() -> None:
     return
 
+
 class commandModuleArgs: 
     def __init__(self,request:dict,websocket:ServerConnection,Settings:dict) -> None:
         self.request    = request
@@ -36,13 +37,13 @@ class commandModuleArgs:
             "malformedRequestChecker"       : malformedRequestChecker,
         }
 
-    def getArgs(self) -> dict:
-        return {
-            "request"   : self.request,
-            "websocket" : self.websocket,
-            "funcs"     : self.funcs,
-            "Settings"  : self.settings
-        }
+    # def getArgs(self) -> dict:
+    #     return {
+    #         "request"   : self.request,
+    #         "websocket" : self.websocket,
+    #         "funcs"     : self.funcs,
+    #         "Settings"  : self.settings
+    #     }
 
 class interruptModuleArgs:
     def __init__(self,data:dict,websocket:ServerConnection,allWebSocketConnections:list[ServerConnection]) -> None:
@@ -50,18 +51,17 @@ class interruptModuleArgs:
         self.mainConnection = websocket
         self.allConnection  = allWebSocketConnections
         self.funcs          = {
-            "sendInterrupt" : placeHolderFunc
+            "sendInterrupt" : sendInterrupt
         }
 
-    def getArgs(self) -> dict:
-        return {
-            "data"          : self.data,
-            "mainConnection": self.mainConnection,
-            "allConnection" : self.allConnection,
-            "funcs"         : self.funcs
-        }
+    # def getArgs(self) -> dict:
+    #     return {
+    #         "data"          : self.data,
+    #         "mainConnection": self.mainConnection,
+    #         "allConnection" : self.allConnection,
+    #         "funcs"         : self.funcs
+    #     }
 
-    
 class pageModuleArgs:
     def __init__(self,data:dict) -> None:
         self.data   = data
@@ -78,8 +78,30 @@ class pageModuleArgs:
             "mkdir"                         : mkdir,
         }
 
-    def getArgs(self) -> dict:
-        return { 
-            "data"  : self.data,
-            "funcs" : self.funcs
+    # def getArgs(self) -> dict:
+    #     return { 
+    #         "data"  : self.data,
+    #         "funcs" : self.funcs
+    #     }
+
+
+class taskModuleArgs:
+    def __init__(self,Settings:dict) -> None:
+        self.settings   = Settings
+        self.funcs      = {
+            # common lib
+            "showJSONMessage"               : showJSONMessage,
+            "dataKeyChecker"                : dataKeyChecker,
+            "timeString"                    : timeString,
+            "findNotes"                     : findNotes,
+            "checkTheAbsolutePath"          : checkTheAbsolutePath,
+            "deleteDataSafely"              : deleteDataSafely,
+            "updateNotebookMatadata"        : updateNotebookMatadata,
+            "readMetadataFormMarkdownPage"  : readMetadataFormMarkdownPage,
+            "mkdir"                         : mkdir,
         }
+
+    # def getArgs(self) -> dict:
+    #     return {
+    #         "funcs": self.funcs
+    #     }

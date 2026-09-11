@@ -1,6 +1,6 @@
 import time
 
-def showPingMessage(): 
+def showPingMessage(moduleArgs:taskModuleArgs): 
     print("observe scheduled task")
     current = time.localtime()
     print("{:04d}/{:02d}/{:02d} {:02d}:{:02d}:{:02d}".format(
