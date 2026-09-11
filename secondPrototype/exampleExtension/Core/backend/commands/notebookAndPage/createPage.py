@@ -1,9 +1,12 @@
-from helper.common import showJSONMessage, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata, errorResponse, mkdir
-from interrupts.controller import callInterrupt
-from helper import loadSettings 
-import os , os.path , json , subprocess
-from type.pages import controller
-import platform
+# from helper.common import showJSONMessage, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata, errorResponse, mkdir
+# from interrupts.controller import callInterrupt
+# from helper import loadSettings 
+# from type.pages import controller
+
+# from extensionBase import commandModuleArgs
+
+import os , os.path , json , subprocess, platform
+
 
 # response note
 # {
@@ -26,13 +29,13 @@ import platform
 
 # TODO: update notebook metadata.
 # TODO: send an interrupt to the all forntends to notify this update.
-async def createPage(request,websocket):
+async def createPage(moduleArgs:commandModuleArgs):
     mandatoryKeys   = ["notebook","newPageID","pageType"]
-    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    missing         = moduleArgs.funcs["dataKeyChecker"](moduleArgs.request["data"],mandatoryKeys)
     if(missing != None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Mandatory keys are missing for this command.",
             [mandatoryKeys,missing]
         )
@@ -40,14 +43,14 @@ async def createPage(request,websocket):
 
 
 
-    pageType                    = request["data"]["pageType"]
-    notebookName                = request["data"]["notebook"]
-    pagePathFromContentFolder   = request["data"]["newPageID"]
+    pageType                    = moduleArgs.request["data"]["pageType"]
+    notebookName                = moduleArgs.request["data"]["notebook"]
+    pagePathFromContentFolder   = moduleArgs.request["data"]["newPageID"]
 
     if(pagePathFromContentFolder[0] == "/"):
         pagePathFromContentFolder = pagePathFromContentFolder[1:]
 
-    pagePath = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
+    pagePath = moduleArgs.settings["notebookPath"] + "/" + notebookName + "/contents/" + pagePathFromContentFolder
     pagePath = pagePath.replace("//","/")
     filename = pagePath.split("/")[-1]
     folder   = pagePath.replace(filename,"")
@@ -57,10 +60,10 @@ async def createPage(request,websocket):
     if(not os.path.exists(folder)):
         # TODO: ~~support windows env -> implement and use mkdirRecursively function in helper.common~~ -> mkdir
         # create folder
-        if(mkdir(folder)):
-            await errorResponse(
-                websocket,
-                request,
+        if(moduleArgs.funcs["mkdir"](folder)):
+            await moduleArgs.funcs["errorResponse"](
+                moduleArgs.websocket,
+                moduleArgs.request,
                 "The backend error. Failed to create an new folder.",
                 [notebookName,pagePathFromContentFolder,pagePath,folder]
             )
@@ -70,9 +73,9 @@ async def createPage(request,websocket):
 
     # check the page existance
     if(os.path.exists(pagePath)): 
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "duplicate pageID",
             [notebookName,pagePathFromContentFolder,pagePath]
         )
@@ -107,9 +110,9 @@ async def createPage(request,websocket):
     # }
 
     async def UnableUpdateNotebookMetadataResponse(error = None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to update the notebook metadata",
             [notebookName,pagePathFromContentFolder,pagePath],
             error
@@ -117,7 +120,7 @@ async def createPage(request,websocket):
 
     # update notebook metadata.json
     try:
-        notebookJSONinfo = findNotes()
+        notebookJSONinfo = moduleArgs.funcs["findNotes"]()
         if(notebookJSONinfo == None):
             await UnableUpdateNotebookMetadataResponse()
             return
@@ -134,7 +137,7 @@ async def createPage(request,websocket):
         
         # register new page ref to notebook metadata.json
         targetNotebookMetadata["pages"].append(pagePathFromContentFolder)
-        if(updateNotebookMatadata(notebookName,targetNotebookMetadata)):
+        if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebookMetadata)):
             await UnableUpdateNotebookMetadataResponse()
             return
 
@@ -150,7 +153,7 @@ async def createPage(request,websocket):
         with open(pagePath,"wt",encoding="utf-8") as page:
             # call page template
             # TODO: implement data for generating init page
-            pageTemplate = controller.getPageTemplate(pageType,None)
+            pageTemplate = moduleArgs.funcs["getPageTemplate"](pageType,None)
             if(pageTemplate != None):
                 page.write(pageTemplate)
             else:
@@ -163,10 +166,10 @@ async def createPage(request,websocket):
 
     if(failed):
         # remove the failed page
-        deleteDataSafely(pagePath)
-        await errorResponse(
-            websocket,
-            request,
+        moduleArgs.funcs["deleteDataSafely"](pagePath)
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The backend error. Failed to create a new file for the new page.",
             [notebookName,pagePathFromContentFolder,pagePath],
             error
@@ -175,13 +178,13 @@ async def createPage(request,websocket):
         responseString = json.dumps({
             "responseType"  : "commandResponse",
             "status"        : "ok",
-            "UUID"          : request["UUID"],
+            "UUID"          : moduleArgs.request["UUID"],
             "command"       : "createPage",
             "errorMessage"  : "nothing",
             "data"          : { }
         })
-        await websocket.send(responseString)
-        showJSONMessage(responseString)
+        await moduleArgs.websocket.send(responseString)
+        moduleArgs.funcs["showJSONMessage"](responseString)
 
-        await callInterrupt(websocket,"newInfo",{"action":"createPage"})
+        await moduleArgs.funcs["callInterrupt"](moduleArgs.websocket,"newInfo",{"action":"createPage"})
 

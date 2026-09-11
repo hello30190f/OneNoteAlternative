@@ -1,7 +1,11 @@
-from helper.common import showJSONMessage, dataKeyChecker, deleteDataSafely, errorResponse
-from interrupts.controller import callInterrupt
-from helper import loadSettings 
+# from helper.common import showJSONMessage, dataKeyChecker, deleteDataSafely, errorResponse
+# from interrupts.controller import callInterrupt
+# from helper import loadSettings 
+
 import json, os, os.path
+
+# from extensionBase import commandModuleArgs
+
 
 # ## args (frontend to dataserver)
 # ```json
@@ -26,38 +30,38 @@ import json, os, os.path
 # ```
 # TODO: send an interrupt to the all forntends to notify this update.
 
-async def deleteNotebook(request,websocket):
+async def deleteNotebook(moduleArgs:commandModuleArgs):
     # If there are no mandatory keys for the command, this checker code can be omitted.
     mandatoryKeys   = ["notebook"]
-    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    missing         = moduleArgs.funcs["dataKeyChecker"](moduleArgs.request["data"],mandatoryKeys)
     if(missing != None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Mandatory keys are missing for this command.",
             [mandatoryKeys,missing]
         )
         return
     
-    notebookName        = request["data"]["notebook"]
-    notebookFolderPath  = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName
+    notebookName        = moduleArgs.request["data"]["notebook"]
+    notebookFolderPath  = moduleArgs.settings["notebookPath"] + "/" + notebookName
     notebookFolderPath  = notebookFolderPath.replace("//","/")
 
     # check the notebook existance
     if(not os.path.exists(notebookFolderPath)):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The notebook has already not existed.",
             []
         )
         return
     
     # delete the notebook and then error handling.
-    if(deleteDataSafely(notebookFolderPath)):
-        await errorResponse(
-            websocket,
-            request,
+    if(moduleArgs.funcs["deleteDataSafely"](notebookFolderPath)):
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to delete the notebook.",
             []
         )
@@ -67,12 +71,12 @@ async def deleteNotebook(request,websocket):
     responseString = json.dumps({
         "responseType"  : "commandResponse",
         "status"        : "ok",
-        "UUID"          : request["UUID"],
+        "UUID"          : moduleArgs.request["UUID"],
         "command"       : "deleteNotebook",
         "errorMessage"  : "nothing",
         "data"          : { }
     })
-    await websocket.send(responseString)
-    showJSONMessage(responseString)
+    await moduleArgs.websocket.send(responseString)
+    moduleArgs.funcs["showJSONMessage"](responseString)
 
-    await callInterrupt(websocket,"newInfo",{"action":"deleteNotebook"})
+    await moduleArgs.funcs["callInterrupt"](moduleArgs.websocket,"newInfo",{"action":"deleteNotebook"})

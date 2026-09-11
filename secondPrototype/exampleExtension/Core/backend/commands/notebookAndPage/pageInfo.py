@@ -1,14 +1,16 @@
-from helper.common import showJSONMessage, dataKeyChecker, errorResponse
-from helper import loadSettings 
+# from helper.common import showJSONMessage, dataKeyChecker, errorResponse
+# from helper import loadSettings 
 import json
 
-async def pageInfo(request,websocket):
+# from extensionBase import commandModuleArgs
+
+async def pageInfo(moduleArgs:commandModuleArgs):
     mandatoryKeys   = ["notebook","pageID"]
-    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    missing         = moduleArgs.funcs["dataKeyChecker"](moduleArgs.request["data"],mandatoryKeys)
     if(missing != None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Mandatory keys are missing for this command.",
             [mandatoryKeys,missing]
         )
@@ -16,10 +18,10 @@ async def pageInfo(request,websocket):
     
     
 
-    root = loadSettings.settings["NotebookRootFolder"][0]
+    root = moduleArgs.settings["notebookPath"]
 
-    pagePathFromContent = request["data"]["pageID"]
-    notebookName        = request["data"]["notebook"]
+    pagePathFromContent = moduleArgs.request["data"]["pageID"]
+    notebookName        = moduleArgs.request["data"]["notebook"]
     targetPath          = root + "/" + notebookName + "/contents/" + pagePathFromContent
     
     try:
@@ -46,7 +48,7 @@ async def pageInfo(request,websocket):
             responseString = json.dumps({
                 "responseType"  : "commandResponse",
                 "status"        : "ok",
-                "UUID"          : request["UUID"],
+                "UUID"          : moduleArgs.request["UUID"],
                 "command"       : "pageInfo",
                 "errorMessage"  : "nothing",
                 "data": {
@@ -56,14 +58,14 @@ async def pageInfo(request,websocket):
                     "pageData": contentString
                 }
             })
-            await websocket.send(responseString)
-            showJSONMessage(responseString)
+            await moduleArgs.websocket.send(responseString)
+            moduleArgs.funcs["showJSONMessage"](responseString)
 
 
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "unable to open or read data.",
             [pagePathFromContent,notebookName,targetPath],
             error

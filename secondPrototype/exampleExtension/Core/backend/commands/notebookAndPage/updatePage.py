@@ -2,9 +2,12 @@
 # Currently to keep things simple, just rewite entire page string into new one.
 # No partial update function exist.
 
-from helper.common import showJSONMessage, dataKeyChecker, errorResponse, findNotes, timeString, updateNotebookMatadata
-from interrupts.controller import callInterrupt
-from helper import loadSettings 
+# from helper.common import showJSONMessage, dataKeyChecker, errorResponse, findNotes, timeString, updateNotebookMatadata
+# from interrupts.controller import callInterrupt
+# from helper import loadSettings 
+
+# from extensionBase import commandModuleArgs
+
 import json, os.path
 
 # ## args (frontend to dataserver)
@@ -33,13 +36,13 @@ import json, os.path
 # ```
 
 # TODO: send an interrupt to the all forntends to notify this update.
-async def updatePage(request,websocket):
+async def updatePage(moduleArgs:commandModuleArgs):
     mandatoryKeys   = ["notebook","pageID","pageType","update"]
-    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    missing         = moduleArgs.funcs["dataKeyChecker"](moduleArgs.request["data"],mandatoryKeys)
     if(missing != None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Mandatory keys are missing for this command.",
             [mandatoryKeys,missing]
         )
@@ -47,28 +50,28 @@ async def updatePage(request,websocket):
 
 
     # gather infomation
-    notebookName        = request["data"]["notebook"]
-    pageID              = request["data"]["pageID"]
-    pageType            = request["data"]["pageType"]
-    updateDataString    = request["data"]["update"]
+    notebookName        = moduleArgs.request["data"]["notebook"]
+    pageID              = moduleArgs.request["data"]["pageID"]
+    pageType            = moduleArgs.request["data"]["pageType"]
+    updateDataString    = moduleArgs.request["data"]["update"]
 
-    pagePath            = loadSettings.settings["NotebookRootFolder"][0] + "/" + notebookName + "/contents/" + pageID 
+    pagePath            = moduleArgs.settings["notebookPath"] + "/" + notebookName + "/contents/" + pageID 
     # gather infomation
 
     # TODO: write the document about this error.
     # check the extention
     if(pageType == "markdown" and not "md" in pageID):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The page type mismatch.",
             [notebookName,pageID,pageType,pagePath]
             )
         return
     elif(not pageType == "markdown" and not "json" in pageID):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The page type mismatch.",
             [notebookName,pageID,pageType,pagePath]
             )
@@ -77,20 +80,20 @@ async def updatePage(request,websocket):
 
     # check the page exist or not
     if(not os.path.exists(pagePath)):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The page does not exist.",
             [notebookName,pageID,pageType,pagePath]
             )
         return
     
     # check the notebook exist or not
-    notebookJSONinfo = findNotes()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
     if(notebookJSONinfo == None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to obtain metadata of each notebooks.",
             [notebookName,pageID,pageType,pagePath]
             )
@@ -102,9 +105,9 @@ async def updatePage(request,websocket):
             targetNotebookMetadata = notebookJSONinfo[aNotebookName]
             break
     if(targetNotebookMetadata == None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The notebook does not exist.",
             [notebookName,pageID,pageType,pagePath]
             )
@@ -118,9 +121,9 @@ async def updatePage(request,websocket):
             break
 
     if(not find):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "The page ref has already been deleted.",
             [notebookName,pageID,pageType,pagePath,targetNotebookMetadata]
             )
@@ -134,9 +137,9 @@ async def updatePage(request,websocket):
         # markdown format
         splitResult = updateDataString.split("++++")
         if(len(splitResult) < 3):
-            await errorResponse(
-                websocket,
-                request,
+            await moduleArgs.funcs["errorResponse"](
+                moduleArgs.websocket,
+                moduleArgs.request,
                 "The update string is malformed. Unable to find the metadata.",
                 [notebookName,pageID,pageType,pagePath,splitResult,updateDataString]
                 )
@@ -145,9 +148,9 @@ async def updatePage(request,websocket):
             pageMetadataJSON = json.loads(splitResult[1])
             pageContent = splitResult[2]
         except Exception as error:
-            await errorResponse(
-                websocket,
-                request,
+            await moduleArgs.funcs["errorResponse"](
+                moduleArgs.websocket,
+                moduleArgs.request,
                 "The update string is malformed. Unable to find the metadata.",
                 [notebookName,pageID,pageType,pagePath,splitResult,updateDataString],
                 error
@@ -167,17 +170,17 @@ async def updatePage(request,websocket):
                 not "updateDate"    in pageMetadataJSON.keys() or
                 not "UUID"          in pageMetadataJSON.keys()
             ):
-                await errorResponse(
-                    websocket,
-                    request,
+                await moduleArgs.funcs["errorResponse"](
+                    moduleArgs.websocket,
+                    moduleArgs.request,
                     "The update string is malformed. Unable to find the metadata.",
                     [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON]
                     )
                 return
         except Exception as error:
-            await errorResponse(
-                websocket,
-                request,
+            await moduleArgs.funcs["errorResponse"](
+                moduleArgs.websocket,
+                moduleArgs.request,
                 "The update string is malformed. Unable to find the metadata.",
                 [notebookName,pageID,pageType,pagePath,updateDataString,pageMetadataJSON],
                 error
@@ -186,14 +189,14 @@ async def updatePage(request,websocket):
 
 
     # update "updateDate" key in the page metadata
-    pageMetadataJSON["updateDate"] = timeString()
+    pageMetadataJSON["updateDate"] = moduleArgs.funcs["timeString"]()
 
     # update "updateDate" key in the notebook metadata
-    targetNotebookMetadata["updateDate"] = timeString()
-    if(updateNotebookMatadata(notebookName,targetNotebookMetadata)):
-        await errorResponse(
-            websocket,
-            request,
+    targetNotebookMetadata["updateDate"] = moduleArgs.funcs["timeString"]()
+    if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebookMetadata)):
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to update the notebook metadata information.",
             [notebookName,pageID,pageType,pagePath,targetNotebookMetadata]
             )
@@ -207,18 +210,18 @@ async def updatePage(request,websocket):
                 datastring = oldData.read()
                 splitResult1 = datastring.split("++++")
                 if(len(splitResult1) < 3):
-                    await errorResponse(
-                        websocket,
-                        request,
+                    await moduleArgs.funcs["errorResponse"](
+                        moduleArgs.websocket,
+                        moduleArgs.request,
                         "The old data string is malformed. Unable to find the metadata.",
                         [notebookName,pageID,pageType,pagePath,splitResult1,updateDataString]
                         )
                     return
                 OLDpageMetadataJSON = json.loads(splitResult1[1])
                 if(OLDpageMetadataJSON["UUID"] != pageMetadataJSON["UUID"]):
-                    await errorResponse(
-                        websocket,
-                        request,
+                    await moduleArgs.funcs["errorResponse"](
+                        moduleArgs.websocket,
+                        moduleArgs.request,
                         "The page UUID does not match to the old one.",
                         [notebookName,pageID,pageType,pagePath,pageMetadataJSON,OLDpageMetadataJSON],
                         error
@@ -227,18 +230,18 @@ async def updatePage(request,websocket):
             else:
                 oldData = json.loads(oldData.read())
                 if(oldData["UUID"] != pageMetadataJSON["UUID"]):
-                    await errorResponse(
-                        websocket,
-                        request,
+                    await moduleArgs.funcs["errorResponse"](
+                        moduleArgs.websocket,
+                        moduleArgs.request,
                         "The page UUID does not match to the old one.",
                         [notebookName,pageID,pageType,pagePath,pageMetadataJSON,oldData],
                         error
                         )
                     return
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Failed to compare page UUID string.",
             [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString],
             error
@@ -256,9 +259,9 @@ async def updatePage(request,websocket):
         else:
             saveString = json.dumps(pageMetadataJSON,indent=4)
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to prepare update data string. This might be caused by malformed update data for the forntend.",
             [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString],
             error
@@ -270,9 +273,9 @@ async def updatePage(request,websocket):
         with open(pagePath,"wt",encoding="utf-8") as saveTarget:
             saveTarget.write(saveString)
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to write the updated page.",
             [notebookName,pageID,pageType,pagePath,pageMetadataJSON,updateDataString],
             error
@@ -283,12 +286,12 @@ async def updatePage(request,websocket):
     responseString = json.dumps({
         "responseType"  : "commandResponse",
         "status"        : "ok",
-        "UUID"          : request["UUID"],
+        "UUID"          : moduleArgs.request["UUID"],
         "command"       : "updatePage",
         "errorMessage"  : "nothing",
         "data"          : { }
     })
-    await websocket.send(responseString)
-    showJSONMessage(responseString)
+    await moduleArgs.websocket.send(responseString)
+    moduleArgs.funcs["showJSONMessage"](responseString)
 
-    await callInterrupt(websocket,"updatePage",None)
+    await moduleArgs.funcs["callInterrupt"](moduleArgs.websocket,"updatePage",None)

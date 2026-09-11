@@ -1,33 +1,32 @@
-from helper.common import showJSONMessage, dataKeyChecker, timeString, findNotes, errorResponse
-from helper import loadSettings
-# from interrupts.controller import callInterrupt
-from type.pages import controller
+# from type.pages import controller
 import json, uuid, os
+# from extensionBase import commandModuleArgs
+
 
 # TODO: if failed to create a new notebook, remove the folders and the files.
 # TODO: send an interrupt to the all forntends to notify this update.
-async def createNotebook(request,websocket):
+async def createNotebook(moduleArgs:commandModuleArgs):
     mandatoryKeys   = ["notebookName"]
-    missing         = dataKeyChecker(request["data"],mandatoryKeys)
+    missing         = moduleArgs.funcs["dataKeyChecker"](moduleArgs.request["data"],mandatoryKeys)
     if(missing != None):
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Mandatory keys are missing for this command.",
             [mandatoryKeys,missing]
         )
         return
 
-    notebookName        = request["data"]["notebookName"]
+    notebookName        = moduleArgs.request["data"]["notebookName"]
 
     # check duplicate notebook
-    notebookJSONinfo = findNotes()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
     for aNotebook in notebookJSONinfo.keys():
         if(notebookName == aNotebook):
             # when has already notebook with same name as "notebookName" exist.
-            await errorResponse(
-                websocket,
-                request,
+            await moduleArgs.funcs["errorResponse"](
+                moduleArgs.websocket,
+                moduleArgs.request,
                 "duplicate notebook",
                 [notebookName,notebookJSONinfo]
             )
@@ -36,10 +35,10 @@ async def createNotebook(request,websocket):
 
 
     # init new notebook info 
-    root                = loadSettings.settings["NotebookRootFolder"][0]
+    root                = moduleArgs.settings["notebookPath"]
     print(root)
     UUID                = uuid.uuid4()
-    currentTimeStr      = timeString()
+    currentTimeStr      = moduleArgs.funcs["timeString"]()
 
     NotebookfolderPath  = root + "/" + notebookName
     metadataPath        = NotebookfolderPath + "/metadata.json"
@@ -78,9 +77,9 @@ async def createNotebook(request,websocket):
         indexFolder     = True
     except Exception as error:
         # when failed to create an new notebook due to folder creation failed.
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "Unable to create new folders.",
             [notebookName,notebookJSONinfo,
              NotebookfolderPath,NotebookFolder,
@@ -96,9 +95,9 @@ async def createNotebook(request,websocket):
         with open(metadataPath,"wt",encoding="utf-8") as metadata:
             metadata.write(json.dumps(newNotebookMetadata,indent=4))
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "failed to create a new metadata file for the new notebook.",
             [notebookName,notebookJSONinfo,
              metadataPath,newNotebookMetadata],
@@ -116,9 +115,9 @@ async def createNotebook(request,websocket):
         with open(filesIndexPath,"wt",encoding="utf-8") as fileIndex:
             fileIndex.write(json.dumps({},indent=4))
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "failed to create new index metadata files for the new notebook.",
             [notebookName,notebookJSONinfo,
              metadataPath,newNotebookMetadata,
@@ -130,13 +129,13 @@ async def createNotebook(request,websocket):
     # create a default blank page. (markdown)
     try:
         with open(blankPagePath,"wt",encoding="utf-8") as blank:
-            pageTemplate = controller.getPageTemplate("markdown",None)
+            pageTemplate = moduleArgs.funcs["getPageTemplate"]("markdown",None)
             if(pageTemplate != None):
                 blank.write(pageTemplate)
     except Exception as error:
-        await errorResponse(
-            websocket,
-            request,
+        await moduleArgs.funcs["errorResponse"](
+            moduleArgs.websocket,
+            moduleArgs.request,
             "failed to create a new blank page file for the new notebook.",
             [notebookName,notebookJSONinfo,
              metadataPath,newNotebookMetadata,
@@ -150,11 +149,11 @@ async def createNotebook(request,websocket):
         "responseType"  : "commandResponse",
         "status"        : "ok",
         "errorMessage"  : "nothing",
-        "UUID"          : request["UUID"],
+        "UUID"          : moduleArgs.request["UUID"],
         "command"       : "createNotebook",
         "data": { }
     })
-    await websocket.send(responseString)
-    showJSONMessage(responseString)
+    await moduleArgs.websocket.send(responseString)
+    moduleArgs.funcs["showJSONMessage"](responseString)
 
-    # await callInterrupt(websocket,"newInfo",{"action":"createNotebook"})
+    await moduleArgs.funcs["callInterrupt"](moduleArgs.websocket,"newInfo",{"action":"createNotebook"})
