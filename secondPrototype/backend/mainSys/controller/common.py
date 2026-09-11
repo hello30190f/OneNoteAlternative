@@ -2,7 +2,7 @@ import json, time, os, subprocess, sys, shutil, platform
 from websockets.exceptions import ConnectionClosedOK
 from websockets.asyncio.server import ServerConnection
 from controller.interrupt import callInterrupt
-from controller.pages import getPageTemplate
+from controller.pages import getPageTemplate, getPageTypeList
 
 
 # arg:
@@ -454,6 +454,7 @@ class commandModuleArgs:
             # access passive controller 
             "callInterrupt"                 : callInterrupt,
             "getPageTemplate"               : getPageTemplate,
+            "getPageTypeList"               : getPageTypeList,
 
             # server response 
             "NotImplementedResponse"        : NotImplementedResponse,

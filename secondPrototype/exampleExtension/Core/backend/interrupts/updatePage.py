@@ -1,5 +1,7 @@
-from helper.common import sendInterrupt
+# from helper.common import sendInterrupt
 import uuid
+
+# from extensionBase import interruptModuleArgs
 
 # ```json
 # {
@@ -9,8 +11,8 @@ import uuid
 # }
 # ```
 
-async def updatePage(websocket,data:dict):    
-    return await sendInterrupt(websocket,{
+async def updatePage(moduleArgs:interruptModuleArgs):    
+    return await moduleArgs.funcs["sendInterrupt"](moduleArgs.allConnection,{
         "responseType"  : "interrupt",
         "event"         : "updatePage",
         "UUID"          : str(uuid.uuid4()),

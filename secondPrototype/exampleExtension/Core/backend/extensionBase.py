@@ -26,6 +26,7 @@ class commandModuleArgs:
             # access passive controller 
             "callInterrupt"                 : callInterrupt,
             "getPageTemplate"               : getPageTemplate,
+            "getPageTypeList"               : getPageTypeList,
 
             # server response 
             "NotImplementedResponse"        : NotImplementedResponse,

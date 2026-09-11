@@ -8,3 +8,6 @@ def getPageTemplate(pageType:str,data:dict) -> str | None:
             return pageExtensionMoludes[aPageType](data)
 
     return None
+
+def getPageTypeList():
+    return pageExtensionMoludes.keys()
