@@ -32,6 +32,7 @@ def startMainSystemOption(Settings:dict) -> None:
     print("Serve forever state.")
     waitForever()
 
+# TODO; use pexpext wait() func
 def waitForever() -> None:
     try:
         while True:
