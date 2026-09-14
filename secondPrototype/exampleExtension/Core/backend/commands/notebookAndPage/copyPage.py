@@ -1,3 +1,4 @@
+import controller.common import commandModuleArgs
 #from extensionBase import commandModuleArgs
 
 # TODO: implement this

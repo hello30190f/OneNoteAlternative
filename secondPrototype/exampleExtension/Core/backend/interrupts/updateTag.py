@@ -1,3 +1,5 @@
+import controller.common import interruptModuleArgs
+
 # from helper.common import sendInterrupt
 import uuid
 

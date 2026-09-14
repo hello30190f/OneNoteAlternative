@@ -1,3 +1,5 @@
+import controller.common import commandModuleArgs
+
 # to save pages.
 # Currently to keep things simple, just rewite entire page string into new one.
 # No partial update function exist.

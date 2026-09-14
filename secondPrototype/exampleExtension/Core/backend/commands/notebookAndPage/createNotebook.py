@@ -1,3 +1,5 @@
+import controller.common import commandModuleArgs
+
 # from type.pages import controller
 import json, uuid, os
 # from extensionBase import commandModuleArgs

@@ -1,3 +1,5 @@
+import controller.common import taskModuleArgs
+
 import time
 
 def showPingMessage(moduleArgs:taskModuleArgs): 

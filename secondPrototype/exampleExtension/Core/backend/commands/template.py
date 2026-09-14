@@ -1,5 +1,7 @@
 # from extensionBase import commandModuleArgs
 
+import controller.common import commandModuleArgs
+
 # TODO: send an interrupt to the all forntends if there are any updates to the notebook.
 async def template(moduleArgs:commandModuleArgs): # TODO: write command name
     # If there are no mandatory keys for the command, this checker code can be omitted.
