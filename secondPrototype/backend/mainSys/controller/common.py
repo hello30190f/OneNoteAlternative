@@ -40,6 +40,43 @@ def showJSONMessage(JSONstring:str,receive:bool=False) -> None:
 
 # error response ---------------------------------------
 # error response ---------------------------------------
+# NOTE: use this command for all commands error responses.
+# arg:
+#   websocket       : the connection to the frontend via websocket
+#   request         : the frontend reqiuest entire JSON data
+#   errorMessage    : an error message to show in the stdout and response to the frontend 
+#   variablesList   : an error related vars list to show in the stdout and response to the frontend 
+#   exception       : Exception message. The default is None.  
+# return value
+#   OK      : None
+#   Error   : Error state does not exist.
+async def errorResponse(websocket,request:dict,errorMessage:str,variablesList:list,exception = None):
+    print("{} ERROR: {}".format(request["command"],errorMessage))
+
+    variableState = []
+    print("{} ERROR: variable state --------------------------".format(request["command"]))
+    for aVar in variablesList:
+        # print variable name and data
+        # https://stackoverflow.com/questions/18425225/getting-the-name-of-a-variable-as-a-string
+        # f'{aaa=}'.split("=")[0]
+        print("{}\n".format(aVar))
+        variableState.append(str(aVar))
+    print("{} ERROR: variable state end --------------------------".format(request["command"]))
+    print("{} ERROR: exception message --------------------------".format(request["command"]))
+    print(exception)
+    print("{} ERROR: exception message end --------------------------".format(request["command"]))
+
+    responseString = json.dumps({
+        "responseType"  : "commandResponse",
+        "status"        : "error",
+        "errorMessage"  : errorMessage,
+        "UUID"          : request["UUID"],
+        "command"       : request["command"],
+        "data"          : variableState
+    })
+    await websocket.send(responseString)
+    showJSONMessage(responseString)
+
 async def NotImplementedResponse(request:dict,websocket:ServerConnection) -> None:
     responseString = json.dumps({
         "responseType"  : "commandResponse",
@@ -450,6 +487,7 @@ class commandModuleArgs:
             "updateNotebookMatadata"        : updateNotebookMatadata,
             "readMetadataFormMarkdownPage"  : readMetadataFormMarkdownPage,
             "mkdir"                         : mkdir,
+            "errorResponse"                 : errorResponse, 
 
             # access passive controller 
             "callInterrupt"                 : callInterrupt,
