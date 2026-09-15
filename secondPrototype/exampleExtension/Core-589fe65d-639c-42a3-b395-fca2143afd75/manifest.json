@@ -27,7 +27,7 @@
             "backend/tasks/pageCleaner.py",
             "backend/tasks/showPingMessage.py"
         ],
-        "PagesModules":[
+        "PageModules":[
             "backend/pages/free.py",
             "backend/pages/markdown.py"
         ]
