@@ -30,13 +30,16 @@ def startMainSystemOption(Settings:dict) -> None:
     pexpectExecuteCommand(session,"python -u main.py")
 
     print("Serve forever state.")
-    waitForever()
+    waitForever(session)
 
 # TODO; use pexpext wait() func
-def waitForever() -> None:
+def waitForever(session:pexpect.spawn) -> None:
+    session.timeout = 3600 # sec
     try:
         while True:
-            time.sleep(100) # For single loop, wait 100 sec 
+            session.send("")
+            session.expect(".+")
+            time.sleep(0.1) # For single loop, wait 100 sec 
     except KeyboardInterrupt:
         print("The dataServer will shutdown.")
         sys.exit(0)

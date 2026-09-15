@@ -2,5 +2,6 @@
     "backendBaseFolderPath": "",
     "findBackendPath": true,
     "notebookPath": "",
-    "useDefaultNotebookPath": true
+    "useDefaultNotebookPath": true,
+    "deletedPagesKeepInterval": "0000/00/10"
 }

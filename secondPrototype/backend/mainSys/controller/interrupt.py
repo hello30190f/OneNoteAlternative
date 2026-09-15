@@ -3,8 +3,7 @@ from websockets import serve
 import asyncio
 from websockets.asyncio.server import ServerConnection
 
-from controller.runtime import interruptExtensionMoludes
-from controller.common  import interruptModuleArgs
+
 
 # serve websocket connection as command controller do.
 websocketConnections    : list[ServerConnection]    = []
@@ -38,6 +37,8 @@ async def mainLoop(websocket:ServerConnection) -> None:
 #  False -> OK
 #  True  -> Something went worng
 async def callInterrupt(websocket:ServerConnection,interruptName:str,data:dict):
+    from controller.common  import interruptModuleArgs
+    from controller.runtime import interruptExtensionMoludes
     for AnInterrupt in interruptExtensionMoludes.keys():
         if(AnInterrupt == interruptName):
             # call interrupt

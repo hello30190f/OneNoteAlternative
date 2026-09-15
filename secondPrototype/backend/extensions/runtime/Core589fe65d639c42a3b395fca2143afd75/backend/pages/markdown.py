@@ -1,4 +1,8 @@
-from controller.common import pageModuleArgs
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if(TYPE_CHECKING):
+    from controller.common import pageModuleArgs
+    
 
 # from helper.common import timeString
 import uuid , json

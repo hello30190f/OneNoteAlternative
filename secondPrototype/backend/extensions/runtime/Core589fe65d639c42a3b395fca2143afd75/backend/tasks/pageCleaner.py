@@ -1,5 +1,7 @@
-from controller.common import taskModuleArgs
-
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if(TYPE_CHECKING):
+    from controller.common import taskModuleArgs
 
 # from extensionBase import taskModuleArgs
 import time

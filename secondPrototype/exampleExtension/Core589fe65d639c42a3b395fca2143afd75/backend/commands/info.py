@@ -19,7 +19,7 @@ import os, os.path, websockets, json
 
 async def info(moduleArgs:commandModuleArgs):
     
-    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"](moduleArgs.settings)
 
     if(notebookJSONinfo == None):
         print("info command ERROR: Unable to prepare the response. There might be no notebooks or unable to access it?")
