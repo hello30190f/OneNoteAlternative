@@ -1,4 +1,4 @@
-import controller.common import commandModuleArgs
+from controller.common import commandModuleArgs
 
 # to save pages.
 # Currently to keep things simple, just rewite entire page string into new one.

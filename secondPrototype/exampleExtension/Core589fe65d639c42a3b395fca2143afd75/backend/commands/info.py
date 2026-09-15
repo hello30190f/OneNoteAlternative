@@ -3,8 +3,11 @@
 # from helper import loadSettings 
 
 
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if(TYPE_CHECKING):
+    from controller.common import commandModuleArgs
 import os, os.path, websockets, json
-from controller.common import commandModuleArgs
 
 # from extensionBase import commandModuleArgs
 

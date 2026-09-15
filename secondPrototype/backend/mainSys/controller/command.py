@@ -1,9 +1,9 @@
-from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, commandModuleArgs
 from websockets import serve
 from websockets.asyncio.server import ServerConnection
 import asyncio
 
 from controller.runtime import commandExtensionMoludes
+from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, commandModuleArgs
 
 # serve websocket connection
 # call command modules from extensions by reading extensionMoludes array

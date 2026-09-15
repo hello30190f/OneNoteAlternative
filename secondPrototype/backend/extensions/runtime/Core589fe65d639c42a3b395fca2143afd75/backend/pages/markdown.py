@@ -1,4 +1,4 @@
-import controller.common import pageModuleArgs
+from controller.common import pageModuleArgs
 
 # from helper.common import timeString
 import uuid , json

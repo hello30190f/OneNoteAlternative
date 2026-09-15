@@ -1,4 +1,8 @@
-from controller.common import interruptModuleArgs
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if(TYPE_CHECKING):
+    from controller.common import interruptModuleArgs
+
 
 # from helper.common import sendInterrupt
 import uuid

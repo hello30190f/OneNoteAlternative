@@ -1,4 +1,7 @@
-from controller.common import commandModuleArgs
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if(TYPE_CHECKING):
+    from controller.common import commandModuleArgs
 
 # from helper.common import showJSONMessage, dataKeyChecker, errorResponse
 # from helper import loadSettings 

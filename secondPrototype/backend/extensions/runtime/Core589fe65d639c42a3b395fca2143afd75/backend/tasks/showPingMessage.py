@@ -1,4 +1,4 @@
-import controller.common import taskModuleArgs
+from controller.common import taskModuleArgs
 
 import time
 

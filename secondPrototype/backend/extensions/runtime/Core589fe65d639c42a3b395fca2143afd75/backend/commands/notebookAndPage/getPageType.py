@@ -1,4 +1,4 @@
-import controller.common import commandModuleArgs
+from controller.common import commandModuleArgs
 
 # list pageType
 

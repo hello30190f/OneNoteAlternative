@@ -1,4 +1,4 @@
-import controller.common import commandModuleArgs
+from controller.common import commandModuleArgs
 
 # TODO: implement this
 # TODO: wirte the document

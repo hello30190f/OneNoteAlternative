@@ -1,4 +1,4 @@
-import controller.common import commandModuleArgs
+from controller.common import commandModuleArgs
 
 # from helper.common import showJSONMessage ,mkdir, readMetadataFormMarkdownPage, dataKeyChecker, findNotes, updateNotebookMatadata, timeString, errorResponse
 # from helper import loadSettings 
