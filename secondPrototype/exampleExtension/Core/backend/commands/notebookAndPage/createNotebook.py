@@ -22,7 +22,7 @@ async def createNotebook(moduleArgs:commandModuleArgs):
     notebookName        = moduleArgs.request["data"]["notebookName"]
 
     # check duplicate notebook
-    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"](moduleArgs.settings)
     for aNotebook in notebookJSONinfo.keys():
         if(notebookName == aNotebook):
             # when has already notebook with same name as "notebookName" exist.

@@ -91,7 +91,7 @@ async def updatePage(moduleArgs:commandModuleArgs):
         return
     
     # check the notebook exist or not
-    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"](moduleArgs.settings)
     if(notebookJSONinfo == None):
         await moduleArgs.funcs["errorResponse"](
             moduleArgs.websocket,
@@ -195,7 +195,7 @@ async def updatePage(moduleArgs:commandModuleArgs):
 
     # update "updateDate" key in the notebook metadata
     targetNotebookMetadata["updateDate"] = moduleArgs.funcs["timeString"]()
-    if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebookMetadata)):
+    if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebookMetadata,moduleArgs.settings)):
         await moduleArgs.funcs["errorResponse"](
             moduleArgs.websocket,
             moduleArgs.request,

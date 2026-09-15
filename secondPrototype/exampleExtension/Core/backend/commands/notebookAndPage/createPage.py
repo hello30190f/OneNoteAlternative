@@ -62,7 +62,7 @@ async def createPage(moduleArgs:commandModuleArgs):
     if(not os.path.exists(folder)):
         # TODO: ~~support windows env -> implement and use mkdirRecursively function in helper.common~~ -> mkdir
         # create folder
-        if(moduleArgs.funcs["mkdir"](folder)):
+        if(moduleArgs.funcs["mkdir"](folder,moduleArgs.settings)):
             await moduleArgs.funcs["errorResponse"](
                 moduleArgs.websocket,
                 moduleArgs.request,
@@ -122,7 +122,7 @@ async def createPage(moduleArgs:commandModuleArgs):
 
     # update notebook metadata.json
     try:
-        notebookJSONinfo = moduleArgs.funcs["findNotes"]()
+        notebookJSONinfo = moduleArgs.funcs["findNotes"](moduleArgs.settings)
         if(notebookJSONinfo == None):
             await UnableUpdateNotebookMetadataResponse()
             return
@@ -139,7 +139,7 @@ async def createPage(moduleArgs:commandModuleArgs):
         
         # register new page ref to notebook metadata.json
         targetNotebookMetadata["pages"].append(pagePathFromContentFolder)
-        if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebookMetadata)):
+        if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebookMetadata,moduleArgs.settings)):
             await UnableUpdateNotebookMetadataResponse()
             return
 
@@ -168,7 +168,7 @@ async def createPage(moduleArgs:commandModuleArgs):
 
     if(failed):
         # remove the failed page
-        moduleArgs.funcs["deleteDataSafely"](pagePath)
+        moduleArgs.funcs["deleteDataSafely"](pagePath,moduleArgs.settings)
         await moduleArgs.funcs["errorResponse"](
             moduleArgs.websocket,
             moduleArgs.request,

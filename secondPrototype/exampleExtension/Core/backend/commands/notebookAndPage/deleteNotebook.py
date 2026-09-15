@@ -60,7 +60,7 @@ async def deleteNotebook(moduleArgs:commandModuleArgs):
         return
     
     # delete the notebook and then error handling.
-    if(moduleArgs.funcs["deleteDataSafely"](notebookFolderPath)):
+    if(moduleArgs.funcs["deleteDataSafely"](notebookFolderPath,moduleArgs.settings)):
         await moduleArgs.funcs["errorResponse"](
             moduleArgs.websocket,
             moduleArgs.request,

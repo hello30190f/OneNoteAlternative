@@ -102,7 +102,7 @@ async def deletePage(moduleArgs:commandModuleArgs):
     print(PageUUID)
 
     # get notebooks metadata
-    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"](moduleArgs.settings)
     if(notebookJSONinfo == None):
         await moduleArgs.funcs["errorResponse"](
             moduleArgs.websocket,
@@ -136,7 +136,7 @@ async def deletePage(moduleArgs:commandModuleArgs):
         )
 
     # update the notebook metadata if the ref still exist
-    notebookJSONinfo = moduleArgs.funcs["findNotes"]()
+    notebookJSONinfo = moduleArgs.funcs["findNotes"](moduleArgs.settings)
     if(notebookJSONinfo == None):
         await UnableUpdateNotebookMetadataResponse()
         return
@@ -169,7 +169,7 @@ async def deletePage(moduleArgs:commandModuleArgs):
         )
         return
 
-    if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebook)):
+    if(moduleArgs.funcs["updateNotebookMatadata"](notebookName,targetNotebook,moduleArgs.settings)):
         await UnableUpdateNotebookMetadataResponse()
         return
 
@@ -186,7 +186,7 @@ async def deletePage(moduleArgs:commandModuleArgs):
 
     # check deleted folder exists or not. The folder shuold exist inside of each notebook folder.
     if(not os.path.exists(deletedFolderPath)):
-        if(moduleArgs.funcs["mkdir"](deletedFolderPath)):
+        if(moduleArgs.funcs["mkdir"](deletedFolderPath,moduleArgs.settings)):
             await moduleArgs.funcs["errorResponse"](
                 moduleArgs.websocket,
                 moduleArgs.request,
