@@ -1,4 +1,4 @@
-import controller.common import commandModuleArgs
+from controller.common import commandModuleArgs
 
 # from helper.common import showJSONMessage, dataKeyChecker, deleteDataSafely, findNotes, updateNotebookMatadata, errorResponse, mkdir
 # from interrupts.controller import callInterrupt

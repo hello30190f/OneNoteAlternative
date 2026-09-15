@@ -4,7 +4,7 @@
 
 
 import os, os.path, websockets, json
-import controller.common import commandModuleArgs
+from controller.common import commandModuleArgs
 
 # from extensionBase import commandModuleArgs
 
