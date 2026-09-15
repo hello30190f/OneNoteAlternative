@@ -13,7 +13,7 @@ class aExtension:
         self.findExtFileNameFromPath()
         self.findUUIDfromFileName()
         self.findExtName()
-        self.workingDirPath     = backendBasePath + "extensions/runtime/{}".format(self.zipFileName[:-4]) + "/"
+        self.workingDirPath     = backendBasePath + "/extensions/runtime/{}".format(self.zipFileName[:-4]) + "/"
         self.manifestPath       = self.workingDirPath + "manifest.json"
         self.pythonDependency   = self.workingDirPath + "requirements.txt"
 
