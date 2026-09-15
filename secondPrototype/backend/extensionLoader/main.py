@@ -112,8 +112,8 @@ if(not '{}' in sys.path):
         for Amodule in imports["PageModules"]:
             moduleName                              = Amodule.split(" ")[-1]
             keyName                                 = "{}-{}/{}".format(extensionInstance.getExtName(),extensionInstance.getUUID(),Amodule.split(" ")[-1])
-            dataServerTaskImportString              += "{}\n".format(Amodule)
-            dataServerTaskModuleArrayString         += "'{}':{},\n".format(keyName,moduleName)
+            dataServerPageImportString              += "{}\n".format(Amodule)
+            dataServerPageModuleArrayString         += "'{}':{},\n".format(keyName,moduleName)
 
         # init frontend runtime
         # append import list (TypeScript), append array that hold all imported module. 

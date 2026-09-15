@@ -20,7 +20,7 @@ async def getPageType(moduleArgs:commandModuleArgs):
         "errorMessage"  : "nothing",
         "UUID"          : moduleArgs.request["UUID"],
         "command"       : "getPageType",
-        "data"          : list(moduleArgs.funcs["getPageTypeList"])
+        "data"          : list(moduleArgs.funcs["getPageTypeList"]())
     })
     
     await moduleArgs.websocket.send(responseString)
