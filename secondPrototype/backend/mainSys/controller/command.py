@@ -56,6 +56,17 @@ async def controller(message:str,websocket:ServerConnection) -> None:
             commandFound = True
             break
 
+    if(not commandFound):
+        # Core-589fe65d-639c-42a3-b395-fca2143afd75/
+        # if the command has no UUID, try to call modules that belong to Core extension.
+        prefix = "Core-589fe65d-639c-42a3-b395-fca2143afd75/"
+        requestedCommand = prefix + requestedCommand
+        for aCommand in commandExtensionMoludes.keys():
+            if(aCommand == requestedCommand):
+                await commandExtensionMoludes[requestedCommand](commandModuleArgs(request,websocket,Settings))
+                commandFound = True
+                break
+
     # when command is not found.
     if(not commandFound):
         await notFound(request,websocket)
