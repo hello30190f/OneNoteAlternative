@@ -13,7 +13,7 @@ class aExtension:
         self.findExtFileNameFromPath()
         self.findUUIDfromFileName()
         self.findExtName()
-        self.workingDirPath     = backendBasePath + "/extensions/runtime/{}".format(self.zipFileName[:-4]) + "/"
+        self.workingDirPath     = backendBasePath + "/extensions/runtime/{}/{}".format(self.name,self.FolderUUID) + "/"
         self.manifestPath       = self.workingDirPath + "manifest.json"
         self.pythonDependency   = self.workingDirPath + "requirements.txt"
 
@@ -30,11 +30,12 @@ class aExtension:
         # -4 -> length of ".zip", 
         # -36 -> length of UUIDv4
         self.UUID = self.zipFileName[-36-4:-4]
+        self.FolderUUID = self.UUID.replace("-","")
 
     def findExtName(self) -> None:
         # -4 -> length of ".zip", 
         # -36 -> length of UUIDv4
-        self.name = self.zipFileName[:-36-4]
+        self.name = self.zipFileName[:-36-4-1]
 
     def unzip(self) -> None:
         with ZipFile(self.zipPath,"r") as extension:
@@ -106,7 +107,7 @@ class aExtension:
     # base path as "mainSys"
     def getImportString(self) -> dict | None:
         # self.pathAdjust:str = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
-        self.pathAdjust:str = "{}.".format(self.zipFileName[:-4])
+        self.pathAdjust:str = "{}.{}.".format(self.name,self.FolderUUID)
 
         def createImportString(modulePath:str) -> str:
             path = self.pathAdjust + modulePath.replace(".py","").replace("/",".")
