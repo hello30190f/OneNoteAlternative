@@ -13,7 +13,7 @@ class aExtension:
         self.findExtFileNameFromPath()
         self.findUUIDfromFileName()
         self.findExtName()
-        self.workingDirPath     = backendBasePath + "/extensions/runtime/{}/{}".format(self.name,self.FolderUUID) + "/"
+        self.workingDirPath     = backendBasePath + "/extensions/runtime/{}{}".format(self.name,self.FolderUUID) + "/"
         self.manifestPath       = self.workingDirPath + "manifest.json"
         self.pythonDependency   = self.workingDirPath + "requirements.txt"
 
@@ -107,7 +107,7 @@ class aExtension:
     # base path as "mainSys"
     def getImportString(self) -> dict | None:
         # self.pathAdjust:str = "..extensions.runtime.{}.".format(self.zipFileName[:-4])
-        self.pathAdjust:str = "{}.{}.".format(self.name,self.FolderUUID)
+        self.pathAdjust:str = "{}{}.".format(self.name,self.FolderUUID)
 
         def createImportString(modulePath:str) -> str:
             path = self.pathAdjust + modulePath.replace(".py","").replace("/",".")

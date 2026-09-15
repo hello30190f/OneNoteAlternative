@@ -52,8 +52,8 @@ def loadExtension(Settings:dict,session:pexpect.spawn) -> None:
     # register system path
     dataServerRegisterExtensionRuntimePath = """
 # Register runtimePath
+import sys
 if(not '{}' in sys.path):
-    import sys
     sys.path.append('{}')\n\n
 """.format(runtimePath,runtimePath)
 

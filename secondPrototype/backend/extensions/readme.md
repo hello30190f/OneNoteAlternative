@@ -6,8 +6,7 @@ The extension zip file name should be formatted like below.
 
 The structure of zip file after unziped, should be like this.
 ```
-[extName]
-    - [UUID without '-']
-        - manifest.json
-        - and so on ...
+[extName][UUID without '-']
+    - manifest.json
+    - and so on ...
 ```

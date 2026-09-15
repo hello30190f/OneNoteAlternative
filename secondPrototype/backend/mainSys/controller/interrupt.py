@@ -3,8 +3,8 @@ from websockets import serve
 import asyncio
 from websockets.asyncio.server import ServerConnection
 
-from controller.common  import interruptModuleArgs
 from controller.runtime import interruptExtensionMoludes
+from controller.common  import interruptModuleArgs
 
 # serve websocket connection as command controller do.
 websocketConnections    : list[ServerConnection]    = []
