@@ -5,6 +5,8 @@ from controller.interrupt import callInterrupt
 from controller.pages import getPageTemplate, getPageTypeList
 
 
+CoreExtPrefix = "Core-589fe65d-639c-42a3-b395-fca2143afd75/"
+
 # arg:
 #   data    : the dict data of "data" key inside the request from the forntend.
 #   keylist : the key list that the command require to work.

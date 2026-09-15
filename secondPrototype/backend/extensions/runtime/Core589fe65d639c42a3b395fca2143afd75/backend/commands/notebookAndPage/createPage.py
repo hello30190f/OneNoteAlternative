@@ -177,7 +177,7 @@ async def createPage(moduleArgs:commandModuleArgs):
             moduleArgs.request,
             "The backend error. Failed to create a new file for the new page.",
             [notebookName,pagePathFromContentFolder,pagePath],
-            error
+            errorMessageFromPy
         )
     else:
         responseString = json.dumps({

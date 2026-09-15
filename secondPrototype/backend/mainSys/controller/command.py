@@ -3,7 +3,7 @@ from websockets.asyncio.server import ServerConnection
 import asyncio
 
 from controller.runtime import commandExtensionMoludes
-from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, commandModuleArgs
+from controller.common import malformedRequestChecker, malformedRequestResponse, notFound, receiveLoop, internalServerErrorResponse, commandModuleArgs, CoreExtPrefix
 
 # serve websocket connection
 # call command modules from extensions by reading extensionMoludes array
@@ -59,8 +59,8 @@ async def controller(message:str,websocket:ServerConnection) -> None:
     if(not commandFound):
         # Core-589fe65d-639c-42a3-b395-fca2143afd75/
         # if the command has no UUID, try to call modules that belong to Core extension.
-        prefix = "Core-589fe65d-639c-42a3-b395-fca2143afd75/"
-        requestedCommand = prefix + requestedCommand
+
+        requestedCommand = CoreExtPrefix + requestedCommand
         for aCommand in commandExtensionMoludes.keys():
             if(aCommand == requestedCommand):
                 await commandExtensionMoludes[requestedCommand](commandModuleArgs(request,websocket,Settings))

@@ -37,12 +37,12 @@ async def mainLoop(websocket:ServerConnection) -> None:
 #  False -> OK
 #  True  -> Something went worng
 async def callInterrupt(websocket:ServerConnection,interruptName:str,data:dict):
-    from controller.common  import interruptModuleArgs
+    from controller.common  import interruptModuleArgs, CoreExtPrefix
     from controller.runtime import interruptExtensionMoludes
     for AnInterrupt in interruptExtensionMoludes.keys():
         if(AnInterrupt == interruptName):
-            # call interrupt
             return await interruptExtensionMoludes[AnInterrupt](interruptModuleArgs(data,websocket,websocketConnections))        
-    
+        elif(AnInterrupt == CoreExtPrefix + interruptName):
+            return await interruptExtensionMoludes[AnInterrupt](interruptModuleArgs(data,websocket,websocketConnections))            
     print("callInterrupt ERROR: The interrupt does not exist.")
     return True
