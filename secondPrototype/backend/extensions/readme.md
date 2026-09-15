@@ -4,3 +4,10 @@ Place a extension here as a zip folder. You don't have to pack all extensions in
 The extension zip file name should be formatted like below.
 [extName]-[UUIDofExt].zip
 
+The structure of zip file after unziped, should be like this.
+```
+[extName]
+    - [UUID without '-']
+        - manifest.json
+        - and so on ...
+```
