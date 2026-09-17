@@ -6,7 +6,7 @@ if(TYPE_CHECKING):
 # from type.pages import controller
 import json, uuid, os
 # from extensionBase import commandModuleArgs
-
+# from controller.common import commandModuleArgs
 
 # TODO: if failed to create a new notebook, remove the folders and the files.
 # TODO: send an interrupt to the all forntends to notify this update.
